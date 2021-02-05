@@ -4,6 +4,7 @@ import lime.Lime;
 import lime.module.impl.combat.InfiniteAura;
 import lime.module.impl.combat.KillAura;
 import lime.module.impl.combat.Velocity;
+import lime.module.impl.misc.NoServAsync;
 import lime.module.impl.movement.Flight;
 import lime.module.impl.movement.Scaffold;
 import lime.module.impl.movement.Speed;
@@ -44,7 +45,7 @@ public class ModuleManager {
         modules.add(new HUD());
 
         // MISC
-
+        modules.add(new NoServAsync());
 
 
 

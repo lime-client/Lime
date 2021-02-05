@@ -1,6 +1,7 @@
 package net.minecraft.client.entity;
 
 import lime.events.impl.EventMotion;
+import lime.events.impl.EventMove;
 import lime.events.impl.EventUpdate;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.MovingSoundMinecartRiding;
@@ -284,6 +285,14 @@ public class EntityPlayerSP extends AbstractClientPlayer
         }
         EventMotion e1 = new EventMotion(EventMotion.State.POST, x, y, z, yaw, pitch, ground, flag, flag1);
         e1.call();
+    }
+
+    @Override
+    public void moveEntity(double x, double y, double z) {
+        EventMove eventMove = new EventMove(x, y, z);
+        eventMove.call();
+        if(eventMove.isCancelled()) return;
+        super.moveEntity(eventMove.getX(), eventMove.getY(), eventMove.getZ());
     }
 
     /**

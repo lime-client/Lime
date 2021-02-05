@@ -159,6 +159,7 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet>
     protected void channelRead0(ChannelHandlerContext p_channelRead0_1_, Packet p_channelRead0_2_) throws Exception
     {
         EventPacket p = new EventPacket(EventPacket.PacketType.RECEIVE, p_channelRead0_2_);
+        p.call();
         if(p.isCancelled()) return;
         p_channelRead0_2_ = p.getPacket();
         if (this.channel.isOpen())
@@ -188,6 +189,7 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet>
     public void sendPacket(Packet packetIn)
     {
         EventPacket p = new EventPacket(EventPacket.PacketType.SEND, packetIn);
+        p.call();
         if(p.isCancelled()) return;
         packetIn = p.getPacket();
         if (this.isChannelOpen())

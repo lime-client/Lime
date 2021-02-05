@@ -99,7 +99,6 @@ public class ClickGui extends GuiScreen {
                 if(flag){
                     Gui.drawRect(x + (i * 50) , y + 15, x + (i * 50) + 10 + 40, y + 19 + 35, new Color(75, 75, 75).getRGB());
                 }
-                System.out.println(c.name());
                 Util2D.drawImage(new ResourceLocation("textures/icons/" + c.name().toLowerCase() + ".png"), x + (i * 50) + 10, y + 19, 32, 32);
                 Gui.drawRect(x + (i * 50) + 50, y + 15, x + (i * 50) + 51, y + 55, new Color(50, 50, 50).getRGB());
             } else {

@@ -2,6 +2,8 @@ package net.minecraft.block;
 
 import java.util.List;
 import java.util.Random;
+
+import lime.events.impl.EventBoundingBox;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
@@ -487,8 +489,10 @@ public class Block
     public void addCollisionBoxesToList(World worldIn, BlockPos pos, IBlockState state, AxisAlignedBB mask, List<AxisAlignedBB> list, Entity collidingEntity)
     {
         AxisAlignedBB axisalignedbb = this.getCollisionBoundingBox(worldIn, pos, state);
-
-        if (axisalignedbb != null && mask.intersectsWith(axisalignedbb))
+        final EventBoundingBox eventBoundingBox = new EventBoundingBox(getBlockState().getBlock(), pos, axisalignedbb);
+        eventBoundingBox.call();
+        axisalignedbb = eventBoundingBox.getBoundingBox();
+        if (!eventBoundingBox.isCancelled() && axisalignedbb != null && mask.intersectsWith(axisalignedbb))
         {
             list.add(axisalignedbb);
         }

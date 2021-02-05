@@ -1,201 +1,614 @@
-[12:58:07] [Client thread/INFO]: Setting user: Player116
-[12:58:07] [Client thread/INFO]: (Session ID is token:0:Player116)
-[12:58:08] [Client thread/INFO]: [OptiFine] *** Reflector Forge ***
-[12:58:08] [Client thread/INFO]: [OptiFine] (Reflector) Class not present: net.minecraftforge.client.model.Attributes
-[12:58:08] [Client thread/INFO]: [OptiFine] (Reflector) Class not present: mods.betterfoliage.client.BetterFoliageClient
-[12:58:08] [Client thread/INFO]: [OptiFine] (Reflector) Class not present: net.minecraftforge.fml.common.asm.transformers.BlamingTransformer
-[12:58:08] [Client thread/INFO]: [OptiFine] (Reflector) Class not present: net.minecraftforge.event.world.ChunkWatchEvent$UnWatch
-[12:58:08] [Client thread/INFO]: [OptiFine] (Reflector) Class not present: net.minecraftforge.fml.relauncher.CoreModManager
-[12:58:08] [Client thread/INFO]: [OptiFine] (Reflector) Class not present: net.minecraftforge.common.DimensionManager
-[12:58:08] [Client thread/INFO]: [OptiFine] (Reflector) Class not present: net.minecraftforge.client.event.GuiScreenEvent$DrawScreenEvent$Pre
-[12:58:08] [Client thread/INFO]: [OptiFine] (Reflector) Class not present: net.minecraftforge.client.event.GuiScreenEvent$DrawScreenEvent$Post
-[12:58:08] [Client thread/INFO]: [OptiFine] (Reflector) Class not present: net.minecraftforge.client.event.EntityViewRenderEvent$CameraSetup
-[12:58:08] [Client thread/INFO]: [OptiFine] (Reflector) Class not present: net.minecraftforge.client.event.EntityViewRenderEvent$FogColors
-[12:58:09] [Client thread/INFO]: [OptiFine] (Reflector) Class not present: net.minecraftforge.fml.common.eventhandler.Event
-[12:58:09] [Client thread/INFO]: [OptiFine] (Reflector) Class not present: net.minecraftforge.fml.common.eventhandler.EventBus
-[12:58:09] [Client thread/INFO]: [OptiFine] (Reflector) Class not present: net.minecraftforge.fml.common.eventhandler.Event$Result
-[12:58:09] [Client thread/INFO]: [OptiFine] (Reflector) Class not present: net.minecraftforge.common.property.ExtendedBlockState
-[12:58:09] [Client thread/INFO]: [OptiFine] (Reflector) Class not present: net.minecraftforge.fml.client.FMLClientHandler
-[12:58:09] [Client thread/INFO]: [OptiFine] (Reflector) Class not present: net.minecraftforge.fml.common.FMLCommonHandler
-[12:58:09] [Client thread/INFO]: [OptiFine] (Reflector) Method not present: net.minecraft.world.biome.BiomeGenBase.getWaterColorMultiplier
-[12:58:09] [Client thread/INFO]: [OptiFine] (Reflector) Method not present: net.minecraft.block.Block.addDestroyEffects
-[12:58:09] [Client thread/INFO]: [OptiFine] (Reflector) Method not present: net.minecraft.block.Block.addHitEffects
-[12:58:09] [Client thread/INFO]: [OptiFine] (Reflector) Method not present: net.minecraft.block.Block.canCreatureSpawn
-[12:58:09] [Client thread/INFO]: [OptiFine] (Reflector) Method not present: net.minecraft.block.Block.canRenderInLayer
-[12:58:09] [Client thread/INFO]: [OptiFine] (Reflector) Method not present: net.minecraft.block.Block.doesSideBlockRendering
-[12:58:09] [Client thread/INFO]: [OptiFine] (Reflector) Method not present: net.minecraft.block.Block.getBedDirection
-[12:58:09] [Client thread/INFO]: [OptiFine] (Reflector) Method not present: net.minecraft.block.Block.getExtendedState
-[12:58:09] [Client thread/INFO]: [OptiFine] (Reflector) Method not present: net.minecraft.block.Block.hasTileEntity
-[12:58:09] [Client thread/INFO]: [OptiFine] (Reflector) Method not present: net.minecraft.block.Block.isAir
-[12:58:09] [Client thread/INFO]: [OptiFine] (Reflector) Method not present: net.minecraft.block.Block.isBed
-[12:58:09] [Client thread/INFO]: [OptiFine] (Reflector) Method not present: net.minecraft.block.Block.isBedFoot
-[12:58:09] [Client thread/INFO]: [OptiFine] (Reflector) Method not present: net.minecraft.block.Block.isSideSolid
-[12:58:09] [Client thread/INFO]: [OptiFine] (Reflector) Method not present: net.minecraft.entity.Entity.canRiderInteract
-[12:58:09] [Client thread/INFO]: [OptiFine] (Reflector) Field not present: net.minecraft.entity.Entity.captureDrops
-[12:58:09] [Client thread/INFO]: [OptiFine] (Reflector) Field not present: net.minecraft.entity.Entity.capturedDrops
-[12:58:09] [Client thread/INFO]: [OptiFine] (Reflector) Method not present: net.minecraft.entity.Entity.shouldRenderInPass
-[12:58:09] [Client thread/INFO]: [OptiFine] (Reflector) Method not present: net.minecraft.entity.Entity.shouldRiderSit
-[12:58:09] [Client thread/INFO]: [OptiFine] (Reflector) Class not present: net.minecraftforge.event.ForgeEventFactory
-[12:58:09] [Client thread/INFO]: [OptiFine] (Reflector) Class not present: net.minecraftforge.common.ForgeHooks
-[12:58:09] [Client thread/INFO]: [OptiFine] (Reflector) Class not present: net.minecraftforge.client.ForgeHooksClient
-[12:58:09] [Client thread/INFO]: [OptiFine] (Reflector) Method not present: net.minecraft.item.Item.getDurabilityForDisplay
-[12:58:09] [Client thread/INFO]: [OptiFine] (Reflector) Method not present: net.minecraft.item.Item.getModel
-[12:58:09] [Client thread/INFO]: [OptiFine] (Reflector) Method not present: net.minecraft.item.Item.onEntitySwing
-[12:58:09] [Client thread/INFO]: [OptiFine] (Reflector) Method not present: net.minecraft.item.Item.shouldCauseReequipAnimation
-[12:58:09] [Client thread/INFO]: [OptiFine] (Reflector) Method not present: net.minecraft.item.Item.showDurabilityBar
-[12:58:09] [Client thread/INFO]: [OptiFine] (Reflector) Method not present: net.minecraft.item.ItemRecord.getRecordResource
-[12:58:09] [Client thread/INFO]: [OptiFine] (Reflector) Class not present: net.minecraftforge.common.ForgeModContainer
-[12:58:09] [Client thread/INFO]: [OptiFine] (Reflector) Method not present: net.minecraft.potion.PotionEffect.isCurativeItem
-[12:58:09] [Client thread/INFO]: [OptiFine] (Reflector) Method not present: net.minecraft.tileentity.TileEntity.canRenderBreaking
-[12:58:09] [Client thread/INFO]: [OptiFine] (Reflector) Method not present: net.minecraft.tileentity.TileEntity.getRenderBoundingBox
-[12:58:09] [Client thread/INFO]: [OptiFine] (Reflector) Method not present: net.minecraft.tileentity.TileEntity.hasFastRenderer
-[12:58:09] [Client thread/INFO]: [OptiFine] (Reflector) Method not present: net.minecraft.tileentity.TileEntity.shouldRenderInPass
-[12:58:09] [Client thread/INFO]: [OptiFine] (Reflector) Method not present: net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher.preDrawBatch
-[12:58:09] [Client thread/INFO]: [OptiFine] (Reflector) Method not present: net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher.drawBatch
-[12:58:09] [Client thread/INFO]: [OptiFine] (Reflector) Method not present: net.minecraft.client.renderer.vertex.VertexFormatElement$EnumUsage.preDraw
-[12:58:09] [Client thread/INFO]: [OptiFine] (Reflector) Method not present: net.minecraft.client.renderer.vertex.VertexFormatElement$EnumUsage.postDraw
-[12:58:09] [Client thread/INFO]: [OptiFine] (Reflector) Method not present: net.minecraft.world.World.countEntities
-[12:58:09] [Client thread/INFO]: [OptiFine] (Reflector) Method not present: net.minecraft.world.World.getPerWorldStorage
-[12:58:09] [Client thread/INFO]: [OptiFine] (Reflector) Method not present: net.minecraft.world.WorldProvider.getCloudRenderer
-[12:58:09] [Client thread/INFO]: [OptiFine] (Reflector) Method not present: net.minecraft.world.WorldProvider.getSkyRenderer
-[12:58:09] [Client thread/INFO]: [OptiFine] (Reflector) Method not present: net.minecraft.world.WorldProvider.getWeatherRenderer
-[12:58:09] [Client thread/INFO]: [OptiFine] (Reflector) Class not present: net.minecraftforge.fml.client.GuiModList
-[12:58:09] [Client thread/INFO]: [OptiFine] (Reflector) Class not present: net.minecraftforge.client.model.IColoredBakedQuad
-[12:58:09] [Client thread/INFO]: [OptiFine] (Reflector) Class not present: net.minecraftforge.common.property.IExtendedBlockState
-[12:58:09] [Client thread/INFO]: [OptiFine] (Reflector) Class not present: net.minecraftforge.client.IRenderHandler
-[12:58:09] [Client thread/INFO]: [OptiFine] (Reflector) Class not present: net.minecraftforge.client.model.ISmartBlockModel
-[12:58:09] [Client thread/INFO]: [OptiFine] (Reflector) Class not present: net.minecraftforge.client.ItemModelMesherForge
-[12:58:09] [Client thread/INFO]: [OptiFine] (Reflector) Class not present: net.minecraft.launchwrapper.Launch
-[12:58:09] [Client thread/INFO]: [OptiFine] (Reflector) Class not present: net.minecraftforge.client.model.pipeline.LightUtil
-[12:58:09] [Client thread/INFO]: [OptiFine] (Reflector) Class not present: net.minecraftforge.common.MinecraftForge
-[12:58:09] [Client thread/INFO]: [OptiFine] (Reflector) Class not present: net.minecraftforge.client.MinecraftForgeClient
-[12:58:09] [Client thread/INFO]: [OptiFine] (Reflector) Class not present: net.minecraftforge.client.model.ModelLoader
-[12:58:09] [Client thread/INFO]: [OptiFine] (Reflector) Class not present: net.minecraftforge.client.event.RenderBlockOverlayEvent$OverlayType
-[12:58:09] [Client thread/INFO]: [OptiFine] (Reflector) Class not present: net.minecraftforge.fml.client.registry.RenderingRegistry
-[12:58:09] [Client thread/INFO]: [OptiFine] (Reflector) Class not present: net.minecraftforge.client.event.RenderItemInFrameEvent
-[12:58:09] [Client thread/INFO]: [OptiFine] (Reflector) Class not present: net.minecraftforge.client.event.RenderLivingEvent$Pre
-[12:58:09] [Client thread/INFO]: [OptiFine] (Reflector) Class not present: net.minecraftforge.client.event.RenderLivingEvent$Post
-[12:58:09] [Client thread/INFO]: [OptiFine] (Reflector) Class not present: net.minecraftforge.client.event.RenderLivingEvent$Specials$Pre
-[12:58:09] [Client thread/INFO]: [OptiFine] (Reflector) Class not present: net.minecraftforge.client.event.RenderLivingEvent$Specials$Post
-[12:58:09] [Client thread/INFO]: [OptiFine] (Reflector) Class not present: net.minecraftforge.fml.client.SplashProgress
-[12:58:09] [Client thread/INFO]: [OptiFine] (Reflector) Class not present: net.minecraftforge.event.world.WorldEvent$Load
-[12:58:09] [Client thread/INFO]: [OptiFine] *** Reflector Vanilla ***
-[12:58:09] [Client thread/INFO]: [OptiFine] (Reflector) Class not present: optifine.OptiFineClassTransformer
-[12:58:09] [Client thread/INFO]: LWJGL Version: 2.9.4
-[12:58:09] [Client thread/INFO]: [OptiFine] 
-[12:58:09] [Client thread/INFO]: [OptiFine] OptiFine_1.8.8_HD_U_H8
-[12:58:09] [Client thread/INFO]: [OptiFine] Build: null
-[12:58:09] [Client thread/INFO]: [OptiFine] OS: Windows 10 (amd64) version 10.0
-[12:58:09] [Client thread/INFO]: [OptiFine] Java: 1.8.0_281, Oracle Corporation
-[12:58:09] [Client thread/INFO]: [OptiFine] VM: Java HotSpot(TM) 64-Bit Server VM (mixed mode), Oracle Corporation
-[12:58:09] [Client thread/INFO]: [OptiFine] LWJGL: 2.9.4
-[12:58:09] [Client thread/INFO]: [OptiFine] OpenGL: GeForce GT 1030/PCIe/SSE2, version 4.6.0 NVIDIA 461.40, NVIDIA Corporation
-[12:58:09] [Client thread/INFO]: [OptiFine] OpenGL Version: 4.6.0
-[12:58:09] [Client thread/INFO]: [OptiFine] Maximum texture size: 32768x32768
-[12:58:09] [Thread-6/INFO]: [OptiFine] Checking for new version
-[12:58:09] [Client thread/INFO]: [Shaders] ShadersMod version: 2.4.12
-[12:58:09] [Client thread/INFO]: [Shaders] OpenGL Version: 4.6.0 NVIDIA 461.40
-[12:58:09] [Client thread/INFO]: [Shaders] Vendor:  NVIDIA Corporation
-[12:58:09] [Client thread/INFO]: [Shaders] Renderer: GeForce GT 1030/PCIe/SSE2
-[12:58:09] [Client thread/INFO]: [Shaders] Capabilities:  2.0  2.1  3.0  3.2  4.0 
-[12:58:09] [Client thread/INFO]: [Shaders] GL_MAX_DRAW_BUFFERS: 8
-[12:58:09] [Client thread/INFO]: [Shaders] GL_MAX_COLOR_ATTACHMENTS_EXT: 8
-[12:58:09] [Client thread/INFO]: [Shaders] GL_MAX_TEXTURE_IMAGE_UNITS: 32
-[12:58:09] [Client thread/INFO]: [Shaders] Load ShadersMod configuration.
-[12:58:09] [Client thread/INFO]: [Shaders] Save ShadersMod configuration.
-[12:58:09] [Client thread/INFO]: [Shaders] Shaders can not be loaded, Fast Render is enabled.
-[12:58:09] [Client thread/INFO]: [Shaders] No shaderpack loaded.
-[12:58:09] [Client thread/INFO]: Reloading ResourceManager: Default
-[12:58:09] [Client thread/INFO]: [OptiFine] *** Reloading textures ***
-[12:58:09] [Client thread/INFO]: [OptiFine] Resource packs: Default
-[12:58:09] [Sound Library Loader/INFO]: Starting up SoundSystem...
-[12:58:09] [Thread-6/INFO]: [OptiFine] Version found: I7
-[12:58:09] [Thread-7/INFO]: Initializing LWJGL OpenAL
-[12:58:09] [Thread-7/INFO]: (The LWJGL binding of OpenAL.  For more information, see http://www.lwjgl.org)
-[12:58:10] [Thread-7/INFO]: OpenAL initialized.
-[12:58:10] [Sound Library Loader/INFO]: Sound engine started
-[12:58:12] [Client thread/INFO]: [OptiFine] Mipmap levels: 4
-[12:58:12] [Client thread/INFO]: [OptiFine] Multitexture: false
-[12:58:12] [Client thread/INFO]: [OptiFine] ConnectedTextures: mcpatcher/ctm/default/0_glass_white/glass_pane_white.properties
-[12:58:12] [Client thread/INFO]: [OptiFine] ConnectedTextures: mcpatcher/ctm/default/0_glass_white/glass_white.properties
-[12:58:12] [Client thread/INFO]: [OptiFine] ConnectedTextures: mcpatcher/ctm/default/10_glass_purple/glass_pane_purple.properties
-[12:58:12] [Client thread/INFO]: [OptiFine] ConnectedTextures: mcpatcher/ctm/default/10_glass_purple/glass_purple.properties
-[12:58:12] [Client thread/INFO]: [OptiFine] ConnectedTextures: mcpatcher/ctm/default/11_glass_blue/glass_blue.properties
-[12:58:12] [Client thread/INFO]: [OptiFine] ConnectedTextures: mcpatcher/ctm/default/11_glass_blue/glass_pane_blue.properties
-[12:58:12] [Client thread/INFO]: [OptiFine] ConnectedTextures: mcpatcher/ctm/default/12_glass_brown/glass_brown.properties
-[12:58:12] [Client thread/INFO]: [OptiFine] ConnectedTextures: mcpatcher/ctm/default/12_glass_brown/glass_pane_brown.properties
-[12:58:12] [Client thread/INFO]: [OptiFine] ConnectedTextures: mcpatcher/ctm/default/13_glass_green/glass_green.properties
-[12:58:12] [Client thread/INFO]: [OptiFine] ConnectedTextures: mcpatcher/ctm/default/13_glass_green/glass_pane_green.properties
-[12:58:12] [Client thread/INFO]: [OptiFine] ConnectedTextures: mcpatcher/ctm/default/14_glass_red/glass_pane_red.properties
-[12:58:12] [Client thread/INFO]: [OptiFine] ConnectedTextures: mcpatcher/ctm/default/14_glass_red/glass_red.properties
-[12:58:12] [Client thread/INFO]: [OptiFine] ConnectedTextures: mcpatcher/ctm/default/15_glass_black/glass_black.properties
-[12:58:12] [Client thread/INFO]: [OptiFine] ConnectedTextures: mcpatcher/ctm/default/15_glass_black/glass_pane_black.properties
-[12:58:12] [Client thread/INFO]: [OptiFine] ConnectedTextures: mcpatcher/ctm/default/1_glass_orange/glass_orange.properties
-[12:58:12] [Client thread/INFO]: [OptiFine] ConnectedTextures: mcpatcher/ctm/default/1_glass_orange/glass_pane_orange.properties
-[12:58:12] [Client thread/INFO]: [OptiFine] ConnectedTextures: mcpatcher/ctm/default/2_glass_magenta/glass_magenta.properties
-[12:58:12] [Client thread/INFO]: [OptiFine] ConnectedTextures: mcpatcher/ctm/default/2_glass_magenta/glass_pane_magenta.properties
-[12:58:12] [Client thread/INFO]: [OptiFine] ConnectedTextures: mcpatcher/ctm/default/3_glass_light_blue/glass_light_blue.properties
-[12:58:12] [Client thread/INFO]: [OptiFine] ConnectedTextures: mcpatcher/ctm/default/3_glass_light_blue/glass_pane_light_blue.properties
-[12:58:12] [Client thread/INFO]: [OptiFine] ConnectedTextures: mcpatcher/ctm/default/4_glass_yellow/glass_pane_yellow.properties
-[12:58:12] [Client thread/INFO]: [OptiFine] ConnectedTextures: mcpatcher/ctm/default/4_glass_yellow/glass_yellow.properties
-[12:58:12] [Client thread/INFO]: [OptiFine] ConnectedTextures: mcpatcher/ctm/default/5_glass_lime/glass_lime.properties
-[12:58:12] [Client thread/INFO]: [OptiFine] ConnectedTextures: mcpatcher/ctm/default/5_glass_lime/glass_pane_lime.properties
-[12:58:12] [Client thread/INFO]: [OptiFine] ConnectedTextures: mcpatcher/ctm/default/6_glass_pink/glass_pane_pink.properties
-[12:58:12] [Client thread/INFO]: [OptiFine] ConnectedTextures: mcpatcher/ctm/default/6_glass_pink/glass_pink.properties
-[12:58:12] [Client thread/INFO]: [OptiFine] ConnectedTextures: mcpatcher/ctm/default/7_glass_gray/glass_gray.properties
-[12:58:12] [Client thread/INFO]: [OptiFine] ConnectedTextures: mcpatcher/ctm/default/7_glass_gray/glass_pane_gray.properties
-[12:58:12] [Client thread/INFO]: [OptiFine] ConnectedTextures: mcpatcher/ctm/default/8_glass_silver/glass_pane_silver.properties
-[12:58:12] [Client thread/INFO]: [OptiFine] ConnectedTextures: mcpatcher/ctm/default/8_glass_silver/glass_silver.properties
-[12:58:12] [Client thread/INFO]: [OptiFine] ConnectedTextures: mcpatcher/ctm/default/9_glass_cyan/glass_cyan.properties
-[12:58:12] [Client thread/INFO]: [OptiFine] ConnectedTextures: mcpatcher/ctm/default/9_glass_cyan/glass_pane_cyan.properties
-[12:58:12] [Client thread/INFO]: [OptiFine] ConnectedTextures: mcpatcher/ctm/default/bookshelf.properties
-[12:58:12] [Client thread/INFO]: [OptiFine] ConnectedTextures: mcpatcher/ctm/default/glass.properties
-[12:58:12] [Client thread/INFO]: [OptiFine] ConnectedTextures: mcpatcher/ctm/default/glasspane.properties
-[12:58:12] [Client thread/INFO]: [OptiFine] ConnectedTextures: mcpatcher/ctm/default/sandstone.properties
-[12:58:12] [Client thread/INFO]: [OptiFine] Multipass connected textures: false
-[12:58:14] [Client thread/INFO]: Created: 1024x512 textures-atlas
-[12:58:16] [Client thread/INFO]: Loading translations...
-[12:58:16] [Client thread/INFO]: Registering protocols...
-[12:58:16] [Via-Mappingloader-0/INFO]: Loading 1.12 -> 1.13 mappings...
-[12:58:16] [Via-Mappingloader-1/INFO]: Loading 1.13 -> 1.13.2 mappings...
-[12:58:16] [Via-Mappingloader-2/INFO]: Loading 1.13.2 -> 1.14 mappings...
-[12:58:16] [Via-Mappingloader-3/INFO]: Loading 1.14 -> 1.15 mappings...
-[12:58:16] [Via-Mappingloader-1/INFO]: Loading 1.16 -> 1.16.2 mappings...
-[12:58:17] [Via-Mappingloader-4/INFO]: Loading 1.15 -> 1.16 mappings...
-[12:58:17] [Via-Mappingloader-5/INFO]: Loading 1.16.2 -> 1.17 mappings...
-[12:58:17] [Via-Mappingloader-0/INFO]: Loading block connection mappings ...
-[12:58:17] [Via-Mappingloader-4/INFO]: Loading 1.13.2 -> 1.13 mappings...
-[12:58:17] [Via-Mappingloader-5/INFO]: Loading 1.14 -> 1.13.2 mappings...
-[12:58:17] [Via-Mappingloader-5/INFO]: Loading 1.15 -> 1.14 mappings...
-[12:58:17] [Via-Mappingloader-5/INFO]: Loading 1.16 -> 1.15 mappings...
-[12:58:17] [Via-Mappingloader-1/INFO]: Loading 1.16.2 -> 1.16 mappings...
-[12:58:17] [Via-Mappingloader-4/INFO]: Loading 1.17 -> 1.16.2 mappings...
-[12:58:17] [ViaFabric-0/INFO]: ViaVersion detected server version: 1.8.x(47)
-[12:58:17] [ViaFabric-0/WARN]: This version of Minecraft is over half a decade old and support for it will be fully dropped eventually. Please upgrade to a newer version to avoid encountering bugs and stability issues that have long been fixed.
-[12:58:17] [Via-Mappingloader-5/INFO]: Loading 1.13 -> 1.12 mappings...
-[12:58:18] [Client thread/INFO]: [OptiFine] *** Reloading custom textures ***
-[12:58:18] [Client thread/INFO]: [OptiFine] Enable face culling: acacia_leaves, birch_leaves, dark_oak_leaves, jungle_leaves, oak_leaves, spruce_leaves
-[12:58:18] [ViaFabric-0/INFO]: Shutting down mapping loader executor!
-[12:58:18] [ViaFabric-0/WARN]: You are running a newer version than is released!
-[12:58:21] [Server thread/INFO]: Starting integrated minecraft server version 1.8.8
-[12:58:21] [Server thread/INFO]: Generating keypair
-[12:58:21] [Server thread/INFO]: Preparing start region for level 0
-[12:58:22] [Server thread/INFO]: Changing view distance to 8, from 10
-[12:58:23] [Server thread/INFO]: Player116[local:E:65073a31] logged in with entity id 359 at (593.468812858453, 67.0, 165.83572796000092)
-[12:58:23] [Server thread/INFO]: Player116 joined the game
-[12:58:23] [Client thread/INFO]: [CHAT] A new §eOptiFine§f version is available: §eHD Ultra I7§f
-[12:58:29] [Server thread/INFO]: Player116 has just earned the achievement [Taking Inventory]
-[12:58:29] [Client thread/INFO]: [CHAT] Player116 has just earned the achievement [Taking Inventory]
-[12:59:26] [Server thread/INFO]: Saving and pausing game...
-[12:59:26] [Server thread/INFO]: Saving chunks for level 'mcpworld'/Overworld
-[12:59:26] [Server thread/INFO]: Saving chunks for level 'mcpworld'/Nether
-[12:59:26] [Server thread/INFO]: Saving chunks for level 'mcpworld'/The End
-[13:06:35] [Client thread/INFO]: Stopping!
-[13:06:35] [Client thread/INFO]: SoundSystem shutting down...
-[13:06:35] [Server thread/INFO]: Stopping server
-[13:06:35] [Server thread/INFO]: Saving players
-[13:06:35] [Server thread/INFO]: Saving worlds
-[13:06:35] [Server thread/INFO]: Saving chunks for level 'mcpworld'/Overworld
-[13:06:35] [Server thread/INFO]: Saving chunks for level 'mcpworld'/Nether
-[13:06:35] [Server thread/INFO]: Saving chunks for level 'mcpworld'/The End
-[13:06:35] [Client thread/WARN]: Author: Paul Lamb, www.paulscode.com
+[16:25:31] [Client thread/INFO]: Setting user: Player414
+[16:25:31] [Client thread/INFO]: (Session ID is token:0:Player414)
+[16:25:32] [Client thread/INFO]: [OptiFine] *** Reflector Forge ***
+[16:25:32] [Client thread/INFO]: [OptiFine] (Reflector) Class not present: net.minecraftforge.client.model.Attributes
+[16:25:32] [Client thread/INFO]: [OptiFine] (Reflector) Class not present: mods.betterfoliage.client.BetterFoliageClient
+[16:25:32] [Client thread/INFO]: [OptiFine] (Reflector) Class not present: net.minecraftforge.fml.common.asm.transformers.BlamingTransformer
+[16:25:32] [Client thread/INFO]: [OptiFine] (Reflector) Class not present: net.minecraftforge.event.world.ChunkWatchEvent$UnWatch
+[16:25:32] [Client thread/INFO]: [OptiFine] (Reflector) Class not present: net.minecraftforge.fml.relauncher.CoreModManager
+[16:25:32] [Client thread/INFO]: [OptiFine] (Reflector) Class not present: net.minecraftforge.common.DimensionManager
+[16:25:32] [Client thread/INFO]: [OptiFine] (Reflector) Class not present: net.minecraftforge.client.event.GuiScreenEvent$DrawScreenEvent$Pre
+[16:25:32] [Client thread/INFO]: [OptiFine] (Reflector) Class not present: net.minecraftforge.client.event.GuiScreenEvent$DrawScreenEvent$Post
+[16:25:32] [Client thread/INFO]: [OptiFine] (Reflector) Class not present: net.minecraftforge.client.event.EntityViewRenderEvent$CameraSetup
+[16:25:32] [Client thread/INFO]: [OptiFine] (Reflector) Class not present: net.minecraftforge.client.event.EntityViewRenderEvent$FogColors
+[16:25:32] [Client thread/INFO]: [OptiFine] (Reflector) Class not present: net.minecraftforge.fml.common.eventhandler.Event
+[16:25:32] [Client thread/INFO]: [OptiFine] (Reflector) Class not present: net.minecraftforge.fml.common.eventhandler.EventBus
+[16:25:32] [Client thread/INFO]: [OptiFine] (Reflector) Class not present: net.minecraftforge.fml.common.eventhandler.Event$Result
+[16:25:32] [Client thread/INFO]: [OptiFine] (Reflector) Class not present: net.minecraftforge.common.property.ExtendedBlockState
+[16:25:32] [Client thread/INFO]: [OptiFine] (Reflector) Class not present: net.minecraftforge.fml.client.FMLClientHandler
+[16:25:32] [Client thread/INFO]: [OptiFine] (Reflector) Class not present: net.minecraftforge.fml.common.FMLCommonHandler
+[16:25:32] [Client thread/INFO]: [OptiFine] (Reflector) Method not present: net.minecraft.world.biome.BiomeGenBase.getWaterColorMultiplier
+[16:25:32] [Client thread/INFO]: [OptiFine] (Reflector) Method not present: net.minecraft.block.Block.addDestroyEffects
+[16:25:32] [Client thread/INFO]: [OptiFine] (Reflector) Method not present: net.minecraft.block.Block.addHitEffects
+[16:25:32] [Client thread/INFO]: [OptiFine] (Reflector) Method not present: net.minecraft.block.Block.canCreatureSpawn
+[16:25:32] [Client thread/INFO]: [OptiFine] (Reflector) Method not present: net.minecraft.block.Block.canRenderInLayer
+[16:25:32] [Client thread/INFO]: [OptiFine] (Reflector) Method not present: net.minecraft.block.Block.doesSideBlockRendering
+[16:25:32] [Client thread/INFO]: [OptiFine] (Reflector) Method not present: net.minecraft.block.Block.getBedDirection
+[16:25:32] [Client thread/INFO]: [OptiFine] (Reflector) Method not present: net.minecraft.block.Block.getExtendedState
+[16:25:32] [Client thread/INFO]: [OptiFine] (Reflector) Method not present: net.minecraft.block.Block.hasTileEntity
+[16:25:32] [Client thread/INFO]: [OptiFine] (Reflector) Method not present: net.minecraft.block.Block.isAir
+[16:25:32] [Client thread/INFO]: [OptiFine] (Reflector) Method not present: net.minecraft.block.Block.isBed
+[16:25:32] [Client thread/INFO]: [OptiFine] (Reflector) Method not present: net.minecraft.block.Block.isBedFoot
+[16:25:32] [Client thread/INFO]: [OptiFine] (Reflector) Method not present: net.minecraft.block.Block.isSideSolid
+[16:25:32] [Client thread/INFO]: [OptiFine] (Reflector) Method not present: net.minecraft.entity.Entity.canRiderInteract
+[16:25:32] [Client thread/INFO]: [OptiFine] (Reflector) Field not present: net.minecraft.entity.Entity.captureDrops
+[16:25:32] [Client thread/INFO]: [OptiFine] (Reflector) Field not present: net.minecraft.entity.Entity.capturedDrops
+[16:25:32] [Client thread/INFO]: [OptiFine] (Reflector) Method not present: net.minecraft.entity.Entity.shouldRenderInPass
+[16:25:32] [Client thread/INFO]: [OptiFine] (Reflector) Method not present: net.minecraft.entity.Entity.shouldRiderSit
+[16:25:32] [Client thread/INFO]: [OptiFine] (Reflector) Class not present: net.minecraftforge.event.ForgeEventFactory
+[16:25:32] [Client thread/INFO]: [OptiFine] (Reflector) Class not present: net.minecraftforge.common.ForgeHooks
+[16:25:32] [Client thread/INFO]: [OptiFine] (Reflector) Class not present: net.minecraftforge.client.ForgeHooksClient
+[16:25:32] [Client thread/INFO]: [OptiFine] (Reflector) Method not present: net.minecraft.item.Item.getDurabilityForDisplay
+[16:25:32] [Client thread/INFO]: [OptiFine] (Reflector) Method not present: net.minecraft.item.Item.getModel
+[16:25:32] [Client thread/INFO]: [OptiFine] (Reflector) Method not present: net.minecraft.item.Item.onEntitySwing
+[16:25:32] [Client thread/INFO]: [OptiFine] (Reflector) Method not present: net.minecraft.item.Item.shouldCauseReequipAnimation
+[16:25:32] [Client thread/INFO]: [OptiFine] (Reflector) Method not present: net.minecraft.item.Item.showDurabilityBar
+[16:25:32] [Client thread/INFO]: [OptiFine] (Reflector) Method not present: net.minecraft.item.ItemRecord.getRecordResource
+[16:25:32] [Client thread/INFO]: [OptiFine] (Reflector) Class not present: net.minecraftforge.common.ForgeModContainer
+[16:25:32] [Client thread/INFO]: [OptiFine] (Reflector) Method not present: net.minecraft.potion.PotionEffect.isCurativeItem
+[16:25:32] [Client thread/INFO]: [OptiFine] (Reflector) Method not present: net.minecraft.tileentity.TileEntity.canRenderBreaking
+[16:25:32] [Client thread/INFO]: [OptiFine] (Reflector) Method not present: net.minecraft.tileentity.TileEntity.getRenderBoundingBox
+[16:25:32] [Client thread/INFO]: [OptiFine] (Reflector) Method not present: net.minecraft.tileentity.TileEntity.hasFastRenderer
+[16:25:32] [Client thread/INFO]: [OptiFine] (Reflector) Method not present: net.minecraft.tileentity.TileEntity.shouldRenderInPass
+[16:25:32] [Client thread/INFO]: [OptiFine] (Reflector) Method not present: net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher.preDrawBatch
+[16:25:32] [Client thread/INFO]: [OptiFine] (Reflector) Method not present: net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher.drawBatch
+[16:25:32] [Client thread/INFO]: [OptiFine] (Reflector) Method not present: net.minecraft.client.renderer.vertex.VertexFormatElement$EnumUsage.preDraw
+[16:25:32] [Client thread/INFO]: [OptiFine] (Reflector) Method not present: net.minecraft.client.renderer.vertex.VertexFormatElement$EnumUsage.postDraw
+[16:25:32] [Client thread/INFO]: [OptiFine] (Reflector) Method not present: net.minecraft.world.World.countEntities
+[16:25:32] [Client thread/INFO]: [OptiFine] (Reflector) Method not present: net.minecraft.world.World.getPerWorldStorage
+[16:25:32] [Client thread/INFO]: [OptiFine] (Reflector) Method not present: net.minecraft.world.WorldProvider.getCloudRenderer
+[16:25:32] [Client thread/INFO]: [OptiFine] (Reflector) Method not present: net.minecraft.world.WorldProvider.getSkyRenderer
+[16:25:32] [Client thread/INFO]: [OptiFine] (Reflector) Method not present: net.minecraft.world.WorldProvider.getWeatherRenderer
+[16:25:32] [Client thread/INFO]: [OptiFine] (Reflector) Class not present: net.minecraftforge.fml.client.GuiModList
+[16:25:32] [Client thread/INFO]: [OptiFine] (Reflector) Class not present: net.minecraftforge.client.model.IColoredBakedQuad
+[16:25:32] [Client thread/INFO]: [OptiFine] (Reflector) Class not present: net.minecraftforge.common.property.IExtendedBlockState
+[16:25:32] [Client thread/INFO]: [OptiFine] (Reflector) Class not present: net.minecraftforge.client.IRenderHandler
+[16:25:32] [Client thread/INFO]: [OptiFine] (Reflector) Class not present: net.minecraftforge.client.model.ISmartBlockModel
+[16:25:32] [Client thread/INFO]: [OptiFine] (Reflector) Class not present: net.minecraftforge.client.ItemModelMesherForge
+[16:25:32] [Client thread/INFO]: [OptiFine] (Reflector) Class not present: net.minecraft.launchwrapper.Launch
+[16:25:32] [Client thread/INFO]: [OptiFine] (Reflector) Class not present: net.minecraftforge.client.model.pipeline.LightUtil
+[16:25:32] [Client thread/INFO]: [OptiFine] (Reflector) Class not present: net.minecraftforge.common.MinecraftForge
+[16:25:32] [Client thread/INFO]: [OptiFine] (Reflector) Class not present: net.minecraftforge.client.MinecraftForgeClient
+[16:25:32] [Client thread/INFO]: [OptiFine] (Reflector) Class not present: net.minecraftforge.client.model.ModelLoader
+[16:25:32] [Client thread/INFO]: [OptiFine] (Reflector) Class not present: net.minecraftforge.client.event.RenderBlockOverlayEvent$OverlayType
+[16:25:32] [Client thread/INFO]: [OptiFine] (Reflector) Class not present: net.minecraftforge.fml.client.registry.RenderingRegistry
+[16:25:32] [Client thread/INFO]: [OptiFine] (Reflector) Class not present: net.minecraftforge.client.event.RenderItemInFrameEvent
+[16:25:32] [Client thread/INFO]: [OptiFine] (Reflector) Class not present: net.minecraftforge.client.event.RenderLivingEvent$Pre
+[16:25:32] [Client thread/INFO]: [OptiFine] (Reflector) Class not present: net.minecraftforge.client.event.RenderLivingEvent$Post
+[16:25:32] [Client thread/INFO]: [OptiFine] (Reflector) Class not present: net.minecraftforge.client.event.RenderLivingEvent$Specials$Pre
+[16:25:32] [Client thread/INFO]: [OptiFine] (Reflector) Class not present: net.minecraftforge.client.event.RenderLivingEvent$Specials$Post
+[16:25:32] [Client thread/INFO]: [OptiFine] (Reflector) Class not present: net.minecraftforge.fml.client.SplashProgress
+[16:25:32] [Client thread/INFO]: [OptiFine] (Reflector) Class not present: net.minecraftforge.event.world.WorldEvent$Load
+[16:25:32] [Client thread/INFO]: [OptiFine] *** Reflector Vanilla ***
+[16:25:32] [Client thread/INFO]: [OptiFine] (Reflector) Class not present: optifine.OptiFineClassTransformer
+[16:25:32] [Client thread/INFO]: LWJGL Version: 2.9.4
+[16:25:33] [Client thread/INFO]: [OptiFine] 
+[16:25:33] [Client thread/INFO]: [OptiFine] OptiFine_1.8.8_HD_U_H8
+[16:25:33] [Client thread/INFO]: [OptiFine] Build: null
+[16:25:33] [Client thread/INFO]: [OptiFine] OS: Windows 10 (amd64) version 10.0
+[16:25:33] [Client thread/INFO]: [OptiFine] Java: 1.8.0_281, Oracle Corporation
+[16:25:33] [Client thread/INFO]: [OptiFine] VM: Java HotSpot(TM) 64-Bit Server VM (mixed mode), Oracle Corporation
+[16:25:33] [Client thread/INFO]: [OptiFine] LWJGL: 2.9.4
+[16:25:33] [Client thread/INFO]: [OptiFine] OpenGL: GeForce GT 1030/PCIe/SSE2, version 4.6.0 NVIDIA 461.40, NVIDIA Corporation
+[16:25:33] [Client thread/INFO]: [OptiFine] OpenGL Version: 4.6.0
+[16:25:33] [Client thread/INFO]: [OptiFine] Maximum texture size: 32768x32768
+[16:25:33] [Thread-6/INFO]: [OptiFine] Checking for new version
+[16:25:33] [Client thread/INFO]: [Shaders] ShadersMod version: 2.4.12
+[16:25:33] [Client thread/INFO]: [Shaders] OpenGL Version: 4.6.0 NVIDIA 461.40
+[16:25:33] [Client thread/INFO]: [Shaders] Vendor:  NVIDIA Corporation
+[16:25:33] [Client thread/INFO]: [Shaders] Renderer: GeForce GT 1030/PCIe/SSE2
+[16:25:33] [Client thread/INFO]: [Shaders] Capabilities:  2.0  2.1  3.0  3.2  4.0 
+[16:25:33] [Client thread/INFO]: [Shaders] GL_MAX_DRAW_BUFFERS: 8
+[16:25:33] [Client thread/INFO]: [Shaders] GL_MAX_COLOR_ATTACHMENTS_EXT: 8
+[16:25:33] [Client thread/INFO]: [Shaders] GL_MAX_TEXTURE_IMAGE_UNITS: 32
+[16:25:33] [Client thread/INFO]: [Shaders] Load ShadersMod configuration.
+[16:25:33] [Client thread/INFO]: [Shaders] Save ShadersMod configuration.
+[16:25:33] [Client thread/INFO]: [Shaders] Shaders can not be loaded, Fast Render is enabled.
+[16:25:33] [Client thread/INFO]: [Shaders] No shaderpack loaded.
+[16:25:33] [Client thread/INFO]: Reloading ResourceManager: Default
+[16:25:33] [Client thread/INFO]: [OptiFine] *** Reloading textures ***
+[16:25:33] [Client thread/INFO]: [OptiFine] Resource packs: Default
+[16:25:33] [Sound Library Loader/INFO]: Starting up SoundSystem...
+[16:25:33] [Thread-6/INFO]: [OptiFine] Version found: I7
+[16:25:33] [Thread-7/INFO]: Initializing LWJGL OpenAL
+[16:25:33] [Thread-7/INFO]: (The LWJGL binding of OpenAL.  For more information, see http://www.lwjgl.org)
+[16:25:33] [Thread-7/INFO]: OpenAL initialized.
+[16:25:34] [Sound Library Loader/INFO]: Sound engine started
+[16:25:35] [Client thread/INFO]: [OptiFine] Mipmap levels: 4
+[16:25:35] [Client thread/INFO]: [OptiFine] Multitexture: false
+[16:25:35] [Client thread/INFO]: [OptiFine] ConnectedTextures: mcpatcher/ctm/default/0_glass_white/glass_pane_white.properties
+[16:25:35] [Client thread/INFO]: [OptiFine] ConnectedTextures: mcpatcher/ctm/default/0_glass_white/glass_white.properties
+[16:25:35] [Client thread/INFO]: [OptiFine] ConnectedTextures: mcpatcher/ctm/default/10_glass_purple/glass_pane_purple.properties
+[16:25:35] [Client thread/INFO]: [OptiFine] ConnectedTextures: mcpatcher/ctm/default/10_glass_purple/glass_purple.properties
+[16:25:35] [Client thread/INFO]: [OptiFine] ConnectedTextures: mcpatcher/ctm/default/11_glass_blue/glass_blue.properties
+[16:25:35] [Client thread/INFO]: [OptiFine] ConnectedTextures: mcpatcher/ctm/default/11_glass_blue/glass_pane_blue.properties
+[16:25:35] [Client thread/INFO]: [OptiFine] ConnectedTextures: mcpatcher/ctm/default/12_glass_brown/glass_brown.properties
+[16:25:35] [Client thread/INFO]: [OptiFine] ConnectedTextures: mcpatcher/ctm/default/12_glass_brown/glass_pane_brown.properties
+[16:25:35] [Client thread/INFO]: [OptiFine] ConnectedTextures: mcpatcher/ctm/default/13_glass_green/glass_green.properties
+[16:25:35] [Client thread/INFO]: [OptiFine] ConnectedTextures: mcpatcher/ctm/default/13_glass_green/glass_pane_green.properties
+[16:25:35] [Client thread/INFO]: [OptiFine] ConnectedTextures: mcpatcher/ctm/default/14_glass_red/glass_pane_red.properties
+[16:25:35] [Client thread/INFO]: [OptiFine] ConnectedTextures: mcpatcher/ctm/default/14_glass_red/glass_red.properties
+[16:25:35] [Client thread/INFO]: [OptiFine] ConnectedTextures: mcpatcher/ctm/default/15_glass_black/glass_black.properties
+[16:25:35] [Client thread/INFO]: [OptiFine] ConnectedTextures: mcpatcher/ctm/default/15_glass_black/glass_pane_black.properties
+[16:25:35] [Client thread/INFO]: [OptiFine] ConnectedTextures: mcpatcher/ctm/default/1_glass_orange/glass_orange.properties
+[16:25:35] [Client thread/INFO]: [OptiFine] ConnectedTextures: mcpatcher/ctm/default/1_glass_orange/glass_pane_orange.properties
+[16:25:35] [Client thread/INFO]: [OptiFine] ConnectedTextures: mcpatcher/ctm/default/2_glass_magenta/glass_magenta.properties
+[16:25:35] [Client thread/INFO]: [OptiFine] ConnectedTextures: mcpatcher/ctm/default/2_glass_magenta/glass_pane_magenta.properties
+[16:25:35] [Client thread/INFO]: [OptiFine] ConnectedTextures: mcpatcher/ctm/default/3_glass_light_blue/glass_light_blue.properties
+[16:25:35] [Client thread/INFO]: [OptiFine] ConnectedTextures: mcpatcher/ctm/default/3_glass_light_blue/glass_pane_light_blue.properties
+[16:25:35] [Client thread/INFO]: [OptiFine] ConnectedTextures: mcpatcher/ctm/default/4_glass_yellow/glass_pane_yellow.properties
+[16:25:35] [Client thread/INFO]: [OptiFine] ConnectedTextures: mcpatcher/ctm/default/4_glass_yellow/glass_yellow.properties
+[16:25:35] [Client thread/INFO]: [OptiFine] ConnectedTextures: mcpatcher/ctm/default/5_glass_lime/glass_lime.properties
+[16:25:35] [Client thread/INFO]: [OptiFine] ConnectedTextures: mcpatcher/ctm/default/5_glass_lime/glass_pane_lime.properties
+[16:25:35] [Client thread/INFO]: [OptiFine] ConnectedTextures: mcpatcher/ctm/default/6_glass_pink/glass_pane_pink.properties
+[16:25:35] [Client thread/INFO]: [OptiFine] ConnectedTextures: mcpatcher/ctm/default/6_glass_pink/glass_pink.properties
+[16:25:35] [Client thread/INFO]: [OptiFine] ConnectedTextures: mcpatcher/ctm/default/7_glass_gray/glass_gray.properties
+[16:25:35] [Client thread/INFO]: [OptiFine] ConnectedTextures: mcpatcher/ctm/default/7_glass_gray/glass_pane_gray.properties
+[16:25:35] [Client thread/INFO]: [OptiFine] ConnectedTextures: mcpatcher/ctm/default/8_glass_silver/glass_pane_silver.properties
+[16:25:35] [Client thread/INFO]: [OptiFine] ConnectedTextures: mcpatcher/ctm/default/8_glass_silver/glass_silver.properties
+[16:25:35] [Client thread/INFO]: [OptiFine] ConnectedTextures: mcpatcher/ctm/default/9_glass_cyan/glass_cyan.properties
+[16:25:35] [Client thread/INFO]: [OptiFine] ConnectedTextures: mcpatcher/ctm/default/9_glass_cyan/glass_pane_cyan.properties
+[16:25:35] [Client thread/INFO]: [OptiFine] ConnectedTextures: mcpatcher/ctm/default/bookshelf.properties
+[16:25:35] [Client thread/INFO]: [OptiFine] ConnectedTextures: mcpatcher/ctm/default/glass.properties
+[16:25:35] [Client thread/INFO]: [OptiFine] ConnectedTextures: mcpatcher/ctm/default/glasspane.properties
+[16:25:35] [Client thread/INFO]: [OptiFine] ConnectedTextures: mcpatcher/ctm/default/sandstone.properties
+[16:25:35] [Client thread/INFO]: [OptiFine] Multipass connected textures: false
+[16:25:36] [Client thread/INFO]: Created: 1024x512 textures-atlas
+[16:25:38] [Client thread/INFO]: Loading translations...
+[16:25:38] [Client thread/INFO]: Registering protocols...
+[16:25:39] [Via-Mappingloader-0/INFO]: Loading 1.12 -> 1.13 mappings...
+[16:25:39] [Via-Mappingloader-1/INFO]: Loading 1.13 -> 1.13.2 mappings...
+[16:25:39] [Via-Mappingloader-2/INFO]: Loading 1.13.2 -> 1.14 mappings...
+[16:25:39] [Via-Mappingloader-3/INFO]: Loading 1.14 -> 1.15 mappings...
+[16:25:39] [Via-Mappingloader-4/INFO]: Loading 1.15 -> 1.16 mappings...
+[16:25:39] [Via-Mappingloader-5/INFO]: Loading 1.16 -> 1.16.2 mappings...
+[16:25:39] [Via-Mappingloader-6/INFO]: Loading 1.16.2 -> 1.17 mappings...
+[16:25:39] [Via-Mappingloader-6/INFO]: Loading 1.13.2 -> 1.13 mappings...
+[16:25:39] [Via-Mappingloader-2/INFO]: Loading 1.14 -> 1.13.2 mappings...
+[16:25:39] [Via-Mappingloader-0/INFO]: Loading block connection mappings ...
+[16:25:39] [Via-Mappingloader-6/INFO]: Loading 1.15 -> 1.14 mappings...
+[16:25:39] [Via-Mappingloader-2/INFO]: Loading 1.16 -> 1.15 mappings...
+[16:25:39] [Via-Mappingloader-6/INFO]: Loading 1.16.2 -> 1.16 mappings...
+[16:25:39] [Via-Mappingloader-2/INFO]: Loading 1.17 -> 1.16.2 mappings...
+[16:25:40] [ViaFabric-0/INFO]: ViaVersion detected server version: 1.8.x(47)
+[16:25:40] [ViaFabric-0/WARN]: This version of Minecraft is over half a decade old and support for it will be fully dropped eventually. Please upgrade to a newer version to avoid encountering bugs and stability issues that have long been fixed.
+[16:25:40] [Via-Mappingloader-2/INFO]: Loading 1.13 -> 1.12 mappings...
+[16:25:40] [Client thread/INFO]: [OptiFine] *** Reloading custom textures ***
+[16:25:40] [Client thread/INFO]: [OptiFine] Enable face culling: acacia_leaves, birch_leaves, dark_oak_leaves, jungle_leaves, oak_leaves, spruce_leaves
+[16:25:40] [ViaFabric-0/INFO]: Shutting down mapping loader executor!
+[16:25:41] [ViaFabric-0/WARN]: You are running a newer version than is released!
+[16:25:53] [Alt Login Thread/INFO]: Logging in with username & password
+[16:26:00] [Client thread/INFO]: Connecting to play.onlymc.us, 25565
+[16:26:21] [Alt Login Thread/INFO]: Logging in with username & password
+[16:26:27] [Client thread/INFO]: Connecting to play.onlymc.us, 25565
+[16:26:37] [Client thread/INFO]: Connecting to funcraft.net, 25565
+[16:26:38] [Client thread/INFO]: [CHAT] Les inscriptions sont désactivées pour le moment.
+[16:27:02] [Client thread/INFO]: Connecting to funcraft.net, 25565
+[16:27:07] [Client thread/INFO]: [CHAT] --------------------------------------------------
+Nous vous conseillons d'utiliser le ⭐AZ Launcher pour profiter pleinement de FunCraft !
+ 
+ Téléchargez-le ici: https://www.az-launcher.nz/ 
+--------------------------------------------------
+[16:27:17] [Client thread/INFO]: [CHAT]  Ctrop Gryfix a rejoint le lobby !
+[16:27:18] [Client thread/INFO]: [CHAT] ✴⭐Ctrop Gryfix: Qui mdt
+[16:27:23] [Client thread/INFO]: [CHAT] ✴⭐Joueur Yukzi: jcuhcyu
+[16:27:25] [Client thread/INFO]: [CHAT] ✴⭐Mini-VIP OkoneSENPAI: qui plat 3x3 ??
+[16:27:32] [Client thread/INFO]: [CHAT]  Dino bbsinge a rejoint le lobby !
+[16:27:36] [Client thread/INFO]: [CHAT] [File d'attente] Vous avez rejoint la file SkyWars Solo !
+Priorité: Normale
+[16:27:37] [Client thread/INFO]: [CHAT]  Toxic Sqdness__ a rejoint le lobby !
+[16:27:52] [Client thread/INFO]: [CHAT] [File d'attente] Vous rejoignez skywars12_34.302 !
+[16:27:53] [Client thread/INFO]: [CHAT] + BroskiiFX s'est connecté. (4/12)
+[16:27:53] [Client thread/INFO]: [CHAT] + Sauya s'est connecté. (5/12)
+[16:27:53] [Client thread/INFO]: [CHAT] + vegeta124 s'est connecté. (6/12)
+[16:27:53] [Client thread/INFO]: [CHAT] + Sensia_Zey_Ytb s'est connecté. (7/12)
+[16:27:53] [Client thread/INFO]: [CHAT] + rxen s'est connecté. (8/12)
+[16:27:53] [Client thread/INFO]: [CHAT] + Drety s'est connecté. (9/12)
+[16:27:53] [Client thread/INFO]: [CHAT] + _hippolyte_ s'est connecté. (10/12)
+[16:27:53] [Client thread/INFO]: [CHAT] + Aysteflamme s'est connecté. (11/12)
+[16:27:53] [Client thread/INFO]: [CHAT] + ledix s'est connecté. (12/12)
+[16:27:56] [Client thread/INFO]: [CHAT] -------------------------
+
+ Questionnaire ! : #Mic_ON Votre avis nous intéresse !
+  
+>  https://forms.gle/K1jwDX3SptFMPz4H8 
+
+ -> 3 lots de 1000 Faveurs à gagner ! <- 
+
+-------------------------
+[16:28:09] [Client thread/INFO]: [CHAT] ✴[9k] ⭐Joueur vegeta124: omg
+[16:28:11] [Client thread/INFO]: [CHAT] ✴[9k] ⭐Joueur vegeta124: 3lot
+[16:28:16] [Client thread/INFO]: [CHAT] ⚔ Brvky est mort.
+[16:28:25] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:entity.player.attack.knockback
+[16:28:25] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:entity.player.attack.strong
+[16:28:26] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:entity.player.attack.knockback
+[16:28:26] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:entity.player.attack.strong
+[16:28:26] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:entity.player.attack.crit
+[16:28:26] [Client thread/INFO]: [CHAT] ⚔ nicodj15 a été tué par BroskiiFX.
+[16:28:26] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:entity.player.attack.crit
+[16:28:26] [Client thread/INFO]: [CHAT] Les alliances sont interdites en parties solo !
+
+[16:28:29] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:entity.player.attack.knockback
+[16:28:29] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:entity.player.attack.strong
+[16:28:34] [Client thread/INFO]: Connecting to funcraft.net, 25565
+[16:28:35] [Client thread/INFO]: [CHAT] Vous avez été banni jusqu'au 20/06/2048 à 17:28 !
+
+- MonsterKiid: Infraction : Triche (fly/glide)
+[16:28:55] [Client thread/INFO]: Connecting to eu.brwserv.net, 25565
+[16:29:11] [Alt Login Thread/INFO]: Logging in with username & password
+[16:29:15] [Client thread/INFO]: Connecting to eu.brwserv.net, 25565
+[16:29:31] [Client thread/INFO]: Connecting to funcraft.net, 25565
+[16:29:34] [Client thread/INFO]: Connecting to eu.brwserv.net, 25565
+[16:29:38] [Client thread/INFO]: Connecting to eu.brwserv.net, 25565
+[16:32:14] [Client thread/INFO]: [CHAT] Vous avez rejoint la file d'attente FFARush...
+[16:32:15] [Client thread/INFO]: [CHAT] Téléportation vers le serveur Rush01...
+[16:32:36] [Client thread/INFO]: [CHAT] §4⚠§r§e§7Joueur Waziix §9»§f romoss
+[16:32:39] [Client thread/INFO]: [CHAT] ----------------------------------------------------
+[16:32:39] [Client thread/INFO]: [CHAT] 
+[16:32:39] [Client thread/INFO]: [CHAT]   » Les alliances sont strictement interdites !
+[16:32:39] [Client thread/INFO]: [CHAT] 
+[16:32:39] [Client thread/INFO]: [CHAT] ----------------------------------------------------
+[16:32:41] [Client thread/INFO]: [CHAT] Ne soyez pas trop pressé...
+[16:32:42] [Client thread/INFO]: [CHAT] Ne soyez pas trop pressé...
+[16:32:42] [Client thread/INFO]: [CHAT] Ne soyez pas trop pressé...
+[16:32:42] [Client thread/INFO]: [CHAT] Ne soyez pas trop pressé...
+[16:32:42] [Client thread/INFO]: [CHAT] Ne soyez pas trop pressé...
+[16:32:43] [Client thread/INFO]: [CHAT] Ne soyez pas trop pressé...
+[16:32:43] [Client thread/INFO]: [CHAT] Ne soyez pas trop pressé...
+[16:32:44] [Client thread/INFO]: [CHAT] Ne soyez pas trop pressé...
+[16:32:44] [Client thread/INFO]: [CHAT] Ne soyez pas trop pressé...
+[16:32:47] [Client thread/INFO]: Connecting to eu.brwserv.net, 25565
+[16:32:50] [Client thread/INFO]: [CHAT] Vous avez rejoint la file d'attente FFARush...
+[16:32:50] [Client thread/INFO]: [CHAT] Téléportation vers le serveur Rush01...
+[16:32:52] [Client thread/INFO]: [CHAT] ----------------------------------------------------
+[16:32:52] [Client thread/INFO]: [CHAT] 
+[16:32:52] [Client thread/INFO]: [CHAT]   » Les alliances sont strictement interdites !
+[16:32:52] [Client thread/INFO]: [CHAT] 
+[16:32:52] [Client thread/INFO]: [CHAT] ----------------------------------------------------
+[16:32:52] [Client thread/INFO]: [CHAT] Ne soyez pas trop pressé...
+[16:32:52] [Client thread/INFO]: [CHAT] Ne soyez pas trop pressé...
+[16:32:52] [Client thread/INFO]: [CHAT] Ne soyez pas trop pressé...
+[16:32:52] [Client thread/INFO]: [CHAT] Ne soyez pas trop pressé...
+[16:32:52] [Client thread/INFO]: [CHAT] Ne soyez pas trop pressé...
+[16:32:53] [Client thread/INFO]: [CHAT] Ne soyez pas trop pressé...
+[16:32:53] [Client thread/INFO]: [CHAT] Ne soyez pas trop pressé...
+[16:32:53] [Client thread/INFO]: [CHAT] Ne soyez pas trop pressé...
+[16:32:53] [Client thread/INFO]: [CHAT] Ne soyez pas trop pressé...
+[16:32:54] [Client thread/INFO]: [CHAT] Ne soyez pas trop pressé...
+[16:32:54] [Client thread/INFO]: [CHAT] Ne soyez pas trop pressé...
+[16:32:54] [Client thread/INFO]: [CHAT] Ne soyez pas trop pressé...
+[16:32:54] [Client thread/INFO]: [CHAT] Ne soyez pas trop pressé...
+[16:32:54] [Client thread/INFO]: [CHAT] Ne soyez pas trop pressé...
+[16:32:55] [Client thread/INFO]: [CHAT] Ne soyez pas trop pressé...
+[16:32:55] [Client thread/INFO]: [CHAT] Ne soyez pas trop pressé...
+[16:32:58] [Client thread/INFO]: [CHAT] _Cazu_ a été tué par xVengeful !
+[16:32:58] [Client thread/INFO]: [CHAT] Gain de BRCoin(s) : +1.0ⒷⒸ
+[16:32:58] [Client thread/INFO]: [CHAT] xSweiz a été tué par xVengeful !
+[16:32:58] [Client thread/INFO]: [CHAT] Gain de BRCoin(s) : +1.0ⒷⒸ
+[16:33:01] [Client thread/INFO]: Connecting to eu.brwserv.net, 25565
+[16:33:04] [Client thread/INFO]: [CHAT] Vous avez rejoint la file d'attente FFARush...
+[16:33:06] [Client thread/INFO]: [CHAT] Téléportation vers le serveur Rush01...
+[16:33:07] [Client thread/INFO]: [CHAT] ----------------------------------------------------
+[16:33:07] [Client thread/INFO]: [CHAT] 
+[16:33:07] [Client thread/INFO]: [CHAT]   » Les alliances sont strictement interdites !
+[16:33:07] [Client thread/INFO]: [CHAT] 
+[16:33:07] [Client thread/INFO]: [CHAT] ----------------------------------------------------
+[16:33:07] [Client thread/INFO]: [CHAT] Ne soyez pas trop pressé...
+[16:33:07] [Client thread/INFO]: [CHAT] Ne soyez pas trop pressé...
+[16:33:08] [Client thread/INFO]: [CHAT] Ne soyez pas trop pressé...
+[16:33:08] [Client thread/INFO]: [CHAT] Ne soyez pas trop pressé...
+[16:33:08] [Client thread/INFO]: [CHAT] Ne soyez pas trop pressé...
+[16:33:08] [Client thread/INFO]: [CHAT] Ne soyez pas trop pressé...
+[16:33:08] [Client thread/INFO]: [CHAT] Ne soyez pas trop pressé...
+[16:33:08] [Client thread/INFO]: [CHAT] Ne soyez pas trop pressé...
+[16:33:09] [Client thread/INFO]: [CHAT] Ne soyez pas trop pressé...
+[16:33:09] [Client thread/INFO]: [CHAT] Ne soyez pas trop pressé...
+[16:33:09] [Client thread/INFO]: [CHAT] Ne soyez pas trop pressé...
+[16:33:09] [Client thread/INFO]: [CHAT] Ne soyez pas trop pressé...
+[16:33:10] [Client thread/INFO]: [CHAT] Ne soyez pas trop pressé...
+[16:33:10] [Client thread/INFO]: [CHAT] Ne soyez pas trop pressé...
+[16:33:10] [Client thread/INFO]: [CHAT] §4⚠§r§e§7Joueur Chokomo_ §9»§f trenquile le cheatr
+[16:33:10] [Client thread/INFO]: [CHAT] Ne soyez pas trop pressé...
+[16:33:10] [Client thread/INFO]: [CHAT] Ne soyez pas trop pressé...
+[16:33:10] [Client thread/INFO]: [CHAT] Ne soyez pas trop pressé...
+[16:33:10] [Client thread/INFO]: [CHAT] Ne soyez pas trop pressé...
+[16:33:11] [Client thread/INFO]: [CHAT] Ne soyez pas trop pressé...
+[16:33:11] [Client thread/INFO]: [CHAT] Ne soyez pas trop pressé...
+[16:33:11] [Client thread/INFO]: [CHAT] Ne soyez pas trop pressé...
+[16:33:12] [Client thread/INFO]: [CHAT] Ne soyez pas trop pressé...
+[16:33:12] [Client thread/INFO]: [CHAT] Ne soyez pas trop pressé...
+[16:33:12] [Client thread/INFO]: [CHAT] §4⚠§r§e§7Joueur Chokomo_ §9»§f trenquile le cheat
+[16:33:15] [Client thread/INFO]: Connecting to eu.brwserv.net, 25565
+[16:33:18] [Client thread/INFO]: Connecting to eu.brwserv.net, 25565
+[16:33:46] [Client thread/INFO]: [CHAT] Vous avez rejoint la file d'attente FFARush...
+[16:33:47] [Client thread/INFO]: [CHAT] Téléportation vers le serveur Rush01...
+[16:33:48] [Client thread/INFO]: [CHAT] ----------------------------------------------------
+[16:33:48] [Client thread/INFO]: [CHAT] 
+[16:33:48] [Client thread/INFO]: [CHAT]   » Les alliances sont strictement interdites !
+[16:33:48] [Client thread/INFO]: [CHAT] 
+[16:33:48] [Client thread/INFO]: [CHAT] ----------------------------------------------------
+[16:33:49] [Client thread/INFO]: [CHAT] §4⚠§r§e§7Joueur ismax344 §9»§f et alors ?
+[16:33:49] [Client thread/INFO]: [CHAT] §4⚠§r§e§7Joueur Soudeur §9»§f 2v1 lool
+[16:33:49] [Client thread/INFO]: [CHAT] §4⚠§r§e§7Joueur GamxblueInGames §9»§f _YaYou ?
+[16:33:50] [Client thread/INFO]: [CHAT] Ne soyez pas trop pressé...
+[16:33:50] [Client thread/INFO]: [CHAT] Ne soyez pas trop pressé...
+[16:33:50] [Client thread/INFO]: [CHAT] Ne soyez pas trop pressé...
+[16:33:51] [Client thread/INFO]: [CHAT] Ne soyez pas trop pressé...
+[16:33:56] [Client thread/INFO]: Connecting to eu.brwserv.net, 25565
+[16:33:58] [Client thread/INFO]: [CHAT] Vous avez rejoint la file d'attente FFARush...
+[16:33:59] [Client thread/INFO]: [CHAT] Téléportation vers le serveur Rush01...
+[16:34:00] [Client thread/INFO]: [CHAT] ----------------------------------------------------
+[16:34:00] [Client thread/INFO]: [CHAT] 
+[16:34:00] [Client thread/INFO]: [CHAT]   » Les alliances sont strictement interdites !
+[16:34:00] [Client thread/INFO]: [CHAT] 
+[16:34:00] [Client thread/INFO]: [CHAT] ----------------------------------------------------
+[16:34:01] [Client thread/INFO]: [CHAT] Ne soyez pas trop pressé...
+[16:34:01] [Client thread/INFO]: [CHAT] Ne soyez pas trop pressé...
+[16:34:01] [Client thread/INFO]: [CHAT] Ne soyez pas trop pressé...
+[16:34:02] [Client thread/INFO]: [CHAT] Ne soyez pas trop pressé...
+[16:34:03] [Client thread/INFO]: [CHAT] Ne soyez pas trop pressé...
+[16:34:03] [Client thread/INFO]: [CHAT] §4⚠§r§e§7Joueur _YaYou §9»§f mdrr
+[16:34:03] [Client thread/INFO]: [CHAT] Ne soyez pas trop pressé...
+[16:34:03] [Client thread/INFO]: [CHAT] Ne soyez pas trop pressé...
+[16:34:06] [Client thread/INFO]: [CHAT] §4⚠§r§e§7Joueur GamxblueInGames §9»§f x)
+[16:34:09] [Client thread/INFO]: [CHAT] Chokomo_ a été tué par xVengeful !
+[16:34:09] [Client thread/INFO]: [CHAT] Gain de BRCoin(s) : +1.0ⒷⒸ
+[16:34:13] [Client thread/INFO]: [CHAT] §4⚠§r§e§7Joueur Chokomo_ §9»§f XD xVengeful
+[16:34:14] [Client thread/INFO]: [CHAT] Ne soyez pas trop pressé...
+[16:34:14] [Client thread/INFO]: [CHAT] Ne soyez pas trop pressé...
+[16:34:14] [Client thread/INFO]: [CHAT] Ne soyez pas trop pressé...
+[16:34:15] [Client thread/INFO]: [CHAT] Ne soyez pas trop pressé...
+[16:34:17] [Client thread/INFO]: Connecting to eu.brwserv.net, 25565
+[16:34:20] [Client thread/INFO]: [CHAT] Vous avez rejoint la file d'attente FFARush...
+[16:34:20] [Client thread/INFO]: [CHAT] Téléportation vers le serveur Rush01...
+[16:34:21] [Client thread/INFO]: [CHAT] ----------------------------------------------------
+[16:34:21] [Client thread/INFO]: [CHAT] 
+[16:34:21] [Client thread/INFO]: [CHAT]   » Les alliances sont strictement interdites !
+[16:34:21] [Client thread/INFO]: [CHAT] 
+[16:34:21] [Client thread/INFO]: [CHAT] ----------------------------------------------------
+[16:34:21] [Client thread/INFO]: [CHAT] Ne soyez pas trop pressé...
+[16:34:22] [Client thread/INFO]: [CHAT] Ne soyez pas trop pressé...
+[16:34:22] [Client thread/INFO]: [CHAT] Ne soyez pas trop pressé...
+[16:34:22] [Client thread/INFO]: [CHAT] Ne soyez pas trop pressé...
+[16:34:23] [Client thread/INFO]: [CHAT] Ne soyez pas trop pressé...
+[16:34:23] [Client thread/INFO]: [CHAT] Ne soyez pas trop pressé...
+[16:34:23] [Client thread/INFO]: [CHAT] §4⚠§a§7Joueur oTutur §9»§f wsh
+[16:34:23] [Client thread/INFO]: [CHAT] Ne soyez pas trop pressé...
+[16:34:24] [Client thread/INFO]: [CHAT] Ne soyez pas trop pressé...
+[16:34:26] [Client thread/INFO]: [CHAT] Ne soyez pas trop pressé...
+[16:34:26] [Client thread/INFO]: [CHAT] Ne soyez pas trop pressé...
+[16:34:32] [Client thread/INFO]: Connecting to eu.brwserv.net, 25565
+[16:34:41] [Client thread/INFO]: [CHAT] Vous avez rejoint la file d'attente FFARush...
+[16:34:41] [Client thread/INFO]: [CHAT] Téléportation vers le serveur Rush01...
+[16:34:42] [Client thread/INFO]: [CHAT] ----------------------------------------------------
+[16:34:42] [Client thread/INFO]: [CHAT] 
+[16:34:42] [Client thread/INFO]: [CHAT]   » Les alliances sont strictement interdites !
+[16:34:42] [Client thread/INFO]: [CHAT] 
+[16:34:42] [Client thread/INFO]: [CHAT] ----------------------------------------------------
+[16:34:42] [Client thread/INFO]: [CHAT] Ne soyez pas trop pressé...
+[16:34:43] [Client thread/INFO]: [CHAT] §4⚠§r§5§4S§fwqt§4ss§0 Slvnze §9❤§f ioui oTutur
+[16:34:43] [Client thread/INFO]: [CHAT] Ne soyez pas trop pressé...
+[16:34:44] [Client thread/INFO]: [CHAT] Ne soyez pas trop pressé...
+[16:34:44] [Client thread/INFO]: [CHAT] Ne soyez pas trop pressé...
+[16:34:44] [Client thread/INFO]: [CHAT] Ne soyez pas trop pressé...
+[16:34:45] [Client thread/INFO]: [CHAT] Ne soyez pas trop pressé...
+[16:34:45] [Client thread/INFO]: [CHAT] Ne soyez pas trop pressé...
+[16:34:46] [Client thread/INFO]: [CHAT] §4⚠§r§5§4S§fwqt§4ss§0 Slvnze §9❤§f oui*
+[16:34:46] [Client thread/INFO]: [CHAT] Chokomo_ a été tué par xVengeful !
+[16:34:46] [Client thread/INFO]: [CHAT] Gain de BRCoin(s) : +1.0ⒷⒸ
+[16:34:47] [Client thread/INFO]: [CHAT] Ne soyez pas trop pressé...
+[16:34:47] [Client thread/INFO]: [CHAT] Ne soyez pas trop pressé...
+[16:34:49] [Client thread/INFO]: [CHAT] §4⚠§a§7Joueur oTutur §9»§f ok
+[16:34:51] [Client thread/INFO]: [CHAT] _Cazu_ a été tué par xVengeful !
+[16:34:51] [Client thread/INFO]: [CHAT] Gain de BRCoin(s) : +1.0ⒷⒸ
+[16:34:53] [Client thread/INFO]: [CHAT] YassEncore a été tué par xVengeful !
+[16:34:53] [Client thread/INFO]: [CHAT] Gain de BRCoin(s) : +1.0ⒷⒸ
+[16:34:54] [Client thread/INFO]: [CHAT] §4⚠§r§e§7Joueur Chokomo_ §9»§f xVengeful sa vas ?
+[16:34:56] [Client thread/INFO]: [CHAT] §4⚠§r§e§7Joueur Waziix §9»§f kbbb dfe fou
+[16:34:56] [Client thread/INFO]: [CHAT] GamxblueInGames a été tué par xVengeful !
+[16:34:56] [Client thread/INFO]: [CHAT] Gain de BRCoin(s) : +1.0ⒷⒸ
+[16:34:58] [Client thread/INFO]: [CHAT] §4⚠§r§e§7Joueur GamxblueInGames §9»§f MDR
+[16:34:59] [Client thread/INFO]: [CHAT] Ne soyez pas trop pressé...
+[16:35:02] [Client thread/INFO]: [CHAT] Ne soyez pas trop pressé...
+[16:35:02] [Client thread/INFO]: [CHAT] Ne soyez pas trop pressé...
+[16:35:02] [Client thread/INFO]: [CHAT] Ne soyez pas trop pressé...
+[16:35:06] [Client thread/INFO]: [CHAT] §4⚠§r§e§7Joueur GamxblueInGames §9»§f Jvais te b**t toi
+[16:35:08] [Client thread/INFO]: [CHAT] §4⚠§r§5§4S§fwqt§4ss§0 Slvnze §9❤§f SayFlow le kb?
+[16:35:09] [Client thread/INFO]: [CHAT] Soudeur a été tué par xVengeful !
+[16:35:09] [Client thread/INFO]: [CHAT] Gain de BRCoin(s) : +1.0ⒷⒸ
+[16:35:10] [Client thread/INFO]: [CHAT] §4⚠§r§e§7Joueur GamxblueInGames §9»§f Le mec qui fly
+[16:35:14] [Client thread/INFO]: [CHAT] NaXoW a été tué par xVengeful !
+[16:35:14] [Client thread/INFO]: [CHAT] Gain de BRCoin(s) : +1.0ⒷⒸ
+[16:35:16] [Client thread/INFO]: [CHAT] §4⚠§r§5§4S§fwqt§4ss§0 Slvnze §9❤§f et t'es joueur fc nn?
+[16:35:18] [Client thread/INFO]: [CHAT] Priyanthan09 a été tué par xVengeful !
+[16:35:18] [Client thread/INFO]: [CHAT] Gain de BRCoin(s) : +1.0ⒷⒸ
+[16:35:21] [Client thread/INFO]: [CHAT] Ne soyez pas trop pressé...
+[16:35:21] [Client thread/INFO]: [CHAT] Ne soyez pas trop pressé...
+[16:35:21] [Client thread/INFO]: [CHAT] Ne soyez pas trop pressé...
+[16:35:22] [Client thread/INFO]: [CHAT] Ne soyez pas trop pressé...
+[16:35:22] [Client thread/INFO]: [CHAT] Ne soyez pas trop pressé...
+[16:35:22] [Client thread/INFO]: [CHAT] Ne soyez pas trop pressé...
+[16:35:23] [Client thread/INFO]: [CHAT] Ne soyez pas trop pressé...
+[16:35:23] [Client thread/INFO]: [CHAT] §4⚠§a§7Joueur oTutur §9»§f TWF
+[16:35:24] [Client thread/INFO]: [CHAT] §4⚠§r§e§7Joueur Chokomo_ §9»§f oe GamxblueInGames c'est xVengeful
+[16:35:27] [Client thread/INFO]: [CHAT] oTutur a été tué par xVengeful !
+[16:35:27] [Client thread/INFO]: [CHAT] Gain de BRCoin(s) : +1.0ⒷⒸ
+[16:35:29] [Client thread/INFO]: [CHAT] Waziix a été tué par xVengeful !
+[16:35:29] [Client thread/INFO]: [CHAT] Gain de BRCoin(s) : +1.0ⒷⒸ
+[16:35:29] [Client thread/INFO]: [CHAT] xVengeful a désormais un Kill Streak de 10 !
+[16:35:29] [Client thread/INFO]: [CHAT] Gain de BRCoin(s) : +5.0ⒷⒸ
+[16:35:29] [Client thread/INFO]: [CHAT] §4⚠§r§e§7Joueur SayFlow §9»§f funcraft ça pue
+[16:35:30] [Client thread/INFO]: [CHAT] Ne soyez pas trop pressé...
+[16:35:31] [Client thread/INFO]: [CHAT] Ne soyez pas trop pressé...
+[16:35:32] [Client thread/INFO]: [CHAT] §4⚠§r§e§7Joueur ismax344 §9»§f g
+[16:35:33] [Client thread/INFO]: [CHAT] Soudeur a été tué par xVengeful !
+[16:35:33] [Client thread/INFO]: [CHAT] Gain de BRCoin(s) : +1.0ⒷⒸ
+[16:35:33] [Client thread/INFO]: [CHAT] §4⚠§a§7Joueur oTutur §9»§f xVengeful prdrrr
+[16:35:34] [Client thread/INFO]: [CHAT] §4⚠§r§e§7Joueur ismax344 §9»§f gg
+[16:35:36] [Client thread/INFO]: [CHAT] turboyoink a été tué par xVengeful !
+[16:35:36] [Client thread/INFO]: [CHAT] Gain de BRCoin(s) : +1.0ⒷⒸ
+[16:35:40] [Client thread/INFO]: [CHAT] §4⚠§r§e§7Joueur GamxblueInGames §9»§f Sxxtw jtai mit plus de coups
+[16:35:40] [Client thread/INFO]: [CHAT] §4⚠§r§5§4S§fwqt§4ss§0 Slvnze §9❤§f bah pk j't'ai vu co alors?
+[16:35:41] [Client thread/INFO]: [CHAT] §4⚠§r§e§7Joueur Waziix §9»§f deso
+[16:35:41] [Client thread/INFO]: [CHAT] §4⚠§a§7Joueur oTutur §9»§f c'est xVengeful le cheater !!!!!!
+[16:35:42] [Client thread/INFO]: [CHAT] Shad_PvP a été tué par xVengeful !
+[16:35:42] [Client thread/INFO]: [CHAT] Gain de BRCoin(s) : +1.0ⒷⒸ
+[16:35:43] [Client thread/INFO]: [CHAT] Ne soyez pas trop pressé...
+[16:35:43] [Client thread/INFO]: [CHAT] Ne soyez pas trop pressé...
+[16:35:44] [Client thread/INFO]: [CHAT] §4⚠§r§9§fIron turboyoink §9»§f jv pleurer
+[16:35:44] [Client thread/INFO]: [CHAT] Ne soyez pas trop pressé...
+[16:35:44] [Client thread/INFO]: [CHAT] §4⚠§r§e§7Joueur SayFlow §9»§f j'afk
+[16:35:44] [Client thread/INFO]: [CHAT] Ne soyez pas trop pressé...
+[16:35:44] [Client thread/INFO]: [CHAT] Ne soyez pas trop pressé...
+[16:35:45] [Client thread/INFO]: [CHAT] Ne soyez pas trop pressé...
+[16:35:45] [Client thread/INFO]: [CHAT] Ne soyez pas trop pressé...
+[16:35:48] [Client thread/INFO]: [CHAT] §4⚠§r§9§fIron turboyoink §9»§f le nyancat moment
+[16:35:49] [Client thread/INFO]: [CHAT] Hexaedron a été tué par xVengeful !
+[16:35:49] [Client thread/INFO]: [CHAT] Gain de BRCoin(s) : +1.0ⒷⒸ
+[16:35:52] [Client thread/INFO]: [CHAT] §4⚠§r§e§7Joueur Hexaedron §9»§f ....
+[16:35:52] [Client thread/INFO]: [CHAT] Slvnze a été tué par xVengeful !
+[16:35:52] [Client thread/INFO]: [CHAT] Gain de BRCoin(s) : +1.0ⒷⒸ
+[16:35:57] [Client thread/INFO]: [CHAT] §4⚠§r§e§7Joueur xVengeful §9»§f c'est wykt dommage
+[16:35:59] [Client thread/INFO]: [CHAT] §4⚠§r§e§7Joueur Hexaedron §9»§f bannez le nan?
+[16:36:02] [Client thread/INFO]: [CHAT] §4⚠§a§7Joueur oTutur §9»§f il a genre une reach 50 blocks
+[16:36:02] [Client thread/INFO]: [CHAT] §4⚠§r§9§fIron turboyoink §9»§f WYKJT OMG
+[16:36:03] [Client thread/INFO]: [CHAT] Ne soyez pas trop pressé...
+[16:36:04] [Client thread/INFO]: [CHAT] Ne soyez pas trop pressé...
+[16:36:04] [Client thread/INFO]: [CHAT] Ne soyez pas trop pressé...
+[16:36:04] [Client thread/INFO]: [CHAT] §4⚠§r§9§fIron turboyoink §9»§f JSS FAN !!!!
+[16:36:04] [Client thread/INFO]: [CHAT] Ne soyez pas trop pressé...
+[16:36:05] [Client thread/INFO]: [CHAT] Ne soyez pas trop pressé...
+[16:36:05] [Client thread/INFO]: [CHAT] Ne soyez pas trop pressé...
+[16:36:06] [Client thread/INFO]: [CHAT] Ne soyez pas trop pressé...
+[16:36:11] [Client thread/INFO]: [CHAT] NaXoW a été tué par xVengeful !
+[16:36:11] [Client thread/INFO]: [CHAT] Gain de BRCoin(s) : +1.0ⒷⒸ
+[16:36:13] [Client thread/INFO]: [CHAT] GamxblueInGames a été tué par xVengeful !
+[16:36:13] [Client thread/INFO]: [CHAT] Gain de BRCoin(s) : +1.0ⒷⒸ
+[16:36:15] [Client thread/INFO]: [CHAT] §4⚠§r§e§7Joueur xVengeful §9»§f oé
+[16:36:16] [Client thread/INFO]: [CHAT] §4⚠§r§e§7Joueur GamxblueInGames §9»§f xVengeful jte boot
+[16:36:16] [Client thread/INFO]: [CHAT] unurled a été tué par xVengeful !
+[16:36:16] [Client thread/INFO]: [CHAT] Gain de BRCoin(s) : +1.0ⒷⒸ
+[16:36:18] [Client thread/INFO]: [CHAT] §4⚠§r§9§fIron turboyoink §9»§f ptdrrr
+[16:36:19] [Client thread/INFO]: [CHAT] SCLT ▏ L'anti-triche a banni un suspect.
+[16:36:19] [Client thread/INFO]: [CHAT] SCLT ▏ xVengeful a été banni: Triche
+[16:36:30] [Alt Login Thread/INFO]: Logging in with username & password
+[16:38:31] [Alt Login Thread/INFO]: Logging in with username & password
+[16:38:34] [Client thread/INFO]: Connecting to eu.brwserv.net, 25565
+[16:38:53] [Client thread/INFO]: Connecting to eu.brwserv.net, 25565
+[16:38:59] [Client thread/INFO]: [CHAT] Vous avez rejoint la file d'attente FFARush...
+[16:39:00] [Client thread/INFO]: [CHAT] Téléportation vers le serveur Rush01...
+[16:39:02] [Client thread/INFO]: [CHAT] ----------------------------------------------------
+[16:39:02] [Client thread/INFO]: [CHAT] 
+[16:39:02] [Client thread/INFO]: [CHAT]   » Les alliances sont strictement interdites !
+[16:39:02] [Client thread/INFO]: [CHAT] 
+[16:39:02] [Client thread/INFO]: [CHAT] ----------------------------------------------------
+[16:39:08] [Client thread/INFO]: [CHAT] xSweiz a été tué par zooted1999 !
+[16:39:08] [Client thread/INFO]: [CHAT] Gain de BRCoin(s) : +1.0ⒷⒸ
+[16:39:09] [Client thread/INFO]: [CHAT] §4⚠§r§e§7Joueur GamxblueInGames §9»§f CHEATEUR
+[16:39:12] [Client thread/INFO]: [CHAT] §4⚠§r§e§7Joueur _YaYou §9»§f qui ?
+[16:39:12] [Client thread/INFO]: [CHAT] §4⚠§r§e§7Joueur xSweiz §9»§f chaud lme target
+[16:39:13] [Client thread/INFO]: [CHAT] §4⚠§a§7Joueur oTutur §9»§f qui ?
+[16:39:13] [Client thread/INFO]: [CHAT] Ne soyez pas trop pressé...
+[16:39:14] [Client thread/INFO]: [CHAT] Hexaedron a été tué par zooted1999 !
+[16:39:14] [Client thread/INFO]: [CHAT] Gain de BRCoin(s) : +1.0ⒷⒸ
+[16:39:14] [Client thread/INFO]: [CHAT] Ne soyez pas trop pressé...
+[16:39:14] [Client thread/INFO]: [CHAT] Slvnze a été tué par zooted1999 !
+[16:39:14] [Client thread/INFO]: [CHAT] Gain de BRCoin(s) : +1.0ⒷⒸ
+[16:39:15] [Client thread/INFO]: [CHAT] Ne soyez pas trop pressé...
+[16:39:19] [Client thread/INFO]: [CHAT] §4⚠§r§e§7Joueur GamxblueInGames §9»§f Un mec sous dc
+[16:39:21] [Client thread/INFO]: [CHAT] Waziix a été tué par zooted1999 !
+[16:39:21] [Client thread/INFO]: [CHAT] Gain de BRCoin(s) : +1.0ⒷⒸ
+[16:39:21] [Client thread/INFO]: [CHAT] §4⚠§r§e§7Joueur GamxblueInGames §9»§f QUi fly
+[16:39:23] [Client thread/INFO]: [CHAT] Slvnze a été tué par zooted1999 !
+[16:39:23] [Client thread/INFO]: [CHAT] Gain de BRCoin(s) : +1.0ⒷⒸ
+[16:39:24] [Client thread/INFO]: [CHAT] §4⚠§r§e§7Joueur Hexaedron §9»§f ac de ksos*
+[16:39:26] [Client thread/INFO]: [CHAT] GamxblueInGames a été tué par zooted1999 !
+[16:39:26] [Client thread/INFO]: [CHAT] Gain de BRCoin(s) : +1.0ⒷⒸ
+[16:39:29] [Client thread/INFO]: [CHAT] §4⚠§r§e§7Joueur GamxblueInGames §9»§f zooted1999
+[16:39:31] [Client thread/INFO]: [CHAT] §4⚠§r§e§7Joueur GamxblueInGames §9»§f ces lui
+[16:39:32] [Client thread/INFO]: [CHAT] Hexaedron a été tué par zooted1999 !
+[16:39:32] [Client thread/INFO]: [CHAT] Gain de BRCoin(s) : +1.0ⒷⒸ
+[16:39:36] [Client thread/INFO]: [CHAT] unurled a été tué par zooted1999 !
+[16:39:36] [Client thread/INFO]: [CHAT] Gain de BRCoin(s) : +1.0ⒷⒸ
+[16:39:39] [Client thread/INFO]: [CHAT] Shad_PvP a été tué par zooted1999 !
+[16:39:39] [Client thread/INFO]: [CHAT] Gain de BRCoin(s) : +1.0ⒷⒸ
+[16:39:43] [Client thread/INFO]: [CHAT] §4⚠§r§5§4S§fwqt§4ss§0 Slvnze §9❤§f jlai report
+[16:39:45] [Client thread/INFO]: [CHAT] unurled a été tué par zooted1999 !
+[16:39:45] [Client thread/INFO]: [CHAT] Gain de BRCoin(s) : +1.0ⒷⒸ
+[16:39:45] [Client thread/INFO]: [CHAT] zooted1999 a désormais un Kill Streak de 10 !
+[16:39:45] [Client thread/INFO]: [CHAT] Gain de BRCoin(s) : +5.0ⒷⒸ
+[16:39:46] [Client thread/INFO]: [CHAT] blanknotfound_ a été tué par zooted1999 !
+[16:39:46] [Client thread/INFO]: [CHAT] Gain de BRCoin(s) : +1.0ⒷⒸ
+[16:39:48] [Client thread/INFO]: [CHAT] §4⚠§r§e§7Joueur GamxblueInGames §9»§f merci
+[16:39:51] [Client thread/INFO]: [CHAT] oTutur a été tué par zooted1999 !
+[16:39:51] [Client thread/INFO]: [CHAT] Gain de BRCoin(s) : +1.0ⒷⒸ
+[16:39:51] [Client thread/INFO]: [CHAT] §4⚠§a§7Joueur oTutur §9»§f wtf
+[16:39:51] [Client thread/INFO]: [CHAT] §4⚠§r§e§7Joueur _YaYou §9»§f fly ?
+[16:39:54] [Client thread/INFO]: [CHAT] §4⚠§a§7Joueur oTutur §9»§f zooted1999
+[16:39:54] [Client thread/INFO]: [CHAT] Waziix a été tué par zooted1999 !
+[16:39:54] [Client thread/INFO]: [CHAT] Gain de BRCoin(s) : +1.0ⒷⒸ
+[16:39:55] [Client thread/INFO]: [CHAT] GamxblueInGames a été tué par zooted1999 !
+[16:39:55] [Client thread/INFO]: [CHAT] Gain de BRCoin(s) : +1.0ⒷⒸ
+[16:40:00] [Client thread/INFO]: [CHAT] §4⚠§r§e§7Joueur GamxblueInGames §9»§f + killaura biensur
+[16:40:00] [Client thread/INFO]: [CHAT] Darkeel a été tué par zooted1999 !
+[16:40:00] [Client thread/INFO]: [CHAT] Gain de BRCoin(s) : +1.0ⒷⒸ
+[16:40:01] [Client thread/INFO]: [CHAT] §4⚠§a§7Joueur oTutur §9»§f fly kill aura
+[16:40:05] [Client thread/INFO]: [CHAT] Levapedebifrech a été tué par zooted1999 !
+[16:40:05] [Client thread/INFO]: [CHAT] Gain de BRCoin(s) : +1.0ⒷⒸ
+[16:40:08] [Client thread/INFO]: [CHAT] NaXoW a été tué par zooted1999 !
+[16:40:08] [Client thread/INFO]: [CHAT] Gain de BRCoin(s) : +1.0ⒷⒸ
+[16:40:08] [Client thread/INFO]: [CHAT] Hexaedron a été tué par zooted1999 !
+[16:40:08] [Client thread/INFO]: [CHAT] Gain de BRCoin(s) : +1.0ⒷⒸ
+[16:40:11] [Client thread/INFO]: [CHAT] §4⚠§r§e§7Joueur Levapedebifrech §9»§f wath
+[16:40:13] [Client thread/INFO]: [CHAT] unurled a été tué par zooted1999 !
+[16:40:13] [Client thread/INFO]: [CHAT] Gain de BRCoin(s) : +1.0ⒷⒸ
+[16:40:18] [Client thread/INFO]: [CHAT] YassEncore a été tué par zooted1999 !
+[16:40:18] [Client thread/INFO]: [CHAT] Gain de BRCoin(s) : +1.0ⒷⒸ
+[16:40:18] [Client thread/INFO]: [CHAT] zooted1999 a désormais un Kill Streak de 20 !
+[16:40:18] [Client thread/INFO]: [CHAT] Gain de BRCoin(s) : +5.0ⒷⒸ
+[16:40:23] [Client thread/INFO]: [CHAT] Sxxtw a été tué par zooted1999 !
+[16:40:23] [Client thread/INFO]: [CHAT] Gain de BRCoin(s) : +1.0ⒷⒸ
+[16:40:29] [Client thread/INFO]: [CHAT] _YaYou a été tué par zooted1999 !
+[16:40:29] [Client thread/INFO]: [CHAT] Gain de BRCoin(s) : +1.0ⒷⒸ
+[16:40:31] [Client thread/INFO]: [CHAT] Shad_PvP a été tué par zooted1999 !
+[16:40:31] [Client thread/INFO]: [CHAT] Gain de BRCoin(s) : +1.0ⒷⒸ
+[16:40:31] [Client thread/INFO]: [CHAT] §4⚠§a§7Joueur oTutur §9»§f mdr il a fais 20 kills en 20 secs
+[16:40:32] [Client thread/INFO]: [CHAT] §4⚠§r§e§7Joueur Waziix §9»§f mdr xSweiz jte vois bg
+[16:40:32] [Client thread/INFO]: [CHAT] Ne soyez pas trop pressé...
+[16:40:32] [Client thread/INFO]: [CHAT] Ne soyez pas trop pressé...
+[16:40:32] [Client thread/INFO]: [CHAT] §4⚠§r§e§7Joueur _YaYou §9»§f ah oui d'accord
+[16:40:33] [Client thread/INFO]: [CHAT] Ne soyez pas trop pressé...
+[16:40:33] [Client thread/INFO]: [CHAT] Ne soyez pas trop pressé...
+[16:40:35] [Client thread/INFO]: [CHAT] §4⚠§r§e§7Joueur Sxxtw §9»§f salope arrete de cheat
+[16:40:36] [Client thread/INFO]: [CHAT] Levapedebifrech a été tué par zooted1999 !
+[16:40:36] [Client thread/INFO]: [CHAT] Gain de BRCoin(s) : +1.0ⒷⒸ
+[16:40:40] [Client thread/INFO]: [CHAT] SCLT ▏ L'anti-triche a banni un suspect.
+[16:40:40] [Client thread/INFO]: [CHAT] SCLT ▏ zooted1999 a été banni: Triche
+[16:41:16] [Alt Login Thread/INFO]: Logging in with username & password
+[16:41:19] [Client thread/INFO]: Connecting to eu.brwserv.net, 25565
+[16:41:23] [Client thread/INFO]: [CHAT] Vous avez rejoint la file d'attente BrainFFA...
+[16:41:24] [Client thread/INFO]: [CHAT] Téléportation vers le serveur Brain01...
+[16:41:32] [Client thread/INFO]: [CHAT] §4⚠§r§e§7Joueur Nocta_Dino §9»§f percpicase
+[16:41:44] [Client thread/INFO]: [CHAT] Vous avez rejoint la file d'attente Practice...
+[16:41:44] [Client thread/INFO]: [CHAT] Téléportation vers le serveur Practice01...
+[16:41:45] [Client thread/INFO]: [CHAT] §4⚠§r§e§7Joueur Le_coyotte_bleu §9»§f lol
+[16:41:46] [Client thread/INFO]: [CHAT] §4⚠§r§e§7Joueur K2mas §9»§f Combo ranked siouplé
+[16:41:47] [Client thread/INFO]: [CHAT] §4⚠§r§e§7Joueur avises §9»§f ferme la
+[16:41:50] [Client thread/INFO]: [CHAT] §4⚠§r§e§7Joueur Romsteck §9»§f ZSKYZZZ pk ?
+[16:41:53] [Client thread/INFO]: [CHAT] Vous avez rejoint la file d'attente RushFight...
+[16:41:53] [Client thread/INFO]: [CHAT] Téléportation vers le serveur RushFight01...
+[16:41:54] [Client thread/INFO]: [CHAT] Joueur TexicanRC a rejoint la partie !
+[16:41:59] [Client thread/INFO]: [CHAT] Mais, vous êtes déjà dans cette équipe !
+[16:42:06] [Client thread/INFO]: [CHAT] Vous avez rejoint la file d'attente Practice...
+[16:42:07] [Client thread/INFO]: [CHAT] Téléportation vers le serveur Practice01...
+[16:42:09] [Client thread/INFO]: [CHAT] §4⚠§r§e§7Joueur ZSKYZZZ §9»§f jsp
+[16:42:10] [Client thread/INFO]: [CHAT] Début du combat dans 3 secondes...
+[16:42:11] [Client thread/INFO]: [CHAT] Début du combat dans 2 secondes...
+[16:42:12] [Client thread/INFO]: [CHAT] §4⚠§r§e§7Joueur Assiduite §9»§f gg
+[16:42:12] [Client thread/INFO]: [CHAT] §4⚠§r§e§7Joueur Exotic_Mangue §9»§f gg
+[16:42:12] [Client thread/INFO]: [CHAT] Début du combat dans 1 seconde...
+[16:42:13] [Client thread/INFO]: [CHAT] Good luck ! Have fun ! :P
+[16:42:20] [Client thread/INFO]: [CHAT] §4⚠§r§e§7Joueur raynore §9»§f wsh
+[16:42:24] [Client thread/INFO]: [CHAT] §4⚠§r§e§7Joueur MATMAN2005 §9»§f tue moi
+[16:42:34] [Client thread/INFO]: [CHAT] SCLT ▏ L'anti-triche a banni un suspect.
+[16:42:34] [Client thread/INFO]: [CHAT] SCLT ▏ TexicanRC a été banni: Triche

@@ -45,7 +45,7 @@ public class VersionCheckThread extends Thread
                     String s1 = "I7";
                     Config.dbg("Version found: " + s1);
 
-                    if (Config.compareRelease(s1, "H8") <= 0)
+                    if (Config.compareRelease("H8", "H8") <= 0)
                     {
                         return;
                     }
