@@ -3,17 +3,14 @@ package lime.cgui.cgui2.component.components;
 import lime.Lime;
 import lime.cgui.cgui2.component.Component;
 import lime.cgui.settings.Setting;
-import lime.module.Module;
 import lime.utils.render.RainbowUtil;
 import lime.utils.render.Util2D;
-import lime.utils.render.UtilGL;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.util.ResourceLocation;
 
 import java.awt.*;
-import java.util.Random;
 
-import static lime.module.impl.render.HUD.fix;
+import static lime.module.impl.render.OldHUD.fix;
 
 public class Combo extends Component {
     public boolean opened = false;
@@ -29,32 +26,14 @@ public class Combo extends Component {
         super.mouseClicked(mouseX, mouseY, mouseButton);
     }
 
-    public Color getColor(Module m, int index){
-        Color color = new Color(255, 255, 255);
-        switch(Lime.setmgr.getSettingByName("HUD Color").getValString().toUpperCase()){
-            case "DYNAMIC":
-                color = RainbowUtil.blend2colors(new Color(255, 0, 0, 255), new Color(100, 0, 0, 255), (System.nanoTime() + (100000000L * 2)) / 1.0E09F % 2.0F);
-                break;
-            case "BASIC":
-                color = new Color(100, 0, 0, 255);
-                break;
-            case "RAINBOW":
-                color = RainbowUtil.rainbow(1, 0.7F, 1);
-                break;
-            case "CHROMA":
-                color = RainbowUtil.rainbow(70000000L, 0.7F, 1);
-                break;
-        }
-        return color;
-    }
     @Override
     public void render(int x, int y, int width, int height, int mouseX, int mouseY) {
         this.x = x;
         this.y = y;
 
         fix();
-        Util2D.drawRoundedRect(x + 255, y + rendered, x + 265 + 100, y + 20 + rendered + (opened ? set.getOptions().size() * 24 : 0), new Color(25, 25, 25).getRGB(), new Color(25, 25, 25).getRGB());
-
+        Util2D.drawRoundedRect(x + 255, y + rendered, x + 265 + 100, y + 20 + rendered + (opened ? set.getOptions().size() * 24 : 0), new Color(200,0, 0).getRGB(), new Color(200,0, 0).getRGB());
+        Util2D.drawRoundedRect(x + 256, y + rendered + 1, x + 265 + 100 - 1, y + 19 + rendered + (opened ? set.getOptions().size() * 24 : 0), RainbowUtil.blend2colors(new Color(150, 0, 0), new Color(250, 0, 0), 10).getRGB(), RainbowUtil.blend2colors(new Color(150, 0, 0), new Color(250, 0, 0), 10).getRGB());
         Gui.drawRect(x + 265, y + rendered, x + 265 + Lime.fontManager.comfortaa_hud_sense.getStringWidth(set.getName()) + 10, y + 5 + rendered, new Color(20, 20, 20).getRGB());
         if(!opened)
             Util2D.drawImage(new ResourceLocation("lime/collapse-down.png"), x + 265 + Lime.fontManager.comfortaa_hud_sense.getStringWidth(set.getName()), y + rendered - 3, 10, 10);

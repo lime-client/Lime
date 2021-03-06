@@ -8,6 +8,7 @@ import lime.cgui.settings.Setting;
 import lime.events.EventTarget;
 import lime.events.impl.EventMotion;
 import lime.events.impl.EventPacket;
+import lime.events.impl.EventSafeWalk;
 import lime.module.Module;
 import lime.utils.Timer;
 import lime.utils.movement.MovementUtil;
@@ -76,6 +77,7 @@ public class Scaffold2 extends Module {
         Lime.setmgr.rSetting(new Setting("Tower Mode", this, "Normal", "Normal"));
         Lime.setmgr.rSetting(new Setting("Expand", this, 0.4, 0, 5, false));
         Lime.setmgr.rSetting(new Setting("Delay", this, 100, 100, 1000, true));
+        Lime.setmgr.rSetting(new Setting("SafeWalk", this, true));
         Lime.setmgr.rSetting(new Setting("BlockPicker", this, true));
         Lime.setmgr.rSetting(new Setting("TowerMove", this, true));
         Lime.setmgr.rSetting(new Setting("NoSwing", this, true));
@@ -95,6 +97,11 @@ public class Scaffold2 extends Module {
         sneaking = true;
         cubeSpoof = -1;
         super.onEnable();
+    }
+    @EventTarget
+    public void onSafeWalk(EventSafeWalk e){
+        if(getSettingByName("SafeWalk").getValBoolean())
+            e.setCancelled(true);
     }
 
     public void onDisable() {

@@ -13,6 +13,7 @@ import java.util.List;
 
 import com.thealtening.auth.TheAlteningAuthentication;
 import lime.Lime;
+import lime.file.impl.ApiKeySaver;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
@@ -74,11 +75,9 @@ extends GuiScreen {
                             Lime.altManager.theAlteningAuthentication = TheAlteningAuthentication.theAltening();
                             this.thread = new AltLoginThread(this.username.getText(), this.password.getText());
                             this.thread.start();
-                            /*if(!((ApiKeySaver) Main.instance.fileManager.getFileByClass(ApiKeySaver.class)).loadKey().equals(apikey.getText())){
-                                ((ApiKeySaver) Main.instance.fileManager.getFileByClass(ApiKeySaver.class)).saveKey(apikey.getText());
+                            if(!((ApiKeySaver) Lime.fileManager.getFileByClass(ApiKeySaver.class)).load().equals(apikey.getText())){
+                                ((ApiKeySaver) Lime.fileManager.getFileByClass(ApiKeySaver.class)).save(apikey.getText());
                             }
-
-                             */
                             return;
                         } else {
                             return;
@@ -143,7 +142,7 @@ extends GuiScreen {
         this.username = new GuiTextField(var3, this.mc.fontRendererObj, width / 2 - 100, 60, 200, 20);
         this.password = new PasswordField(this.mc.fontRendererObj, width / 2 - 100, 100, 200, 20);
         this.apikey = new PasswordField(this.mc.fontRendererObj, width / 2 - 100, 140, 200, 20);
-        //apikey.setText(((ApiKeySaver) Main.instance.fileManager.getFileByClass(ApiKeySaver.class)).loadKey());
+        apikey.setText(((ApiKeySaver) Lime.fileManager.getFileByClass(ApiKeySaver.class)).load());
         this.username.setFocused(true);
         Keyboard.enableRepeatEvents(true);
     }

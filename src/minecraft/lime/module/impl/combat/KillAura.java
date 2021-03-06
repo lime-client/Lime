@@ -7,6 +7,7 @@ import lime.events.impl.Event3D;
 import lime.events.impl.EventMotion;
 import lime.module.Module;
 import lime.cgui.settings.Setting;
+import lime.module.impl.render.targethuds.AstolfoTargetHUD;
 import lime.utils.*;
 import lime.utils.movement.MovementUtil;
 import lime.utils.render.RainbowUtil;
@@ -66,9 +67,11 @@ public class KillAura extends Module {
     }
     float time;
     EntityLivingBase ent;
+    private AstolfoTargetHUD astolfoTargetHUD = new AstolfoTargetHUD();
     Timer cps = new Timer();
     @Override
     public void onEnable() {
+        astolfoTargetHUD.resetHealthAnimated();
         super.onEnable();
     }
 
@@ -111,6 +114,7 @@ public class KillAura extends Module {
             mc.thePlayer.renderYawOffset = eventMotion.getYaw();
             mc.thePlayer.renderArmYaw = eventMotion.getYaw();
             mc.thePlayer.renderArmPitch = eventMotion.getPitch();
+            mc.thePlayer.rotationPitchHead = eventMotion.getPitch();
         }
         if(Lime.setmgr.getSettingByNameAndMod("AutoBlock", this).getValBoolean() && (mc.thePlayer.getHeldItem() != null && mc.thePlayer.getHeldItem().getItem() instanceof ItemSword)){
             mc.thePlayer.setItemInUse(mc.thePlayer.getCurrentEquippedItem(), 71626);
@@ -198,7 +202,17 @@ public class KillAura extends Module {
     boolean down;
     @EventTarget
     public void onRender2D(Event2D event2D){
-        if(ent == null || (!Lime.setmgr.getSettingByNameAndMod("Through Walls", this).getValBoolean() && !mc.thePlayer.canEntityBeSeen(ent))  || (mc.thePlayer.getDistanceToEntity(ent) > Lime.setmgr.getSettingByNameAndMod("Reach", this).getValDouble()) || !isValid(ent)) return;
+        if(ent != null){
+            if(ent.canEntityBeSeen(mc.thePlayer) ||(!ent.canEntityBeSeen(mc.thePlayer) && getSettingByName("Through Walls").getValBoolean()))
+                if(ent.getDistanceToEntity(mc.thePlayer) <= getSettingByName("Reach").getValDouble())
+                    if(isValid(ent) && ent.ticksExisted > 30){
+                        ScaledResolution sr = new ScaledResolution(this.mc);
+                        astolfoTargetHUD.draw(ent, sr.getScaledWidth() / 2 - 87, sr.getScaledHeight() / 2 + 100, new Color(255, 0, 0).getRGB());
+                    }
+        }
+    }
+
+            /*if(ent == null || (!Lime.setmgr.getSettingByNameAndMod("Through Walls", this).getValBoolean() && !mc.thePlayer.canEntityBeSeen(ent))  || (mc.thePlayer.getDistanceToEntity(ent) > Lime.setmgr.getSettingByNameAndMod("Reach", this).getValDouble()) || !isValid(ent)) return;
         GlStateManager.color(1.0f, 1.0f, 1.0f);
         sr = new ScaledResolution(Minecraft.getMinecraft());
         Util2D.drawRoundedRect(sr.getScaledWidth() / 2 - 95, sr.getScaledHeight() - 150, sr.getScaledWidth() / 2 + 95, sr.getScaledHeight() - 75, new Color(0, 0, 0, 255).getRGB(),  new Color(0, 0, 0, 200).getRGB());
@@ -227,9 +241,7 @@ public class KillAura extends Module {
         try{
             Util2D.drawRoundedRect(sr.getScaledWidth() / 2 - 95, sr.getScaledHeight() - 75 - 3, (float) (sr.getScaledWidth() / 2 - 95 + (ent.getHealth() * 9.5)), sr.getScaledHeight() - 75, getHealthColor(ent.getHealth()).getRGB(), getHealthColor(ent.getHealth()).getRGB());
         } catch (Exception ignored){}
-
-    }
-    public static Color getHealthColor(float health){
+            public static Color getHealthColor(float health){
         if(health >= 20){
             return new Color(0, 200, 0, 255);
         } else if(health >= 15){
@@ -252,7 +264,8 @@ public class KillAura extends Module {
         } else {
             return "wtf is that";
         }
-    }
+    }*/
+
 
     public static float[] getRotations2(EntityLivingBase ent) {
         double x = ent.posX;

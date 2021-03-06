@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 import java.util.concurrent.Callable;
+
+import lime.events.impl.EventSafeWalk;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFence;
 import net.minecraft.block.BlockFenceGate;
@@ -93,10 +95,10 @@ public abstract class Entity implements ICommandSender
 
     /** Entity rotation Yaw */
     public float rotationYaw;
+    public float prevRotationYaw;
 
     /** Entity rotation Pitch */
     public float rotationPitch;
-    public float prevRotationYaw;
     public float prevRotationPitch;
 
     /** Axis aligned bounding box. */
@@ -609,11 +611,11 @@ public abstract class Entity implements ICommandSender
                 this.motionY = 0.0D;
                 this.motionZ = 0.0D;
             }
-
+            EventSafeWalk eventSafeWalk = new EventSafeWalk().call();
             double d3 = x;
             double d4 = y;
             double d5 = z;
-            boolean flag = this.onGround && this.isSneaking() && this instanceof EntityPlayer;
+            boolean flag = this.onGround && (this.isSneaking() || eventSafeWalk.isCancelled()) && this instanceof EntityPlayer;
 
             if (flag)
             {
@@ -1675,6 +1677,7 @@ public abstract class Entity implements ICommandSender
             this.prevRotationYaw = this.rotationYaw = nbttaglist2.getFloatAt(0);
             this.prevRotationPitch = this.rotationPitch = nbttaglist2.getFloatAt(1);
             this.setRotationYawHead(this.rotationYaw);
+
             this.func_181013_g(this.rotationYaw);
             this.fallDistance = tagCompund.getFloat("FallDistance");
             this.fire = tagCompund.getShort("Fire");
@@ -2365,6 +2368,7 @@ public abstract class Entity implements ICommandSender
     {
         return this == entityIn;
     }
+
 
     public float getRotationYawHead()
     {

@@ -11,7 +11,9 @@ import lime.module.Module;
 import lime.utils.Timer;
 import lime.utils.movement.MovementUtil;
 import net.minecraft.block.BlockAir;
+import net.minecraft.network.play.client.C03PacketPlayer;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.MathHelper;
 import org.lwjgl.input.Keyboard;
 
 import java.util.ArrayList;
@@ -20,7 +22,7 @@ import java.util.List;
 public class Flight extends Module {
     public Flight(){
         super("Flight", Keyboard.KEY_F, Category.MOVEMENT);
-        Lime.setmgr.rSetting(new Setting("Flight", this, "Vanilla", true, "Vanilla", "VanillaCreative", "BRWServ", "Funcraft", "Verus", "Verus-Fast"));
+        Lime.setmgr.rSetting(new Setting("Flight", this, "Vanilla", true, "Vanilla", "VanillaCreative", "BRWServ", "Funcraft", "Verus", "Verus-Fast", "ZoneCraft"));
         Lime.setmgr.rSetting(new Setting("Speed", this, 1, 0, 10, false));
     }
     private double lastDist, speed; int stage;
@@ -67,7 +69,15 @@ public class Flight extends Module {
                     MovementUtil.setSpeed(Lime.setmgr.getSettingByNameAndMod("Speed", this).getValDouble());
                 break;
             case "Funcraft":
-                if (mc.thePlayer.onGround){stage=1;}
+                if (mc.thePlayer.onGround){stage=1;} else {
+                    mc.thePlayer.motionY = 0;
+                    if(mc.thePlayer.ticksExisted % 3 == 0){
+                        mc.thePlayer.setPosition(mc.thePlayer.posX, mc.thePlayer.posY + 1.0E-12, mc.thePlayer.posZ);
+                    } else {
+                        mc.thePlayer.setPosition(mc.thePlayer.posX, mc.thePlayer.posY - 1.0E-12, mc.thePlayer.posZ);
+                    }
+                    mc.timer.timerSpeed = 1.65f;
+                }
                 if (stage == 1) {
                     oof = lastDist / 159 + 1.5;
                     mc.timer.timerSpeed = 1.0F;
@@ -95,8 +105,13 @@ public class Flight extends Module {
                         if (speed > 1.0) {
                             speed -= 0.01;
                         }
+                        if(mc.thePlayer.ticksExisted % 3 == 0){
+                            mc.thePlayer.setPosition(mc.thePlayer.posX, mc.thePlayer.posY + 1.0E-12, mc.thePlayer.posZ);
+                        } else {
+                            mc.thePlayer.setPosition(mc.thePlayer.posX, mc.thePlayer.posY - 1.0E-12, mc.thePlayer.posZ);
+                        }
 
-                        this.state += 1;
+                        /*this.state += 1;
                         switch (this.state) {
                             case 1:
                                 this.mc.thePlayer.setPosition(this.mc.thePlayer.posX, this.mc.thePlayer.posY + 1.0E-12D, this.mc.thePlayer.posZ);
@@ -110,7 +125,7 @@ public class Flight extends Module {
                                 break;
                             default:
                                 break;
-                        }
+                        }*/
                     }
                     if (this.mc.thePlayer.onGround) {
                     } else {
@@ -129,6 +144,8 @@ public class Flight extends Module {
                 }
 
                 break;
+            case "ZoneCraft":
+
         }
     }
     @EventTarget
@@ -142,6 +159,12 @@ public class Flight extends Module {
             default: break;
         }
     }
+
+    public void hClip2(double offset) {
+        mc.thePlayer.sendQueue.addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX + -MathHelper.sin(MovementUtil.getDirection()) * offset, mc.thePlayer.posY, mc.thePlayer.posZ + MathHelper.cos(MovementUtil.getDirection()) * offset, false));
+        mc.thePlayer.setPosition(mc.thePlayer.posX + -MathHelper.sin(MovementUtil.getDirection()) * offset, mc.thePlayer.posY, mc.thePlayer.posZ + MathHelper.cos(MovementUtil.getDirection()) * offset);
+    }
+
     @EventTarget
     public void onBB(EventBoundingBox e){
         switch(Lime.setmgr.getSettingByNameAndMod("Flight", this).getValString()){

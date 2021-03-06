@@ -40,11 +40,11 @@ public abstract class Event {
         }
     }
 
-    public Event call() {
 
-        this.cancelled = false;
+    public <T extends Event> T call(){
+        cancelled = false;
         call(this);
-        return this;
+        return (T) this;
     }
 
     public boolean isCancelled() {

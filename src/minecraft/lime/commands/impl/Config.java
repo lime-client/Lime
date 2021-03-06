@@ -67,7 +67,7 @@ public class Config extends Command {
                         }
                     }
                 }
-                if(!no) ChatUtils.sendMsg("Loaded §c" + args[1] + ".lime §7config");
+                if(!no) ChatUtils.sendMsg("Loaded §c" + args[1] + ".lime §7config ");
                 break;
             case "save":
                 try{

@@ -108,4 +108,5 @@ public class MovementUtil
     public static void hClip(double offset) {
         mc.thePlayer.setPosition(mc.thePlayer.posX + -MathHelper.sin(getDirection()) * offset, mc.thePlayer.posY, mc.thePlayer.posZ + MathHelper.cos(getDirection()) * offset);
     }
+
 }

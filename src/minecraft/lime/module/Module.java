@@ -10,16 +10,17 @@ public class Module {
     }
     protected Minecraft mc = Minecraft.getMinecraft();
     public String name, displayName;
-    public int key, anim = -1;
+    public int key;
+    public float anim = -1;
     public boolean binding = false;
     Category cat;
     public boolean toggled;
 
-    public int getAnim() {
+    public float getAnim() {
         return anim;
     }
 
-    public void setAnim(int anim) {
+    public void setAnim(float anim) {
         this.anim = anim;
     }
 

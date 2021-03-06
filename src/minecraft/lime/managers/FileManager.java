@@ -1,6 +1,7 @@
 package lime.managers;
 
 import lime.file.LimeFile;
+import lime.file.impl.ApiKeySaver;
 import lime.file.impl.ModuleSaver;
 import lime.file.impl.SettingsSaver;
 
@@ -18,6 +19,7 @@ public class FileManager {
         final String folder = limeFolder();
         clientFiles.add(new ModuleSaver(folder + File.separator + "modules.txt"));
         clientFiles.add(new SettingsSaver(folder + File.separator + "settings.txt"));
+        clientFiles.add(new ApiKeySaver(folder + File.separator + "apikey.txt"));
     }
     public LimeFile getFileByClass(final Class<? extends LimeFile> classe){
         return clientFiles.stream().filter(file -> file.getClass() == classe).findFirst().orElse(null);

@@ -39,7 +39,7 @@ public class ChestStealer extends Module {
             String name = chest.getLowerChestInventory().getDisplayName().getUnformattedText().toLowerCase();
             String[] list = new String[] {"menu", "selector", "game", "server", "inventory", "cancel", "buy", "trade", "compass", "profile", "friends", "select", "map", "armor", "user", "teleporter", "upgrade", "lobby",
                     "vault", "utility", "potions", "anticheat", "travel", "settings", "preference", "warp", "sure", "tool", "team", "play", "accept", "soul", "book", "recipe", "skywars", "cakewars", "bedwars", "wars",
-                    "profile", "lang", "english", "jeux", "équipe", "boutique", "amis", "paramètres", "team", "paramètre", "pvp", "duel", "skyblock", "cubelets", "préférences"};
+                    "profile", "lang", "english", "jeux", "équipe", "boutique", "amis", "paramètres", "team", "paramètre", "pvp", "duel", "skyblock", "cubelets", "préférences", "lottery", "echanges", "échanges"};
             for(String str : list){
                 if(name.toLowerCase().contains(str.toLowerCase())) return;
             }

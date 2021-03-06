@@ -147,6 +147,8 @@ public abstract class EntityLivingBase extends Entity
     public float moveForward;
     protected float randomYawVelocity;
 
+    public float prevRotationPitchHead, rotationPitchHead;
+
     /**
      * The number of updates over which the new position and rotation are to be applied to the entity.
      */
@@ -205,6 +207,7 @@ public abstract class EntityLivingBase extends Entity
         this.field_70769_ao = (float)Math.random() * 12398.0F;
         this.rotationYaw = (float)(Math.random() * Math.PI * 2.0D);
         this.rotationYawHead = this.rotationYaw;
+        this.rotationPitchHead = this.rotationPitch;
         this.stepHeight = 0.6F;
     }
 
@@ -263,6 +266,7 @@ public abstract class EntityLivingBase extends Entity
      */
     public void onEntityUpdate()
     {
+        prevRotationPitchHead = this.rotationPitchHead;
         this.prevSwingProgress = this.swingProgress;
         super.onEntityUpdate();
         this.worldObj.theProfiler.startSection("livingEntityBaseTick");

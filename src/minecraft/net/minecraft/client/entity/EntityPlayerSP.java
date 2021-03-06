@@ -3,6 +3,7 @@ package net.minecraft.client.entity;
 import lime.Lime;
 import lime.events.impl.EventMotion;
 import lime.events.impl.EventMove;
+import lime.events.impl.EventSlow;
 import lime.events.impl.EventUpdate;
 import lime.module.impl.player.ChestStealer;
 import net.minecraft.client.Minecraft;
@@ -825,8 +826,9 @@ public class EntityPlayerSP extends AbstractClientPlayer
 
         if (this.isUsingItem() && !this.isRiding())
         {
-            this.movementInput.moveStrafe *= 0.2F;
-            this.movementInput.moveForward *= 0.2F;
+            EventSlow eventSlow = new EventSlow(0.2F, 0.2F).call();
+            this.movementInput.moveStrafe *= eventSlow.getMoveStafeSlow();
+            this.movementInput.moveForward *= eventSlow.getMoveForwardSlow();
             this.sprintToggleTimer = 0;
         }
 

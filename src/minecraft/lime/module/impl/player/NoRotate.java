@@ -3,11 +3,12 @@ package lime.module.impl.player;
 import lime.events.EventTarget;
 import lime.events.impl.EventPacket;
 import lime.module.Module;
+import net.minecraft.network.play.server.S08PacketPlayerPosLook;
 import net.minecraft.network.play.server.S14PacketEntity;
 
 public class NoRotate extends Module {
     public NoRotate(){
-        super("NoServAsync", 0, Category.MISC);
+        super("NoRotate", 0, Category.PLAYER);
     }
 
     @Override
@@ -21,8 +22,11 @@ public class NoRotate extends Module {
     }
     @EventTarget
     public void onPacketReceive(EventPacket e){
-        if(e.getPacket() instanceof S14PacketEntity.S16PacketEntityLook){
-            e.setCancelled(true);
+        if(e.getPacket() instanceof S08PacketPlayerPosLook){
+            S08PacketPlayerPosLook packet = (S08PacketPlayerPosLook) e.getPacket();
+            packet.setYaw(mc.thePlayer.rotationYaw);
+            packet.setPitch(mc.thePlayer.rotationPitch);
+            e.setPacket(packet);
         }
     }
 }

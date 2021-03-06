@@ -146,4 +146,11 @@ public class S08PacketPlayerPosLook implements Packet<INetHandlerPlayClient>
             return i;
         }
     }
+
+    public void setYaw(float yaw) {
+        this.yaw = yaw;
+    }
+    public void setPitch(float pitch) {
+        this.pitch = pitch;
+    }
 }
