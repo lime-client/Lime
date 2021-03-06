@@ -50,6 +50,9 @@ public class InfiniteAura extends Module {
     //MODIFICATION DE LA REACH DANS ENTITYRENDERER
     public InfiniteAura() {
         super("InfiniteAura", Keyboard.KEY_Y, Module.Category.COMBAT);
+        ArrayList<String> m = new ArrayList<>();
+        m.add("Vanilla");
+        Lime.setmgr.rSetting(new Setting("TPAura Mode", this, "Vanilla", m));
         Lime.setmgr.rSetting(new Setting("TPAura Players", this, true));
         Lime.setmgr.rSetting(new Setting("TPAura ESP", this, true));
         Lime.setmgr.rSetting(new Setting("TPAura PATHESP", this, true));
@@ -57,9 +60,6 @@ public class InfiniteAura extends Module {
         Lime.setmgr.rSetting(new Setting("TPAura Invisibles", this, false));
         Lime.setmgr.rSetting(new Setting("TPAura Range", this, 50, 0, 200, true));
         Lime.setmgr.rSetting(new Setting("TPAura CPS", this, 3, 0, 20, true));
-        ArrayList<String> m = new ArrayList<>();
-        m.add("Vanilla");
-        Lime.setmgr.rSetting(new Setting("TPAura Mode", this, "Vanilla", m));
         Lime.setmgr.rSetting(new Setting("Max Targets", this, 2, 0, 10, true));
         Lime.setmgr.rSetting(new Setting("TPAura Timer", this, 1, 0, 5, false));
     }

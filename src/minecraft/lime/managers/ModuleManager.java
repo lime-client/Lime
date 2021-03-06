@@ -1,17 +1,10 @@
 package lime.managers;
 
 import lime.Lime;
-import lime.module.impl.combat.InfiniteAura;
-import lime.module.impl.combat.KillAura;
-import lime.module.impl.combat.Velocity;
-import lime.module.impl.misc.NoServAsync;
-import lime.module.impl.movement.Flight;
-import lime.module.impl.movement.Scaffold;
-import lime.module.impl.movement.Speed;
-import lime.module.impl.player.AutoArmor;
-import lime.module.impl.player.ChestStealer;
-import lime.module.impl.player.InvManager;
-import lime.module.impl.player.InvMove;
+import lime.module.impl.combat.*;
+//import lime.module.impl.misc.*;
+import lime.module.impl.movement.*;
+import lime.module.impl.player.*;
 import lime.module.impl.render.*;
 import lime.module.Module;
 
@@ -30,22 +23,31 @@ public class ModuleManager {
         // MOVEMENT
         modules.add(new Flight());
         modules.add(new Speed());
-        modules.add(new Scaffold());
+        //modules.add(new Scaffold());
+        modules.add(new Scaffold2());
 
         // PLAYER
         modules.add(new InvMove());
         modules.add(new ChestStealer());
         modules.add(new InvManager());
+        modules.add(new ChestAura());
         modules.add(new AutoArmor());
+        modules.add(new NoRotate());
 
 
         // RENDER
         modules.add(new ClickGUI());
         modules.add(new Tracers());
         modules.add(new HUD());
+        modules.add(new HUD2());
+        modules.add(new NoFire());
+        modules.add(new NoHurtCam());
+        modules.add(new NoScoreboard());
+        modules.add(new FullBright());
+        modules.add(new ChestESP());
 
         // MISC
-        modules.add(new NoServAsync());
+
 
 
 

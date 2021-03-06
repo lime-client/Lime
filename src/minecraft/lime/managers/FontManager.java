@@ -9,7 +9,9 @@ import java.io.InputStream;
 
 public class FontManager {
     public CFontRenderer comfortaa_hud = new CFontRenderer(getFont("comfortaa.ttf", 18), true, 8);
+    public CFontRenderer comfortaa_hud_sense = new CFontRenderer(getFont("comfortaa.ttf", 16), true, 8);
     public CFontRenderer comfortaa_slider = new CFontRenderer(getFont("comfortaa.ttf", 12), true, 8);
+    public CFontRenderer roboto_sense = new CFontRenderer(getFont("roboto.ttf", 18), true, 8);
     public static Font getFont(String fontName, int size) {
         Font font = null;
         try {

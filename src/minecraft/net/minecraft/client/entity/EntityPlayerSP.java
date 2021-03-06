@@ -1,8 +1,10 @@
 package net.minecraft.client.entity;
 
+import lime.Lime;
 import lime.events.impl.EventMotion;
 import lime.events.impl.EventMove;
 import lime.events.impl.EventUpdate;
+import lime.module.impl.player.ChestStealer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.MovingSoundMinecartRiding;
 import net.minecraft.client.audio.PositionedSoundRecord;

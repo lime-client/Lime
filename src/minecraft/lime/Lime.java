@@ -2,6 +2,7 @@ package lime;
 
 import lime.altmanager.AltManager;
 import lime.cgui.ClickGui;
+import lime.cgui.cgui2.ClickGui2;
 import lime.cgui.settings.SettingsManager;
 import lime.events.EventManager;
 import lime.events.EventTarget;
@@ -25,6 +26,7 @@ public class Lime {
     public static SettingsManager setmgr;
     public static AltManager altManager;
     public static ClickGui clickgui;
+    public static ClickGui2 clickgui2;
     public static Lime instance = new Lime();
     public void startClient(){
         Display.setTitle("Lime " + version);
@@ -37,6 +39,7 @@ public class Lime {
         setmgr = new SettingsManager();
         moduleManager = new ModuleManager();
         clickgui = new ClickGui();
+        clickgui2 = new ClickGui2();
         loadViaMCP();
         altManager = new AltManager();
 

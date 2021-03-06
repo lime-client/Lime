@@ -16,9 +16,9 @@ import java.util.Random;
 public class ChestStealer extends Module {
     public ChestStealer(){
         super("ChestSteal", Keyboard.KEY_I, Category.PLAYER);
-        Lime.setmgr.rSetting(new Setting("Delay", this, 250, 10, 1000, true));
-        Lime.setmgr.rSetting(new Setting("Randomize", this, false));
+        Lime.setmgr.rSetting(new Setting("Delay", this, 150, 10, 1000, true));
         Lime.setmgr.rSetting(new Setting("Random Delay", this, true));
+        Lime.setmgr.rSetting(new Setting("Randomize", this, true));
     }
 
     @Override
@@ -67,7 +67,6 @@ public class ChestStealer extends Module {
                     Integer is = ischest.get(rand.nextInt(ischest.size()));
                     if(chest.getLowerChestInventory().getStackInSlot(is) != null)
                         if(timer.hasReached(delay)) {
-                            System.out.println(is);
                             mc.playerController.windowClick(chest.windowId, is, 0, 1, mc.thePlayer);
                             try { ischest.remove(is); } catch (Exception ignored) { ; }
                             timer.reset();

@@ -81,9 +81,13 @@ public class ClickGui extends GuiScreen {
         super.drawScreen(mouseX, mouseY, partialTicks);
     }
 
+    @Override
+    public boolean doesGuiPauseGame() {
+        return false;
+    }
+
     void drawPanel(int xPos, int yPos, int mouseX, int mouseY) {
         rendered = 0;
-        //if(!components.isEmpty() && currentCat != null && currentMod != null && components.get(0).set.getParentMod() != currentMod) components.clear();
         Util2D.drawRoundedRect(xPos - 1, yPos - 1, xPos + width + 1, yPos + height + 1, new Color(50, 50, 50).getRGB(), new Color(50, 50, 50).getRGB());
         Util2D.drawRoundedRect(xPos, yPos, xPos + width, yPos + height, new Color(25, 25, 25).getRGB(), new Color(25, 25, 25).getRGB());
         Lime.fontManager.comfortaa_hud.drawString(Lime.clientName, x + (width / 2) - Lime.fontManager.comfortaa_hud.getStringWidth(Lime.clientName) + 10, y + 4, -1);
@@ -123,7 +127,6 @@ public class ClickGui extends GuiScreen {
         if(currentCat != null && currentMod != null && currentMod.hasSettings()){
             for(Component component : components){
                 if(component.set.getParentMod() == currentMod){
-
                     component.render(x, y, width, height, mouseX, mouseY);
                     rendered++;
                 }

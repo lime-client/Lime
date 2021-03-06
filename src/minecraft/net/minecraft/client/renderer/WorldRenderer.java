@@ -60,6 +60,7 @@ public class WorldRenderer
         SVertexBuilder.initVertexBuilder(this);
     }
 
+
     private void func_181670_b(int p_181670_1_)
     {
         if (Config.isShaders())
@@ -253,6 +254,20 @@ public class WorldRenderer
         this.field_181677_f = null;
         this.field_181678_g = 0;
         this.quadSprite = null;
+    }
+    public void startDrawing(int mode) {
+        if (this.isDrawing) {
+            throw new IllegalStateException("Already building!");
+        } else {
+            this.isDrawing = true;
+            this.reset();
+            this.drawMode = mode;
+            this.needsUpdate = false;
+        }
+    }
+
+    public void startDrawingQuads() {
+        this.startDrawing(7);
     }
 
     public void begin(int p_181668_1_, VertexFormat p_181668_2_)

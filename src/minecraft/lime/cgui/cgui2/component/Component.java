@@ -1,4 +1,4 @@
-package lime.cgui.component;
+package lime.cgui.cgui2.component;
 
 import lime.cgui.settings.Setting;
 
@@ -19,5 +19,5 @@ public class Component {
     public void mouseReleased(int mouseX, int mouseY, int mouseButton){
 
     }
-
+    public int rendered = 0;
 }

@@ -20,7 +20,7 @@ import java.util.List;
 public class Flight extends Module {
     public Flight(){
         super("Flight", Keyboard.KEY_F, Category.MOVEMENT);
-        Lime.setmgr.rSetting(new Setting("Flight", this, "Vanilla", true, "Vanilla", "VanillaCreative", "BRWServ", "Funcraft", "Rinaorc", "Redesky"));
+        Lime.setmgr.rSetting(new Setting("Flight", this, "Vanilla", true, "Vanilla", "VanillaCreative", "BRWServ", "Funcraft", "Verus", "Verus-Fast"));
         Lime.setmgr.rSetting(new Setting("Speed", this, 1, 0, 10, false));
     }
     private double lastDist, speed; int stage;
@@ -121,7 +121,13 @@ public class Flight extends Module {
                 }
 
                 break;
-            case "Redesky":
+            case "Verus-Fast":
+                if(mc.thePlayer.ticksExisted % 20 == 0){
+                    mc.timer.timerSpeed = 0.5f;
+                } else {
+                    mc.timer.timerSpeed = 3f;
+                }
+
                 break;
         }
     }
@@ -139,7 +145,8 @@ public class Flight extends Module {
     @EventTarget
     public void onBB(EventBoundingBox e){
         switch(Lime.setmgr.getSettingByNameAndMod("Flight", this).getValString()){
-            case "Rinaorc":
+            case "Verus-Fast":
+            case "Verus":
             case "BRWServ":
                 if(e.getBlock() instanceof BlockAir && e.getBlockPos().getY() < mc.thePlayer.posY)
                     e.setBoundingBox(new AxisAlignedBB(e.getBlockPos().getX(), e.getBlockPos().getY(), e.getBlockPos().getZ(), e.getBlockPos().getX() + 1, mc.thePlayer.posY, e.getBlockPos().getZ() + 1));

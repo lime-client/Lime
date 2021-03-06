@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Random;
 
+import lime.Lime;
 import lime.events.impl.Event2D;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
@@ -547,6 +548,7 @@ public class GuiIngame extends Gui
 
     private void renderScoreboard(ScoreObjective p_180475_1_, ScaledResolution p_180475_2_)
     {
+        if(Lime.moduleManager.getModuleByName("NoScoreboard").isToggled()) return;
         Scoreboard scoreboard = p_180475_1_.getScoreboard();
         Collection collection = scoreboard.getSortedScores(p_180475_1_);
         ArrayList arraylist = Lists.newArrayList(Iterables.filter(collection, new Predicate()

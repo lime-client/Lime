@@ -1,12 +1,12 @@
-package lime.module.impl.misc;
+package lime.module.impl.player;
 
 import lime.events.EventTarget;
 import lime.events.impl.EventPacket;
 import lime.module.Module;
 import net.minecraft.network.play.server.S14PacketEntity;
 
-public class NoServAsync extends Module {
-    public NoServAsync(){
+public class NoRotate extends Module {
+    public NoRotate(){
         super("NoServAsync", 0, Category.MISC);
     }
 

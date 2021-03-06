@@ -38,6 +38,7 @@ import javax.imageio.ImageIO;
 
 import lime.Lime;
 import lime.events.impl.EventKey;
+import lime.module.impl.player.ChestStealer;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.audio.MusicTicker;

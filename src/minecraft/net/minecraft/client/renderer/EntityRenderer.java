@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.Callable;
 
+import lime.Lime;
 import lime.events.impl.Event3D;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockBed;
@@ -664,6 +665,7 @@ public class EntityRenderer implements IResourceManagerReloadListener
 
     private void hurtCameraEffect(float partialTicks)
     {
+        if(Lime.moduleManager.getModuleByName("NoHurtCam").isToggled()) return;
         if (this.mc.getRenderViewEntity() instanceof EntityLivingBase)
         {
             EntityLivingBase entitylivingbase = (EntityLivingBase)this.mc.getRenderViewEntity();
