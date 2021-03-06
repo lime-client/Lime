@@ -25,7 +25,7 @@ public class Combo extends Component {
     @Override
     public void mouseClicked(int mouseX, int mouseY, int mouseButton) {
         boolean flag = hover(x + 255, y + rendered, mouseX, mouseY, 100, 22);
-        if(flag) opened = !opened;
+        if(flag && mouseButton == 0) opened = !opened;
         super.mouseClicked(mouseX, mouseY, mouseButton);
     }
 

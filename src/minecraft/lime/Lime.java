@@ -8,6 +8,10 @@ import lime.events.EventManager;
 import lime.events.EventTarget;
 import lime.events.impl.EventKey;
 import lime.events.impl.EventUpdate;
+import lime.file.impl.ModuleSaver;
+import lime.file.impl.SettingsSaver;
+import lime.managers.CommandManager;
+import lime.managers.FileManager;
 import lime.managers.FontManager;
 import lime.managers.ModuleManager;
 import net.minecraft.client.Minecraft;
@@ -15,6 +19,7 @@ import org.lwjgl.opengl.Display;
 import viamcp.ViaFabric;
 
 import java.awt.*;
+import java.io.File;
 import java.net.MalformedURLException;
 
 public class Lime {
@@ -22,6 +27,8 @@ public class Lime {
     public static String version = "b1", clientName = "Lime";
     public static EventManager eventManager;
     public static ModuleManager moduleManager;
+    public static CommandManager commandManager;
+    public static FileManager fileManager;
     public static FontManager fontManager;
     public static SettingsManager setmgr;
     public static AltManager altManager;
@@ -35,15 +42,35 @@ public class Lime {
 
     }
     public static void initInstance(){
+        try{
+            File file = new File("Lime");
+            if(!file.exists()) file.mkdir();
+        } catch (Exception ignored){
+
+        }
+        try{
+            File file = new File("Lime" + File.separator + "configs");
+            if(!file.exists()) file.mkdir();
+        } catch (Exception ignored){
+
+        }
         fontManager = new FontManager();
         setmgr = new SettingsManager();
         moduleManager = new ModuleManager();
+        commandManager = new CommandManager();
+        fileManager = new FileManager();
+        ((ModuleSaver) fileManager.getFileByClass(ModuleSaver.class)).load();
+        ((SettingsSaver) fileManager.getFileByClass(SettingsSaver.class)).load();
         clickgui = new ClickGui();
         clickgui2 = new ClickGui2();
         loadViaMCP();
         altManager = new AltManager();
         //
 
+    }
+    public static void stopClient(){
+        ((ModuleSaver) fileManager.getFileByClass(ModuleSaver.class)).save();
+        ((SettingsSaver) fileManager.getFileByClass(SettingsSaver.class)).save();
     }
     public static void loadViaMCP() {
         try {

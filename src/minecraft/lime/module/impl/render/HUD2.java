@@ -8,7 +8,9 @@ import lime.module.Module;
 import lime.utils.render.RainbowUtil;
 import lime.utils.render.Util2D;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiChat;
 import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.Vec3;
 import org.apache.commons.lang3.RandomUtils;
 import viamcp.utils.Util;
@@ -39,18 +41,20 @@ public class HUD2 extends Module {
     }
 
     public void hud(){
+        if(mc.gameSettings.showDebugInfo) return;
         ScaledResolution sr = new ScaledResolution(this.mc);
         int index = 0;
         int increment = Lime.fontManager.comfortaa_hud.FONT_HEIGHT + 2;
         int yCount = 1;
         String ip = mc.getIntegratedServer() != null ? "Singleplayer" : mc.getCurrentServerData().serverIP;
         Lime.fontManager.roboto_sense.drawString("Lime | b1 | " + ip, 4, 4, getColor(null, 0).getRGB());
+        if(!(mc.currentScreen instanceof GuiChat)) Lime.fontManager.roboto_sense.drawString("FPS: " + EnumChatFormatting.GRAY + " " + Minecraft.getDebugFPS(), 4, sr.getScaledHeight() - Lime.fontManager.roboto_sense.FONT_HEIGHT - 2, new Color(255, 255, 255).getRGB());
         Lime.moduleManager.filteredLengthModules.sort(new Comparator<Module>() {
             public int compare(Module m1, Module m2) {
-                if (Lime.fontManager.comfortaa_hud.getStringWidth(m1.getName()) > Lime.fontManager.comfortaa_hud.getStringWidth(m2.getName())) {
+                if (Lime.fontManager.roboto_sense.getStringWidth(m1.getName()) > Lime.fontManager.roboto_sense.getStringWidth(m2.getName())) {
                     return -1;
                 }
-                if (Lime.fontManager.comfortaa_hud.getStringWidth(m1.getName()) < Lime.fontManager.comfortaa_hud.getStringWidth(m2.getName())) {
+                if (Lime.fontManager.roboto_sense.getStringWidth(m1.getName()) < Lime.fontManager.roboto_sense.getStringWidth(m2.getName())) {
                     return 1;
                 }
                 return 0;
@@ -59,15 +63,15 @@ public class HUD2 extends Module {
         for(Module mod : Lime.moduleManager.filteredLengthModules){
             Color color = getColor(mod, index);
             if(mod.isToggled()) {
-                Lime.fontManager.roboto_sense.drawString(mod.getName(), sr.getScaledWidth() - Lime.fontManager.roboto_sense.getStringWidth(mod.getName()) - 2, yCount, color.getRGB());
+                Lime.fontManager.roboto_sense.drawString(mod.getName(), sr.getScaledWidth() - mod.getAnim(), yCount, color.getRGB());
                 index++;
                 yCount++;
             }
 
             for(int i = 0; i < 5; i++) {
                 if(mod.isToggled()) {
-                    if(mod.getAnim() < Lime.fontManager.comfortaa_hud.getStringWidth(mod.getName()) + 2) { mod.setAnim(mod.getAnim() + 1); }
-                    if(mod.getAnim() > Lime.fontManager.comfortaa_hud.getStringWidth(mod.getName()) + 3) { mod.setAnim((int)Lime.fontManager.comfortaa_hud.getStringWidth(mod.getName())); }
+                    if(mod.getAnim() < Lime.fontManager.roboto_sense.getStringWidth(mod.getName()) + 2) { mod.setAnim(mod.getAnim() + 1); }
+                    if(mod.getAnim() > Lime.fontManager.roboto_sense.getStringWidth(mod.getName()) + 3) { mod.setAnim((int)Lime.fontManager.roboto_sense.getStringWidth(mod.getName())); }
                 }else {
                     if(mod.getAnim() > -1) { mod.setAnim(mod.getAnim() - 1); }
                 }

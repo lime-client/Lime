@@ -319,7 +319,21 @@ public class EntityPlayerSP extends AbstractClientPlayer
      */
     public void sendChatMessage(String message)
     {
-        this.sendQueue.addToSendQueue(new C01PacketChatMessage(message));
+        if(onSendMessage(message)){
+            if(message.startsWith("#."))
+                this.sendQueue.addToSendQueue(new C01PacketChatMessage(message.substring(1)));
+            else
+                this.sendQueue.addToSendQueue(new C01PacketChatMessage(message));
+
+        }
+    }
+
+    public boolean onSendMessage(String str){
+        if(str.startsWith(".")){
+            Lime.commandManager.callCommand(str.substring(1));
+            return false;
+        }
+        return true;
     }
 
     /**
