@@ -108,5 +108,22 @@ public class MovementUtil
     public static void hClip(double offset) {
         mc.thePlayer.setPosition(mc.thePlayer.posX + -MathHelper.sin(getDirection()) * offset, mc.thePlayer.posY, mc.thePlayer.posZ + MathHelper.cos(getDirection()) * offset);
     }
+    public static double getBaseMoveSpeed() {
+        double baseSpeed = 0.2875D;
+        if (mc.thePlayer.isPotionActive(Potion.moveSpeed)) {
+            baseSpeed *= 1.0D + 0.2D * (double)(mc.thePlayer.getActivePotionEffect(Potion.moveSpeed).getAmplifier() + 1);
+        }
+
+        return baseSpeed;
+    }
+
+    public static double getJumpBoostModifier(double baseJumpHeight) {
+        if (mc.thePlayer.isPotionActive(Potion.jump)) {
+            int amplifier = mc.thePlayer.getActivePotionEffect(Potion.jump).getAmplifier();
+            baseJumpHeight += (double)((float)(amplifier + 1) * 0.1F);
+        }
+
+        return baseJumpHeight;
+    }
 
 }

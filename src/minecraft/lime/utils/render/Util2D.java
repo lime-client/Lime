@@ -312,7 +312,7 @@ public class Util2D {
         GL11.glScissor((int) (x * factor), (int) ((new ScaledResolution(Minecraft.getMinecraft()).getScaledHeight() - y2) * factor), (int) ((x2 - x) * factor), (int) ((y2 - y) * factor));
     }
     public static void drawRoundedRect(final float x, final float y, final float width, final float height,
-                                       final float radius, final int color) {
+                                       final float radius, final int color, final boolean a) {
         float x2 = x + ((radius / 2f) + 0.5f);
         float y2 = y + ((radius / 2f) + 0.5f);
         float calcWidth = (width - ((radius / 2f) + 0.5f));

@@ -6,6 +6,7 @@ import lime.events.EventTarget;
 import lime.events.impl.EventMotion;
 import lime.module.Module;
 import lime.module.impl.combat.KillAura;
+import net.minecraft.client.gui.inventory.GuiChest;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -29,7 +30,7 @@ public class ChestAura extends Module {
 
     @Override
     public void onEnable() {
-        alreadyOpenned.clear();
+        alreadyOpened.clear();
         super.onEnable();
     }
 
@@ -37,9 +38,14 @@ public class ChestAura extends Module {
     public void onDisable() {
         super.onDisable();
     }
-    public ArrayList<TileEntityChest> alreadyOpenned = new ArrayList<>();
+    public ArrayList<TileEntityChest> alreadyOpened = new ArrayList<>();
     @EventTarget
     public void onMotion(EventMotion e){
+        if(!mc.thePlayer.onGround || (mc.currentScreen instanceof GuiChest)) return;
+        for (Entity et : mc.theWorld.loadedEntityList){
+            if(et == mc.thePlayer) continue;
+            if(et.getDistanceToEntity(mc.thePlayer) < 6) return;
+        }
         for(TileEntity te : mc.theWorld.loadedTileEntityList){
             if(te instanceof TileEntityChest){
                 TileEntityChest chest = (TileEntityChest) te;
@@ -51,13 +57,13 @@ public class ChestAura extends Module {
                     e.setYaw(rot[0]);
                     e.setPitch(rot[1]);
                     mc.thePlayer.sendQueue.addToSendQueue(new C08PacketPlayerBlockPlacement(chest.getPos(), getFacingDirection(chest.getPos()).getIndex(), mc.thePlayer.getCurrentEquippedItem(), x, y, z));
-                    alreadyOpenned.add(chest);
+                    alreadyOpened.add(chest);
                 }
             }
         }
     }
     public boolean isIn(TileEntityChest tileEntityChest){
-        for(TileEntityChest tec : alreadyOpenned){
+        for(TileEntityChest tec : alreadyOpened){
             if(tec == tileEntityChest)
                 return true;
         }

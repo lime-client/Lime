@@ -1,6 +1,8 @@
 package net.minecraft.client.gui.inventory;
 
 import java.io.IOException;
+
+import lime.Lime;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.achievement.GuiAchievements;
@@ -48,7 +50,9 @@ public class GuiInventory extends InventoryEffectRenderer
     public void initGui()
     {
         this.buttonList.clear();
-
+        this.buttonList.add(new GuiButton(69, 3, 3, 100, 20, "Disable KillAura"));
+        this.buttonList.add(new GuiButton(69420, 3, 3 + 22, 100, 20, "Disable InvManager"));
+        this.buttonList.add(new GuiButton(6969, 3, 3 + 22 + 22, 100, 20, "Disable ChestAura"));
         if (this.mc.playerController.isInCreativeMode())
         {
             this.mc.displayGuiScreen(new GuiContainerCreative(this.mc.thePlayer));
@@ -146,6 +150,18 @@ public class GuiInventory extends InventoryEffectRenderer
         if (button.id == 1)
         {
             this.mc.displayGuiScreen(new GuiStats(this, this.mc.thePlayer.getStatFileWriter()));
+        }
+        if(button.id == 69){
+            if(Lime.moduleManager.getModuleByName("KillAura").isToggled())
+                Lime.moduleManager.getModuleByName("KillAura").toggle();
+        }
+        if(button.id == 69420){
+            if(Lime.moduleManager.getModuleByName("InvManager").isToggled())
+                Lime.moduleManager.getModuleByName("InvManager").toggle();
+        }
+        if(button.id == 6969){
+        if(Lime.moduleManager.getModuleByName("ChestAura").isToggled())
+                Lime.moduleManager.getModuleByName("ChestAUra").toggle();
         }
     }
 }

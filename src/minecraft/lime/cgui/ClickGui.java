@@ -43,8 +43,9 @@ public class ClickGui extends GuiScreen {
     public ArrayList<Component> components = new ArrayList<Component>();
     public Module modBinding;
     private boolean wasClosed = true;
-    public ClickGui(){
-
+    ArrayList<Module> modules;
+    public ClickGui(ArrayList<Module> modules){
+        this.modules = modules;
     }
 
     @Override
@@ -148,7 +149,8 @@ public class ClickGui extends GuiScreen {
         GL11.glPushMatrix();
         GL11.glEnable(3089);
         prepareScissorBox(x, y + 56, x + 128, y + 300);
-        for(Module m : Lime.moduleManager.getModulesByCategory(currentCat)){
+        for(Module m : modules){
+            if(m.getCat() != currentCat) continue;
             boolean flag = hover(x, yPos - offset - 80 + (i * 30) - 14, mouseX, mouseY, width / 2, 27);
             if(flag){
                 Gui.drawRect(x, yPos - offset - 80 + (i * 30) + 15, x + width / 2, yPos - offset - 80 + (i * 30) - 15, new Color(75, 75, 75, alpha).getRGB());
@@ -195,76 +197,59 @@ public class ClickGui extends GuiScreen {
             drag = false;
         }
         if(hover(x, y + 15, mouseX, mouseY, 50, 40) && mouseButton == 0){
+            offset = 0;
             if(currentCat != Module.Category.COMBAT){
                 currentMod = null;
             }
             currentCat = Module.Category.COMBAT;
         }
         if(hover(x + 50, y + 15, mouseX, mouseY, 50, 40) && mouseButton == 0){
+            offset = 0;
             if(currentCat != Module.Category.MOVEMENT){
                 currentMod = null;
             }
             currentCat = Module.Category.MOVEMENT;
         }
         if(hover(x + (2 * 50), y + 15, mouseX, mouseY, 50, 40) && mouseButton == 0){
+            offset = 0;
             if(currentCat != Module.Category.PLAYER){
                 currentMod = null;
             }
             currentCat = Module.Category.PLAYER;
         }
         if(hover(x + (3 * 50), y + 15, mouseX, mouseY, 50, 40) && mouseButton == 0){
+            offset = 0;
             if(currentCat != Module.Category.RENDER){
                 currentMod = null;
             }
             currentCat = Module.Category.RENDER;
         }
         if(hover(x + (4 * 50), y + 15, mouseX, mouseY, 50, 40) && mouseButton == 0){
+            offset = 0;
             if(currentCat != Module.Category.MISC){
                 currentMod = null;
             }
             currentCat = Module.Category.MISC;
         }
         int i = 5;
-        if(mouseButton == 0){
-            for(Module ignored :  Lime.moduleManager.getModulesByCategory(currentCat)){
-                boolean flag = hover(x, y - offset - 80 + (i * 30) - 14, mouseX, mouseY, width / 2, 27);
-                if(flag){
-                    ArrayList<Module> moduleArrayList = Lime.moduleManager.getModulesByCategory(currentCat);
-                    Module mod = moduleArrayList.get(i - 5);
-                    if(!mod.name.equalsIgnoreCase("clickgui")) {
-                        mod.toggle();
-                    }
+        for(Module ignored : modules){
+            if(ignored.getCat() != currentCat) continue;
+            boolean flag = hover(x, y - offset - 80 + (i * 30) - 14, mouseX, mouseY, width / 2, 27);
+            if(flag){
+                ArrayList<Module> moduleArrayList = new ArrayList<>();
+                for(Module m : modules){
+                    if(m.getCat() == currentCat) moduleArrayList.add(m);
                 }
-
-                i++;
-            }
-        }
-        if(mouseButton == 1){
-            for(Module ignored :  Lime.moduleManager.getModulesByCategory(currentCat)){
-                boolean flag = hover(x, y - offset - 80 + (i * 30) - 14, mouseX, mouseY, width / 2, 27);
-                if(flag){
-                    ArrayList<Module> moduleArrayList = Lime.moduleManager.getModulesByCategory(currentCat);
-                    Module mod = moduleArrayList.get(i - 5);
-                    if(mod.hasSettings()) currentMod = mod;
-                }
-
-                i++;
-            }
-        }
-        if(mouseButton == 2){
-            for(Module ignored :  Lime.moduleManager.getModulesByCategory(currentCat)){
-                boolean flag = hover(x, y - 80 + (i * 30) - 14, mouseX, mouseY, width / 2, 27);
-                if(flag){
-                    ArrayList<Module> moduleArrayList = Lime.moduleManager.getModulesByCategory(currentCat);
-                    Module mod = moduleArrayList.get(i - 5);
+                Module mod = moduleArrayList.get(i - 5);
+                if(mouseButton == 1) if(mod.hasSettings()) currentMod = mod;
+                if(mouseButton == 2){
                     mod.binding = true;
                     modBinding = mod;
-
-
                 }
-
-                i++;
+                if(mouseButton == 0) mod.toggle();
             }
+
+            i++;
         }
         if(currentCat != null && currentMod != null && currentMod.hasSettings()){
             for(Component component : components){

@@ -1,5 +1,6 @@
 package lime.module.impl.misc;
 
+import lime.cgui.settings.impl.BooleanValue;
 import lime.events.EventTarget;
 import lime.events.impl.EventMotion;
 import lime.module.Module;

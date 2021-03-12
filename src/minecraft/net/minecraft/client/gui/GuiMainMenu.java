@@ -12,6 +12,7 @@ import java.util.Random;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import lime.altmanager.GuiAltManager;
+import lime.gui.MainMenu;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
@@ -238,6 +239,7 @@ public class GuiMainMenu extends GuiScreen implements GuiYesNoCallback
         this.buttonList.add(new GuiButton(1, this.width / 2 - 100, p_73969_1_, I18n.format("menu.singleplayer", new Object[0])));
         this.buttonList.add(new GuiButton(2, this.width / 2 - 100, p_73969_1_ + p_73969_2_ * 1, I18n.format("menu.multiplayer", new Object[0])));
         this.buttonList.add(this.realmsButton = new GuiButton(14, this.width / 2 - 100, p_73969_1_ + p_73969_2_ * 2, "Alt Manager"));
+        this.buttonList.add(new GuiButton(69, 3, 3, 60, 20, "Load New MainMenu"));
     }
 
     /**
@@ -284,6 +286,10 @@ public class GuiMainMenu extends GuiScreen implements GuiYesNoCallback
         if (button.id == 14 && this.realmsButton.visible)
         {
             mc.displayGuiScreen(new GuiAltManager());
+        }
+
+        if(button.id == 69){
+            mc.displayGuiScreen(new MainMenu());
         }
 
         if (button.id == 4)

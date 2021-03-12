@@ -2,7 +2,10 @@ package lime.module;
 
 import lime.Lime;
 import lime.cgui.settings.Setting;
+import lime.cgui.settings.Value;
 import net.minecraft.client.Minecraft;
+
+import java.util.ArrayList;
 
 public class Module {
     public enum Category{
@@ -15,7 +18,9 @@ public class Module {
     public boolean binding = false;
     Category cat;
     public boolean toggled;
-
+    public void disable(){
+        if(isToggled()) toggle();
+    }
     public float getAnim() {
         return anim;
     }
@@ -25,9 +30,9 @@ public class Module {
     }
 
     public Module(String name, int key, Category category){
-            this.name = name;
-            this.key = key;
-            this.cat = category;
+        this.name = name;
+        this.key = key;
+        this.cat = category;
     }
     public void onEnable(){
         Lime.eventManager.register(this);

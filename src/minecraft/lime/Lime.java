@@ -10,17 +10,23 @@ import lime.events.impl.EventKey;
 import lime.events.impl.EventUpdate;
 import lime.file.impl.ModuleSaver;
 import lime.file.impl.SettingsSaver;
+import lime.gui.LoginMenu;
 import lime.managers.CommandManager;
 import lime.managers.FileManager;
 import lime.managers.FontManager;
 import lime.managers.ModuleManager;
+import lime.utils.Timer;
 import net.minecraft.client.Minecraft;
+import org.apache.commons.io.IOUtils;
 import org.lwjgl.opengl.Display;
 import viamcp.ViaFabric;
 
 import java.awt.*;
 import java.io.File;
+import java.io.InputStream;
 import java.net.MalformedURLException;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 
 public class Lime {
     public static int deltaTime = 0;
@@ -34,6 +40,7 @@ public class Lime {
     public static AltManager altManager;
     public static ClickGui clickgui;
     public static ClickGui2 clickgui2;
+    public static boolean logged = false;
     public static Lime instance = new Lime();
     public void startClient(){
         Display.setTitle("Lime " + version);
@@ -42,6 +49,11 @@ public class Lime {
 
     }
     public static void initInstance(){
+        if(logged) return;
+        if(Lime.logged && Minecraft.getMinecraft().currentScreen instanceof LoginMenu) System.exit(0);
+        if(!Lime.logged && !(Minecraft.getMinecraft().currentScreen instanceof LoginMenu)){
+            System.exit(0);
+        }
         try{
             File file = new File("Lime");
             if(!file.exists()) file.mkdir();
@@ -59,9 +71,9 @@ public class Lime {
         moduleManager = new ModuleManager();
         commandManager = new CommandManager();
         fileManager = new FileManager();
+        clickgui = new ClickGui(new ArrayList<>(moduleManager.getModules()));
         ((ModuleSaver) fileManager.getFileByClass(ModuleSaver.class)).load();
         ((SettingsSaver) fileManager.getFileByClass(SettingsSaver.class)).load();
-        clickgui = new ClickGui();
         clickgui2 = new ClickGui2();
         loadViaMCP();
         altManager = new AltManager();

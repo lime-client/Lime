@@ -1,5 +1,6 @@
 package net.minecraft.client.renderer.entity;
 
+import lime.events.impl.EventNameTags;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
@@ -339,11 +340,14 @@ public abstract class Render<T extends Entity>
     /**
      * Renders an entity's name above its head
      */
+    public static boolean doRenderNameTags = true;
     protected void renderLivingLabel(T entityIn, String str, double x, double y, double z, int maxDistance)
     {
+        EventNameTags e = new EventNameTags(entityIn).call();
+        if(e.isCancelled()) return;
         double d0 = entityIn.getDistanceSqToEntity(this.renderManager.livingPlayer);
 
-        if (d0 <= (double)(maxDistance * maxDistance))
+        if (d0 <= (double)(maxDistance * maxDistance) && doRenderNameTags)
         {
             FontRenderer fontrenderer = this.getFontRendererFromRenderManager();
             float f = 1.6F;

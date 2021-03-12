@@ -5,6 +5,7 @@ import lime.events.EventTarget;
 import lime.events.impl.Event2D;
 import lime.events.impl.Event3D;
 import lime.events.impl.EventMotion;
+import lime.events.impl.EventPacket;
 import lime.module.Module;
 import lime.cgui.settings.Setting;
 import lime.module.impl.render.targethuds.AstolfoTargetHUD;
@@ -28,6 +29,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemSword;
 import net.minecraft.network.play.client.C02PacketUseEntity;
 import net.minecraft.network.play.client.C0APacketAnimation;
+import net.minecraft.network.play.server.S08PacketPlayerPosLook;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
@@ -88,6 +90,11 @@ public class KillAura extends Module {
         } else
             return;
         ent = getBestEntityByDistance();
+        if(Lime.moduleManager.getModuleByName("AntiBot").isToggled()){
+            AntiBot antiBot = (AntiBot) Lime.moduleManager.getModuleByName("AntiBot");
+            antiBot.removeBot();
+        }
+        if(Lime.moduleManager.getModuleByName("AutoPot").isToggled() && (AutoPot.doPot || AutoPot.doSp)) return;
         if(ent == null || ent.ticksExisted < 30 || (!mc.thePlayer.canEntityBeSeen(ent) && !Lime.setmgr.getSettingByNameAndMod("Through Walls", this).getValBoolean()) || mc.thePlayer.getDistanceToEntity(ent) > Lime.setmgr.getSettingByNameAndMod("Reach", this).getValDouble())
             return;
         if(mc.getIntegratedServer() == null){
@@ -207,9 +214,24 @@ public class KillAura extends Module {
                 if(ent.getDistanceToEntity(mc.thePlayer) <= getSettingByName("Reach").getValDouble())
                     if(isValid(ent) && ent.ticksExisted > 30){
                         ScaledResolution sr = new ScaledResolution(this.mc);
-                        astolfoTargetHUD.draw(ent, sr.getScaledWidth() / 2 - 87, sr.getScaledHeight() / 2 + 100, new Color(255, 0, 0).getRGB());
+                        try{
+                            astolfoTargetHUD.draw(ent, sr.getScaledWidth() / 2 - 87, sr.getScaledHeight() / 2 + 100, getHealthColor(Math.round(ent.getHealth())).getRGB());
+                        } catch (Exception ignored){
+
+                        }
                     }
         }
+    }
+    public Color getHealthColor(int health){
+        if(health >= 20)
+            return new Color(0, 250, 0);
+        else if(health >= 15)
+            return new Color(250, 200, 0);
+        else if(health >= 10)
+            return new Color(250, 88, 0);
+        else if(health >= 5)
+            return new Color(100, 0, 0);
+        return null;
     }
 
             /*if(ent == null || (!Lime.setmgr.getSettingByNameAndMod("Through Walls", this).getValBoolean() && !mc.thePlayer.canEntityBeSeen(ent))  || (mc.thePlayer.getDistanceToEntity(ent) > Lime.setmgr.getSettingByNameAndMod("Reach", this).getValDouble()) || !isValid(ent)) return;
@@ -285,8 +307,16 @@ public class KillAura extends Module {
     }
 
     @EventTarget
+    public void flagCheck(EventPacket e){
+        if(e.getPacket() instanceof S08PacketPlayerPosLook){
+            ChatUtils.sendMsg("Disabled " + this.name + " for lagback reasons");
+            this.toggle();
+        }
+    }
+
+    @EventTarget
     public void onRender3D(Event3D event3D){
-        if(ent == null || ent.ticksExisted < 30 || (!mc.thePlayer.canEntityBeSeen(ent) && !Lime.setmgr.getSettingByNameAndMod("Through Walls", this).getValBoolean()) || mc.thePlayer.getDistanceToEntity(ent) > Lime.setmgr.getSettingByNameAndMod("Reach", this).getValDouble())
+        if(ent == null || ent.ticksExisted < 30 || (!mc.thePlayer.canEntityBeSeen(ent) && !getSettingByName("Through Walls").getValBoolean()) || mc.thePlayer.getDistanceToEntity(ent) > getSettingByName("Reach").getValDouble())
             return;
         try{
             Color color = RainbowUtil.blend2colors(new Color(255, 0, 0, 255), new Color(100, 0, 0, 255), (System.nanoTime() + (100000000L * 2)) / 1.0E09F % 2.0F);
@@ -320,7 +350,6 @@ public class KillAura extends Module {
                     color(new Color(color.getRed(), color.getGreen(), color.getBlue(), (int) (down ? 255 * height : 255 * (1 - height))));
                     GL11.glVertex3d(x + Math.cos(Math.toRadians(j)) * size, y + yOffset, z - Math.sin(Math.toRadians(j)) * size);
                     color(new Color(color.getRed(), color.getGreen(), color.getBlue(), 0));
-                    GL11.glVertex3d(x + Math.cos(Math.toRadians(j)) * size, y + yOffset + ((down ? -.5 * (1 - height) : .5 * height)), z - Math.sin(Math.toRadians(j)) * size);
                 }
             }
             GL11.glEnd();

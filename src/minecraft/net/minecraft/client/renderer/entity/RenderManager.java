@@ -117,9 +117,9 @@ public class RenderManager
 
     /** Renders fonts */
     private FontRenderer textRenderer;
-    public double renderPosX;
-    public double renderPosY;
-    public double renderPosZ;
+    public static double renderPosX;
+    public static double renderPosY;
+    public static double renderPosZ;
     public TextureManager renderEngine;
 
     /** Reference to the World object. */
@@ -128,8 +128,8 @@ public class RenderManager
     /** Rendermanager's variable for the player */
     public Entity livingPlayer;
     public Entity pointedEntity;
-    public float playerViewY;
-    public float playerViewX;
+    public static float playerViewY;
+    public static float playerViewX;
 
     /** Reference to the GameSettings object. */
     public GameSettings options;

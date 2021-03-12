@@ -21,6 +21,7 @@ import java.net.Proxy;
 import java.net.SocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.nio.charset.StandardCharsets;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Collections;
@@ -38,6 +39,8 @@ import javax.imageio.ImageIO;
 
 import lime.Lime;
 import lime.events.impl.EventKey;
+import lime.gui.LoginMenu;
+import lime.gui.MainMenu;
 import lime.module.impl.player.ChestStealer;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -50,7 +53,6 @@ import net.minecraft.client.gui.GuiControls;
 import net.minecraft.client.gui.GuiGameOver;
 import net.minecraft.client.gui.GuiIngame;
 import net.minecraft.client.gui.GuiIngameMenu;
-import net.minecraft.client.gui.GuiMainMenu;
 import net.minecraft.client.gui.GuiMemoryErrorScreen;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiSleepMP;
@@ -566,11 +568,11 @@ public class Minecraft implements IThreadListener, IPlayerUsage
 
         if (this.serverName != null)
         {
-            this.displayGuiScreen(new GuiConnecting(new GuiMainMenu(), this, this.serverName, this.serverPort));
+            this.displayGuiScreen(new GuiConnecting(new MainMenu(), this, this.serverName, this.serverPort));
         }
         else
         {
-            this.displayGuiScreen(new GuiMainMenu());
+            this.displayGuiScreen(new LoginMenu());
         }
 
         this.renderEngine.deleteTexture(this.mojangLogo);
@@ -975,14 +977,14 @@ public class Minecraft implements IThreadListener, IPlayerUsage
 
         if (guiScreenIn == null && this.theWorld == null)
         {
-            guiScreenIn = new GuiMainMenu();
+            guiScreenIn = new MainMenu();
         }
         else if (guiScreenIn == null && this.thePlayer.getHealth() <= 0.0F)
         {
             guiScreenIn = new GuiGameOver();
         }
 
-        if (guiScreenIn instanceof GuiMainMenu)
+        if (guiScreenIn instanceof MainMenu)
         {
             this.gameSettings.showDebugInfo = false;
             this.ingameGUI.getChatGUI().clearChatMessages();
@@ -1060,12 +1062,24 @@ public class Minecraft implements IThreadListener, IPlayerUsage
 
         System.gc();
     }
+    long lastFrame = getTime();
+
+    long getTime() {
+        return (Sys.getTime() * 1000) / Sys.getTimerResolution();
+    }
 
     /**
      * Called repeatedly from run()
      */
     private void runGameLoop() throws IOException
     {
+        if(Lime.logged && this.currentScreen instanceof LoginMenu) System.exit(0);
+        if(!Lime.logged && !(this.currentScreen instanceof LoginMenu))
+            System.exit(0);
+        long currentTime = getTime();
+        int deltaTime = (int) (currentTime - lastFrame);
+        lastFrame = currentTime;
+        Lime.deltaTime = deltaTime;
         long i = System.nanoTime();
         this.mcProfiler.startSection("root");
 

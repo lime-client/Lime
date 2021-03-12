@@ -50,7 +50,7 @@ public class SettingsManager {
                 return set;
             }
         }
-        System.err.println("["+ Lime.clientName + "] Error Setting NOT found: '" + name +"'!");
+        //System.err.println("["+ Lime.clientName + "] Error Setting NOT found: '" + name +"'!");
         return null;
     }
 

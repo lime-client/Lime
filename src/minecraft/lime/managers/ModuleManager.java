@@ -3,6 +3,7 @@ package lime.managers;
 import lime.module.impl.combat.*;
 //import lime.module.impl.misc.*;
 import lime.module.impl.misc.AntiBlindness;
+import lime.module.impl.misc.Disabler;
 import lime.module.impl.movement.*;
 import lime.module.impl.player.*;
 import lime.module.impl.render.*;
@@ -12,21 +13,26 @@ import java.util.ArrayList;
 
 public class ModuleManager {
     ArrayList<Module> modules = new ArrayList<>();
-    public ArrayList<Module> filteredLengthModules = new ArrayList<>();
     public ModuleManager(){
         // COMBAT
         modules.add(new KillAura());
         modules.add(new Velocity());
         modules.add(new InfiniteAura());
+        modules.add(new AntiBot());
+        modules.add(new AutoPot());
+        modules.add(new Criticals());
+        modules.add(new KillAuraNew());
 
         // MOVEMENT
         modules.add(new Flight());
         modules.add(new Speed());
         //modules.add(new Scaffold());
         modules.add(new Scaffold2());
+        modules.add(new Scaffold3());
         modules.add(new SafeWalk());
         modules.add(new Sprint());
         modules.add(new NoSlow());
+        modules.add(new Step());
 
         // PLAYER
         modules.add(new InvMove());
@@ -35,8 +41,10 @@ public class ModuleManager {
         modules.add(new ChestAura());
         modules.add(new AutoArmor());
         modules.add(new NoRotate());
-        modules.add(new Blink());
+        //modules.add(new Blink());
         modules.add(new Freecam());
+        modules.add(new FastEat());
+        modules.add(new NoFall());
 
 
         // RENDER
@@ -48,13 +56,15 @@ public class ModuleManager {
         modules.add(new NoScoreboard());
         modules.add(new FullBright());
         modules.add(new ChestESP());
+        modules.add(new SkeletonESP());
+        modules.add(new Nametags());
 
         // MISC
         modules.add(new AntiBlindness());
+        modules.add(new Disabler());
 
 
 
-        filteredLengthModules = modules;
 
     }
 
@@ -62,9 +72,6 @@ public class ModuleManager {
         return modules;
     }
 
-    public ArrayList<Module> getFilteredLengthModules() {
-        return filteredLengthModules;
-    }
 
     public Module getModuleByName(String name){
         for(Module mod : this.getModules()){

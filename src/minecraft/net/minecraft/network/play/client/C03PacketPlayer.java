@@ -12,7 +12,7 @@ public class C03PacketPlayer implements Packet<INetHandlerPlayServer>
     protected double z;
     protected float yaw;
     protected float pitch;
-    protected boolean onGround;
+    public boolean onGround;
     protected boolean moving;
     protected boolean rotating;
 
@@ -39,6 +39,10 @@ public class C03PacketPlayer implements Packet<INetHandlerPlayServer>
     public void readPacketData(PacketBuffer buf) throws IOException
     {
         this.onGround = buf.readUnsignedByte() != 0;
+    }
+
+    public void setY(double y) {
+        this.y = y;
     }
 
     /**

@@ -14,12 +14,14 @@ import java.util.List;
 import com.thealtening.auth.TheAlteningAuthentication;
 import lime.Lime;
 import lime.file.impl.ApiKeySaver;
+import lime.utils.render.Util2D;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.ResourceLocation;
 import org.lwjgl.input.Keyboard;
 
 public final class GuiAltLogin
@@ -119,14 +121,20 @@ extends GuiScreen {
         this.apikey.drawTextBox();
         this.drawCenteredString(this.mc.fontRendererObj, "Alt Login", width / 2, 20, -1);
         this.drawCenteredString(this.mc.fontRendererObj, this.thread == null ? (Object)((Object)EnumChatFormatting.GRAY) + "Idle..." : this.thread.getStatus(), width / 2, 29, -1);
+        if(this.thread != null && thread.getStatus().contains("Logging")){
+            Util2D.drawImage(new ResourceLocation("lime/logging.png"), width / 2 - 18, 28 + this.fontRendererObj.FONT_HEIGHT + 5, 36, 36);
+        }
+        if(this.thread != null && thread.getStatus().contains("Logged")){
+            Util2D.drawImage(new ResourceLocation("lime/done.png"), width / 2 - 18, 28 + this.fontRendererObj.FONT_HEIGHT + 5, 36, 36);
+        }
         if (this.username.getText().isEmpty()) {
-            this.drawString(this.mc.fontRendererObj, "Username / E-Mail", width / 2 - 96, 66, -7829368);
+            this.drawString(this.mc.fontRendererObj, "Username / E-Mail", width / 2 - 96, 96, -7829368);
         }
         if (this.password.getText().isEmpty()) {
-            this.drawString(this.mc.fontRendererObj, "Password", width / 2 - 96, 106, -7829368);
+            this.drawString(this.mc.fontRendererObj, "Password", width / 2 - 96, 136, -7829368);
         }
         if(this.apikey.getText().isEmpty()){
-            this.drawString(this.mc.fontRendererObj, "TheAltening API Key", width / 2 - 96, 146, -7829368);
+            this.drawString(this.mc.fontRendererObj, "TheAltening API Key", width / 2 - 96, 176, -7829368);
         }
 
         super.drawScreen(x2, y2, z2);
@@ -139,9 +147,9 @@ extends GuiScreen {
         this.buttonList.add(new GuiButton(0, width / 2 - 100, var3 + 72 + 12, "Login"));
         this.buttonList.add(new GuiButton(2, width / 2 - 100, var3 + 72 + 12 + 24, "Copy Email:Pass"));
         this.buttonList.add(new GuiButton(1, width / 2 - 100, var3 + 72 + 12 + 24 + 24, "Back"));
-        this.username = new GuiTextField(var3, this.mc.fontRendererObj, width / 2 - 100, 60, 200, 20);
-        this.password = new PasswordField(this.mc.fontRendererObj, width / 2 - 100, 100, 200, 20);
-        this.apikey = new PasswordField(this.mc.fontRendererObj, width / 2 - 100, 140, 200, 20);
+        this.username = new GuiTextField(var3, this.mc.fontRendererObj, width / 2 - 100, 90, 200, 20);
+        this.password = new PasswordField(this.mc.fontRendererObj, width / 2 - 100, 130, 200, 20);
+        this.apikey = new PasswordField(this.mc.fontRendererObj, width / 2 - 100, 170, 200, 20);
         apikey.setText(((ApiKeySaver) Lime.fileManager.getFileByClass(ApiKeySaver.class)).load());
         this.username.setFocused(true);
         Keyboard.enableRepeatEvents(true);

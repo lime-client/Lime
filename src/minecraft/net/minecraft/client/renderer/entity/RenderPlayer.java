@@ -1,5 +1,6 @@
 package net.minecraft.client.renderer.entity;
 
+import lime.module.impl.render.SkeletonESP;
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.model.ModelPlayer;
@@ -56,6 +57,7 @@ public class RenderPlayer extends RendererLivingEntity<AbstractClientPlayer>
     {
         if (!entity.isUser() || this.renderManager.livingPlayer == entity)
         {
+            SkeletonESP.addEntity(entity, getMainModel());
             double d0 = y;
 
             if (entity.isSneaking() && !(entity instanceof EntityPlayerSP))

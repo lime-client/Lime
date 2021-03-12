@@ -72,4 +72,29 @@ public class RainbowUtil {
         int alphaPart = (int) (color1.getAlpha() * inverse_percent + color2.getAlpha() * offset);
         return new Color(redPart, greenPart, bluePart, alphaPart);
     }
+    public static Color getGradient(double offset, Color color1, Color color2, Color color3) {
+        Color color11 = color1;
+        Color color22 = color2;
+        if (offset > 1) {
+            double left = offset % 1;
+            int off = (int) offset;
+            offset = off % 2 == 0 ? left : 1 - left;
+
+        }
+
+        offset = offset * 2;
+
+        if(offset >= 1) {
+            offset -= 1;
+            color11 = color2;
+            color22 = color3;
+
+        }
+
+        double inverse_percent = 1 - offset;
+        int redPart = (int) (color11.getRed() * inverse_percent + color22.getRed() * offset);
+        int greenPart = (int) (color11.getGreen() * inverse_percent + color22.getGreen() * offset);
+        int bluePart = (int) (color11.getBlue() * inverse_percent + color22.getBlue() * offset);
+        return new Color(redPart, greenPart, bluePart);
+    }
 }

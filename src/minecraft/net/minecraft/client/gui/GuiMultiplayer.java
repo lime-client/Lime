@@ -13,7 +13,9 @@ import net.minecraft.client.resources.I18n;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.lwjgl.input.Keyboard;
+import viamcp.ViaFabric;
 import viamcp.gui.GuiProtocolSelector;
+import viamcp.util.ProtocolUtils;
 
 public class GuiMultiplayer extends GuiScreen implements GuiYesNoCallback
 {
@@ -99,7 +101,7 @@ public class GuiMultiplayer extends GuiScreen implements GuiYesNoCallback
         this.buttonList.add(new GuiButton(3, this.width / 2 + 4 + 50, this.height - 52, 100, 20, I18n.format("selectServer.add", new Object[0])));
         this.buttonList.add(new GuiButton(8, this.width / 2 + 4, this.height - 28, 70, 20, I18n.format("selectServer.refresh", new Object[0])));
         this.buttonList.add(new GuiButton(0, this.width / 2 + 4 + 76, this.height - 28, 75, 20, I18n.format("gui.cancel", new Object[0])));
-        this.buttonList.add(new GuiButton(69, 20, 5, 200, 20, "ViaMCP Version"));
+        this.buttonList.add(new GuiButton(69, 20, 5, 100, 20, ProtocolUtils.getProtocolName(ViaFabric.clientSideVersion)));
         this.selectServer(this.serverListSelector.func_148193_k());
     }
 

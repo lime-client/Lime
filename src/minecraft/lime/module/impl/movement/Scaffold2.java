@@ -1,17 +1,21 @@
 package lime.module.impl.movement;
 
+import java.awt.*;
 import java.util.Arrays;
 import java.util.List;
 
 import lime.Lime;
 import lime.cgui.settings.Setting;
 import lime.events.EventTarget;
+import lime.events.impl.Event2D;
 import lime.events.impl.EventMotion;
 import lime.events.impl.EventPacket;
 import lime.events.impl.EventSafeWalk;
 import lime.module.Module;
 import lime.utils.Timer;
 import lime.utils.movement.MovementUtil;
+import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.util.*;
 import org.lwjgl.input.Keyboard;
 
 import net.minecraft.block.Block;
@@ -31,10 +35,6 @@ import net.minecraft.network.play.client.C09PacketHeldItemChange;
 import net.minecraft.network.play.client.C0APacketAnimation;
 import net.minecraft.network.play.client.C0BPacketEntityAction;
 import net.minecraft.network.play.client.C0BPacketEntityAction.Action;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.MathHelper;
-import net.minecraft.util.Vec3;
 
 
 public class Scaffold2 extends Module {
@@ -88,6 +88,7 @@ public class Scaffold2 extends Module {
 
     @Override
     public void onEnable() {
+        timerBoost.reset();
         tDelay.reset();
         yaw = 999;
         pitch = 999;
@@ -98,6 +99,29 @@ public class Scaffold2 extends Module {
         cubeSpoof = -1;
         super.onEnable();
     }
+
+    @EventTarget
+    public void onEvent2D(Event2D e){
+
+        int blocks = getBlockCount();
+        if(stackez != null && blocks != 0){
+            RenderHelper.enableStandardItemLighting();
+            mc.getRenderItem().renderItemAndEffectIntoGUI(stackez, (int) e.getWidth() / 2 - 20, (int) e.getHeight() / 2 + 5);
+            RenderHelper.disableStandardItemLighting();
+            Lime.fontManager.roboto_sense.drawString(blocks + " " + EnumChatFormatting.WHITE + "blocks", e.getWidth() / 2 - 3, (int) e.getHeight() / 2 + 10, blocks > 64 ? new Color(0, 255, 0).getRGB() : new Color(255, 0, 0).getRGB());
+        }
+
+    }
+
+    public void doRotationsInThirdPerson(EventMotion eventMotion){
+        mc.thePlayer.rotationYawHead = eventMotion.getYaw();
+        mc.thePlayer.renderYawOffset = eventMotion.getYaw();
+        mc.thePlayer.renderArmYaw = eventMotion.getYaw();
+        mc.thePlayer.renderArmPitch = eventMotion.getPitch();
+        mc.thePlayer.rotationPitchHead = eventMotion.getPitch();
+    }
+
+
     @EventTarget
     public void onSafeWalk(EventSafeWalk e){
         if(getSettingByName("SafeWalk").getValBoolean())
@@ -125,6 +149,8 @@ public class Scaffold2 extends Module {
         }
         super.onDisable();
     }
+    Timer timerBoost = new Timer();
+    ItemStack stackez;
 
     
     @EventTarget
@@ -136,25 +162,20 @@ public class Scaffold2 extends Module {
         boolean samey = getSettingByName("SameY").getValBoolean();
         if(em.getState() == EventMotion.State.PRE){
             getBestBlocks();
-            if(!currentMode.equalsIgnoreCase("Legit") && !currentMode.equalsIgnoreCase("Cubecraft")){
-                if(sneaking && !mc.thePlayer.isSneaking()){
-                    C0BPacketEntityAction p = new C0BPacketEntityAction(mc.thePlayer, Action.STOP_SNEAKING);
-                    mc.thePlayer.sendQueue.addToSendQueue(p);
-                    sneaking = !sneaking;
-                }
-                if(cubeSpoof != -1){
-                    C09PacketHeldItemChange p = new C09PacketHeldItemChange(mc.thePlayer.inventory.currentItem);
-                    mc.thePlayer.sendQueue.getNetworkManager().sendPacket(p);
-                    cubeSpoof = -1;
-                }
-            }else if(!sneaking){
+            if(sneaking && !mc.thePlayer.isSneaking()){
+                C0BPacketEntityAction p = new C0BPacketEntityAction(mc.thePlayer, Action.STOP_SNEAKING);
+                mc.thePlayer.sendQueue.addToSendQueue(p);
+                sneaking = !sneaking;
+            }
+            if(cubeSpoof != -1){
+                C09PacketHeldItemChange p = new C09PacketHeldItemChange(mc.thePlayer.inventory.currentItem);
+                mc.thePlayer.sendQueue.getNetworkManager().sendPacket(p);
+                cubeSpoof = -1;
+            }
+            if(!sneaking){
                 BlockPos ppos = new BlockPos(-1, -1, -1);
                 ItemStack stack;
-                if(cubeSpoof == -1){
-                    stack = mc.thePlayer.inventory.getCurrentItem();
-                }else{
-                    stack = mc.thePlayer.inventory.getStackInSlot(cubeSpoof);
-                }
+                stack = mc.thePlayer.inventory.getCurrentItem();
 
                 C08PacketPlayerBlockPlacement pl = new C08PacketPlayerBlockPlacement(ppos, 255, stack, 0, 0, 0);
                 mc.thePlayer.sendQueue.addToSendQueue(pl);
@@ -194,7 +215,8 @@ public class Scaffold2 extends Module {
         BlockData data = getBlockData(underPos);
 
         if (em.getState() == EventMotion.State.PRE) {
-
+            em.setYaw(yaw + (float)randomNumber(1, -1));
+            em.setPitch(pitch);
 
             setSpeed(currentMode, em);
             if(getBlockCount()>0){
@@ -211,19 +233,17 @@ public class Scaffold2 extends Module {
             if (em.getState() == EventMotion.State.PRE) {
                 blockdata = data;
                 float[] rot = getRotations(data.position, data.face);
-                if (!currentMode.equalsIgnoreCase("Mineplex")) {
-                    em.setYaw(rot[0]);
-                    em.setPitch(rot[1]);
-                    yaw = rot[0];
-                    pitch = rot[1];
-                }
-                if (currentMode.equalsIgnoreCase("Normal") && !mc.gameSettings.keyBindJump.pressed && mc.thePlayer.onGround && MovementUtil.isOnGround(0.001) && mc.thePlayer.isCollidedVertically) {
+                em.setYaw(rot[0]);
+                em.setPitch(rot[1]);
+                yaw = rot[0];
+                pitch = rot[1];
+                if (!mc.gameSettings.keyBindJump.pressed && mc.thePlayer.onGround && MovementUtil.isOnGround(0.001) && mc.thePlayer.isCollidedVertically) {
                     em.setGround(false);
                 }
 
             } else {
                 
-                if (!tDelay.hasReached(80) && currentMode.equalsIgnoreCase("Normal") && MovementUtil.isOnGround(0.01) && !mc.gameSettings.keyBindJump.pressed) {
+                if (!tDelay.hasReached(80) && MovementUtil.isOnGround(0.01) && !mc.gameSettings.keyBindJump.pressed) {
                     return;
                 }
                 tDelay.reset();
@@ -231,15 +251,14 @@ public class Scaffold2 extends Module {
                 ItemSpoof();
 
                 
-                if (currentMode.equalsIgnoreCase("Normal") && !mc.gameSettings.keyBindJump.pressed && mc.thePlayer.onGround && MovementUtil.isOnGround(0.001) && mc.thePlayer.isCollidedVertically) {
+                if (!mc.gameSettings.keyBindJump.pressed && mc.thePlayer.onGround && MovementUtil.isOnGround(0.001) && mc.thePlayer.isCollidedVertically)
                     em.setGround(false);
-                }
                 count ++;
-                if((currentMode.equalsIgnoreCase("Legit") || currentMode.equalsIgnoreCase("Cubecraft")) && cubeSpoof != -1){
-                    ;
-                }else{
-                    mc.playerController.onPlayerRightClick(mc.thePlayer, mc.theWorld, mc.thePlayer.inventory.getCurrentItem(), data.position, data.face, getVec3(data.position, data.face));
+                stackez = mc.thePlayer.inventory.getCurrentItem();
+                if(mc.gameSettings.thirdPersonView != 0){
+                    doRotationsInThirdPerson(em);
                 }
+                mc.playerController.onPlayerRightClick(mc.thePlayer, mc.theWorld, mc.thePlayer.inventory.getCurrentItem(), data.position, data.face, getVec3(data.position, data.face));
                 if(timer.hasReached(250)){
                     timer.reset();
                 }
@@ -251,9 +270,6 @@ public class Scaffold2 extends Module {
                 }
                 mc.thePlayer.inventory.currentItem = slot;
                 mc.playerController.updateController();
-
-
-
             }
         }
         
@@ -482,14 +498,8 @@ public class Scaffold2 extends Module {
                         && mc.thePlayer.inventoryContainer.getSlot(i).getStack().getItem() instanceof ItemBlock && mc.thePlayer.inventoryContainer.getSlot(i).getStack() != null) {
                     if (isValid(mc.thePlayer.inventoryContainer.getSlot(i).getStack().getItem()) && mc.thePlayer.inventoryContainer.getSlot(i).getStack().stackSize != 0) {
                         if (mc.thePlayer.inventory.currentItem != theSlot) {
-
-                            if(currentMode.equalsIgnoreCase("Legit") || currentMode.equalsIgnoreCase("Cubecraft")){
-                                ;
-                            }else{
-                                mc.thePlayer.inventory.currentItem = theSlot;
-                                mc.playerController.updateController();
-                            }
-
+                            mc.thePlayer.inventory.currentItem = theSlot;
+                            mc.playerController.updateController();
                         }
                         break;
 
@@ -582,7 +592,6 @@ public class Scaffold2 extends Module {
         if (isPosSolid(pos4.add(0, 0, -1))) {
             return new BlockData(pos4.add(0, 0, -1), EnumFacing.SOUTH);
         }
-        BlockPos pos19 = pos.add(-2, 0, 0);
         if (isPosSolid(pos1.add(0, -1, 0))) {
             return new BlockData(pos1.add(0, -1, 0), EnumFacing.UP);
         }
@@ -598,7 +607,6 @@ public class Scaffold2 extends Module {
         if (isPosSolid(pos1.add(0, 0, -1))) {
             return new BlockData(pos1.add(0, 0, -1), EnumFacing.SOUTH);
         }
-        BlockPos pos29 = pos.add(2, 0, 0);
         if (isPosSolid(pos2.add(0, -1, 0))) {
             return new BlockData(pos2.add(0, -1, 0), EnumFacing.UP);
         }
@@ -614,7 +622,6 @@ public class Scaffold2 extends Module {
         if (isPosSolid(pos2.add(0, 0, -1))) {
             return new BlockData(pos2.add(0, 0, -1), EnumFacing.SOUTH);
         }
-        BlockPos pos39 = pos.add(0, 0, 2);
         if (isPosSolid(pos3.add(0, -1, 0))) {
             return new BlockData(pos3.add(0, -1, 0), EnumFacing.UP);
         }
@@ -630,7 +637,6 @@ public class Scaffold2 extends Module {
         if (isPosSolid(pos3.add(0, 0, -1))) {
             return new BlockData(pos3.add(0, 0, -1), EnumFacing.SOUTH);
         }
-        BlockPos pos49 = pos.add(0, 0, -2);
         if (isPosSolid(pos4.add(0, -1, 0))) {
             return new BlockData(pos4.add(0, -1, 0), EnumFacing.UP);
         }
@@ -732,15 +738,6 @@ public class Scaffold2 extends Module {
         double x = block.getX() + 0.5 - mc.thePlayer.posX +  (double) face.getFrontOffsetX()/2;
         double z = block.getZ() + 0.5 - mc.thePlayer.posZ +  (double) face.getFrontOffsetZ()/2;
         double y = (block.getY() + 0.5);
-        if(currentMode.equalsIgnoreCase("Legit")){
-            double dist = mc.thePlayer.getDistance(block.getX()+ 0.5 + (double) face.getFrontOffsetX()/2, block.getY(), block.getZ()+ 0.5+  (double) face.getFrontOffsetZ()/2);
-            //if(dist > 1.5){
-            y += 0.5;
-            //x += (double) face.getFrontOffsetX()/8;
-            //z += (double) face.getFrontOffsetZ()/8;
-            //}
-
-        }
         double d1 = mc.thePlayer.posY + mc.thePlayer.getEyeHeight() - y;
         double d3 = MathHelper.sqrt_double(x * x + z * z);
         float yaw = (float) (Math.atan2(z, x) * 180.0D / Math.PI) - 90.0F;
@@ -791,7 +788,7 @@ public class Scaffold2 extends Module {
         Block underBlock = mc.theWorld.getBlockState(underPos).getBlock();
         BlockData data = getBlockData(underPos);
         if(!mc.gameSettings.keyBindJump.pressed){
-            if((getSettingByName("TowerMove").getValBoolean() && MovementUtil.isMoving()) && (mode.equalsIgnoreCase("Normal" ))){
+            if((getSettingByName("TowerMove").getValBoolean() && MovementUtil.isMoving())){
                 if (MovementUtil.isOnGround(0.76) && !MovementUtil.isOnGround(0.75) && mc.thePlayer.motionY > 0.23 && mc.thePlayer.motionY < 0.25) {
                     mc.thePlayer.motionY = (Math.round(mc.thePlayer.posY) - mc.thePlayer.posY);
                 }
@@ -804,27 +801,25 @@ public class Scaffold2 extends Module {
             }
             return;
         }
-        if(mode.equalsIgnoreCase("Normal")){
-            if(MovementUtil.isMoving()){
-                if (MovementUtil.isOnGround(0.76) && !MovementUtil.isOnGround(0.75) && mc.thePlayer.motionY > 0.23 && mc.thePlayer.motionY < 0.25) {
-                    mc.thePlayer.motionY = (Math.round(mc.thePlayer.posY) - mc.thePlayer.posY);
-                }
-                if (MovementUtil.isOnGround(0.0001)) {
-                    mc.thePlayer.motionY = 0.42;
-                    mc.thePlayer.motionX *= 0.9;
-                    mc.thePlayer.motionZ *= 0.9;
-                }else if(mc.thePlayer.posY >= Math.round(mc.thePlayer.posY) - 0.0001 && mc.thePlayer.posY <= Math.round(mc.thePlayer.posY) + 0.0001){
-                    mc.thePlayer.motionY = 0;
-                }
-            }else{
-                mc.thePlayer.motionX = 0;
-                mc.thePlayer.motionZ = 0;
-                mc.thePlayer.jumpMovementFactor = 0;
-                if (isAirBlock(underBlock) && data != null) {
-                    mc.thePlayer.motionY = 0.4196;
-                    mc.thePlayer.motionX *= 0.75;
-                    mc.thePlayer.motionZ *= 0.75;
-                }
+        if(MovementUtil.isMoving()){
+            if (MovementUtil.isOnGround(0.76) && !MovementUtil.isOnGround(0.75) && mc.thePlayer.motionY > 0.23 && mc.thePlayer.motionY < 0.25) {
+                mc.thePlayer.motionY = (Math.round(mc.thePlayer.posY) - mc.thePlayer.posY);
+            }
+            if (MovementUtil.isOnGround(0.0001)) {
+                mc.thePlayer.motionY = 0.42;
+                mc.thePlayer.motionX *= 0.9;
+                mc.thePlayer.motionZ *= 0.9;
+            }else if(mc.thePlayer.posY >= Math.round(mc.thePlayer.posY) - 0.0001 && mc.thePlayer.posY <= Math.round(mc.thePlayer.posY) + 0.0001){
+                mc.thePlayer.motionY = 0;
+            }
+        }else{
+            mc.thePlayer.motionX = 0;
+            mc.thePlayer.motionZ = 0;
+            mc.thePlayer.jumpMovementFactor = 0;
+            if (isAirBlock(underBlock) && data != null) {
+                mc.thePlayer.motionY = 0.4196;
+                mc.thePlayer.motionX *= 0.75;
+                mc.thePlayer.motionZ *= 0.75;
             }
         }
     }
@@ -838,9 +833,6 @@ public class Scaffold2 extends Module {
         double xCalc = -999, zCalc = -999;
         double dist = 0;
         double expandDist = getSettingByName("Expand").getValDouble() *2;
-        if(currentMode.equalsIgnoreCase("Cubecraft")){
-            expandDist += randomNumber(0.1, -0.3);
-        }
         while(!isAirBlock(underBlock)){
             xCalc = x;
             zCalc = z;

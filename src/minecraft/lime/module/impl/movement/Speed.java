@@ -3,20 +3,19 @@ package lime.module.impl.movement;
 import lime.Lime;
 import lime.cgui.settings.Setting;
 import lime.events.EventTarget;
-import lime.events.impl.EventBoundingBox;
-import lime.events.impl.EventMotion;
-import lime.events.impl.EventMove;
-import lime.events.impl.EventUpdate;
+import lime.events.impl.*;
 import lime.module.Module;
 import lime.module.impl.movement.SpeedMode.SpeedManager;
+import lime.utils.ChatUtils;
 import lime.utils.movement.MovementUtil;
+import net.minecraft.network.play.server.S08PacketPlayerPosLook;
 import org.lwjgl.input.Keyboard;
 
 public class Speed extends Module {
     public SpeedManager speedManager;
     public Speed(){
         super("Speed", Keyboard.KEY_V, Category.MOVEMENT);
-        Lime.setmgr.rSetting(new Setting("Speed", this, "Vanilla", true, "Vanilla", "BRWServ", "Funcraft", "Verus"));
+        Lime.setmgr.rSetting(new Setting("Speed", this, "Vanilla", true, "Vanilla", "BRWServ", "Funcraft", "FuncraftYPort", "Verus"));
         Lime.setmgr.rSetting(new Setting("Speed Power", this, 1, 0, 10, false));
         speedManager = new SpeedManager();
     }
@@ -30,6 +29,14 @@ public class Speed extends Module {
             }
         }
 
+    }
+
+    @EventTarget
+    public void flagCheck(EventPacket e){
+        if(e.getPacket() instanceof S08PacketPlayerPosLook){
+            ChatUtils.sendMsg("Disabled " + this.name + " for lagback reasons");
+            this.toggle();
+        }
     }
 
     @Override

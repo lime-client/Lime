@@ -73,6 +73,7 @@ public class AstolfoTargetHUD extends TargetHUD {
         }
 
         //drawing the entity
+        GlStateManager.color(1, 1, 1);
         GuiInventory.drawEntityOnScreen(24, 68, 32, -30.0F, 0.0F, target);
 
         //target name

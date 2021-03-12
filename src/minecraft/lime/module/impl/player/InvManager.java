@@ -348,7 +348,7 @@ public class InvManager extends Module {
             if (mc.thePlayer.inventoryContainer.getSlot(i).getHasStack()) {
                 ItemStack iss = mc.thePlayer.inventoryContainer.getSlot(i).getStack();
                 Item e = iss.getItem();
-                if (!(e instanceof ItemPickaxe) && !(e instanceof ItemAxe) && !(e instanceof ItemSword) && !(e instanceof ItemFood) && !(e instanceof ItemAppleGold) && !(e instanceof ItemPotion)  && !e.getUnlocalizedName().toLowerCase().contains("arrow") && !(e instanceof ItemArmor)) {
+                if (!(e instanceof ItemPickaxe) && !(e instanceof ItemAxe) && !(e instanceof ItemSword) && !(e instanceof ItemFood) && !(e instanceof ItemAppleGold) && !(e instanceof ItemPotion)  && !e.getUnlocalizedName().toLowerCase().contains("arrow") && !(e instanceof ItemArmor) && !e.getUnlocalizedName().toLowerCase().contains("pearl")) {
                     if(e instanceof ItemBow && !alreadyFoundABow){
                         alreadyFoundABow = true;
                         continue;

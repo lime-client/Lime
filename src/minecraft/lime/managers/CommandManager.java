@@ -2,9 +2,7 @@ package lime.managers;
 
 import lime.commands.Command;
 import lime.commands.cmds.Help;
-import lime.commands.impl.Config;
-import lime.commands.impl.HClip;
-import lime.commands.impl.VClip;
+import lime.commands.impl.*;
 import lime.utils.ChatUtils;
 
 import java.util.ArrayList;
@@ -17,6 +15,10 @@ public class CommandManager {
         commands.add(new VClip());
         commands.add(new HClip());
         commands.add(new Config());
+        commands.add(new Panic());
+        commands.add(new Toggle());
+        commands.add(new T());
+        commands.add(new Bind());
     }
     public ArrayList<Command> getCommands(){return commands;}
 
