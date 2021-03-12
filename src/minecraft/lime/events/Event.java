@@ -1,9 +1,6 @@
 package lime.events;
 import java.lang.reflect.InvocationTargetException;
 
-/**
- * Created by Hexeption on 18/12/2016.
- */
 public abstract class Event {
 
     /**

@@ -7,7 +7,6 @@ import lime.events.impl.EventUpdate;
 import lime.module.Module;
 import lime.cgui.settings.Setting;
 import lime.utils.Timer;
-import lime.utils.Timer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiChat;
 import net.minecraft.client.gui.inventory.GuiInventory;

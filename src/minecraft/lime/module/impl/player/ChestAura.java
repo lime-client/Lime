@@ -8,9 +8,6 @@ import lime.module.Module;
 import lime.module.impl.combat.KillAura;
 import net.minecraft.client.gui.inventory.GuiChest;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.ContainerChest;
 import net.minecraft.network.play.client.C08PacketPlayerBlockPlacement;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityChest;
@@ -20,7 +17,6 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class ChestAura extends Module {
     public ChestAura() {

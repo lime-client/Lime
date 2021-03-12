@@ -4,9 +4,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-/**
- * Created by Hexeption on 18/12/2016.
- */
 public class EventManager {
 
     //TODO: Comment Event's

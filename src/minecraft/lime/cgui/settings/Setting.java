@@ -1,7 +1,5 @@
 package lime.cgui.settings;
 
-
-
 import lime.module.Module;
 
 import java.util.ArrayList;

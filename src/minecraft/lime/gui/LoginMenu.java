@@ -2,7 +2,6 @@ package lime.gui;
 
 import lime.Lime;
 import lime.ui.GuiNewButton;
-import lime.utils.Timer;
 import lime.utils.render.Util2D;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;

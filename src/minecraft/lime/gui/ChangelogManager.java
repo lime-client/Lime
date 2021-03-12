@@ -1,7 +1,6 @@
 package lime.gui;
 
 import lime.Lime;
-import lime.module.Module;
 import lime.ui.GuiNewButton;
 import lime.utils.render.Util2D;
 import net.minecraft.client.gui.Gui;
@@ -10,7 +9,6 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.input.Mouse;
-import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
 import java.io.BufferedReader;

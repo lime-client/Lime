@@ -1,7 +1,5 @@
 package lime.events;
-/**
- * Created by Hexeption on 18/12/2016.
- */
+
 public class Priority {
 
     public static final byte FIRST = 0, SECOND = 1, THIRD = 2, FOURTH = 3, FIFTH = 4;

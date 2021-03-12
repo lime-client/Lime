@@ -1,6 +1,5 @@
 package lime.file.impl;
 
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import lime.Lime;
 import lime.cgui.settings.Setting;
 import lime.file.LimeFile;

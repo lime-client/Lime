@@ -1,9 +1,7 @@
 package lime.events;
 import java.lang.reflect.Method;
 
-/**
- * Created by Hexeption on 18/12/2016.
- */
+
 public class Data {
 
     public final Object source;

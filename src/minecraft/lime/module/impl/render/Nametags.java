@@ -7,7 +7,6 @@ import lime.events.impl.Event3D;
 import lime.events.impl.EventNameTags;
 import lime.module.Module;
 import net.minecraft.client.entity.EntityOtherPlayerMP;
-import net.minecraft.client.gui.Gui;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.EntityLivingBase;
@@ -19,7 +18,6 @@ import net.minecraft.entity.passive.EntityBat;
 import net.minecraft.entity.passive.EntitySquid;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.util.EnumChatFormatting;
-import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
 import java.util.ArrayList;

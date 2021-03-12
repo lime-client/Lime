@@ -13,19 +13,10 @@ import lime.module.Module;
 import lime.utils.Timer;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
-import net.minecraft.client.Minecraft;
 import net.minecraft.network.play.client.C03PacketPlayer;
-import net.minecraft.network.play.client.C03PacketPlayer.C04PacketPlayerPosition;
-import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.BlockPos;
-import net.minecraft.util.MathHelper;
 
 public class Step extends Module {
-    public final static String MODE = "MODE";
-    public final static String STEP = "HEIGHT";
-    public final static String NCPHEIGHT = "HEIGHT2";
-    public final static String TIMER = "TIMER";
-    public final static String DELAY= "DELAY";
     boolean resetTimer;
     Timer time = new Timer();
     public static Timer lastStep = new Timer();

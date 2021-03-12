@@ -15,17 +15,11 @@ import lime.managers.CommandManager;
 import lime.managers.FileManager;
 import lime.managers.FontManager;
 import lime.managers.ModuleManager;
-import lime.utils.Timer;
 import net.minecraft.client.Minecraft;
-import org.apache.commons.io.IOUtils;
 import org.lwjgl.opengl.Display;
 import viamcp.ViaFabric;
 
-import java.awt.*;
 import java.io.File;
-import java.io.InputStream;
-import java.net.MalformedURLException;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
 public class Lime {

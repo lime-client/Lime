@@ -11,7 +11,6 @@ import lime.utils.Timer;
 import lime.utils.movement.MovementUtil;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
@@ -21,7 +20,6 @@ import net.minecraft.network.play.client.C09PacketHeldItemChange;
 import net.minecraft.network.play.client.C0APacketAnimation;
 import net.minecraft.potion.Potion;
 import net.minecraft.util.*;
-import org.apache.commons.lang3.StringUtils;
 
 import java.awt.*;
 import java.util.Arrays;

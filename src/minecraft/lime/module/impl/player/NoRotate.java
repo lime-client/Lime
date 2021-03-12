@@ -4,7 +4,6 @@ import lime.events.EventTarget;
 import lime.events.impl.EventPacket;
 import lime.module.Module;
 import net.minecraft.network.play.server.S08PacketPlayerPosLook;
-import net.minecraft.network.play.server.S14PacketEntity;
 
 public class NoRotate extends Module {
     public NoRotate(){

@@ -4,18 +4,15 @@ import lime.Lime;
 import lime.cgui.cgui2.component.Component;
 import lime.cgui.cgui2.component.components.Checkbox;
 import lime.cgui.cgui2.component.components.Combo;
-import lime.cgui.component.button.Slider;
 import lime.cgui.settings.Setting;
 import lime.module.Module;
 import lime.utils.Timer;
 import lime.utils.render.Util2D;
 import net.minecraft.client.gui.Gui;
-import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
-import org.lwjgl.input.Mouse;
 
 import java.awt.*;
 import java.io.IOException;

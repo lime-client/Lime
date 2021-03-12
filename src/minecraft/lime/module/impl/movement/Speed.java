@@ -7,7 +7,6 @@ import lime.events.impl.*;
 import lime.module.Module;
 import lime.module.impl.movement.SpeedMode.SpeedManager;
 import lime.utils.ChatUtils;
-import lime.utils.movement.MovementUtil;
 import net.minecraft.network.play.server.S08PacketPlayerPosLook;
 import org.lwjgl.input.Keyboard;
 

@@ -12,25 +12,21 @@ import lime.module.impl.render.targethuds.AstolfoTargetHUD;
 import lime.utils.*;
 import lime.utils.movement.MovementUtil;
 import lime.utils.render.RainbowUtil;
-import lime.utils.render.Util2D;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
-import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.passive.EntityAnimal;
-import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemSword;
 import net.minecraft.network.play.client.C02PacketUseEntity;
 import net.minecraft.network.play.client.C0APacketAnimation;
 import net.minecraft.network.play.server.S08PacketPlayerPosLook;
-import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.input.Keyboard;
@@ -40,7 +36,6 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.Comparator;
 
-import static net.minecraft.client.gui.inventory.GuiInventory.drawEntityOnScreen;
 
 public class KillAura extends Module {
     public KillAura(){
