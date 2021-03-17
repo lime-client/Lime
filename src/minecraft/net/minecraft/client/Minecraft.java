@@ -1441,6 +1441,7 @@ public class Minecraft implements IThreadListener, IPlayerUsage
      */
     public void shutdown()
     {
+        Lime.stopClient();
         this.running = false;
     }
 

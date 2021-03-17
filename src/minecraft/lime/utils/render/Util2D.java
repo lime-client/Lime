@@ -28,6 +28,7 @@ public class Util2D {
         GL11.glDisable(GL_BLEND);
         GL11.glEnable(GL_DEPTH_TEST);
         GL11.glPopMatrix();
+        GlStateManager.color(1, 1, 1);
     }
 
     public static void drawRect(double left, double top, double right, double bottom, int color) {
@@ -114,6 +115,48 @@ public class Util2D {
     }
 
     public static void DrawCroix(int x, int y, int size, int color) {
+        GL11.glColor4f(1F, 1F, 1F, 1F);
+
+        //START 2D
+        GL11.glDisable((int)2929);
+        GL11.glEnable((int)3042);
+        GL11.glDisable((int)3553);
+        GL11.glBlendFunc((int)770, (int)771);
+        GL11.glDepthMask((boolean)true);
+        GL11.glEnable((int)2848);
+        GL11.glHint((int)3154, (int)4354);
+        GL11.glHint((int)3155, (int)4354);
+
+        //HEX Color
+        float alpha = (float)(color >> 24 & 255) / 255.0f;
+        float red = (float)(color >> 16 & 255) / 255.0f;
+        float green = (float)(color >> 8 & 255) / 255.0f;
+        float blue = (float)(color & 255) / 255.0f;
+        GL11.glColor4f((float)red, (float)green, (float)blue, (float)alpha);
+
+        //Draw Croix By LaVache
+        GL11.glBlendFunc(770, 771);
+        GL11.glLineWidth(2);
+        GL11.glBegin(GL11.GL_LINES);
+        GL11.glVertex2f(x, y + size / 5 - 1);
+        GL11.glVertex2f(x + size, y + size);
+        GL11.glVertex2f(x, y + size);
+        GL11.glVertex2f(x + size, y + size / 5 - 1);
+        GL11.glEnd();
+
+        //END 2D
+        GL11.glEnable((int)3553);
+        GL11.glDisable((int)3042);
+        GL11.glEnable((int)2929);
+        GL11.glDisable((int)2848);
+        GL11.glHint((int)3154, (int)4352);
+        GL11.glHint((int)3155, (int)4352);
+
+        GL11.glColor4f(1F, 1F, 1F, 1F);
+
+    }
+
+    public static void DrawV(int x, int y, int size, int color) {
         GL11.glColor4f(1F, 1F, 1F, 1F);
 
         //START 2D

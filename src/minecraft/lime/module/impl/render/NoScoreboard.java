@@ -1,5 +1,7 @@
 package lime.module.impl.render;
 
+import lime.events.EventTarget;
+import lime.events.impl.EventScoreboard;
 import lime.module.Module;
 
 public class NoScoreboard extends Module {
@@ -15,5 +17,10 @@ public class NoScoreboard extends Module {
     @Override
     public void onDisable() {
         super.onDisable();
+    }
+
+    @EventTarget
+    public void onScore(EventScoreboard e){
+        e.setCancelled(true);
     }
 }

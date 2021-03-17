@@ -1,11 +1,12 @@
 package lime.module.impl.player;
 
 import lime.Lime;
-import lime.cgui.settings.Setting;
+import lime.settings.Setting;
 import lime.events.EventTarget;
 import lime.events.impl.EventMotion;
 import lime.module.Module;
 import lime.module.impl.combat.KillAura;
+import lime.module.impl.combat.OldKillAura;
 import net.minecraft.client.gui.inventory.GuiChest;
 import net.minecraft.entity.Entity;
 import net.minecraft.network.play.client.C08PacketPlayerBlockPlacement;
@@ -37,7 +38,7 @@ public class ChestAura extends Module {
     public ArrayList<TileEntityChest> alreadyOpened = new ArrayList<>();
     @EventTarget
     public void onMotion(EventMotion e){
-        if(!mc.thePlayer.onGround || (mc.currentScreen instanceof GuiChest)) return;
+        if(!mc.thePlayer.onGround || (mc.currentScreen instanceof GuiChest) || Lime.moduleManager.getModuleByName("Scaffold").isToggled() || Lime.moduleManager.getModuleByName("Scaffold3").isToggled() || KillAura.entity != null || mc.currentScreen != null) return;
         for (Entity et : mc.theWorld.loadedEntityList){
             if(et == mc.thePlayer) continue;
             if(et.getDistanceToEntity(mc.thePlayer) < 6) return;
@@ -48,8 +49,8 @@ public class ChestAura extends Module {
                 float x = chest.getPos().getX();
                 float y = chest.getPos().getY();
                 float z = chest.getPos().getZ();
-                if(mc.thePlayer.getDistance(x, y, z) < getSettingByName("Reach").getValDouble() && mc.currentScreen == null && !isIn(chest)){
-                    float[] rot = KillAura.getRotationFromPosition2(x, y, z);
+                if(mc.thePlayer.getDistance(x, y, z) < getSettingByName("Reach").getValDouble() && !isIn(chest)){
+                    float[] rot = OldKillAura.getRotationFromPosition2(x, y, z);
                     e.setYaw(rot[0]);
                     e.setPitch(rot[1]);
                     mc.thePlayer.sendQueue.addToSendQueue(new C08PacketPlayerBlockPlacement(chest.getPos(), getFacingDirection(chest.getPos()).getIndex(), mc.thePlayer.getCurrentEquippedItem(), x, y, z));

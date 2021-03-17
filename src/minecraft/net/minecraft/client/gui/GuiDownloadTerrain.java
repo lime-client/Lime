@@ -1,6 +1,8 @@
 package net.minecraft.client.gui;
 
 import java.io.IOException;
+
+import lime.events.impl.EventWorldChange;
 import net.minecraft.client.network.NetHandlerPlayClient;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.network.play.client.C00PacketKeepAlive;
@@ -29,6 +31,7 @@ public class GuiDownloadTerrain extends GuiScreen
      */
     public void initGui()
     {
+        EventWorldChange e = new EventWorldChange().call();
         this.buttonList.clear();
     }
 

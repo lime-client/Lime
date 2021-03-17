@@ -1,7 +1,7 @@
 package lime.module.impl.render;
 
 import lime.Lime;
-import lime.cgui.settings.Setting;
+import lime.settings.Setting;
 import lime.events.EventTarget;
 import lime.events.impl.Event3D;
 import lime.events.impl.EventNameTags;
@@ -13,6 +13,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityArmorStand;
 import net.minecraft.entity.monster.EntityIronGolem;
 import net.minecraft.entity.monster.EntityMob;
+import net.minecraft.entity.monster.EntitySlime;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.passive.EntityBat;
 import net.minecraft.entity.passive.EntitySquid;
@@ -46,7 +47,7 @@ public class Nametags extends Module {
         Collections.reverse(sorted);
 
         for (Object entity : sorted) {
-            if (entity instanceof EntityLivingBase && isValid((EntityLivingBase) entity)) {
+            if (entity instanceof EntityLivingBase && isValid((EntityLivingBase) entity) && !(entity instanceof EntitySlime)) {
                 GlStateManager.disableDepth();
                 GlStateManager.depthMask(false);
 

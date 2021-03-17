@@ -1,7 +1,7 @@
 package lime.file.impl;
 
 import lime.Lime;
-import lime.cgui.settings.Setting;
+import lime.settings.Setting;
 import lime.file.LimeFile;
 
 public class SettingsSaver extends LimeFile {
@@ -14,6 +14,7 @@ public class SettingsSaver extends LimeFile {
             if(set.isCombo()) content += "C:" + set.getName() + ":" + set.getParentMod().getName() + ":" + set.getValString() + "\n";
             if(set.isSlider()) content += "S:" + set.getName() + ":" + set.getParentMod().getName() + ":" + set.getValDouble() + "\n";
             if(set.isCheck()) content += "B:" + set.getName() + ":" + set.getParentMod().getName() + ":" + set.getValBoolean() + "\n";
+            if(set.isColor()) content += "CC:" + set.getName() + ":" + set.getParentMod().getName() + ":" + set.getValColor() + "\n";
         }
         saveFile(content);
     }
@@ -34,6 +35,10 @@ public class SettingsSaver extends LimeFile {
                     case "B":
                         Setting set3 = Lime.setmgr.getSettingByNameAndMod(str.split(":")[1], Lime.moduleManager.getModuleByName(str.split(":")[2]));
                         set3.setValBoolean(Boolean.parseBoolean(str.split(":")[3]));
+                        break;
+                    case "CC":
+                        Setting set4 = Lime.setmgr.getSettingByNameAndMod(str.split(":")[1], Lime.moduleManager.getModuleByName(str.split(":")[2]));
+                        set4.setColor(Integer.parseInt(str.split(":")[3]));
                         break;
                 }
             } catch (Exception ignored){

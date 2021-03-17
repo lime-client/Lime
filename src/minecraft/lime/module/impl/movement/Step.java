@@ -1,12 +1,11 @@
 package lime.module.impl.movement;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 
 import lime.Lime;
-import lime.cgui.settings.Setting;
+import lime.settings.Setting;
 import lime.events.EventTarget;
 import lime.events.impl.EventStep;
 import lime.module.Module;

@@ -1,7 +1,7 @@
 package lime.module.impl.player;
 
 import lime.Lime;
-import lime.cgui.settings.Setting;
+import lime.settings.Setting;
 import lime.events.EventTarget;
 import lime.events.impl.EventMotion;
 import lime.events.impl.EventPacket;

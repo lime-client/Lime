@@ -25,6 +25,7 @@ public class EventMotion extends Event {
     public EventMotion(float rotationYaw, float rotationPitch, boolean onGround, double posX, double minY, double posZ) {
         super();
     }
+    public boolean isPre(){ return getState() == State.PRE; }
 
 
     public double getX() {

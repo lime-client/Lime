@@ -1269,7 +1269,7 @@ public class ConnectedTextures
         for (int i = 0; i < astring.length; ++i)
         {
             String s = astring[i];
-            Config.dbg("ConnectedTextures: " + s);
+            //Config.dbg("ConnectedTextures: " + s);
 
             try
             {

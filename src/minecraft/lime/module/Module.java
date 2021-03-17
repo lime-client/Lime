@@ -1,11 +1,8 @@
 package lime.module;
 
 import lime.Lime;
-import lime.cgui.settings.Setting;
-import lime.cgui.settings.Value;
+import lime.settings.Setting;
 import net.minecraft.client.Minecraft;
-
-import java.util.ArrayList;
 
 public class Module {
     public enum Category{
@@ -14,19 +11,18 @@ public class Module {
     protected Minecraft mc = Minecraft.getMinecraft();
     public String name, displayName;
     public int key;
-    public float anim = -1;
     public boolean binding = false;
+    public String suffix = "";
     Category cat;
     public boolean toggled;
     public void disable(){
         if(isToggled()) toggle();
     }
-    public float getAnim() {
-        return anim;
-    }
 
-    public void setAnim(float anim) {
-        this.anim = anim;
+    public void setSuffix(String s){
+        if(Lime.setmgr.getSettingByNameAndMod("ArrayList Suffix", Lime.moduleManager.getModuleByName("HUD")).getValBoolean()){
+            suffix = s;
+        }
     }
 
     public Module(String name, int key, Category category){

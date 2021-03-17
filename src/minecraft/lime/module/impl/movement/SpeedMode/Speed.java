@@ -1,7 +1,7 @@
 package lime.module.impl.movement.SpeedMode;
 
 import lime.Lime;
-import lime.cgui.settings.Setting;
+import lime.settings.Setting;
 import lime.events.impl.EventBoundingBox;
 import lime.events.impl.EventMotion;
 import lime.events.impl.EventMove;

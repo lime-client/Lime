@@ -120,7 +120,7 @@ public class CFontRenderer extends FontRenderer {
             for (int i = 0; i < lines.length; ++i) {
                 result = this.drawLine(lines[i], x, y + (float) (i * this.getHeight()), color, shadow);
             }
-
+            GlStateManager.color(1, 1, 1);
             return result;
         } else {
             Minecraft.getMinecraft().fontRendererObj.drawString(text, (int)x, (int)y, color);

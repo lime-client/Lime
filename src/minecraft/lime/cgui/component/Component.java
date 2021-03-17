@@ -1,6 +1,6 @@
 package lime.cgui.component;
 
-import lime.cgui.settings.Setting;
+import lime.settings.Setting;
 
 public class Component {
     public Setting set;
@@ -19,5 +19,6 @@ public class Component {
     public void mouseReleased(int mouseX, int mouseY, int mouseButton){
 
     }
+    public int rendered = 0;
 
 }

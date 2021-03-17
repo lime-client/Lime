@@ -1,6 +1,7 @@
 package net.minecraft.client.renderer;
 
 import lime.Lime;
+import lime.module.impl.render.Animation;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -45,8 +46,8 @@ public class ItemRenderer
     /**
      * How far the current item has been equipped (0 disequipped and 1 fully up)
      */
-    private float equippedProgress;
-    private float prevEquippedProgress;
+    public float equippedProgress;
+    public float prevEquippedProgress;
     private final RenderManager renderManager;
     private final RenderItem itemRenderer;
 
@@ -322,6 +323,45 @@ public class ItemRenderer
         GlStateManager.rotate(60.0F, 0.0F, 1.0F, 0.0F);
     }
 
+    private void lime(){
+        GlStateManager.translate(-0.5F, 0.2F, 0.0F);
+        GlStateManager.rotate(30.0F, 0.0F, 2.0F, 0.0F);
+        GlStateManager.rotate(-80.0F, 3.0F, 1.0F, 0.0F);
+        GlStateManager.rotate(70, 2.0F, 2.0F, 1.0F);
+    }
+
+    private void spin() {
+        float angle = System.currentTimeMillis() % (360 * 20) * (float) 0.5;
+        GlStateManager.translate(0.54F, -0.4F, -0.81999997F);
+        GlStateManager.translate(0.0F, 0f, 0.0F);
+        GlStateManager.scale(0.4f, 0.4f, 0.4f);
+        GlStateManager.rotate(72.0F, 0.0F, 1.0F, 0.0F);
+        GlStateManager.rotate(angle, 0f, 0.1f, 0f);
+    }
+
+    public void blockAnimation(float f, float f1){
+        Animation animation = (Animation) Lime.moduleManager.getModuleByName("Animation");
+        if(!animation.isToggled()){
+            this.transformFirstPersonItem(f, 0);
+            this.func_178103_d();
+        } else {
+            switch(animation.blockAnimation.getValue().toLowerCase()){
+                case "1.7":
+                    this.transformFirstPersonItem(f, f1);
+                    this.func_178103_d();
+                    break;
+                case "lime":
+                    this.transformFirstPersonItem(f, f1);
+                    this.lime();
+                    break;
+                case "spin":
+                    //this.transformFirstPersonItem(f, f1);
+                    this.spin();
+                    break;
+            }
+        }
+    }
+
     /**
      * Renders the active item in the player's hand when in first person mode. Args: partialTickTime
      */
@@ -361,13 +401,13 @@ public class ItemRenderer
                         break;
 
                     case 4:
-                        this.transformFirstPersonItem(f, f1);
-                        this.func_178103_d();
+                        blockAnimation(f, f1);
                         break;
 
                     case 5:
                         this.transformFirstPersonItem(f, f1);
                         this.func_178098_a(partialTicks, entityplayersp);
+                        break;
                 }
             }
             else

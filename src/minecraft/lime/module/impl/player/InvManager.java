@@ -1,430 +1,303 @@
 package lime.module.impl.player;
 
-
 import lime.Lime;
-import lime.cgui.settings.Setting;
+import lime.settings.impl.BooleanValue;
+import lime.settings.impl.ComboBooleanValue;
+import lime.settings.impl.ListValue;
+import lime.settings.impl.SlideValue;
 import lime.events.EventTarget;
-import lime.events.impl.EventUpdate;
+import lime.events.impl.EventDeath;
+import lime.events.impl.EventMotion;
+import lime.events.impl.EventWorldChange;
 import lime.module.Module;
+import lime.utils.Timer;
 import net.minecraft.client.gui.inventory.GuiInventory;
-import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.item.*;
 import net.minecraft.network.play.client.C16PacketClientStatus;
+import net.minecraft.potion.Potion;
+import net.minecraft.potion.PotionEffect;
 
-import java.util.ArrayList;
+import static lime.utils.other.InvManagerUtil.*;
 
 public class InvManager extends Module {
+
+    ListValue mode = new ListValue("Mode", this, "Basic", "Basic", "FakeInv", "OpenInv");
+    ComboBooleanValue disableon = new ComboBooleanValue("Disable on", this);
+    BooleanValue onDeath = new BooleanValue("Death", this, true, disableon.getSet());
+    BooleanValue onWorldChange = new BooleanValue("Changing World", this, true, disableon.getSet());
+    SlideValue delay = new SlideValue("Delay", this, 200, 0, 1000, true);
+    SlideValue sword = new SlideValue("Sword Slot", this, 1, 1, 9, true);
+    SlideValue pickaxe = new SlideValue("Pickaxe Slot", this, 2, 1, 9, true);
+    SlideValue axe = new SlideValue("Axe Slot", this, 3, 1, 9, true);
+    public Timer timer = new Timer();
+
     public InvManager(){
-        super("InvManager",0, Module.Category.PLAYER);
-        ArrayList<String> mods = new ArrayList<>();
-        mods.add("Basic");
-        mods.add("OpenInv");
-        mods.add("FakeInv");
-        Lime.setmgr.rSetting(new Setting("InvManager Mode", this, "Basic", mods));
-        Lime.setmgr.rSetting(new Setting("InvManager Delay", this, 500, 150, 1000, true));
-        Lime.setmgr.rSetting(new Setting("Max Blocks Stack", this, 3, 1, 5, true));
+        super("InvManager", 0, Category.PLAYER);
     }
-    private lime.utils.Timer timerDrop = new lime.utils.Timer(), timerSwap = new lime.utils.Timer();
 
-    @Override
-    public void onEnable(){
-        super.onEnable();
-    }
-    @Override
-    public void onDisable(){super.onDisable();}
-    @EventTarget
-    public void onUpdate(EventUpdate e){
-        timerDelay = (int) Lime.setmgr.getSettingByName("InvManager Delay").getValDouble();
-        if(mc.thePlayer.capabilities.isCreativeMode){
-            return;
-        }
-        if(mc.currentScreen instanceof GuiInventory && Lime.setmgr.getSettingByName("InvManager Mode").getValString().equalsIgnoreCase("OpenInv")){
-            try{
-                getBestSword(36);
-            } catch (Exception e1) {}
-            try{
-                dropRetardItem();
-            } catch (Exception e1) {}
-            try{
-                dropShitArmor();
-            } catch (Exception e1) {}
-            try{
-                getBestPickaxe(37);
-            } catch (Exception e1) {}
-            try{
-                getBestAxe(38);
-            } catch (Exception e1) {}
-        }
-        if(Lime.setmgr.getSettingByName("InvManager Mode").getValString().equalsIgnoreCase("Basic") || Lime.setmgr.getSettingByName("InvManager Mode").getValString().equalsIgnoreCase("FakeInv")){
-            try{
-                getBestSword(36);
-            } catch (Exception e1) {}
-            try{
-                dropRetardItem();
-            } catch (Exception e1) {}
-            try{
-                dropShitArmor();
-            } catch (Exception e1) {}
-            try{
-                getBestPickaxe(37);
-            } catch (Exception e1) {}
-            try{
-                getBestAxe(38);
-            } catch (Exception e1) {}
-        }
-    }
-    int timerDelay = 0;
-
-
-    public void getBestSword(int slot) {
-        for(int i = 9; i < 45; i++) {
-            if (i == 36) { i++;}
-            if (mc.thePlayer.inventoryContainer.getSlot(i).getHasStack()) {
-                ItemStack iss = mc.thePlayer.inventoryContainer.getSlot(i).getStack();
-                if (iss.getItem() instanceof ItemSword) {
-                    if (isBestSword(iss)) {
-                        if(Lime.setmgr.getSettingByName("InvManager Mode").getValString().equalsIgnoreCase("FakeInv")){
-                            mc.thePlayer.sendQueue.addToSendQueue(new C16PacketClientStatus(C16PacketClientStatus.EnumState.OPEN_INVENTORY_ACHIEVEMENT));
-                        }
-                        if (mc.thePlayer.inventoryContainer.getSlot(36).getHasStack()) {
-                            ItemStack xoof = mc.thePlayer.inventoryContainer.getSlot(36).getStack();
-                            if ((getDamage(iss) > getDamage(xoof)) && timerSwap.hasReached((timerDelay))) {
-                                swap(i, slot - 36);
-                                timerSwap.reset();
-                            } else if ((getDamage(iss) < getDamage(xoof)) && timerDrop.hasReached(timerDelay)) {
+    public void dropUselessItem(){
+        for(int i = 9; i < 45; i++){
+            if(getSlot(i).getHasStack()){
+                ItemStack is = getSlot(i).getStack();
+                Item item = is.getItem();
+                if(!(item instanceof ItemPickaxe) && !(item instanceof ItemSword)
+                         && !(item instanceof ItemAxe) &&
+                        !(item instanceof ItemFood) && !(item instanceof ItemEnderPearl) && !(item instanceof ItemArmor)){
+                    if(shouldDrop(is) && timer.hasReached(delay.getIntValue())){
+                        if(item instanceof ItemBlock){
+                            String name = item.getUnlocalizedName().toLowerCase();
+                            if(name.contains("sand") || name.contains("cactus") || name.contains("gravel")){
+                                if (mode.getValue().equalsIgnoreCase("fakeinv"))
+                                    mc.getNetHandler().addToSendQueue(new C16PacketClientStatus(C16PacketClientStatus.EnumState.OPEN_INVENTORY_ACHIEVEMENT));
                                 drop(i);
-                                timerDrop.reset();
-                            } else if (getDamage(iss) == getDamage(xoof)) {
-                                if ((xoof.getItemDamage() > iss.getItemDamage()) && timerSwap.hasReached(timerDelay)) {
-                                    swap(i, slot - 36);
-                                    timerSwap.reset();
-                                } else if ((xoof.getItemDamage() < iss.getItemDamage()) && timerDrop.hasReached(timerDelay)) {
-                                    drop(i);
-                                    timerDrop.reset();
-                                } else if ((xoof.getItemDamage() == iss.getItemDamage()) && timerDrop.hasReached(timerDelay)) {
-                                    drop(i);
-                                    timerDrop.reset();
+                                timer.reset();
+                            }
+                        } else if (item instanceof ItemPotion){
+                            ItemPotion potion = (ItemPotion) item;
+                            if(potion.getEffects(is) != null){
+                                for(Object o : potion.getEffects(is)){
+                                    PotionEffect effect = (PotionEffect) o;
+                                    if(effect.getPotionID() != Potion.heal.id && effect.getPotionID() != Potion.moveSpeed.id && effect.getPotionID() != Potion.regeneration.id){
+                                        if (mode.getValue().equalsIgnoreCase("fakeinv"))
+                                            mc.getNetHandler().addToSendQueue(new C16PacketClientStatus(C16PacketClientStatus.EnumState.OPEN_INVENTORY_ACHIEVEMENT));
+                                        drop(i);
+                                        timer.reset();
+                                        return;
+                                    }
                                 }
                             }
                         } else {
-                            if(timerSwap.hasReached(timerDelay)){
-                                swap(i, slot - 36);
-                                timerSwap.reset();
-                            }
+                            if (mode.getValue().equalsIgnoreCase("fakeinv"))
+                                mc.getNetHandler().addToSendQueue(new C16PacketClientStatus(C16PacketClientStatus.EnumState.OPEN_INVENTORY_ACHIEVEMENT));
+                            drop(i);
+                            timer.reset();
                         }
-                    } else if ((!isBestSword(iss) && iss.getItem() instanceof ItemSword) && timerDrop.hasReached(timerDelay)) {
-                        drop(i);
-                        timerDrop.reset();
                     }
                 }
             }
-
         }
     }
-    public void getBestPickaxe(int slot) {
+
+    public void getBestSword(int slot){
         for(int i = 9; i < 45; i++){
-            if(i == 37){
-                i++;
-            }
-            if(mc.thePlayer.inventoryContainer.getSlot(i).getHasStack()) {
-                ItemStack iss = mc.thePlayer.inventoryContainer.getSlot(i).getStack();
-                if (iss.getItem() instanceof ItemPickaxe) {
-                    if (isBestPickaxe(iss)) {
-                        if(Lime.setmgr.getSettingByName("InvManager Mode").getValString().equalsIgnoreCase("FakeInv")){
-                            mc.thePlayer.sendQueue.addToSendQueue(new C16PacketClientStatus(C16PacketClientStatus.EnumState.OPEN_INVENTORY_ACHIEVEMENT));
-                        }
-                        if(mc.thePlayer.inventoryContainer.getSlot(37).getHasStack()){
-                            ItemStack xoof = mc.thePlayer.inventoryContainer.getSlot(37).getStack();
-                            if((getPickaxeDamage(iss) > getPickaxeDamage(xoof)) && timerSwap.hasReached(timerDelay)){
-                                swap(i, slot - 36);
-                                timerSwap.reset();
-                            } else if((getPickaxeDamage(iss) < getPickaxeDamage(xoof)) && timerDrop.hasReached(timerDelay)){
-                                drop(i);
-                                timerDrop.reset();
-                            } else if(getPickaxeDamage(iss) == getPickaxeDamage(xoof)){
-                                if((xoof.getItemDamage() > iss.getItemDamage()) && timerSwap.hasReached(timerDelay)){
-                                    swap(i, slot - 36);
-                                    timerSwap.reset();
-                                } else if((xoof.getItemDamage() < iss.getItemDamage()) && timerDrop.hasReached(timerDelay)){
-                                    drop(i);
-                                    timerDrop.reset();
-                                } else if((xoof.getItemDamage() == iss.getItemDamage() && timerDrop.hasReached(timerDelay))){
-                                    drop(i);
-                                    timerDrop.reset();
+            if(i == 36 + slot) continue;
+            if(getSlot(i).getHasStack()){
+                ItemStack stack = getSlot(i).getStack();
+                if(stack.getItem() instanceof ItemSword){
+                    if(isBestSword(stack)){
+                        if(getSlot(36 + slot).getHasStack() && getSlot(36 + slot).getStack().getItem() instanceof ItemSword && getDamage(stack) == getDamage(getSlot(36 + slot).getStack())){
+                            if(getDamage(stack) == getDamage(getSlot(36 + slot).getStack())){
+                                ItemStack sword = getSlot(36 + slot).getStack();
+                                if(sword.getItemDamage() < stack.getItemDamage()){
+                                    dropWithTimerCheck(i, timer);
+                                } else if(sword.getItemDamage() > stack.getItemDamage()){
+                                    swapWithTimerCheck(i, slot, timer);
+                                } else if (sword.getItemDamage() == stack.getItemDamage() && isBestSword(sword)) {
+                                    dropWithTimerCheck(i, timer);
+                                } else if(sword.getItemDamage() == stack.getItemDamage() && isBestSword(stack)){
+                                    swapWithTimerCheck(i, slot, timer);
                                 }
+                            } else if (getDamage(stack) > getDamage(getSlot(36 + slot).getStack())){
+                                swapWithTimerCheck(i, slot, timer);
+                            } else if(getDamage(stack) < getDamage(getSlot(36 + slot).getStack())){
+                                dropWithTimerCheck(i, timer);
                             }
                         } else {
-                            if(timerSwap.hasReached(timerDelay)){
-                                swap(i, slot - 36);
-                                timerSwap.reset();
-                            }
+                            swapWithTimerCheck(i, slot, timer);
                         }
                     } else {
-                        if(timerDrop.hasReached(timerDelay)){
-                            drop(i);
-                            timerDrop.reset();
-                        }
+                        dropWithTimerCheck(i, timer);
                     }
                 }
             }
         }
     }
 
-
-    public void getBestAxe(int slot) {
+    public void getBestPickaxe(int slot){
         for(int i = 9; i < 45; i++){
-            if(i == 38){
-                i++;
-            }
-            if(mc.thePlayer.inventoryContainer.getSlot(i).getHasStack()) {
-                ItemStack iss = mc.thePlayer.inventoryContainer.getSlot(i).getStack();
-                if (iss.getItem() instanceof ItemAxe) {
-                    if (isBestAxe(iss)) {
-                        if(Lime.setmgr.getSettingByName("InvManager Mode").getValString().equalsIgnoreCase("FakeInv")){
-                            mc.thePlayer.sendQueue.addToSendQueue(new C16PacketClientStatus(C16PacketClientStatus.EnumState.OPEN_INVENTORY_ACHIEVEMENT));
-                        }
-                        if(mc.thePlayer.inventoryContainer.getSlot(38).getHasStack()){
-                            ItemStack xoof = mc.thePlayer.inventoryContainer.getSlot(38).getStack();
-                            if((getAxeDamage(iss) > getAxeDamage(xoof)) && timerSwap.hasReached(timerDelay)){
-                                swap(i, slot - 36);
-                                timerSwap.reset();
-                            } else if(getAxeDamage(iss) < getAxeDamage(xoof) && timerDrop.hasReached(timerDelay)){
-                                drop(i);
-                                timerDrop.reset();
-                            } else if(getAxeDamage(iss) == getAxeDamage(xoof)){
-                                if(xoof.getItemDamage() > iss.getItemDamage() && timerSwap.hasReached(timerDelay)){
-                                    swap(i, slot - 36);
-                                    timerSwap.reset();
-                                } else if(xoof.getItemDamage() < iss.getItemDamage() && timerDrop.hasReached(timerDelay)){
-                                    drop(i);
-                                    timerDrop.reset();
-                                } else if(xoof.getItemDamage() == iss.getItemDamage() && timerDrop.hasReached(timerDelay)){
-                                    drop(i);
-                                    timerDrop.reset();
+            if(i == 36 + slot) continue;
+            if(getSlot(i).getHasStack()){
+                ItemStack stack = getSlot(i).getStack();
+                if(stack.getItem() instanceof ItemPickaxe){
+                    if(isBestPickaxe(stack)){
+                        if(getSlot(36 + slot).getHasStack() && getSlot(36 + slot).getStack().getItem() instanceof ItemPickaxe && getToolEffect(stack) == getToolEffect(getSlot(36 + slot).getStack())){
+                            if(getToolEffect(stack) == getToolEffect(getSlot(36 + slot).getStack())){
+                                ItemStack sword = getSlot(36 + slot).getStack();
+                                if(sword.getItemDamage() < stack.getItemDamage()){
+                                    dropWithTimerCheck(i, timer);
+                                } else if(sword.getItemDamage() > stack.getItemDamage()){
+                                    swapWithTimerCheck(i, slot, timer);
+                                } else if (sword.getItemDamage() == stack.getItemDamage() && isBestPickaxe(sword)) {
+                                    dropWithTimerCheck(i, timer);
+                                } else if(sword.getItemDamage() == stack.getItemDamage() && isBestPickaxe(stack)){
+                                    swapWithTimerCheck(i, slot, timer);
                                 }
+                            } else if (getToolEffect(stack) > getToolEffect(getSlot(36 + slot).getStack())){
+                                swapWithTimerCheck(i, slot, timer);
+                            } else if(getToolEffect(stack) < getToolEffect(getSlot(36 + slot).getStack())){
+                                dropWithTimerCheck(i, timer);
                             }
                         } else {
-                            if(timerSwap.hasReached(timerDelay)){
-                                swap(i, slot - 36);
-                                timerSwap.reset();
-                            }
+                            swapWithTimerCheck(i, slot, timer);
                         }
                     } else {
-                        if(timerDrop.hasReached(timerDelay)){
-                            drop(i);
-                            timerDrop.reset();
-                        }
+                        dropWithTimerCheck(i, timer);
                     }
                 }
             }
-
         }
     }
 
-    public boolean isBestAxe(ItemStack stack){
-        float damage = getAxeDamage(stack);
-        for (int i = 9; i < 45; i++) {
-            if (mc.thePlayer.inventoryContainer.getSlot(i).getHasStack()) {
-                ItemStack is = mc.thePlayer.inventoryContainer.getSlot(i).getStack();
-                if(getAxeDamage(is) > damage && (is.getItem() instanceof ItemAxe))
-                    return false;
-            }
-        }
-        if((stack.getItem() instanceof ItemAxe)){
-            return true;
-        }else{
-            return false;
-        }
+    public void getBestAxe(int slot){
+        for(int i = 9; i < 45; i++){
+            if(i == 36 + slot) continue;
+            if(getSlot(i).getHasStack()){
+                ItemStack stack = getSlot(i).getStack();
+                if(stack.getItem() instanceof ItemAxe){
 
-    }
-
-    public float getAxeDamage(ItemStack s){
-        if(s.getItem() instanceof ItemAxe){
-            float value = 0;
-            Item item = s.getItem();
-            ItemTool tool = (ItemTool) item;
-
-            value += (float) tool.getMaxDamage();
-            if(tool.getToolMaterialName().contains("WOOD")){
-                value += 0.1;
-            }
-            value += EnchantmentHelper.getEnchantmentLevel(32, s) * 1.25f +
-                    EnchantmentHelper.getEnchantmentLevel(34, s) * 0.25f;
-            return value;
-        } else {
-            return 0;
-        }
-
-    }
-
-    public boolean isBestSword(ItemStack stack){
-        float damage = getDamage(stack);
-        for (int i = 9; i < 45; i++) {
-            if (mc.thePlayer.inventoryContainer.getSlot(i).getHasStack()) {
-                ItemStack is = mc.thePlayer.inventoryContainer.getSlot(i).getStack();
-                if(getDamage(is) > damage && (is.getItem() instanceof ItemSword))
-                    return false;
-            }
-        }
-        if((stack.getItem() instanceof ItemSword)){
-            return true;
-        }else{
-            return false;
-        }
-
-    }
-
-    public boolean isBestPickaxe(ItemStack stack){
-        float damage = getPickaxeDamage(stack);
-        for (int i = 9; i < 45; i++) {
-            if (mc.thePlayer.inventoryContainer.getSlot(i).getHasStack()) {
-                ItemStack is = mc.thePlayer.inventoryContainer.getSlot(i).getStack();
-                if(getPickaxeDamage(is) > damage && (is.getItem() instanceof ItemPickaxe))
-                    return false;
-            }
-        }
-        if((stack.getItem() instanceof ItemPickaxe)){
-            return true;
-        }else{
-            return false;
-        }
-
-    }
-
-    public float getPickaxeDamage(ItemStack s){
-        if(s.getItem() instanceof ItemPickaxe){
-            float value = 0;
-            Item item = s.getItem();
-            ItemTool tool = (ItemTool) item;
-
-            value += (float) tool.getMaxDamage();
-            if(tool.getToolMaterialName().contains("WOOD")){
-                value += 0.1;
-            }
-            value += EnchantmentHelper.getEnchantmentLevel(32, s) * 1.25f +
-                    EnchantmentHelper.getEnchantmentLevel(34, s) * 0.25f;
-            return value;
-        } else {
-            return 0;
-        }
-
-    }
-
-
-
-
-
-
-    public float getDamage(ItemStack stack){
-        float damage = 0;
-        Item item = stack.getItem();
-        if(item instanceof ItemTool){
-            ItemTool tool = (ItemTool)item;
-            damage += tool.getMaxDamage();
-        }
-        if(item instanceof ItemSword){
-            ItemSword sword = (ItemSword)item;
-            damage += sword.getDamageVsEntity();
-        }
-        damage += EnchantmentHelper.getEnchantmentLevel(16, stack) * 1.25f +
-                EnchantmentHelper.getEnchantmentLevel(20, stack) * 0.01f;
-        return damage;
-
-    }
-
-    public void swap(int slot1, int hotbarSlot){
-        mc.playerController.windowClick(mc.thePlayer.inventoryContainer.windowId, slot1, hotbarSlot, 2, mc.thePlayer);
-    }
-
-
-
-
-
-
-    public void dropRetardItem(){
-        boolean alreadyFoundABow = false;
-        int totalBlocksFounds = 0;
-        for(int i = 9; i < 45; i++) {
-            if (mc.thePlayer.inventoryContainer.getSlot(i).getHasStack()) {
-                ItemStack iss = mc.thePlayer.inventoryContainer.getSlot(i).getStack();
-                Item e = iss.getItem();
-                if (!(e instanceof ItemPickaxe) && !(e instanceof ItemAxe) && !(e instanceof ItemSword) && !(e instanceof ItemFood) && !(e instanceof ItemAppleGold) && !(e instanceof ItemPotion)  && !e.getUnlocalizedName().toLowerCase().contains("arrow") && !(e instanceof ItemArmor) && !e.getUnlocalizedName().toLowerCase().contains("pearl")) {
-                    if(e instanceof ItemBow && !alreadyFoundABow){
-                        alreadyFoundABow = true;
-                        continue;
-                    }
-                    if(e instanceof ItemBlock){
-                        if(totalBlocksFounds < (getSettingByName("Max Blocks Stack").getValDouble() * 64)){
-                            totalBlocksFounds += iss.stackSize;
-                            continue;
-                        }
-                    }
-                    if (shouldDrop(iss)) {
-                        if(timerDrop.hasReached(timerDelay)){
-                            if(Lime.setmgr.getSettingByName("InvManager Mode").getValString().equalsIgnoreCase("FakeInv")){
-                                mc.thePlayer.sendQueue.addToSendQueue(new C16PacketClientStatus(C16PacketClientStatus.EnumState.OPEN_INVENTORY_ACHIEVEMENT));
+                    if(isBestAxe(stack)){
+                        if(getSlot(36 + slot).getHasStack() && getSlot(36 + slot).getStack().getItem() instanceof ItemAxe){
+                            if(getToolEffect(stack) == getToolEffect(getSlot(36 + slot).getStack())){
+                                ItemStack sword = getSlot(36 + slot).getStack();
+                                if(sword.getItemDamage() < stack.getItemDamage()){
+                                    dropWithTimerCheck(i, timer);
+                                } else if(sword.getItemDamage() > stack.getItemDamage()){
+                                    swapWithTimerCheck(i, slot, timer);
+                                } else if (sword.getItemDamage() == stack.getItemDamage() && isBestAxe(sword)) {
+                                    dropWithTimerCheck(i, timer);
+                                } else if(sword.getItemDamage() == stack.getItemDamage() && isBestAxe(stack)){
+                                    swapWithTimerCheck(i, slot, timer);
+                                }
+                            } else if (getToolEffect(stack) > getToolEffect(getSlot(36 + slot).getStack())){
+                                swapWithTimerCheck(i, slot, timer);
+                            } else if(getToolEffect(stack) < getToolEffect(getSlot(36 + slot).getStack())){
+                                dropWithTimerCheck(i, timer);
                             }
-                            drop(i);
-                            timerDrop.reset();
+                        } else {
+                            swapWithTimerCheck(i, slot, timer);
                         }
+                    } else {
+                        dropWithTimerCheck(i, timer);
                     }
                 }
-
-
             }
-
-
         }
     }
-    public boolean shouldDrop(ItemStack xd){
-        if(xd.getDisplayName().contains("right click") || xd.getDisplayName().contains("§")){
-            return false;
+
+
+    public void swapWithTimerCheck(int slot1, int hotbarSlot,Timer timer){
+        if(timer.hasReached(delay.getIntValue())){
+            swap(slot1, hotbarSlot);
+            timer.reset();
         }
-        return true;
+    }
+    public void dropWithTimerCheck(int slot,Timer timer){
+        if(timer.hasReached(delay.getIntValue())){
+            drop(slot);
+            timer.reset();
+        }
     }
 
-
-
-
-
-
-
-
-    public void drop(int slot){
-        mc.playerController.windowClick(mc.thePlayer.inventoryContainer.windowId, slot, 1, 4, mc.thePlayer);
-    }
-    public void dropShitArmor(){
-        if(!Lime.moduleManager.getModuleByName("AutoArmor").isToggled()){
-            return;
+    public boolean isBestSword(ItemStack is){
+        float damage = getDamage(is);
+        for(int i = 9; i < 45; i++){
+            if(getSlot(i).getHasStack()){
+                ItemStack itemStack = getSlot(i).getStack();
+                if(itemStack.getItem() instanceof ItemSword && itemStack != is){
+                    if(getDamage(itemStack) > damage)
+                        return false;
+                }
+            }
         }
-        int type = 0;
-        for(int i = 9; i < 45; i++) {
-            if(mc.thePlayer.inventoryContainer.getSlot(i).getHasStack()){
-                ItemStack ntm = mc.thePlayer.inventoryContainer.getSlot(i).getStack();
-                if(ntm.getUnlocalizedName().contains("helmet")){
+        return is.getItem() instanceof ItemSword;
+    }
+
+    public boolean isBestPickaxe(ItemStack is){
+        float damage = getToolEffect(is);
+        for(int i = 9; i < 45; i++){
+            if(getSlot(i).getHasStack()){
+                ItemStack itemStack = getSlot(i).getStack();
+                if(itemStack.getItem() instanceof ItemPickaxe){
+                    if(damage < getToolEffect(itemStack))
+                        return false;
+                }
+            }
+        }
+        return is.getItem() instanceof ItemPickaxe;
+    }
+
+    public boolean isBestAxe(ItemStack is){
+        float damage = getToolEffect(is);
+        for(int i = 9; i < 45; i++){
+            if(getSlot(i).getHasStack()){
+                ItemStack itemStack = getSlot(i).getStack();
+                if(itemStack.getItem() instanceof ItemAxe){
+                    if(damage < getToolEffect(itemStack))
+                        return false;
+                }
+            }
+        }
+        return is.getItem() instanceof ItemAxe;
+    }
+
+    public void dropUselessArmor(){
+        if(!Lime.moduleManager.getModuleByName("AutoArmor").isToggled()) return;
+        for(int i = 9; i < 45; i++){
+            int type = -1;
+            if(getSlot(i).getHasStack()){
+                ItemStack is = getSlot(i).getStack();
+                if(is.getUnlocalizedName().contains("helmet"))
                     type = 1;
-                } else if(ntm.getUnlocalizedName().contains("chestplate")){
+                if(is.getUnlocalizedName().contains("chestplate"))
                     type = 2;
-                } else if(ntm.getUnlocalizedName().contains("leggings")){
+                if(is.getUnlocalizedName().contains("leggings"))
                     type = 3;
-                } else if (ntm.getUnlocalizedName().contains("boots")){
+                if(is.getUnlocalizedName().contains("boots"))
                     type = 4;
-                }
-                if(ntm.getItem() instanceof ItemArmor && !AutoArmor.isBestArmor(ntm, type)){
-                    if(timerDrop.hasReached(timerDelay)){
-                        if(Lime.setmgr.getSettingByName("InvManager Mode").getValString().equalsIgnoreCase("FakeInv")){
-                            mc.thePlayer.sendQueue.addToSendQueue(new C16PacketClientStatus(C16PacketClientStatus.EnumState.OPEN_INVENTORY_ACHIEVEMENT));
-                        }
-                        drop(i);
-                        timerDrop.reset();
+                if(type == -1) continue;
+                if(is.getItem() instanceof ItemArmor && !AutoArmor.isBestArmor(is, type)){
+                    if(Lime.setmgr.getSettingByName("Mode").getValString().equalsIgnoreCase("FakeInv")){
+                        mc.thePlayer.sendQueue.addToSendQueue(new C16PacketClientStatus(C16PacketClientStatus.EnumState.OPEN_INVENTORY_ACHIEVEMENT));
                     }
-                } else if(ntm.getItem() instanceof ItemArmor && !AutoArmor.isBestArmor(ntm, type) && (AutoArmor.getProtection(ntm) == AutoArmor.getProtection(mc.thePlayer.inventoryContainer.getSlot(4 + type).getStack()) && ntm.getUnlocalizedName() == mc.thePlayer.inventoryContainer.getSlot(4 + type ).getStack().getUnlocalizedName())){
-                    if(timerDrop.hasReached(timerDelay)){
-                        drop(i);
-                        timerDrop.reset();
-                    }
+                    dropWithTimerCheck(i, timer);
                 }
+                if(is.getItem() instanceof ItemArmor && getSlot(type + 4).getHasStack() && AutoArmor.getProtection(is) == AutoArmor.getProtection(getSlot(type + 4).getStack())){
+                    if(Lime.setmgr.getSettingByName("Mode").getValString().equalsIgnoreCase("FakeInv")){
+                        mc.thePlayer.sendQueue.addToSendQueue(new C16PacketClientStatus(C16PacketClientStatus.EnumState.OPEN_INVENTORY_ACHIEVEMENT));
+                    }
+                    dropWithTimerCheck(i, timer);
+                }
+
             }
         }
+    }
+
+
+
+
+
+    @EventTarget
+    public void onMotion(EventMotion e){
+        if(mode.getValue().equalsIgnoreCase("OpenInv") && !(mc.currentScreen instanceof GuiInventory)) return;
+        if(sword.getIntValue() == pickaxe.getIntValue()) return;
+        if(sword.getIntValue() == axe.getIntValue()) return;
+        if(axe.getIntValue() == pickaxe.getIntValue()) return;
+        dropUselessItem();
+        getBestSword(sword.getIntValue() - 1);
+        getBestPickaxe(pickaxe.getIntValue() - 1);
+        getBestAxe(axe.getIntValue() - 1);
+        dropUselessArmor();
+    }
+
+    @EventTarget
+    public void onWorldChange(EventWorldChange e){
+        if(onWorldChange.getValue())
+            this.disable();
+    }
+
+    @EventTarget
+    public void onDeath(EventDeath e){
+        if(onDeath.getValue())
+            this.disable();
     }
 }

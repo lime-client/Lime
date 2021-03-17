@@ -1,10 +1,14 @@
 package net.minecraft.client.gui.inventory;
 
+import lime.Lime;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.inventory.ContainerChest;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.util.ResourceLocation;
+
+import java.io.IOException;
 
 public class GuiChest extends GuiContainer
 {
@@ -28,6 +32,30 @@ public class GuiChest extends GuiContainer
         int j = i - 108;
         this.inventoryRows = lowerInv.getSizeInventory() / 9;
         this.ySize = j + this.inventoryRows * 18;
+    }
+
+    @Override
+    public void initGui() {
+        this.buttonList.add(new GuiButton(69, 3, 3, 100, 20, "Disable KillAura"));
+        this.buttonList.add(new GuiButton(69420, 3, 3 + 22, 100, 20, "Disable InvManager"));
+        this.buttonList.add(new GuiButton(6969, 3, 3 + 22 + 22, 100, 20, "Disable ChestAura"));
+        super.initGui();
+    }
+
+    @Override
+    protected void actionPerformed(GuiButton button) throws IOException {
+        if(button.id == 69){
+            Lime.moduleManager.getModuleByName("KillAura").disable();
+        }
+        if(button.id == 69420){
+            if(Lime.moduleManager.getModuleByName("InvManager").isToggled())
+                Lime.moduleManager.getModuleByName("InvManager").toggle();
+        }
+        if(button.id == 6969){
+            if(Lime.moduleManager.getModuleByName("ChestAura").isToggled())
+                Lime.moduleManager.getModuleByName("ChestAUra").toggle();
+        }
+        super.actionPerformed(button);
     }
 
     /**

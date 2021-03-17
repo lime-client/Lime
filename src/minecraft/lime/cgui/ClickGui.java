@@ -2,10 +2,9 @@ package lime.cgui;
 
 import lime.Lime;
 import lime.cgui.component.Component;
+import lime.cgui.component.button.*;
 import lime.cgui.component.button.Checkbox;
-import lime.cgui.component.button.Combo;
-import lime.cgui.component.button.Slider;
-import lime.cgui.settings.Setting;
+import lime.settings.Setting;
 import lime.module.Module;
 import lime.utils.Timer;
 import lime.utils.render.Util2D;
@@ -32,6 +31,7 @@ public class ClickGui extends GuiScreen {
     public int width = 250;
     public int height = 300;
     public int offset = 0;
+    public int offsetSet = 0;
     public int alpha = 255;
     public Timer timer = new Timer();
     public AnimationSlideSmooth animationSlideSmooth = new AnimationSlideSmooth();
@@ -70,14 +70,31 @@ public class ClickGui extends GuiScreen {
             mc.entityRenderer.loadShader(new ResourceLocation("shaders/post/blur.json"));
         }
         if(wasClosed){
+            ArrayList<Setting> sets = new ArrayList<>();
+            for(Setting set: Lime.setmgr.getSettings()){
+                if(set.isCheck() && set.parentSet != null)
+                    sets.add(set);
+            }
             for(Setting set: Lime.setmgr.getSettings()){
                 if(set.isCombo())
                     components.add(new Combo(set));
+                if(set.isComboBool()){
+                    ArrayList<Setting> toSend = new ArrayList<>();
+                    for(Setting set2 : sets){
+                        if(set == set2.parentSet){
+                            toSend.add(set2);
+                        }
+                    }
+                    Setting[] toSendArray = new Setting[toSend.size()];
+                    toSendArray = toSend.toArray(toSendArray);
+                    components.add(new ComboBoolean(set, toSendArray));
+                }
                 if(set.isSlider())
                     components.add(new Slider(set));
-                if(set.isCheck())
+                if(set.isCheck() && set.parentSet == null)
                     components.add(new Checkbox(set));
-
+                if(set.isColor())
+                    components.add(new ColorPicker(set));
             }
             wasClosed =false;
         }
@@ -93,23 +110,52 @@ public class ClickGui extends GuiScreen {
             x = xDrag + mouseX;
             y = yDrag + mouseY;
         }
-        scroll();
+        scroll(mouseX, mouseY);
+        scrollSet(mouseX, mouseY);
         drawPanel(x, y, mouseX, mouseY);
         GL11.glPopMatrix();
         super.drawScreen(mouseX, mouseY, partialTicks);
     }
-    public void scroll(){
-        ArrayList<Module> mods = Lime.moduleManager.getModulesByCategory(currentCat);
-        int maxOffset = -1;
-        if(mods.size() > 8){
-            maxOffset = (mods.size() - 8) * 30;
+    public void scrollSet(int mouseX, int mouseY){
+        if(hover(x + width / 2, y + 55, mouseX, mouseY, width / 2, height - 55)){
+            if(Mouse.hasWheel()){
+                int maxOffsetCanBe = 0;
+                for(Component component : components){
+                    if(component.set.getParentMod() != currentMod) continue;
+                    if(component.set.isCombo()) maxOffsetCanBe += 16;
+                    if(component.set.isSlider()) maxOffsetCanBe += 18;
+                    if(component.set.isCheck()) maxOffsetCanBe += 14;
+                    if(component.set.isComboBool()) maxOffsetCanBe += 16;
+                    if(component.set.isColor()) maxOffsetCanBe += 86;
+                }
+                maxOffsetCanBe -= height - 55;
+
+                int wheel = Mouse.getDWheel();
+                if(wheel < 0 && maxOffsetCanBe + 10 > offsetSet){
+                    offsetSet += 10;
+                    components.stream().filter(component -> component.set.isColor() && component.set.getParentMod() == currentMod).forEach(component -> component.set.posYColor = component.set.posYColor - 10);
+                } else if(wheel > 0 && offsetSet - 10 >= 0){
+                    offsetSet -= 10;
+                    components.stream().filter(component -> component.set.isColor() && component.set.getParentMod() == currentMod).forEach(component -> component.set.posYColor = component.set.posYColor + 10);
+                }
+            }
         }
-        if(Mouse.hasWheel() && maxOffset != -1){
-            int wheel = Mouse.getDWheel();
-            if(wheel < 0 && offset + 9 < maxOffset){
-                offset += 10;
-            } else if(wheel > 0 && offset > 0) {
-                offset -= 10;
+    }
+
+    public void scroll(int mouseX, int mouseY){
+        if(hover(x, y + 55, mouseX, mouseY, width / 2, height - 55)){
+            ArrayList<Module> mods = Lime.moduleManager.getModulesByCategory(currentCat);
+            int maxOffset = -1;
+            if(mods.size() > 8){
+                maxOffset = (mods.size() - 8) * 30;
+            }
+            if(Mouse.hasWheel() && maxOffset != -1){
+                int wheel = Mouse.getDWheel();
+                if(wheel < 0 && offset + 9 < maxOffset){
+                    offset += 10;
+                } else if(wheel > 0 && offset > 0) {
+                    offset -= 10;
+                }
             }
         }
     }
@@ -141,8 +187,8 @@ public class ClickGui extends GuiScreen {
             } else {
                 boolean flag = hover(x + (i * 50) + 10, y + 19, mouseX, mouseY, 32, 32);
                 if(flag)
-                    Gui.drawRect(x + (i * 50) , y + 15, x + (i * 50) + 10 + 40, y + 19 + 35, new Color(75, 75, 75).getRGB());
-                Util2D.drawImage(new ResourceLocation("textures/icons/world.png"), x + 200 + 10, y + 19, 32, 32);
+                    Gui.drawRect(x + (i * 50) , y + 15, x + (i * 50) + 10 + 40, y + 54, new Color(75, 75, 75).getRGB());
+                Util2D.drawImage(new ResourceLocation("textures/icons/misc.png"), x + 200 + 10, y + 19, 32, 32);
             }
             i++;
         }
@@ -156,7 +202,10 @@ public class ClickGui extends GuiScreen {
                 Gui.drawRect(x, yPos - offset - 80 + (i * 30) + 15, x + width / 2, yPos - offset - 80 + (i * 30) - 15, new Color(75, 75, 75, alpha).getRGB());
             }
             Lime.fontManager.comfortaa_hud.drawString(m.binding ? "Set a key" : m.name, x + 5, yPos - offset - 80 + (i * 30) - 2, new Color(255, 255, 255, alpha).getRGB());
-            Util2D.drawFullCircle(x + (width / 2) - 20, yPos - offset - 80 + (i * 30) + 1, 5, 5, m.toggled ? new Color(0, 150, 0, alpha).getRGB() : new Color(75, 0, 0, alpha).getRGB());
+            if(m.binding)
+                Util2D.drawImage(new ResourceLocation("textures/icons/keybind.png"), x + (width / 2) - 25, yPos - offset - 80 + (i * 30) - 4, 10, 10);
+            else
+                Util2D.drawFullCircle(x + (width / 2) - 20, yPos - offset - 80 + (i * 30) + 1, 5, 5, m.toggled ? new Color(0, 150, 0, alpha).getRGB() : new Color(75, 0, 0, alpha).getRGB());
             fix();
             Gui.drawRect(x, yPos - offset  - 80 + (i * 30) + 15, x + (width / 2), yPos - offset - 80 + (i * 30) + 16, new Color(50, 50, 50, alpha).getRGB());
             i++;
@@ -166,8 +215,19 @@ public class ClickGui extends GuiScreen {
         if(currentCat != null && currentMod != null && currentMod.hasSettings()){
             for(Component component : components){
                 if(component.set.getParentMod() == currentMod){
-                    component.render(x, y, width, height, mouseX, mouseY);
-                    rendered++;
+                    GlStateManager.color(1, 1, 1);
+                    GL11.glPushMatrix();
+                    GL11.glEnable(3089);
+                    prepareScissorBox(x + width / 2, y + 56, x + ((width / 2) * 2), y + height);
+                    component.render(x, y - offsetSet, width, height, mouseX, mouseY);
+                    GL11.glDisable(3089);
+                    GL11.glPopMatrix();
+                    if(component.set.isCombo()) rendered += 16;
+                    if(component.set.isSlider()) rendered += 18;
+                    if(component.set.isCheck()) rendered += 14;
+                    if(component.set.isComboBool()) rendered += 16;
+                    if(component.set.isColor()) rendered += 86;
+                    component.rendered = this.rendered - 15;
                 }
             }
         }
@@ -241,7 +301,10 @@ public class ClickGui extends GuiScreen {
                     if(m.getCat() == currentCat) moduleArrayList.add(m);
                 }
                 Module mod = moduleArrayList.get(i - 5);
-                if(mouseButton == 1) if(mod.hasSettings()) currentMod = mod;
+                if(mouseButton == 1) if(mod.hasSettings()) {
+                    currentMod = mod;
+                    offsetSet = 0;
+                }
                 if(mouseButton == 2){
                     mod.binding = true;
                     modBinding = mod;

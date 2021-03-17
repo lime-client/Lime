@@ -694,7 +694,7 @@ public class EntityRenderer implements IResourceManagerReloadListener
     /**
      * Setups all the GL settings for view bobbing. Args: partialTickTime
      */
-    private void setupViewBobbing(float partialTicks)
+    public void setupViewBobbing(float partialTicks)
     {
         if (this.mc.getRenderViewEntity() instanceof EntityPlayer)
         {

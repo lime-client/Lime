@@ -1,9 +1,7 @@
 package lime.managers;
 
 import lime.module.impl.combat.*;
-//import lime.module.impl.misc.*;
-import lime.module.impl.misc.AntiBlindness;
-import lime.module.impl.misc.Disabler;
+import lime.module.impl.misc.*;
 import lime.module.impl.movement.*;
 import lime.module.impl.player.*;
 import lime.module.impl.render.*;
@@ -16,16 +14,17 @@ public class ModuleManager {
     public ModuleManager(){
         // COMBAT
         modules.add(new KillAura());
+        //modules.add(new OldKillAura());
         modules.add(new Velocity());
         modules.add(new InfiniteAura());
         modules.add(new AntiBot());
         modules.add(new AutoPot());
         modules.add(new Criticals());
-        modules.add(new KillAuraNew());
 
         // MOVEMENT
         modules.add(new Flight());
         modules.add(new Speed());
+        modules.add(new LongJump());
         //modules.add(new Scaffold());
         modules.add(new Scaffold2());
         modules.add(new Scaffold3());
@@ -34,10 +33,13 @@ public class ModuleManager {
         modules.add(new NoSlow());
         modules.add(new Step());
 
+
         // PLAYER
         modules.add(new InvMove());
         modules.add(new ChestStealer());
+        //modules.add(new OldInvManager());
         modules.add(new InvManager());
+        modules.add(new AutoTool());
         modules.add(new ChestAura());
         modules.add(new AutoArmor());
         modules.add(new NoRotate());
@@ -45,11 +47,13 @@ public class ModuleManager {
         modules.add(new Freecam());
         modules.add(new FastEat());
         modules.add(new NoFall());
+        modules.add(new ClickTP());
 
 
         // RENDER
         modules.add(new ClickGUI());
         modules.add(new Tracers());
+        //modules.add(new OldHUD2());
         modules.add(new HUD());
         modules.add(new NoFire());
         modules.add(new NoHurtCam());
@@ -58,10 +62,15 @@ public class ModuleManager {
         modules.add(new ChestESP());
         modules.add(new SkeletonESP());
         modules.add(new Nametags());
+        modules.add(new Animation());
+        modules.add(new BlockOverlay());
 
         // MISC
         modules.add(new AntiBlindness());
+        modules.add(new AutoReplay());
         modules.add(new Disabler());
+        modules.add(new Friends());
+        modules.add(new Derp());
 
 
 

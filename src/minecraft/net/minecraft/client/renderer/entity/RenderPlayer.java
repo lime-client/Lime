@@ -57,7 +57,7 @@ public class RenderPlayer extends RendererLivingEntity<AbstractClientPlayer>
     {
         if (!entity.isUser() || this.renderManager.livingPlayer == entity)
         {
-            SkeletonESP.addEntity(entity, getMainModel());
+
             double d0 = y;
 
             if (entity.isSneaking() && !(entity instanceof EntityPlayerSP))

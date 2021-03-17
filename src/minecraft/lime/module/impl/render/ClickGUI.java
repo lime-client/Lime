@@ -1,8 +1,7 @@
 package lime.module.impl.render;
 
 import lime.Lime;
-import lime.cgui.ClickGui;
-import lime.cgui.settings.Setting;
+import lime.settings.Setting;
 import lime.module.Module;
 import org.lwjgl.input.Keyboard;
 
@@ -20,7 +19,7 @@ public class ClickGUI extends Module {
                 mc.displayGuiScreen(Lime.clickgui);
                 break;
             case "LimeNew":
-                mc.displayGuiScreen(Lime.clickgui2);
+                mc.displayGuiScreen(Lime.clickGui);
                 break;
         }
         this.toggle();

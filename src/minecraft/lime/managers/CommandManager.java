@@ -19,6 +19,7 @@ public class CommandManager {
         commands.add(new Toggle());
         commands.add(new T());
         commands.add(new Bind());
+        commands.add(new Friend());
     }
     public ArrayList<Command> getCommands(){return commands;}
 

@@ -1,7 +1,7 @@
 package lime.commands.impl;
 
 import lime.Lime;
-import lime.cgui.settings.Setting;
+import lime.settings.Setting;
 import lime.commands.Command;
 import lime.module.Module;
 import lime.utils.ChatUtils;

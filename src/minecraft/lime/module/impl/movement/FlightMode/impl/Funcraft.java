@@ -50,11 +50,11 @@ public class Funcraft extends Flight {
                 if (MovementUtil.isMoving()) {
                     mc.timer.timerSpeed = (float) 1.65F;
 
-                    /*mc.gameSettings.keyBindRight.pressed = true;
+                    mc.gameSettings.keyBindRight.pressed = true;
                     mc.gameSettings.keyBindLeft.pressed = true;
                     mc.gameSettings.keyBindBack.pressed = true;
 
-                     */
+
                 }
 
                 if (oof > 0.25) {

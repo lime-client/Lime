@@ -1,8 +1,8 @@
-package lime.cgui.settings.impl;
+package lime.settings.impl;
 
 import lime.Lime;
-import lime.cgui.settings.Setting;
-import lime.cgui.settings.Value;
+import lime.settings.Setting;
+import lime.settings.Value;
 import lime.module.Module;
 
 public class BooleanValue extends Value {
@@ -14,6 +14,12 @@ public class BooleanValue extends Value {
         this.bool = bool;
         this.parentMod = mod;
         Lime.setmgr.rSetting(new Setting(name, mod, bool));
+    }
+    public BooleanValue(String name, Module mod, boolean bool, Setting parentSet){
+        this.name = name;
+        this.bool = bool;
+        this.parentMod = mod;
+        Lime.setmgr.rSetting(new Setting(name, mod, bool, parentSet));
     }
 
     public boolean getValue(){

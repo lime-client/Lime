@@ -1,21 +1,16 @@
 package lime.module.impl.render;
 
 import lime.Lime;
-import lime.cgui.settings.Setting;
+import lime.settings.Setting;
 import lime.events.EventTarget;
 import lime.events.impl.Event2D;
 import lime.module.Module;
-import lime.utils.render.RainbowUtil;
 import lime.utils.render.Util2D;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
-import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.util.Vec3;
 import org.apache.commons.lang3.RandomUtils;
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 
 public class OldHUD extends Module {
 

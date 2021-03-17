@@ -1,7 +1,12 @@
 package net.minecraft.client.renderer.tileentity;
 
 import com.google.common.collect.Maps;
+
+import java.awt.*;
 import java.util.Map;
+
+import lime.Lime;
+import lime.utils.render.UtilGL;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
@@ -23,6 +28,7 @@ import net.minecraft.tileentity.TileEntitySkull;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.ReportedException;
 import net.minecraft.world.World;
+import org.lwjgl.opengl.GL11;
 
 public class TileEntityRendererDispatcher
 {
@@ -131,7 +137,33 @@ public class TileEntityRendererDispatcher
         {
             try
             {
-                tileentityspecialrenderer.renderTileEntityAt(tileEntityIn, x, y, z, partialTicks, destroyStage);
+                if(Lime.moduleManager.getModuleByName("ChestESP").isToggled() && Lime.setmgr.getSettingByName("Custom Color").getValBoolean() && tileEntityIn instanceof TileEntityChest && tileEntityIn.hasWorldObj()){
+                    tileentityspecialrenderer.renderTileEntityAt(tileEntityIn, x, y, z, partialTicks, destroyStage);
+                    GL11.glPushMatrix();
+                    {
+                        GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
+                        {
+                            GL11.glPolygonMode(GL11.GL_FRONT_AND_BACK, GL11.GL_LINE);
+                            GL11.glDisable(GL11.GL_TEXTURE_2D);
+                            GL11.glDisable(GL11.GL_LIGHTING);
+                            GL11.glDisable(GL11.GL_DEPTH_TEST);
+
+                            GL11.glEnable(GL11.GL_LINE_SMOOTH);
+
+                            GL11.glEnable(GL11.GL_BLEND);
+                            GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_CONSTANT_ALPHA);
+
+                            GL11.glLineWidth(1f);
+                            GL11.glColor3f(1, 1, 1);
+
+                            tileentityspecialrenderer.renderTileEntityAt(tileEntityIn, x, y, z, partialTicks, destroyStage);
+                        }
+                        GL11.glPopAttrib();
+                    }
+                    GL11.glPopMatrix();
+                } else {
+                    tileentityspecialrenderer.renderTileEntityAt(tileEntityIn, x, y, z, partialTicks, destroyStage);
+                }
             }
             catch (Throwable throwable)
             {

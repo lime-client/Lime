@@ -2,7 +2,7 @@ package lime.module.impl.combat;
 
 
 import lime.Lime;
-import lime.cgui.settings.Setting;
+import lime.settings.Setting;
 import lime.events.EventTarget;
 import lime.events.impl.Event3D;
 import lime.events.impl.EventMotion;
@@ -30,7 +30,6 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.lwjgl.input.Keyboard;
-import org.lwjgl.opengl.GL11;
 
 
 public class InfiniteAura extends Module {
@@ -265,7 +264,7 @@ public class InfiniteAura extends Module {
         for (Object o : mc.theWorld.getLoadedEntityList()) {
             if (o instanceof EntityLivingBase) {
                 EntityLivingBase entity = (EntityLivingBase) o;
-                if( entity.posY < mc.thePlayer.posY - 6 || entity.posY > mc.thePlayer.posY +7){
+                if( (entity.posY < mc.thePlayer.posY - 6 || entity.posY > mc.thePlayer.posY +7) && mc.getIntegratedServer() != null && mc.getCurrentServerData().serverIP.contains("brw")){
                     continue;
                 }
                 if (validEntity(entity)) {

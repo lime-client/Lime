@@ -1,7 +1,7 @@
 package lime.module.impl.combat;
 
 import lime.Lime;
-import lime.cgui.settings.Setting;
+import lime.settings.Setting;
 import lime.events.EventTarget;
 import lime.events.impl.EventPacket;
 import lime.module.Module;

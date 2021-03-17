@@ -1,11 +1,8 @@
 package lime.module.impl.movement.FlightMode;
 
 import lime.Lime;
-import lime.cgui.settings.Setting;
-import lime.events.impl.EventBoundingBox;
-import lime.events.impl.EventMotion;
-import lime.events.impl.EventMove;
-import lime.events.impl.EventUpdate;
+import lime.settings.Setting;
+import lime.events.impl.*;
 import net.minecraft.client.Minecraft;
 
 public class Flight {
@@ -34,6 +31,9 @@ public class Flight {
     }
 
     public void onBB(EventBoundingBox e){
+
+    }
+    public void onPacket(EventPacket e){
 
     }
 

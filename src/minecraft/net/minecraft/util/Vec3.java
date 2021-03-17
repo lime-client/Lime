@@ -11,6 +11,21 @@ public class Vec3
     /** Z coordinate of Vec3D */
     public final double zCoord;
 
+    public double getX() {
+        return xCoord;
+    }
+
+    public double getY() {
+        return yCoord;
+    }
+
+    public double getZ() {
+        return zCoord;
+    }
+    public BlockPos getBlockPos(){
+        return new BlockPos(getX(), getY(), getZ());
+    }
+
     public Vec3(double x, double y, double z)
     {
         if (x == -0.0D)
@@ -31,6 +46,10 @@ public class Vec3
         this.xCoord = x;
         this.yCoord = y;
         this.zCoord = z;
+    }
+
+    public Vec3(BlockPos bp){
+        this(bp.getX(), bp.getY(), bp.getZ());
     }
 
     public Vec3(Vec3i p_i46377_1_)

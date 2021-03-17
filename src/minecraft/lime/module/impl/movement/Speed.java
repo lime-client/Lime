@@ -1,7 +1,7 @@
 package lime.module.impl.movement;
 
 import lime.Lime;
-import lime.cgui.settings.Setting;
+import lime.settings.Setting;
 import lime.events.EventTarget;
 import lime.events.impl.*;
 import lime.module.Module;
@@ -52,6 +52,7 @@ public class Speed extends Module {
     }
     @EventTarget
     public void onMotion(EventMotion e){
+        setSuffix(getSettingByName("Speed").getValString());
         for(lime.module.impl.movement.SpeedMode.Speed sp : speedManager.speeds){
             if(sp.getName().toLowerCase().equals(getSettingByName("Speed").getValString().toLowerCase())){
                 sp.onMotion(e);

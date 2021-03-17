@@ -1,12 +1,13 @@
 package lime.module.impl.movement;
 
 import lime.Lime;
-import lime.cgui.settings.Setting;
+import lime.settings.Setting;
 import lime.events.EventTarget;
 import lime.events.impl.Event2D;
 import lime.events.impl.EventMotion;
 import lime.events.impl.EventSafeWalk;
 import lime.module.Module;
+import lime.utils.other.OtherUtil;
 import lime.utils.Timer;
 import lime.utils.movement.MovementUtil;
 import net.minecraft.block.Block;
@@ -71,9 +72,7 @@ public class Scaffold3 extends Module {
                         float yaw = aimAtLocation(blockData.position.getX(), blockData.position.getY(), blockData.position.getZ())[0];
                         event.setPitch(pitch);
                         event.setYaw(yaw);
-                        if(mc.gameSettings.thirdPersonView != 0){
-                            doRotationsInThirdPerson(event);
-                        }
+                        OtherUtil.doRotationsInThirdPerson(event);
                     }
                 }
             }
@@ -107,9 +106,10 @@ public class Scaffold3 extends Module {
                             if (mc.gameSettings.keyBindJump.isKeyDown() && !MovementUtil.isMoving() && !mc.thePlayer.isPotionActive(Potion.jump)) {
                                 mc.thePlayer.motionY = 0.42F;
                                 mc.thePlayer.motionX = Minecraft.getMinecraft().thePlayer.motionZ = 0;
-                                /*if (timerMotion.sleep(1500)) {
+                                if (timerMotion.hasReached(2500)) {
                                     mc.thePlayer.motionY = -0.28f;
-                                }*/
+                                    timerMotion.reset();
+                                }
                             } else {
                                 timerMotion.reset();
                             }

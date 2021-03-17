@@ -1,5 +1,7 @@
 package lime.utils.render;
 
+import lime.module.impl.combat.KillAura;
+import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
@@ -511,14 +513,14 @@ public class UtilGL {
             color = Color.white;
         color(color.getRed() / 255F, color.getGreen() / 255F, color.getBlue() / 255F, color.getAlpha() / 255F);
     }
-    /*public static final void drawAxisAlignedBBShadedFilled(AxisAlignedBB axisAlignedBB, Color color, boolean depth) {
+    public static final void drawAxisAlignedBBShadedFilled(AxisAlignedBB axisAlignedBB, Color color, boolean depth) {
         GL11.glEnable(GL_BLEND);
         GL11.glBlendFunc(GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
         GL11.glDisable(GL11.GL_TEXTURE_2D);
         GlStateManager.disableAlpha();
         if (depth) GL11.glDisable(GL_DEPTH_TEST);
         GL11.glDepthMask(false);
-        final Color alphaColor = Aura.setAlpha(color, 0);
+        final Color alphaColor = color;
         GL11.glShadeModel(GL11.GL_SMOOTH);
         GL11.glBegin(GL11.GL_QUADS);
         {
@@ -614,11 +616,10 @@ public class UtilGL {
         GL11.glDepthMask(true);
         GL11.glDisable(GL_BLEND);
     }
-     */
 
-    /*public static final void drawBox(Vec3 pos, Vec3 size, Color color) {
+
+    public static final void drawBox(Vec3 pos, Vec3 size, Color color) {
         final RenderManager renderManager = mc.getRenderManager();
-        final Timer timer = mc.timer;
         final double x = pos.getX() - renderManager.renderPosX;
         final double y = pos.getY() - renderManager.renderPosY;
         final double z = pos.getZ() - renderManager.renderPosZ;
@@ -628,7 +629,7 @@ public class UtilGL {
             drawAxisAlignedBBShadedFilled(axisAlignedBB, color, true);
         }
     }
-     */
+
     public static void drawImage(ResourceLocation image, int x, int y, int width, int height) {
 
         glEnable(GL_BLEND);

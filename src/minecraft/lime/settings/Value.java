@@ -1,4 +1,4 @@
-package lime.cgui.settings;
+package lime.settings;
 
 public class Value {
     public Value(){

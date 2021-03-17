@@ -5,16 +5,18 @@ import java.util.Arrays;
 import java.util.List;
 
 import lime.Lime;
-import lime.cgui.settings.Setting;
+import lime.settings.Setting;
+import lime.settings.impl.BooleanValue;
+import lime.settings.impl.ColorPicker;
 import lime.events.EventTarget;
-import lime.events.impl.Event2D;
-import lime.events.impl.EventMotion;
-import lime.events.impl.EventPacket;
-import lime.events.impl.EventSafeWalk;
+import lime.events.impl.*;
 import lime.module.Module;
+import lime.utils.other.OtherUtil;
 import lime.utils.Timer;
 import lime.utils.movement.MovementUtil;
+import lime.utils.render.UtilGL;
 import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.*;
 import org.lwjgl.input.Keyboard;
 
@@ -50,6 +52,9 @@ public class Scaffold2 extends Module {
 
     }
 
+    ColorPicker colorEsp;
+    BooleanValue esp;
+
 
     public static float yaw = 999, pitch = 999;
     private static List<Block> blacklistedBlocks;
@@ -83,6 +88,8 @@ public class Scaffold2 extends Module {
         Lime.setmgr.rSetting(new Setting("NoSwing", this, true));
         Lime.setmgr.rSetting(new Setting("Tower", this, true));
         Lime.setmgr.rSetting(new Setting("SameY", this, false));
+        esp = new BooleanValue("ESP", this, true);
+        colorEsp = new ColorPicker("ESP Color", this, new Color(200, 0, 0).getRGB());
 
     }
 
@@ -255,9 +262,7 @@ public class Scaffold2 extends Module {
                     em.setGround(false);
                 count ++;
                 stackez = mc.thePlayer.inventory.getCurrentItem();
-                if(mc.gameSettings.thirdPersonView != 0){
-                    doRotationsInThirdPerson(em);
-                }
+                OtherUtil.doRotationsInThirdPerson(em);
                 mc.playerController.onPlayerRightClick(mc.thePlayer, mc.theWorld, mc.thePlayer.inventory.getCurrentItem(), data.position, data.face, getVec3(data.position, data.face));
                 if(timer.hasReached(250)){
                     timer.reset();
@@ -296,6 +301,35 @@ public class Scaffold2 extends Module {
                     }
                 }
             }
+        }
+    }
+
+    @EventTarget
+    public void on3D(Event3D e){
+        if(esp.getValue() && blockdata != null){
+            UtilGL.pre3D();
+            BlockPos place = blockdata.position;
+            EnumFacing face = blockdata.face;
+            double x1 = place.getX() - RenderManager.renderPosX;
+            double x2 = place.getX() - RenderManager.renderPosX + 1;
+            double y1 = place.getY() - RenderManager.renderPosY;
+            double y2 = place.getY() - RenderManager.renderPosY + 1;
+            double z1 = place.getZ() - RenderManager.renderPosZ;
+            double z2 = place.getZ() - RenderManager.renderPosZ + 1;
+            y1 += face.getFrontOffsetY();
+            if(face.getFrontOffsetX() < 0){
+                x2 += face.getFrontOffsetX();
+            }else{
+                x1 += face.getFrontOffsetX();
+            }
+            if(face.getFrontOffsetZ() < 0){
+                z2 += face.getFrontOffsetZ();
+            }else{
+                z1 += face.getFrontOffsetZ();
+            }
+            UtilGL.color(colorEsp.getColorValue());
+            UtilGL.drawBoxFilled(new AxisAlignedBB(x1, y1, z1, x2, y2, z2));
+            UtilGL.post3D();
         }
     }
 

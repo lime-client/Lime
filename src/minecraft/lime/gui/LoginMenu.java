@@ -26,6 +26,7 @@ public class LoginMenu extends GuiScreen {
     @Override
     public void initGui() {
         user = new GuiTextField(69, mc.fontRendererObj, this.width / 2 - 50 + 1, this.height / 2 - 30, 101, 20);
+        user.setFocused(true);
         this.buttonList.add(new GuiNewButton(6969, this.width / 2 - 50 + 1, this.height / 2 - 6, 101, 20, "Login"));
         super.initGui();
     }
@@ -48,7 +49,7 @@ public class LoginMenu extends GuiScreen {
         user.textboxKeyTyped(typedChar, keyCode);
         if(keyCode == 1)
             return;
-        if(keyCode == Keyboard.KEY_EQUALS && user.isFocused()){
+        if(keyCode == 28 && user.isFocused()){
             actionPerformed(buttonList.get(0));
         }
         super.keyTyped(typedChar, keyCode);

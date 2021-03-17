@@ -31,6 +31,7 @@ public class MainMenu extends GuiScreen {
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+
         Util2D.drawImage(new ResourceLocation("lime/wp.jpg"), 0, 0, this.width, this.height);
         Util2D.drawImage(new ResourceLocation("lime/discord.png"), this.width - 42, 10, 36, 36);
         Util2D.drawImage(new ResourceLocation("lime/changelog.png"), this.width - 42 - 48, 10, 36, 36);
@@ -62,7 +63,7 @@ public class MainMenu extends GuiScreen {
                 mc.displayGuiScreen(new GuiAltManager());
                 break;
             case 4:
-                System.exit(0);
+                mc.shutdownMinecraftApplet();
                 break;
         }
         super.actionPerformed(button);

@@ -14,6 +14,7 @@ public class FlightManager {
         flights.add(new Verus("Verus"));
         flights.add(new VerusFast("VerusFast"));
         flights.add(new Funcraft2("Funcraft2"));
+        flights.add(new Funcraft3("Funcraft3"));
     }
     public Flight getSpeedByName(String name){
         for(Flight fl : flights){

@@ -5,6 +5,7 @@ import java.util.Random;
 import java.util.UUID;
 import java.util.concurrent.Callable;
 
+import lime.events.impl.EventDeath;
 import lime.events.impl.EventSafeWalk;
 import lime.events.impl.EventStep;
 import net.minecraft.block.Block;
@@ -16,6 +17,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.block.state.pattern.BlockPattern;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.command.CommandResultStats;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.crash.CrashReport;
@@ -332,6 +334,9 @@ public abstract class Entity implements ICommandSender
      */
     public void setDead()
     {
+        if(this instanceof EntityPlayerSP && this == Minecraft.getMinecraft().thePlayer){
+            EventDeath e = new EventDeath().call();
+        }
         this.isDead = true;
     }
 
@@ -2486,7 +2491,6 @@ public abstract class Entity implements ICommandSender
 
                 worldserver1.spawnEntityInWorld(entity);
             }
-
             this.isDead = true;
             this.worldObj.theProfiler.endSection();
             worldserver.resetUpdateEntityTick();

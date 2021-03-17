@@ -1,4 +1,4 @@
-package lime.cgui.settings;
+package lime.settings;
 
 import lime.Lime;
 import lime.module.Module;

@@ -9,6 +9,7 @@ import java.util.Random;
 
 import lime.Lime;
 import lime.events.impl.Event2D;
+import lime.events.impl.EventScoreboard;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
@@ -548,7 +549,8 @@ public class GuiIngame extends Gui
 
     private void renderScoreboard(ScoreObjective p_180475_1_, ScaledResolution p_180475_2_)
     {
-        if(Lime.moduleManager.getModuleByName("NoScoreboard").isToggled()) return;
+        EventScoreboard e = new EventScoreboard().call();
+        if(e.isCancelled()) return;
         Scoreboard scoreboard = p_180475_1_.getScoreboard();
         Collection collection = scoreboard.getSortedScores(p_180475_1_);
         ArrayList arraylist = Lists.newArrayList(Iterables.filter(collection, new Predicate()
@@ -584,9 +586,9 @@ public class GuiIngame extends Gui
         }
 
         int j1 = arraylist1.size() * this.getFontRenderer().FONT_HEIGHT;
-        int k1 = p_180475_2_.getScaledHeight() / 2 + j1 / 3;
+        int k1 = p_180475_2_.getScaledHeight() / 2 + j1 / 3 + e.getY();
         byte b0 = 3;
-        int j = p_180475_2_.getScaledWidth() - i - b0;
+        int j = p_180475_2_.getScaledWidth() - i - b0 - e.getX();
         int k = 0;
 
         for (Object score1 : arraylist1)

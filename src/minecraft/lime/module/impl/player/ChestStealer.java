@@ -1,9 +1,13 @@
 package lime.module.impl.player;
 
 import lime.Lime;
-import lime.cgui.settings.Setting;
+import lime.settings.Setting;
+import lime.settings.impl.BooleanValue;
+import lime.settings.impl.ComboBooleanValue;
 import lime.events.EventTarget;
+import lime.events.impl.EventDeath;
 import lime.events.impl.EventMotion;
+import lime.events.impl.EventWorldChange;
 import lime.module.Module;
 import lime.utils.Timer;
 import net.minecraft.inventory.ContainerChest;
@@ -14,12 +18,17 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class ChestStealer extends Module {
+    ComboBooleanValue disableon = new ComboBooleanValue("Disable on", this);
+    BooleanValue onDeath = new BooleanValue("Death", this, true, disableon.getSet());
+    BooleanValue onWorldChange = new BooleanValue("Changing World", this, true, disableon.getSet());
     public ChestStealer(){
         super("ChestSteal", Keyboard.KEY_I, Category.PLAYER);
         Lime.setmgr.rSetting(new Setting("Delay", this, 150, 10, 1000, true));
         Lime.setmgr.rSetting(new Setting("Random Delay", this, true));
         Lime.setmgr.rSetting(new Setting("Randomize", this, true));
     }
+
+
 
     @Override
     public void onEnable() {
@@ -30,10 +39,24 @@ public class ChestStealer extends Module {
     public void onDisable() {
         super.onDisable();
     }
+
+    @EventTarget
+    public void onWorldChange(EventWorldChange e){
+        if(onWorldChange.getValue())
+            this.disable();
+    }
+
+    @EventTarget
+    public void onDeath(EventDeath e){
+        if(onDeath.getValue())
+            this.disable();
+    }
+
     Timer timer = new Timer();
 
     @EventTarget
     public void onMotion(EventMotion eventMotion){
+        setSuffix(getSettingByName("Delay").getValDouble() + "");
         if(mc.thePlayer.openContainer != null && mc.thePlayer.openContainer instanceof ContainerChest){
             ContainerChest chest = (ContainerChest) mc.thePlayer.openContainer;
             String name = chest.getLowerChestInventory().getDisplayName().getUnformattedText().toLowerCase();

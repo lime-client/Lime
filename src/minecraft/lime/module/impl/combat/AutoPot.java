@@ -1,7 +1,7 @@
 package lime.module.impl.combat;
 
 import lime.Lime;
-import lime.cgui.settings.Setting;
+import lime.settings.Setting;
 import lime.events.EventTarget;
 import lime.events.impl.EventMotion;
 import lime.module.Module;
@@ -42,6 +42,7 @@ public class AutoPot extends Module {
 
     @EventTarget
     public void onUpdate(EventMotion event) {
+        setSuffix(getCount() + "");
         if (this.ticks > 0)
         {
             this.ticks -= 1;

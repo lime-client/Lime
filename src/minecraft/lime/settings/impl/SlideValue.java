@@ -1,8 +1,8 @@
-package lime.cgui.settings.impl;
+package lime.settings.impl;
 
 import lime.Lime;
-import lime.cgui.settings.Setting;
-import lime.cgui.settings.Value;
+import lime.settings.Setting;
+import lime.settings.Value;
 import lime.module.Module;
 
 public class SlideValue extends Value {

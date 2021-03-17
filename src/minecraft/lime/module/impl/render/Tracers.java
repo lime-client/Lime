@@ -1,20 +1,19 @@
 package lime.module.impl.render;
 
+import lime.settings.impl.ColorPicker;
 import lime.events.EventTarget;
 import lime.events.impl.Event3D;
 import lime.module.Module;
-import lime.utils.render.RainbowUtil;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityArmorStand;
 import net.minecraft.entity.player.EntityPlayer;
 import org.lwjgl.opengl.GL11;
 
-import java.awt.*;
-
 public class Tracers extends Module {
+    ColorPicker color = new ColorPicker("Color", this, -1);
+
     public Tracers(){
         super("Tracers", 0, Category.RENDER);
     }
@@ -35,7 +34,7 @@ public class Tracers extends Module {
                 float posX = (float) ((float) (ent.lastTickPosX + (ent.posX - ent.lastTickPosX) * event.getPartialTicks()) - mc.getRenderManager().renderPosX);
                 float posY = (float) ((float) (ent.lastTickPosY + (ent.posY - ent.lastTickPosY) * event.getPartialTicks()) - mc.getRenderManager().renderPosY);
                 float posZ = (float) ((float) (ent.lastTickPosZ + (ent.posZ - ent.lastTickPosZ) * event.getPartialTicks()) - mc.getRenderManager().renderPosZ);
-                draw3DLine(posX, posY, posZ, RainbowUtil.blend2colors(new Color(255, 0, 0, 255), new Color(100, 0, 0, 255), (System.nanoTime() + (100000000L * 2)) / 1.0E09F % 2.0F).getRGB());
+                draw3DLine(posX, posY, posZ, color.getValue());
             }
         }
     }

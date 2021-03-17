@@ -2,8 +2,7 @@ package lime;
 
 import lime.altmanager.AltManager;
 import lime.cgui.ClickGui;
-import lime.cgui.cgui2.ClickGui2;
-import lime.cgui.settings.SettingsManager;
+import lime.settings.SettingsManager;
 import lime.events.EventManager;
 import lime.events.EventTarget;
 import lime.events.impl.EventKey;
@@ -11,10 +10,9 @@ import lime.events.impl.EventUpdate;
 import lime.file.impl.ModuleSaver;
 import lime.file.impl.SettingsSaver;
 import lime.gui.LoginMenu;
-import lime.managers.CommandManager;
-import lime.managers.FileManager;
-import lime.managers.FontManager;
-import lime.managers.ModuleManager;
+import lime.managers.*;
+import lime.module.Module;
+import lime.utils.Timer;
 import net.minecraft.client.Minecraft;
 import org.lwjgl.opengl.Display;
 import viamcp.ViaFabric;
@@ -28,12 +26,13 @@ public class Lime {
     public static EventManager eventManager;
     public static ModuleManager moduleManager;
     public static CommandManager commandManager;
+    public static FriendManager friendManager;
     public static FileManager fileManager;
     public static FontManager fontManager;
     public static SettingsManager setmgr;
     public static AltManager altManager;
     public static ClickGui clickgui;
-    public static ClickGui2 clickgui2;
+    public static lime.cguinew.ClickGui clickGui;
     public static boolean logged = false;
     public static Lime instance = new Lime();
     public void startClient(){
@@ -65,10 +64,11 @@ public class Lime {
         moduleManager = new ModuleManager();
         commandManager = new CommandManager();
         fileManager = new FileManager();
+        friendManager = new FriendManager();
         clickgui = new ClickGui(new ArrayList<>(moduleManager.getModules()));
+        clickGui = new lime.cguinew.ClickGui();
         ((ModuleSaver) fileManager.getFileByClass(ModuleSaver.class)).load();
         ((SettingsSaver) fileManager.getFileByClass(SettingsSaver.class)).load();
-        clickgui2 = new ClickGui2();
         loadViaMCP();
         altManager = new AltManager();
         //
@@ -86,11 +86,21 @@ public class Lime {
         }
     }
 
+    Timer autoSaveTimer = new Timer();
+    @EventTarget
+    public void autoSave(EventUpdate e){
+        if(autoSaveTimer.hasReached(30000))
+        {
+            stopClient();
+            autoSaveTimer.reset();
+        }
+    }
+
 
 
     @EventTarget
     public void onKey(EventKey event) {
-        moduleManager.getModules().stream().filter(module -> module.getKey() == event.key).forEach(module -> module.toggle());
+        moduleManager.getModules().stream().filter(module -> module.getKey() == event.key).forEach(Module::toggle);
     }
     @EventTarget
     public void onUpdate(EventUpdate e){

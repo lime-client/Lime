@@ -1,31 +1,24 @@
 package lime.module.impl.movement;
 
-import com.sun.javafx.geom.Vec3d;
-import lime.Lime;
-import lime.cgui.settings.Setting;
+import lime.settings.impl.BooleanValue;
+import lime.settings.impl.ListValue;
+import lime.settings.impl.SlideValue;
 import lime.events.EventTarget;
 import lime.events.impl.*;
 import lime.module.Module;
 import lime.module.impl.movement.FlightMode.FlightManager;
 import lime.utils.ChatUtils;
-import lime.utils.Timer;
-import lime.utils.movement.MovementUtil;
-import net.minecraft.block.BlockAir;
-import net.minecraft.network.play.client.C03PacketPlayer;
 import net.minecraft.network.play.server.S08PacketPlayerPosLook;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.MathHelper;
 import org.lwjgl.input.Keyboard;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class Flight extends Module {
     public FlightManager flightManager;
+
+    public ListValue flightMode = new ListValue("Flight", this, "Vanilla", "Vanilla", "VanillaCreative", "BRWServ", "Funcraft", "Funcraft2","Funcraft3", "Verus", "VerusFast", "ZoneCraft");
+    public SlideValue flightSpeed = new SlideValue("Flight", this, 1, 0, 10, false);
+    public BooleanValue bobbing = new BooleanValue("Bobbing", this, false);
     public Flight(){
         super("Flight", Keyboard.KEY_F, Category.MOVEMENT);
-        Lime.setmgr.rSetting(new Setting("Flight", this, "Vanilla", true, "Vanilla", "VanillaCreative", "BRWServ", "Funcraft", "Funcraft2", "Verus", "VerusFast", "ZoneCraft"));
-        Lime.setmgr.rSetting(new Setting("Flight", this, 1, 0, 10, false));
         flightManager = new FlightManager();
     }
 
@@ -57,7 +50,10 @@ public class Flight extends Module {
     }
     @EventTarget
     public void onMotion(EventMotion e){
-
+        if(bobbing.getValue()) {
+            mc.thePlayer.cameraYaw = 0.105f;
+        }
+        setSuffix(getSettingByName("Flight").getValString());
         for(lime.module.impl.movement.FlightMode.Flight fl : flightManager.flights){
             if(fl.getName().toLowerCase().equals(getSettingByName("Flight").getValString().toLowerCase())){
                 fl.onMotion(e);
@@ -68,9 +64,18 @@ public class Flight extends Module {
 
     @EventTarget
     public void flagCheck(EventPacket e){
-        if(e.getPacket() instanceof S08PacketPlayerPosLook){
+        if(e.getPacket() instanceof S08PacketPlayerPosLook && !getSettingByName("Flight").getValString().equalsIgnoreCase("Funcraft2")){
             ChatUtils.sendMsg("Disabled " + this.name + " for lagback reasons");
             this.toggle();
+        }
+    }
+    @EventTarget
+    public void packetCall(EventPacket e){
+        for(lime.module.impl.movement.FlightMode.Flight fl : flightManager.flights){
+            if(fl.getName().toLowerCase().equals(getSettingByName("Flight").getValString().toLowerCase())){
+                fl.onPacket(e);
+                return;
+            }
         }
     }
 

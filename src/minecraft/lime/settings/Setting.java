@@ -1,4 +1,4 @@
-package lime.cgui.settings;
+package lime.settings;
 
 import lime.module.Module;
 
@@ -13,7 +13,10 @@ public class Setting {
 
     private String sval;
     private ArrayList<String> options;
-
+    public Setting parentSet;
+    public int color;
+    public int posXColor;
+    public int posYColor;
     private boolean bval;
     public boolean isMain;
     private double dval;
@@ -61,7 +64,22 @@ public class Setting {
         this.name = name;
         this.parent = parent;
         this.bval = bval;
+        this.parentSet = null;
         this.mode = "Check";
+    }
+
+    public Setting(String name, Module parent, boolean bval, Setting set){
+        this.name = name;
+        this.parent = parent;
+        this.bval = bval;
+        this.parentSet = set;
+        this.mode = "Check";
+    }
+
+    public Setting(String name, Module parent){
+        this.name = name;
+        this.parent = parent;
+        this.mode = "ComboBoolean";
     }
 
     public Setting(String name, Module parent, double dval, double min, double max, boolean onlyint){
@@ -73,6 +91,14 @@ public class Setting {
         this.onlyint = onlyint;
         this.mode = "Slider";
     }
+
+    public Setting(String name, Module parent, int color){
+        this.name = name;
+        this.parent = parent;
+        this.color = color;
+        this.mode = "Color";
+    }
+
 
     public String getName(){
         return name;
@@ -89,6 +115,10 @@ public class Setting {
     public void setValString(String in){
         this.sval = in;
     }
+
+    public int getValColor() { return this.color; }
+
+    public void setColor(int color) { this.color = color; }
 
     public ArrayList<String> getOptions(){
         return this.options;
@@ -139,6 +169,10 @@ public class Setting {
     public boolean isSlider(){
         return this.mode.equalsIgnoreCase("Slider");
     }
+
+    public boolean isComboBool(){ return this.mode.equalsIgnoreCase("ComboBoolean");}
+
+    public boolean isColor(){ return this.mode.equalsIgnoreCase("Color"); }
 
     public boolean onlyInt(){
         return this.onlyint;

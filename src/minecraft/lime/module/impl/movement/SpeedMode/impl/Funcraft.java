@@ -4,6 +4,7 @@ import lime.events.impl.EventMotion;
 import lime.events.impl.EventMove;
 import lime.module.impl.movement.SpeedMode.Speed;
 import lime.utils.movement.MovementUtil;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.Entity;
 import net.minecraft.potion.Potion;
@@ -151,4 +152,5 @@ public class Funcraft extends Speed {
         }
         return baseSpeed;
     }
+
 }
