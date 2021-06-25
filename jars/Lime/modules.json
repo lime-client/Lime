@@ -1,0 +1,368 @@
+{
+  "modules": [
+    {
+      "moduleName": "Auto Gapple",
+      "key": -1,
+      "toggled": false,
+      "settings": [
+        {
+          "name": "Delay",
+          "type": "slider",
+          "value": 100.0
+        },
+        {
+          "name": "Health",
+          "type": "slider",
+          "value": 10.0
+        }
+      ]
+    },
+    {
+      "moduleName": "Kill Aura",
+      "key": 19,
+      "toggled": true,
+      "settings": [
+        {
+          "name": "State",
+          "type": "enum",
+          "value": "pre"
+        },
+        {
+          "name": "Priority",
+          "type": "enum",
+          "value": "distance"
+        },
+        {
+          "name": "Rotations",
+          "type": "enum",
+          "value": "basic"
+        },
+        {
+          "name": "Target ESP",
+          "type": "enum",
+          "value": "circle"
+        },
+        {
+          "name": "Auto Block",
+          "type": "enum",
+          "value": "fake"
+        },
+        {
+          "name": "Reach",
+          "type": "slider",
+          "value": 3.0
+        },
+        {
+          "name": "CPS",
+          "type": "slider",
+          "value": 8.0
+        },
+        {
+          "name": "Players",
+          "type": "bool",
+          "value": true
+        },
+        {
+          "name": "Passives",
+          "type": "bool",
+          "value": false
+        },
+        {
+          "name": "Mobs",
+          "type": "bool",
+          "value": false
+        },
+        {
+          "name": "Ray Cast",
+          "type": "bool",
+          "value": true
+        },
+        {
+          "name": "Through Walls",
+          "type": "bool",
+          "value": true
+        },
+        {
+          "name": "Keep Sprint",
+          "type": "bool",
+          "value": true
+        },
+        {
+          "name": "Death Check",
+          "type": "bool",
+          "value": true
+        }
+      ]
+    },
+    {
+      "moduleName": "Velocity",
+      "key": -1,
+      "toggled": true
+    },
+    {
+      "moduleName": "Anti Bot",
+      "key": -1,
+      "toggled": false
+    },
+    {
+      "moduleName": "Fast Bow",
+      "key": -1,
+      "toggled": false
+    },
+    {
+      "moduleName": "Blink",
+      "key": -1,
+      "toggled": false,
+      "settings": [
+        {
+          "name": "Blink Delay",
+          "type": "slider",
+          "value": 200.0
+        }
+      ]
+    },
+    {
+      "moduleName": "Long Jump",
+      "key": 40,
+      "toggled": false,
+      "settings": [
+        {
+          "name": "Mode",
+          "type": "enum",
+          "value": "ncpbow"
+        }
+      ]
+    },
+    {
+      "moduleName": "No Slow",
+      "key": -1,
+      "toggled": true,
+      "settings": [
+        {
+          "name": "Mode",
+          "type": "enum",
+          "value": "ncp"
+        }
+      ]
+    },
+    {
+      "moduleName": "Flight",
+      "key": 33,
+      "toggled": true,
+      "settings": [
+        {
+          "name": "Mode",
+          "type": "enum",
+          "value": "funcraft"
+        }
+      ]
+    },
+    {
+      "moduleName": "Sprint",
+      "key": -1,
+      "toggled": false
+    },
+    {
+      "moduleName": "Speed",
+      "key": 47,
+      "toggled": false,
+      "settings": [
+        {
+          "name": "Mode",
+          "type": "enum",
+          "value": "vanilla_bhop"
+        }
+      ]
+    },
+    {
+      "moduleName": "Glide",
+      "key": -1,
+      "toggled": false,
+      "settings": [
+        {
+          "name": "Mode",
+          "type": "enum",
+          "value": "verus"
+        }
+      ]
+    },
+    {
+      "moduleName": "Step",
+      "key": -1,
+      "toggled": false,
+      "settings": [
+        {
+          "name": "Mode",
+          "type": "enum",
+          "value": "vanilla"
+        },
+        {
+          "name": "Height",
+          "type": "slider",
+          "value": 2.5
+        }
+      ]
+    },
+    {
+      "moduleName": "Inventory Move",
+      "key": -1,
+      "toggled": true
+    },
+    {
+      "moduleName": "Click Teleport",
+      "key": -1,
+      "toggled": false
+    },
+    {
+      "moduleName": "Speed Mine",
+      "key": -1,
+      "toggled": false
+    },
+    {
+      "moduleName": "Fast Place",
+      "key": -1,
+      "toggled": true
+    },
+    {
+      "moduleName": "Anti Void",
+      "key": -1,
+      "toggled": false,
+      "settings": [
+        {
+          "name": "Mode",
+          "type": "enum",
+          "value": "motion"
+        },
+        {
+          "name": "Pullback",
+          "type": "slider",
+          "value": 500.0
+        }
+      ]
+    },
+    {
+      "moduleName": "Freecam",
+      "key": -1,
+      "toggled": false
+    },
+    {
+      "moduleName": "Fast Eat",
+      "key": -1,
+      "toggled": false
+    },
+    {
+      "moduleName": "No Fall",
+      "key": -1,
+      "toggled": false,
+      "settings": [
+        {
+          "name": "Mode",
+          "type": "enum",
+          "value": "verus"
+        }
+      ]
+    },
+    {
+      "moduleName": "No Scoreboard",
+      "key": -1,
+      "toggled": false
+    },
+    {
+      "moduleName": "Animations",
+      "key": -1,
+      "toggled": false,
+      "settings": [
+        {
+          "name": "Mode",
+          "type": "enum",
+          "value": "swing"
+        }
+      ]
+    },
+    {
+      "moduleName": "Full Bright",
+      "key": -1,
+      "toggled": true
+    },
+    {
+      "moduleName": "ClickGUI",
+      "key": 54,
+      "toggled": false,
+      "settings": [
+        {
+          "name": "Mode",
+          "type": "enum",
+          "value": "frame"
+        }
+      ]
+    },
+    {
+      "moduleName": "Tracers",
+      "key": -1,
+      "toggled": true
+    },
+    {
+      "moduleName": "Chams",
+      "key": -1,
+      "toggled": false,
+      "settings": [
+        {
+          "name": "Mode",
+          "type": "enum",
+          "value": "colored"
+        }
+      ]
+    },
+    {
+      "moduleName": "ESP",
+      "key": -1,
+      "toggled": true,
+      "settings": [
+        {
+          "name": "Mode",
+          "type": "enum",
+          "value": "cylinder"
+        }
+      ]
+    },
+    {
+      "moduleName": "HUD",
+      "key": -1,
+      "toggled": true
+    },
+    {
+      "moduleName": "Time Changer",
+      "key": -1,
+      "toggled": false,
+      "settings": [
+        {
+          "name": "Time",
+          "type": "slider",
+          "value": 21000.0
+        },
+        {
+          "name": "Rain",
+          "type": "bool",
+          "value": false
+        }
+      ]
+    },
+    {
+      "moduleName": "No Rotate",
+      "key": -1,
+      "toggled": false
+    },
+    {
+      "moduleName": "Timer",
+      "key": -1,
+      "toggled": false,
+      "settings": [
+        {
+          "name": "Timer Speed",
+          "type": "slider",
+          "value": 1.5
+        }
+      ]
+    }
+  ]
+}
