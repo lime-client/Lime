@@ -50,7 +50,10 @@ public class Flight extends Module {
     public void onMotion(EventMotion e) {
         if(mode.is("vanilla")) {
             mc.thePlayer.motionY = mc.gameSettings.keyBindJump.isKeyDown() ? 0.80 : mc.gameSettings.keyBindSneak.isKeyDown() ? -0.80 : 0;
-            //MovementUtils.setSpeed(1.5);
+            if(mc.thePlayer.isMoving()) {
+                MovementUtils.setSpeed(1.5);
+                mc.thePlayer.cameraYaw = 0.116f;
+            }
         }
         if(mode.is("verus") && mc.gameSettings.keyBindJump.isKeyDown() && e.isPre()) {
             mc.thePlayer.motionY = -0.0784000015258789;

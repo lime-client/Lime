@@ -16,6 +16,7 @@ import static org.lwjgl.opengl.GL11.*;
 
 public class RenderUtils implements IUtil {
 
+    // From moon
     public static void drawRadius(EntityLivingBase target, int color) {
         TargetStrafe targetStrafe = (TargetStrafe) Lime.getInstance().getModuleManager().getModuleC(TargetStrafe.class);
         float rangeValue = (float) targetStrafe.distance.getCurrent();
@@ -46,6 +47,21 @@ public class RenderUtils implements IUtil {
         GL11.glDisable(GL11.GL_LINE_SMOOTH);
 
         GL11.glPopMatrix();
+    }
+
+    public static void drawImage(ResourceLocation image, int x, int y, int width, int height) {
+        GL11.glPushMatrix();
+        glEnable(GL_BLEND);
+        glDepthMask(false);
+        GL14.glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ZERO);
+        glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+        mc.getTextureManager().bindTexture(image);
+        Gui.drawModalRectWithCustomSizedTexture(x, y, 0, 0, width, height, width, height);
+        GL11.glDepthMask(true);
+        GL11.glDisable(GL_BLEND);
+        GL11.glEnable(GL_DEPTH_TEST);
+        GL11.glPopMatrix();
+        GlStateManager.color(1, 1, 1);
     }
 
     public static void glColor(Color color) {

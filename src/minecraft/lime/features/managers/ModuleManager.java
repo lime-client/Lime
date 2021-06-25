@@ -55,6 +55,7 @@ public class ModuleManager {
         registerModule(new NoFall());
 
         // RENDER
+        registerModule(new RenderTestModule());
         registerModule(new NoScoreboard());
         registerModule(new Animations());
         registerModule(new FullBright());

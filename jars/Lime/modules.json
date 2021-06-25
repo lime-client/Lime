@@ -50,7 +50,7 @@
         {
           "name": "Reach",
           "type": "slider",
-          "value": 4.8500000000000005
+          "value": 3.0
         },
         {
           "name": "CPS",
@@ -75,7 +75,7 @@
         {
           "name": "Ray Cast",
           "type": "bool",
-          "value": true
+          "value": false
         },
         {
           "name": "Through Walls",
@@ -129,7 +129,7 @@
         {
           "name": "Distance",
           "type": "slider",
-          "value": 3.1
+          "value": 2.5
         },
         {
           "name": "Circle",
@@ -175,7 +175,7 @@
         {
           "name": "Mode",
           "type": "enum",
-          "value": "funcraft"
+          "value": "vanilla"
         }
       ]
     },
@@ -192,7 +192,7 @@
         {
           "name": "Mode",
           "type": "enum",
-          "value": "ncp"
+          "value": "vanilla_bhop"
         }
       ]
     },
@@ -283,6 +283,11 @@
           "value": "verus"
         }
       ]
+    },
+    {
+      "moduleName": "Render Test",
+      "key": -1,
+      "toggled": false
     },
     {
       "moduleName": "No Scoreboard",

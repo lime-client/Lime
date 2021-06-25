@@ -42,7 +42,6 @@ public class TargetStrafe extends Module {
 
     @EventTarget
     public void onMove(EventMove e) {
-        if(Lime.getInstance().getModuleManager().getModuleC(Flight.class).isToggled()) return;
         if(Lime.getInstance().getModuleManager().getModuleC(KillAura.class).isToggled()) {
             if(KillAura.getEntity() == null) {
                 return;
@@ -88,15 +87,12 @@ public class TargetStrafe extends Module {
 
                 canMove = true;
 
-                e.setX(0);
-                e.setZ(0);
-
                 if(canMove) {
-                    MovementUtils.setSpeed(e, moveSpeed, rotations[0], direction, 0.0D);
+                    MovementUtils.setSpeed(e, MovementUtils.getSpeed(), rotations[0], direction, 0.0D);
                 }
             } else {
                 if(canMove) {
-                    MovementUtils.setSpeed(e, moveSpeed, rotations[0], direction, 1.0D);
+                    MovementUtils.setSpeed(e, MovementUtils.getSpeed(), rotations[0], direction, 1.0D);
                 }
                 canMove = false;
             }

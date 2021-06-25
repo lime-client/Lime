@@ -52,8 +52,6 @@ public class Speed extends Module {
                     if(mc.thePlayer.isMoving() && mc.thePlayer.onGround) mc.thePlayer.motionY = 0.42;
                     if(mc.thePlayer.isMoving()) {
                         MovementUtils.setSpeed(0.6);
-                        if(mc.thePlayer.hurtTime > 0)
-                            MovementUtils.setSpeed(1.4);
                     }
                     if(mc.thePlayer.ticksExisted % 3 == 0) mc.thePlayer.motionY -= 0.04;
                 }
