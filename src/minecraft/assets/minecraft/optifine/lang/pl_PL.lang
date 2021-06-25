@@ -1,3 +1,6 @@
+# Contributors of Polish localization #
+#  Kamil7430 2016-03-14 -- 2017-03-12 #
+
 # General
 of.general.ambiguous=dwuznaczny
 of.general.custom=Inny
@@ -19,6 +22,9 @@ of.message.af.shaders2=Proszę, wyłącz Shadery, aby używać tej opcji.
 of.message.fr.shaders1=Szybkie renderowanie nie jest kompatybilne z Shaderami.
 of.message.fr.shaders2=Proszę, wyłącz Shadery, aby używać tej opcji.
 
+of.message.an.shaders1=Anaglifowe 3D nie jest kompatybilne z Shaderami.
+of.message.an.shaders2=Proszę, wyłącz Shadery, aby używać tej opcji.
+
 of.message.shaders.aa1=Shadery nie są kompatybilne z antyaliasingiem. 
 of.message.shaders.aa2=Proszę, wyłącz opcję Jakość -> Antyaliasing, a następnie zrestartuj grę.
 
@@ -28,6 +34,9 @@ of.message.shaders.af2=Proszę, wyłącz opcję Jakość -> Filtrowanie anizotro
 of.message.shaders.fr1=Shadery nie są kompatybilne z szybkim renderowaniem.
 of.message.shaders.fr2=Proszę, wyłącz opcję Wydajność -> Szybkie renderowanie.
 
+of.message.shaders.an1=Shadery nie są kompatybilne z anaglifowym 3D.
+of.message.shaders.an2=Proszę, wyłącz opcję Inne -> Anaglifowe 3D.
+
 of.message.newVersion=Nowa wersja §eOptiFine§f jest dostępna: §e%s§f
 of.message.java64Bit=Zalecamy zainstalowanie §e64-bitowego środowiska Java§f, aby podwyższyć wydajność.
 of.message.openglError=§eBłąd OpenGL§f: %s (%s)
@@ -36,6 +45,8 @@ of.message.shaders.loading=Wczytuję shadery: %s
 
 of.message.other.reset=Czy chcesz przywrócić wszystkie ustawienia graficzne do ich domyślnych wartości?
  
+of.message.loadingVisibleChunks=Wczytywanie widzialnych chunków
+
 # Video settings
 
 options.graphics.tooltip.1=Jakość grafiki
@@ -99,6 +110,11 @@ options.anaglyph.tooltip.4=Wymaga czerwono-niebieskich okularów.
 options.blockAlternatives.tooltip.1=Alternatywne bloki
 options.blockAlternatives.tooltip.2=Używa alternatywnych modeli dla niektóych bloków.
 options.blockAlternatives.tooltip.3=Bazowane na wybranyej paczce tekstur.
+
+of.options.ALTERNATE_BLOCKS=Alternatywne bloki
+of.options.blockAlternatives.tooltip.1=Alternatywne bloki
+of.options.blockAlternatives.tooltip.2=Używa alternatywnych modeli dla niektóych bloków.
+of.options.blockAlternatives.tooltip.3=Bazowane na wybranyej paczce tekstur.
 
 of.options.FOG_FANCY=Mgła
 of.options.FOG_FANCY.tooltip.1=Typ mgły
@@ -293,7 +309,14 @@ of.options.CUSTOM_ITEMS.tooltip.1=Własne przedmioty
 of.options.CUSTOM_ITEMS.tooltip.2=  Wł. - własne tekstury przedmiotów (domyślne), niższa wydajność
 of.options.CUSTOM_ITEMS.tooltip.3=  Wył. - domyślne tesktury przedmiotów, wyższa wydajność
 of.options.CUSTOM_ITEMS.tooltip.4=Własne tekstury przedmiotów są pobierane
-of.options.CUSTOM_ITEMS.tooltip.5=z aktualnej paczki tekstur
+of.options.CUSTOM_ITEMS.tooltip.5=z aktualnej paczki tekstur.
+
+of.options.CUSTOM_ENTITY_MODELS=Własne modele mobów
+of.options.CUSTOM_ENTITY_MODELS.tooltip.1=Własne modele mobów i innych podmiotów
+of.options.CUSTOM_ENTITY_MODELS.tooltip.2=  Wł. - opcja włączona (domyślne), wolniej
+of.options.CUSTOM_ENTITY_MODELS.tooltip.3=  Wył. - opcja wyłączona, szybciej
+of.options.CUSTOM_ENTITY_MODELS.tooltip.4=Własne modele są pobierane z
+of.options.CUSTOM_ENTITY_MODELS.tooltip.5=aktualnej paczki tekstur.
 
 # Details
 
@@ -363,6 +386,14 @@ of.options.HELD_ITEM_TOOLTIPS.tooltip.1=Nazwy trzymanych przedmiotów nad interf
 of.options.HELD_ITEM_TOOLTIPS.tooltip.2=  Wł. - pokazuj nazwy przedmiotów (domyślne)
 of.options.HELD_ITEM_TOOLTIPS.tooltip.3=  Wył. - nie pokazuj nazw przedmiotów
 
+of.options.ADVANCED_TOOLTIPS=Dokładne dane przedmiotów
+of.options.ADVANCED_TOOLTIPS.tooltip.1=Dokładne dane przedmiotów, bloków oraz narzędzi
+of.options.ADVANCED_TOOLTIPS.tooltip.2=  Wł. - pokazuj dokładne dane
+of.options.ADVANCED_TOOLTIPS.tooltip.3=  Wył. - nie pokazuj dokładnych danych (domyślne)
+of.options.ADVANCED_TOOLTIPS.tooltip.4=Ta opcja pokazuje więcej informacji o dowolnym
+of.options.ADVANCED_TOOLTIPS.tooltip.5=przedmiocie (id, wytrzymałość), a także dane o nim
+of.options.ADVANCED_TOOLTIPS.tooltip.6=dla shaderów (id, źródło, domyślna wartość).
+
 of.options.DROPPED_ITEMS=Upuszczone przedmioty
 of.options.DROPPED_ITEMS.tooltip.1=Upuszczone przedmioty
 of.options.DROPPED_ITEMS.tooltip.2=  Domyślne - przystosowane do ustawienia graficznego
@@ -392,11 +423,12 @@ of.options.DYNAMIC_FOV.tooltip.5=sprintujesz lub naciągasz łuk.
 
 of.options.DYNAMIC_LIGHTS=Dynamiczne światło
 of.options.DYNAMIC_LIGHTS.tooltip.1=Dynamiczne światło
-of.options.DYNAMIC_LIGHTS.tooltip.2=  Wł. - funkcja dynamicznego światła włączona
-of.options.DYNAMIC_LIGHTS.tooltip.3=  Wył. - funkcja dynamicznego światła wyłączona (domyślne)
-of.options.DYNAMIC_LIGHTS.tooltip.4=Przedmioty świecące (pochodnia, jasnopył, itp.)
-of.options.DYNAMIC_LIGHTS.tooltip.5=oświetlają teren, gdy są w Twojej dłoni,
-of.options.DYNAMIC_LIGHTS.tooltip.6=dłoni innego gracza lub gdy są upuszczone na podłoże.
+of.options.DYNAMIC_LIGHTS.tooltip.2=  Wył. - funkcja dynamicznego światła wyłączona (domyślne)
+of.options.DYNAMIC_LIGHTS.tooltip.3=  Szybka - proste dynamiczne światła - aktualizowane co 500ms
+of.options.DYNAMIC_LIGHTS.tooltip.4=  Dokładna - zaawansowane dynamiczne światło - aktualizowane na bieżąco
+of.options.DYNAMIC_LIGHTS.tooltip.5=Przedmioty świecące (pochodnia, jasnopył, itp.)
+of.options.DYNAMIC_LIGHTS.tooltip.6=oświetlają teren, gdy są w Twojej dłoni,
+of.options.DYNAMIC_LIGHTS.tooltip.7=dłoni innego gracza lub gdy są upuszczone na podłoże.
 
 # Performance
 
@@ -544,4 +576,10 @@ of.options.AUTOSAVE_TICKS.tooltip.1=Częstotliwość autozapisu
 of.options.AUTOSAVE_TICKS.tooltip.2=Domyślna częstotliwość (2s) jest NIEZALECANA.
 of.options.AUTOSAVE_TICKS.tooltip.3=Autozapisy często powodują ścięcia gry.
 
-options.anaglyph.tooltip.1=Tryb 3D wymaga czerwono-niebieskich okularów 3D.
+of.options.SCREENSHOT_SIZE=Rozmiar zrzutów ekranu
+of.options.SCREENSHOT_SIZE.tooltip.1=Rozmiar zrzutów ekranu
+of.options.SCREENSHOT_SIZE.tooltip.2=  Domyślne - domyślny rozmiar
+of.options.SCREENSHOT_SIZE.tooltip.3=  2x-4x - własny rozmiar
+of.options.SCREENSHOT_SIZE.tooltip.4=Zapisywanie większych zrzutów może wymagać więcej pamięci,
+of.options.SCREENSHOT_SIZE.tooltip.5=opcja nie jest kompatybilna z szybkim renderowaniem ani
+of.options.SCREENSHOT_SIZE.tooltip.6=antyaliasingiem. Wymaga wsparcia bufora ramki GPU.

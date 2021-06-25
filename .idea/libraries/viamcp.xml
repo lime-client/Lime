@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="viamcp">
+    <CLASSES>
+      <root url="file://$PROJECT_DIR$/lib/viamcp" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+    <jarDirectory url="file://$PROJECT_DIR$/lib/viamcp" recursive="false" />
+  </library>
+</component>

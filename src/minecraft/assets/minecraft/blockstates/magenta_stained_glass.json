@@ -1,7 +1,5 @@
 {
-  "variants": {
-    "normal": {
-      "model": "glass_magenta"
+    "variants": {
+        "normal": { "model": "glass_magenta" }
     }
-  }
 }

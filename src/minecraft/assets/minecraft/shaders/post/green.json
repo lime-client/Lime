@@ -1,53 +1,41 @@
 {
-  "targets": [
-    "swap"
-  ],
-  "passes": [
-    {
-      "name": "color_convolve",
-      "intarget": "minecraft:main",
-      "outtarget": "swap",
-      "uniforms": [
+    "targets": [
+        "swap"
+    ],
+    "passes": [
         {
-          "name": "RedMatrix",
-          "values": [
-            0.0,
-            0.0,
-            0.0
-          ]
+            "name": "color_convolve",
+            "intarget": "minecraft:main",
+            "outtarget": "swap",
+            "uniforms": [
+                {
+                    "name": "RedMatrix",
+                    "values": [ 0.0, 0.0, 0.0 ]
+                },
+                {
+                    "name": "GreenMatrix",
+                    "values": [ 0.3, 0.59, 0.11 ]
+                },
+                {
+                    "name": "BlueMatrix",
+                    "values": [ 0.0, 0.0, 0.0 ]
+                }
+            ]
         },
         {
-          "name": "GreenMatrix",
-          "values": [
-            0.3,
-            0.59,
-            0.11
-          ]
+            "name": "bits",
+            "intarget": "swap",
+            "outtarget": "minecraft:main"
         },
         {
-          "name": "BlueMatrix",
-          "values": [
-            0.0,
-            0.0,
-            0.0
-          ]
+            "name": "scan_pincushion",
+            "intarget": "minecraft:main",
+            "outtarget": "swap"
+        },
+        {
+            "name": "blit",
+            "intarget": "swap",
+            "outtarget": "minecraft:main"
         }
-      ]
-    },
-    {
-      "name": "bits",
-      "intarget": "swap",
-      "outtarget": "minecraft:main"
-    },
-    {
-      "name": "scan_pincushion",
-      "intarget": "minecraft:main",
-      "outtarget": "swap"
-    },
-    {
-      "name": "blit",
-      "intarget": "swap",
-      "outtarget": "minecraft:main"
-    }
-  ]
+    ]
 }

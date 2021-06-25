@@ -14,7 +14,7 @@ difficulty:2
 fancyGraphics:true
 ao:2
 renderClouds:false
-resourcePacks:["! Eum3(315) Blue Revamp.zip"]
+resourcePacks:["§l§6! Molten 256x.zip"]
 incompatibleResourcePacks:[]
 lastServer:localhost
 lang:en_US

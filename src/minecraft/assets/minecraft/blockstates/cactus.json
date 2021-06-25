@@ -1,7 +1,5 @@
 {
-  "variants": {
-    "normal": {
-      "model": "cactus"
+    "variants": {
+        "normal": { "model": "cactus" }
     }
-  }
 }

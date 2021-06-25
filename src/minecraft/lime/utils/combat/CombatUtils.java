@@ -13,14 +13,14 @@ import static lime.utils.other.MathUtils.random;
 public class CombatUtils implements IUtil {
 
     public static float[] getRotations(double posX, double posY, double posZ) {
-        double x = posX - mc.thePlayer.posX;
-        double y = posY - (mc.thePlayer.posY + (double)mc.thePlayer.getEyeHeight());
-        double z = posZ - mc.thePlayer.posZ;
-        double dist = MathHelper.sqrt_double(x * x + z * z);
-        float yaw = (float)(Math.atan2(z, x) * 180f / 3.141592653589793f) - 90f;
-        float pitch = (float)(-(Math.atan2(y, dist) * 180.0D / 3.141592653589793));
-
-        return new float[]{yaw, pitch};
+        EntityLivingBase player = mc.thePlayer;
+        double x = posX - player.posX;
+        double y = posY - player.posY + player.getEyeHeight();
+        double z = posZ - player.posZ;
+        double dist = Math.sqrt(x * x + z * z);
+        float yaw = (float)(Math.atan2(z, x) * 180.0D / Math.PI) - 90.0F;
+        float pitch = (float)-(Math.atan2(y, dist) * 180.0D / Math.PI);
+        return new float[] { yaw, pitch };
     }
 
     public static float[] getEntityRotations(EntityLivingBase e, boolean random) {

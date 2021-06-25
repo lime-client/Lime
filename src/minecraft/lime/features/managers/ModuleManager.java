@@ -35,6 +35,7 @@ public class ModuleManager {
         registerModule(new Blink());
 
         // MOVEMENT
+        registerModule(new TargetStrafe());
         registerModule(new LongJump());
         registerModule(new NoSlow());
         registerModule(new Flight());

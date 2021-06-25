@@ -7,8 +7,12 @@ import lime.core.events.impl.EventPacket;
 import lime.features.module.Category;
 import lime.features.module.Module;
 import lime.features.module.ModuleData;
+import lime.features.module.impl.combat.KillAura;
 import lime.features.setting.impl.EnumValue;
+import lime.utils.combat.CombatUtils;
 import lime.utils.movement.MovementUtils;
+import lime.utils.other.MathUtils;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.network.play.server.S08PacketPlayerPosLook;
 import net.minecraft.potion.Potion;
 
@@ -133,7 +137,12 @@ public class Speed extends Module {
             }
 
             this.moveSpeed = Math.max(this.moveSpeed, MovementUtils.getBaseMoveSpeed());
-            MovementUtils.setSpeed(e, this.moveSpeed);
+            if (TargetStrafe.canMove && KillAura.getEntity() != null && KillAura.getEntity() instanceof EntityLivingBase) {
+                EntityLivingBase entity = (EntityLivingBase) KillAura.getEntity(); 
+                MovementUtils.setSpeed(e, moveSpeed, CombatUtils.getRotations(entity.posX + MathUtils.random(0.03D, -0.03D), entity.posY + entity.getEyeHeight() - 0.4D + MathUtils.random(0.07D, -0.07D), entity.posZ + MathUtils.random(0.03D, -0.03D))[0], TargetStrafe.direction, 0);
+            } else {
+                MovementUtils.setSpeed(e, moveSpeed);
+            }
         }
     }
 }

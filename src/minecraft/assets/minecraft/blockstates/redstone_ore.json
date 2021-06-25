@@ -1,7 +1,5 @@
 {
-  "variants": {
-    "normal": {
-      "model": "redstone_ore"
+    "variants": {
+        "normal": { "model": "redstone_ore" }
     }
-  }
 }

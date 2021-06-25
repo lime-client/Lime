@@ -1,7 +1,5 @@
 {
-  "variants": {
-    "normal": {
-      "model": "orange_tulip"
+    "variants": {
+        "normal": { "model": "orange_tulip" }
     }
-  }
 }

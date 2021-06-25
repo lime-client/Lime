@@ -1,7 +1,5 @@
 {
-  "variants": {
-    "normal": {
-      "model": "reeds"
+    "variants": {
+        "normal": { "model": "reeds" }
     }
-  }
 }

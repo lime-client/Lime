@@ -1,7 +1,5 @@
 {
-  "variants": {
-    "normal": {
-      "model": "crafting_table"
+    "variants": {
+        "normal": { "model": "crafting_table" }
     }
-  }
 }

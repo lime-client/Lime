@@ -50,7 +50,7 @@
         {
           "name": "Reach",
           "type": "slider",
-          "value": 3.0
+          "value": 4.8500000000000005
         },
         {
           "name": "CPS",
@@ -102,7 +102,7 @@
     {
       "moduleName": "Anti Bot",
       "key": -1,
-      "toggled": false
+      "toggled": true
     },
     {
       "moduleName": "Fast Bow",
@@ -118,6 +118,28 @@
           "name": "Blink Delay",
           "type": "slider",
           "value": 200.0
+        }
+      ]
+    },
+    {
+      "moduleName": "Target Strafe",
+      "key": -1,
+      "toggled": true,
+      "settings": [
+        {
+          "name": "Distance",
+          "type": "slider",
+          "value": 3.1
+        },
+        {
+          "name": "Circle",
+          "type": "bool",
+          "value": false
+        },
+        {
+          "name": "Only Speed",
+          "type": "bool",
+          "value": false
         }
       ]
     },
@@ -148,7 +170,7 @@
     {
       "moduleName": "Flight",
       "key": 33,
-      "toggled": true,
+      "toggled": false,
       "settings": [
         {
           "name": "Mode",
@@ -165,12 +187,12 @@
     {
       "moduleName": "Speed",
       "key": 47,
-      "toggled": false,
+      "toggled": true,
       "settings": [
         {
           "name": "Mode",
           "type": "enum",
-          "value": "vanilla_bhop"
+          "value": "ncp"
         }
       ]
     },

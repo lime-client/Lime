@@ -17,6 +17,9 @@ of.message.aa.shaders2=Будь ласка, відключіть шейдери 
 of.message.af.shaders1=Анізотропна фільтрація не сумісне з шейдерами.
 of.message.af.shaders2=Будь ласка, відключіть шейдери щоб увімкнути цю функцію.
 
+of.message.an.shaders1=3D ефект не сумісний з шейдерами.
+of.message.an.shaders2=Вимкніть шейдери щоб увімкнути цю функцію.
+
 of.message.fr.shaders1=Швидкий рендер не сумісний з шейдерами.
 of.message.fr.shaders2=Будь ласка, вимкнуть шейдери щоб увімкнути цю функцію.
 
@@ -29,6 +32,9 @@ of.message.shaders.af2=Будь ласка, встановіть Якість ->
 of.message.shaders.fr1=Шейдери не сумісні з швидким рендером.
 of.message.shaders.fr2=Будь ласка, встановіть Продуктивність -> Швидкий рендер на Вимк і перезапустіть гру.
 
+of.message.shaders.an1=Шейдери не сумісні з 3D анагліфом.
+of.message.shaders.an2=Будь-ласка, встановіть Інші -> 3D ефект на Вимк.
+ 
 of.message.newVersion=Нова версія §eOptiFine§f доступна: §e%s§f
 of.message.java64Bit=Встанови §e64-bit Java§f щоб покращити продуктивність
 of.message.openglError=§eOpenGL Error§f: %s (%s)
@@ -36,7 +42,9 @@ of.message.openglError=§eOpenGL Error§f: %s (%s)
 of.message.shaders.loading=Завантажуємо шейдери: %s
 
 of.message.other.reset=Встановити всі налаштування на їхні початкові значення?
- 
+
+of.message.loadingVisibleChunks=Завантажувати видимі чанки
+
 # Video settings
 
 options.graphics.tooltip.1=Візуальна якість
@@ -45,6 +53,10 @@ options.graphics.tooltip.3=  Красива - вижча якість, пові�
 options.graphics.tooltip.4=Змінює зовнішній вигляд хмар, листя води
 options.graphics.tooltip.5=тіней і сторін трави.
 
+of.options.renderDistance.tiny=Маленька
+of.options.renderDistance.short=Коротка
+of.options.renderDistance.normal=Нормальна
+of.options.renderDistance.far=Далека
 of.options.renderDistance.extreme=Надзвичайна
 
 options.renderDistance.tooltip.1=Видима відстань
@@ -80,6 +92,11 @@ options.viewBobbing.tooltip.2=При використанні міпмапів �
 
 options.guiScale.tooltip.1=Розмір GUI
 options.guiScale.tooltip.2=Найменше GUI буде швидше
+options.guiScale.tooltip.2=  Авто - максимальний розмір
+options.guiScale.tooltip.3=  Малий, Нормальний, Великий - 1x до 3x
+options.guiScale.tooltip.4=  4x до 10x - доступні на 4K дисплеях
+options.guiScale.tooltip.5=Непарні значення (1x, 3x, 5x ...) не підтримуються юнікодом.
+options.guiScale.tooltip.6=Менший GUI швидший.
 
 options.vbo.tooltip.1=Об'єкти буфера вершин
 options.vbo.tooltip.2=Використовує альтернативну технологію рендерингу, що зазвичай
@@ -100,6 +117,11 @@ options.anaglyph.tooltip.4=Потребує червоно-сині окуляр
 options.blockAlternatives.tooltip.1=Альтернативні блоки
 options.blockAlternatives.tooltip.2=Використовує альтернативні моделі для деяких блоків.
 options.blockAlternatives.tooltip.3=Базується на обраному ресурспаці.
+
+of.options.ALTERNATE_BLOCKS=Альтернативні блоки
+of.options.ALTERNATE_BLOCKS.tooltip.1=Альтернативні блоки
+of.options.ALTERNATE_BLOCKS.tooltip.2=Використовує альтернативні моделі для деяких блоків.
+of.options.ALTERNATE_BLOCKS.tooltip.3=Базується на обраному ресурспаці.
 
 of.options.FOG_FANCY=Туман
 of.options.FOG_FANCY.tooltip.1=Тип туману
@@ -296,6 +318,13 @@ of.options.CUSTOM_ITEMS.tooltip.3=  Вимк - базові речі, швидш
 of.options.CUSTOM_ITEMS.tooltip.4=Власна текстура неба може бути змінена
 of.options.CUSTOM_ITEMS.tooltip.5=ресурспаком
 
+of.options.CUSTOM_ENTITY_MODELS=Власні моделі істот
+of.options.CUSTOM_ENTITY_MODELS.tooltip.1=Власні моделі істот
+of.options.CUSTOM_ENTITY_MODELS.tooltip.2=  Увімк - власні моделі для істот (базово), повільно
+of.options.CUSTOM_ENTITY_MODELS.tooltip.3=  Вимк - стандартні моделі істот, швидше
+of.options.CUSTOM_ENTITY_MODELS.tooltip.4=Моделі істот можуть бути змінені
+of.options.CUSTOM_ENTITY_MODELS.tooltip.5=ресурспаком
+
 # Details
 
 of.options.CLOUDS=Хмари
@@ -364,6 +393,14 @@ of.options.HELD_ITEM_TOOLTIPS.tooltip.1=Спливаючі підказки
 of.options.HELD_ITEM_TOOLTIPS.tooltip.2=  Увімк - показувати спливаючі підказки (базово)
 of.options.HELD_ITEM_TOOLTIPS.tooltip.3=  Вимк - не показувати підказок
 
+of.options.ADVANCED_TOOLTIPS=Розширені підказки
+of.options.ADVANCED_TOOLTIPS.tooltip.1=Розширені спливаючі підказки
+of.options.ADVANCED_TOOLTIPS.tooltip.2=  Увімк - показувати розширені підказки 
+of.options.ADVANCED_TOOLTIPS.tooltip.3=  Вимк - не показувати розширені підказки (базово)
+of.options.ADVANCED_TOOLTIPS.tooltip.4=Розширені підказки показують більше інформації про
+of.options.ADVANCED_TOOLTIPS.tooltip.5=речі (id, міцність) і для налаштування шейдерів
+of.options.ADVANCED_TOOLTIPS.tooltip.6=(id, джерело, стандартне значення)
+
 of.options.DROPPED_ITEMS=Викинуті речі
 of.options.DROPPED_ITEMS.tooltip.1=Викинуті речі
 of.options.DROPPED_ITEMS.tooltip.2=  Базові - як у налаштуваннях відео
@@ -390,6 +427,15 @@ of.options.DYNAMIC_FOV.tooltip.2=  Увімк - динамічний FOV уві�
 of.options.DYNAMIC_FOV.tooltip.3=  Вимк - динамічний FOV вимкнуто
 of.options.DYNAMIC_FOV.tooltip.4=Змінює поле зору (FOV) коли літаємо, біжимо 
 of.options.DYNAMIC_FOV.tooltip.5=чи натягуємо лук.
+
+of.options.DYNAMIC_LIGHTS=Динамічне освітлення
+of.options.DYNAMIC_LIGHTS.tooltip.1=Динамічне освітлення
+of.options.DYNAMIC_LIGHTS.tooltip.2=  Вимк - без динамічного освітлення (базово)
+of.options.DYNAMIC_LIGHTS.tooltip.3=  Швидка - швидке динамічне освітлення (оновлення кожні 500мс)
+of.options.DYNAMIC_LIGHTS.tooltip.4=  Красива - красиве динамічне освітлення (оновлення в реальному часу)
+of.options.DYNAMIC_LIGHTS.tooltip.5=Дозволяє випромінювати світло речам (факел, світлокамінь, т.д.)
+of.options.DYNAMIC_LIGHTS.tooltip.6=щоб освітлювати все навкруги, коли знаходяться в руці,
+of.options.DYNAMIC_LIGHTS.tooltip.7=вдягнуті іншим гравцем або викинуті на землю.
 
 # Performance
 
@@ -537,4 +583,10 @@ of.options.AUTOSAVE_TICKS.tooltip.1=Інтервал автозбереженн�
 of.options.AUTOSAVE_TICKS.tooltip.2=Базовий інтервал збереження (2с) НЕ РЕКОМЕНДОВАНО.
 of.options.AUTOSAVE_TICKS.tooltip.3=Автозбереження спричиняє "фріз смерті".
 
-options.anaglyph.tooltip.1=3D режим використовується з червоно-синіми окулярами.
+of.options.SCREENSHOT_SIZE=Розмір знімку екрану
+of.options.SCREENSHOT_SIZE.tooltip.1=Розмір скріншоту
+of.options.SCREENSHOT_SIZE.tooltip.2=  Базовий - стандартний розмір скріншоту
+of.options.SCREENSHOT_SIZE.tooltip.3=  2x-4x - власний розмір скріншоту
+of.options.SCREENSHOT_SIZE.tooltip.4=Зйомка більшого скріншоту потребує більше пам'яті
+of.options.SCREENSHOT_SIZE.tooltip.5=Не сумісне з швидким рендером і згладжуванням
+of.options.SCREENSHOT_SIZE.tooltip.6=Потребує підтримку фреймбуфера GPU.

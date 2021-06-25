@@ -1,7 +1,5 @@
 {
-  "variants": {
-    "normal": {
-      "model": "poppy"
+    "variants": {
+        "normal": { "model": "poppy" }
     }
-  }
 }
