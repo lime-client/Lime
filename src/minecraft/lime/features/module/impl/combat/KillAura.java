@@ -40,11 +40,11 @@ public class KillAura extends Module {
     private enum TargetESP { NONE, CIRCLE }
 
     private final EnumValue state = new EnumValue("State", this, State.PRE);
-    private final EnumValue priority = new EnumValue("Priority", this, Priority.HEALTH);
+    private final EnumValue priority = new EnumValue("Priority", this, Priority.DISTANCE);
     private final EnumValue rotations = new EnumValue("Rotations", this, Rotations.BASIC);
     private final EnumValue targetEsp = new EnumValue("Target ESP", this, TargetESP.CIRCLE);
     private final EnumValue autoBlock = new EnumValue("Auto Block", this, AutoBlock.FAKE);
-    private final SlideValue reach = new SlideValue("Reach", this, 2.8, 6, 4.2, 0.05);
+    private final SlideValue range = new SlideValue("Range", this, 2.8, 6, 4.2, 0.05);
     private final SlideValue cps = new SlideValue("CPS", this, 1, 20, 8, 1);
     private final BoolValue players = new BoolValue("Players", this, true);
     private final BoolValue passives = new BoolValue("Passives", this, false);
@@ -86,9 +86,7 @@ public class KillAura extends Module {
 
     @EventTarget
     public void onMotion(EventMotion e) {
-        Entity entity = null;
-        if(priority.is("distance")) entity = getNearestEntity();
-        if(priority.is("health")) entity = getEntityWithLowestHealth();
+        Entity entity = getEntityByPriority();
 
         if(entity != null && isValid(entity)) {
             // Rotations
@@ -110,7 +108,7 @@ public class KillAura extends Module {
 
                 // Ray Cast
                 if(this.rayCast.isEnabled()) {
-                    entity = CombatUtils.raycastEntity(this.reach.getCurrent(), rotations);
+                    entity = CombatUtils.raycastEntity(this.range.getCurrent(), rotations);
 
                     if(entity == null) return;
                 }
@@ -123,6 +121,8 @@ public class KillAura extends Module {
                 mc.thePlayer.setItemInUse(mc.thePlayer.getHeldItem(), 32767);
                 isBlocking = true;
             }
+
+            if(!state.is(e.getState().name())) return;
 
             if(cpsTimer.hasReached(20 / (int) this.cps.getCurrent() * 50L)) {
                 mc.thePlayer.swingItem();
@@ -192,38 +192,30 @@ public class KillAura extends Module {
         return mc.thePlayer.getHeldItem() != null && mc.thePlayer.getHeldItem().getItem() instanceof ItemSword;
     }
 
-    private Entity getNearestEntity() {
+    private Entity getEntityByPriority() {
         ArrayList<Entity> entities = new ArrayList<>();
 
         for(Entity entity : mc.theWorld.getLoadedEntityList()) {
-            if(this.isValid(entity) && mc.thePlayer != entity && entity instanceof EntityLivingBase && mc.thePlayer.getDistanceToEntity(entity) <= this.reach.getCurrent())
+            if(this.isValid(entity) && mc.thePlayer != entity && entity instanceof EntityLivingBase && mc.thePlayer.getDistanceToEntity(entity) <= this.range.getCurrent())
                 entities.add(entity);
         }
 
         if(entities.isEmpty()) return null;
 
-        entities.sort(Comparator.comparingDouble(entity -> mc.thePlayer.getDistanceToEntity(entity)));
-
-        return entities.get(0);
-    }
-
-    private Entity getEntityWithLowestHealth() {
-        ArrayList<Entity> entities = new ArrayList<>();
-
-        for(Entity entity : mc.theWorld.getLoadedEntityList()) {
-            if(this.isValid(entity) && mc.thePlayer != entity && mc.thePlayer.getDistanceToEntity(entity) <= this.reach.getCurrent())
-                entities.add(entity);
+        switch(priority.getSelected().name().toLowerCase()) {
+            case "health":
+                entities.sort(Comparator.comparingDouble(entity -> ((EntityLivingBase) entity).getHealth()));
+                break;
+            case "distance":
+                entities.sort(Comparator.comparingDouble(entity -> mc.thePlayer.getDistanceToEntity(entity)));
+                break;
         }
-
-        if(entities.isEmpty()) return null;
-
-        entities.sort(Comparator.comparingDouble(entity -> ((EntityLivingBase) entity).getHealth()));
 
         return entities.get(0);
     }
 
     private boolean isValid(Entity entity) {
         if((deathCheck.isEnabled() && !entity.isEntityAlive()) || (!mc.thePlayer.canEntityBeSeen(entity) && !throughWalls.isEnabled())) return false;
-        return (entity instanceof EntityPlayer && this.players.isEnabled()) || ((entity instanceof EntityVillager || entity instanceof EntityAnimal) && this.passives.isEnabled()) || (entity instanceof EntityMob && this.mobs.isEnabled()) && mc.thePlayer.getDistanceToEntity(entity) <= this.reach.getCurrent();
+        return (entity instanceof EntityPlayer && this.players.isEnabled()) || ((entity instanceof EntityVillager || entity instanceof EntityAnimal) && this.passives.isEnabled()) || (entity instanceof EntityMob && this.mobs.isEnabled()) && mc.thePlayer.getDistanceToEntity(entity) <= this.range.getCurrent();
     }
 }
