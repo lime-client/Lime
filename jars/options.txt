@@ -8,13 +8,13 @@ guiScale:2
 particles:0
 bobView:true
 anaglyph3d:false
-maxFps:260
+maxFps:145
 fboEnable:true
 difficulty:2
 fancyGraphics:true
 ao:2
 renderClouds:false
-resourcePacks:["§l§6! Molten 256x.zip"]
+resourcePacks:["! Eum3(315) Blue Revamp.zip"]
 incompatibleResourcePacks:[]
 lastServer:localhost
 lang:en_US
@@ -25,7 +25,7 @@ chatLinksPrompt:true
 chatOpacity:1.0
 snooperEnabled:true
 fullscreen:false
-enableVsync:true
+enableVsync:false
 useVbo:false
 hideServerAddress:false
 advancedItemTooltips:false
