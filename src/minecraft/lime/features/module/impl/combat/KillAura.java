@@ -18,7 +18,12 @@ import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemSword;
 import net.minecraft.network.play.client.C02PacketUseEntity;
+import net.minecraft.network.play.client.C07PacketPlayerDigging;
+import net.minecraft.network.play.client.C08PacketPlayerBlockPlacement;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import org.lwjgl.opengl.GL11;
 
 import java.util.ArrayList;
@@ -58,13 +63,20 @@ public class KillAura extends Module {
     private boolean down;
     private final Timer timer = new Timer();
 
+    // AutoBlock
+    private boolean isBlocking = false;
+
     @Override
     public void onEnable() {
-        super.onEnable();
+        isBlocking = false;
     }
 
     @Override
     public void onDisable() {
+        if(autoBlock.is("basic") && hasSword() && isBlocking) {
+            mc.getNetHandler().addToSendQueue(new C07PacketPlayerDigging(C07PacketPlayerDigging.Action.RELEASE_USE_ITEM, BlockPos.ORIGIN, EnumFacing.DOWN));
+            isBlocking = false;
+        }
         entity = null;
     }
 
@@ -74,8 +86,6 @@ public class KillAura extends Module {
 
     @EventTarget
     public void onMotion(EventMotion e) {
-        if(!state.getSelected().name().equalsIgnoreCase(e.getState().name())) return;
-
         Entity entity = null;
         if(priority.is("distance")) entity = getNearestEntity();
         if(priority.is("health")) entity = getEntityWithLowestHealth();
@@ -108,20 +118,32 @@ public class KillAura extends Module {
 
             KillAura.entity = entity;
 
+            if(!e.isPre() && hasSword() && autoBlock.is("basic")) {
+                mc.getNetHandler().addToSendQueue(new C08PacketPlayerBlockPlacement(mc.thePlayer.getHeldItem()));
+                mc.thePlayer.setItemInUse(mc.thePlayer.getHeldItem(), 32767);
+                isBlocking = true;
+            }
+
             if(cpsTimer.hasReached(20 / (int) this.cps.getCurrent() * 50L)) {
                 mc.thePlayer.swingItem();
                 mc.getNetHandler().addToSendQueue(new C02PacketUseEntity(entity, C02PacketUseEntity.Action.ATTACK));
                 if(!this.keepSprint.isEnabled()) mc.thePlayer.setSprinting(false);
                 cpsTimer.reset();
             }
-        } else
+        } else {
             KillAura.entity = null;
+            isBlocking = false;
+            if(autoBlock.is("basic") && hasSword() && isBlocking) {
+                mc.getNetHandler().addToSendQueue(new C07PacketPlayerDigging(C07PacketPlayerDigging.Action.RELEASE_USE_ITEM, BlockPos.ORIGIN, EnumFacing.DOWN));
+                isBlocking = false;
+            }
+        }
     }
 
 
     @EventTarget
     public void on3D(Event3D e) {
-        if(KillAura.getEntity() != null && isValid(entity)) {
+        if(KillAura.getEntity() != null && isValid(entity) && targetEsp.is("circle")) {
             GL11.glPushMatrix();
             GlStateManager.disableTexture2D();
             GlStateManager.disableBlend();
@@ -166,6 +188,9 @@ public class KillAura extends Module {
 
     }
 
+    private boolean hasSword() {
+        return mc.thePlayer.getHeldItem() != null && mc.thePlayer.getHeldItem().getItem() instanceof ItemSword;
+    }
 
     private Entity getNearestEntity() {
         ArrayList<Entity> entities = new ArrayList<>();
@@ -198,7 +223,7 @@ public class KillAura extends Module {
     }
 
     private boolean isValid(Entity entity) {
-        if(deathCheck.isEnabled() && !entity.isEntityAlive()) return false;
+        if((deathCheck.isEnabled() && !entity.isEntityAlive()) || (!mc.thePlayer.canEntityBeSeen(entity) && !throughWalls.isEnabled())) return false;
         return (entity instanceof EntityPlayer && this.players.isEnabled()) || ((entity instanceof EntityVillager || entity instanceof EntityAnimal) && this.passives.isEnabled()) || (entity instanceof EntityMob && this.mobs.isEnabled()) && mc.thePlayer.getDistanceToEntity(entity) <= this.reach.getCurrent();
     }
 }
