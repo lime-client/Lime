@@ -61,6 +61,7 @@ public class ModuleManager {
         registerModule(new FullBright());
         registerModule(new ClickGUI());
         registerModule(new Tracers());
+        registerModule(new Camera());
         registerModule(new Chams());
         registerModule(new ESP());
         registerModule(new HUD());

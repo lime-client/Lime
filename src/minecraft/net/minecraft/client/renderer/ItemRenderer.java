@@ -3,6 +3,8 @@ package net.minecraft.client.renderer;
 import lime.core.Lime;
 import lime.features.module.impl.combat.KillAura;
 import lime.features.module.impl.render.Animations;
+import lime.features.module.impl.render.Camera;
+import lime.features.setting.impl.BoolValue;
 import lime.features.setting.impl.EnumValue;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -567,6 +569,9 @@ public class ItemRenderer
      */
     private void renderFireInFirstPerson(float p_78442_1_)
     {
+        if(((BoolValue) Lime.getInstance().getSettingsManager().getSetting("No Fire", Lime.getInstance().getModuleManager().getModuleC(Camera.class))).isEnabled()) {
+            return;
+        }
         Tessellator tessellator = Tessellator.getInstance();
         WorldRenderer worldrenderer = tessellator.getWorldRenderer();
         GlStateManager.color(1.0F, 1.0F, 1.0F, 0.9F);

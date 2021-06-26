@@ -11,8 +11,11 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.Callable;
 
+import lime.core.Lime;
 import lime.core.events.EventBus;
 import lime.core.events.impl.Event3D;
+import lime.features.module.impl.render.Camera;
+import lime.features.setting.impl.BoolValue;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockBed;
 import net.minecraft.block.material.Material;
@@ -665,6 +668,9 @@ public class EntityRenderer implements IResourceManagerReloadListener
     {
         if (this.mc.getRenderViewEntity() instanceof EntityLivingBase)
         {
+            if(((BoolValue) Lime.getInstance().getSettingsManager().getSetting("No Hurt Cam", Lime.getInstance().getModuleManager().getModuleC(Camera.class))).isEnabled()) {
+                return;
+            }
             EntityLivingBase entitylivingbase = (EntityLivingBase)this.mc.getRenderViewEntity();
             float f = (float)entitylivingbase.hurtTime - partialTicks;
 
