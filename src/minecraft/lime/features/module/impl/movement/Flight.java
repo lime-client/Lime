@@ -51,8 +51,10 @@ public class Flight extends Module {
         if(mode.is("vanilla")) {
             mc.thePlayer.motionY = mc.gameSettings.keyBindJump.isKeyDown() ? 0.80 : mc.gameSettings.keyBindSneak.isKeyDown() ? -0.80 : 0;
             if(mc.thePlayer.isMoving()) {
-                MovementUtils.setSpeed(1.5);
+                MovementUtils.setSpeed(0.8);
                 mc.thePlayer.cameraYaw = 0.116f;
+            } else {
+                MovementUtils.setSpeed(0);
             }
         }
         if(mode.is("verus") && mc.gameSettings.keyBindJump.isKeyDown() && e.isPre()) {
