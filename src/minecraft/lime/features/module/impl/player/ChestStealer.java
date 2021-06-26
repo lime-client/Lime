@@ -89,12 +89,12 @@ public class ChestStealer extends Module {
 
         return item instanceof ItemSword || item instanceof ItemBlock || item instanceof ItemTool || item instanceof ItemFood
                 || item instanceof ItemArmor || item instanceof ItemBow || item.getUnlocalizedName().contains("arrow") ||
-                item instanceof ItemEnderPearl;
+                item instanceof ItemEnderPearl || (item instanceof ItemPotion);
     }
 
     public boolean isChestEmpty(ContainerChest chest) {
         for(int i = 0; i < chest.getLowerChestInventory().getSizeInventory(); ++i) {
-            if (chest.getLowerChestInventory().getStackInSlot(i) != null) {
+            if (chest.getLowerChestInventory().getStackInSlot(i) != null && isValidItem(chest.getLowerChestInventory().getStackInSlot(i).getItem())) {
                 return false;
             }
         }

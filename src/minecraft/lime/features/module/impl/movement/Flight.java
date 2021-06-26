@@ -4,13 +4,16 @@ import lime.core.events.EventTarget;
 import lime.core.events.impl.Event2D;
 import lime.core.events.impl.EventBoundingBox;
 import lime.core.events.impl.EventMotion;
+import lime.features.managers.FontManager;
 import lime.features.module.Category;
 import lime.features.module.Module;
 import lime.features.module.ModuleData;
+import lime.features.setting.impl.BoolValue;
 import lime.features.setting.impl.EnumValue;
 import lime.utils.movement.MovementUtils;
 import net.minecraft.block.BlockAir;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.ResourceLocation;
 
 @ModuleData(name = "Flight", category = Category.MOVEMENT)
 public class Flight extends Module {
@@ -21,6 +24,7 @@ public class Flight extends Module {
 
     //Settings
     private final EnumValue mode = new EnumValue("Mode", this, Mode.VANILLA);
+    private final BoolValue bobbing = new BoolValue("Bobbing", this, true);
 
     private double moveSpeed;
 
@@ -48,6 +52,9 @@ public class Flight extends Module {
 
     @EventTarget
     public void onMotion(EventMotion e) {
+        if(bobbing.isEnabled() && mc.thePlayer.isMoving()) {
+            mc.thePlayer.cameraYaw = 0.116f;
+        }
         if(mode.is("vanilla")) {
             mc.thePlayer.motionY = mc.gameSettings.keyBindJump.isKeyDown() ? 0.80 : mc.gameSettings.keyBindSneak.isKeyDown() ? -0.80 : 0;
             if(mc.thePlayer.isMoving()) {

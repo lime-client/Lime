@@ -23,6 +23,7 @@ public class ModuleManager {
 
         // COMBAT
         registerModule(new AutoGapple());
+        registerModule(new AutoSword());
         registerModule(new Criticals());
         registerModule(new KillAura());
         registerModule(new Velocity());
@@ -43,11 +44,14 @@ public class ModuleManager {
         registerModule(new Step());
 
         // PLAYER
+        registerModule(new InventoryManager());
         registerModule(new InventoryMove());
         registerModule(new ClickTeleport());
         registerModule(new ChestStealer());
+        registerModule(new AutoArmor());
         registerModule(new SpeedMine());
         registerModule(new FastPlace());
+        registerModule(new AutoTool());
         registerModule(new AntiVoid());
         registerModule(new Freecam());
         registerModule(new FastEat());

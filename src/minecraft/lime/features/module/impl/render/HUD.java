@@ -8,6 +8,7 @@ import lime.features.managers.FontManager;
 import lime.features.module.Category;
 import lime.features.module.Module;
 import lime.features.module.ModuleData;
+import lime.utils.render.ColorUtils;
 import net.minecraft.client.gui.Gui;
 import org.lwjgl.opengl.GL11;
 
@@ -20,7 +21,8 @@ public class HUD extends Module {
     @EventTarget
     public void on2D(Event2D e) {
         for(int i = 0; i < 361; i++) {
-            Gui.drawRect(5 + Math.toRadians(i), 5 + Math.toRadians(i), 5 + Math.toRadians(i) + 3, 5 + Math.toRadians(i) + 3, new Color(0, 255, 0).getRGB());
+            Color color = ColorUtils.blend2colors(new Color(0, 255, 0), new Color(0, 255, 0).darker(), (System.nanoTime() + (0 * 100000000L * 2)) / 1.0E09F % 2.0F);
+            Gui.drawRect(5 + Math.toRadians(i), 5 + Math.toRadians(i), 5 + Math.toRadians(i) + 3, 5 + Math.toRadians(i) + 3, color.getRGB());
         }
 
         ArrayList<Module> modules = new ArrayList<>(Lime.getInstance().getModuleManager().getModules());
@@ -34,8 +36,12 @@ public class HUD extends Module {
         int yCount = 0;
         for (Module module : modules) {
             if(module.isToggled()) {
-                Gui.drawRect(e.getScaledResolution().getScaledWidth() - 1, yCount * 12, e.getScaledResolution().getScaledWidth(), yCount * 12 + 12, new Color(0, 255, 0).getRGB());
-                FontManager.ProductSans20.getFont().drawStringWithShadow(module.getName(), (e.getScaledResolution().getScaledWidth() - FontManager.ProductSans20.getFont().getStringWidth(module.getName())) - 4, yCount * 12, new Color(0, 255, 0).getRGB());
+
+                Color color = ColorUtils.blend2colors(new Color(0, 255, 0), new Color(0, 255, 0).darker(), (System.nanoTime() + (yCount + yCount * 100000000L * 2)) / 1.0E09F % 2.0F);
+
+                Gui.drawRect(e.getScaledResolution().getScaledWidth() - 1, yCount * 12, e.getScaledResolution().getScaledWidth(), yCount * 12 + 12, color.getRGB());
+                //FontManager.ProductSans20.getFont().drawStringWithShadow(module.getName(), (e.getScaledResolution().getScaledWidth() - FontManager.ProductSans20.getFont().getStringWidth(module.getName())) - 4, yCount * 12, new Color(0, 255, 0).getRGB());
+                FontManager.ProductSans20.getFont().drawStringWithShadow(module.getName(), (e.getScaledResolution().getScaledWidth() - FontManager.ProductSans20.getFont().getStringWidth(module.getName())) - 4, yCount * 12, color.getRGB());
                 ++yCount;
             }
         }

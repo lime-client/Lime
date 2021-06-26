@@ -1,9 +1,11 @@
 package lime.utils.other;
 
 import lime.utils.IUtil;
+import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.init.Blocks;
 import net.minecraft.inventory.Slot;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
+import net.minecraft.item.*;
 
 public class InventoryUtils implements IUtil {
     public static void swap(int slot1, int hotbarSlot){
@@ -53,6 +55,61 @@ public class InventoryUtils implements IUtil {
         return -1;
     }
 
+    public static float getDamage(ItemStack stack){
+        float damage = 0;
+        Item item = stack.getItem();
+        if(item instanceof ItemSword){
+            ItemSword sword = (ItemSword)item;
+            damage += sword.getDamageVsEntity();
+        }
+        damage += EnchantmentHelper.getEnchantmentLevel(16, stack) * 1.25f +
+                EnchantmentHelper.getEnchantmentLevel(20, stack) * 1.02f;
+        return damage;
+
+    }
+
+    public static float getProtection(ItemStack stack){
+        float prot = 0;
+        if ((stack.getItem() instanceof ItemArmor)) {
+            ItemArmor armor = (ItemArmor)stack.getItem();
+            prot += armor.damageReduceAmount + (100 - armor.damageReduceAmount) * EnchantmentHelper.getEnchantmentLevel(0, stack) * 0.0075D;
+            prot += EnchantmentHelper.getEnchantmentLevel(3, stack)/100d;
+            prot += EnchantmentHelper.getEnchantmentLevel(1, stack)/100d;
+            prot += EnchantmentHelper.getEnchantmentLevel(7, stack)/100d;
+            prot += EnchantmentHelper.getEnchantmentLevel(34, stack)/50d;
+        }
+        return prot;
+    }
+
+    public static float getToolEffect(ItemStack stack){
+        Item item = stack.getItem();
+        if(!(item instanceof ItemTool))
+            return 0;
+        String name = item.getUnlocalizedName();
+        ItemTool tool = (ItemTool)item;
+        float value = 1;
+        if(item instanceof ItemPickaxe){
+            value = tool.getStrVsBlock(stack, Blocks.stone);
+            if(name.toLowerCase().contains("gold")){
+                value -= 100;
+            }
+        }else if(item instanceof ItemSpade){
+            value = tool.getStrVsBlock(stack, Blocks.dirt);
+            if(name.toLowerCase().contains("gold")){
+                value -= 100;
+            }
+        }else if(item instanceof ItemAxe){
+            value = tool.getStrVsBlock(stack, Blocks.log);
+            if(name.toLowerCase().contains("gold")){
+                value -= 100;
+            }
+        }else
+            return 1f;
+        value += EnchantmentHelper.getEnchantmentLevel(Enchantment.efficiency.effectId, stack) * 0.0075D;
+        value += EnchantmentHelper.getEnchantmentLevel(Enchantment.unbreaking.effectId, stack)/100d;
+        return value;
+    }
+
     public static boolean isInventoryFull() {
         for(int i = 9; i < 45; i++) {
             if(!getSlot(i).getHasStack()) {
@@ -62,4 +119,19 @@ public class InventoryUtils implements IUtil {
         return true;
     }
 
+    public static boolean hotBarIsFull() {
+        for(int i = 36; i < 45; ++i) {
+            if(!getSlot(i).getHasStack()) return true;
+        }
+
+        return false;
+    }
+
+    public static void shiftClick(int slot){
+        mc.playerController.windowClick(mc.thePlayer.inventoryContainer.windowId, slot, 0, 1, mc.thePlayer);
+    }
+
+    public static void drop(int slot){
+        mc.playerController.windowClick(mc.thePlayer.inventoryContainer.windowId, slot, 1, 4, mc.thePlayer);
+    }
 }
