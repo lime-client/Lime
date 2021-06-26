@@ -14,7 +14,8 @@ public class EventBus {
 	private final HashMap<Class<? extends Event>, LightList<Handler>> HANDLERS = new HashMap<>();
 
 	private EventBus() {
-		registerEvents(Event2D.class, EventUpdate.class, EventKey.class, EventPacket.class, EventMotion.class, EventBoundingBox.class, EventScoreboard.class,
+		registerEvents(Event2D.class, EventUpdate.class, EventKey.class, EventPacket.class,
+				EventMotion.class, EventBoundingBox.class, EventScoreboard.class,
 				Event3D.class, EventMove.class, EventSlow.class, EventRendererEntity.class);
 	}
 

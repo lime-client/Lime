@@ -17,13 +17,13 @@ public class EventRendererEntity extends Event {
     public EventRendererEntity(State state, ModelBase model, EntityLivingBase entity, float x, float y, float z, float x2, float y2, float z2) {
         this.state = state;
         this.model = model;
+        this.entity = entity;
         this.x = x;
         this.y = y;
         this.z = z;
         this.x2 = x2;
         this.y2 = y2;
         this.z2 = z2;
-        this.entity = entity;
     }
 
     public EntityLivingBase getEntity() {

@@ -296,6 +296,7 @@ public abstract class RendererLivingEntity<T extends EntityLivingBase> extends R
                 GlStateManager.alphaFunc(516, 0.003921569F);
             }
 
+            // PRE EVENT
             EventRendererEntity e = new EventRendererEntity(EventRendererEntity.State.PRE, this.mainModel, entitylivingbaseIn, p_77036_2_, p_77036_3_, p_77036_4_, p_77036_5_, p_77036_6_, p_77036_7_);
 
             EventBus.INSTANCE.call(e);
@@ -304,6 +305,7 @@ public abstract class RendererLivingEntity<T extends EntityLivingBase> extends R
                 this.mainModel.render(entitylivingbaseIn, p_77036_2_, p_77036_3_, p_77036_4_, p_77036_5_, p_77036_6_, p_77036_7_);
             }
 
+            // POST EVENT
             EventRendererEntity e1 = new EventRendererEntity(EventRendererEntity.State.POST, this.mainModel, entitylivingbaseIn, p_77036_2_, p_77036_3_, p_77036_4_, p_77036_5_, p_77036_6_, p_77036_7_);
 
             EventBus.INSTANCE.call(e1);

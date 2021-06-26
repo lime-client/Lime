@@ -24,6 +24,8 @@ public class Chams extends Module {
     public void onRendererLivingEntity(EventRendererEntity e) {
         e.setCanceled(true);
         if(e.isPre()) {
+            // Only colored
+            // TODO: THROUGH
             switch(mode.getSelected().name().toLowerCase()) {
                 case "colored":
                     GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);

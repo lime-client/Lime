@@ -81,13 +81,14 @@ public class ModuleManager {
         this.modules.add(module);
     }
 
+    public Module getModuleC(Class<? extends Module> clazz) {
+        return getModules().stream().filter(module -> module.getClass() == clazz).findFirst().orElse(null);
+    }
+
     public Module getModule(String name) {
         return getModules().stream().filter(module -> name.equalsIgnoreCase(module.getName())).findFirst().orElse(null);
     }
 
-    public Module getModuleC(Class<? extends Module> clazz) {
-        return getModules().stream().filter(module -> module.getClass() == clazz).findFirst().orElse(null);
-    }
 
     public ArrayList<Module> getModulesFromCategory(Category category) {
         return getModules().stream().filter(module -> category == module.getCategory()).collect(Collectors.toCollection(ArrayList::new));

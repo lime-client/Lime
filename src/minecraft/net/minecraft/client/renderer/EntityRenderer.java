@@ -666,6 +666,7 @@ public class EntityRenderer implements IResourceManagerReloadListener
 
     private void hurtCameraEffect(float partialTicks)
     {
+        // No Hurt Cam
         if (this.mc.getRenderViewEntity() instanceof EntityLivingBase)
         {
             if(((BoolValue) Lime.getInstance().getSettingsManager().getSetting("No Hurt Cam", Lime.getInstance().getModuleManager().getModuleC(Camera.class))).isEnabled()) {
