@@ -2,10 +2,7 @@ package lime.features.managers;
 
 import lime.features.module.Category;
 import lime.features.module.Module;
-import lime.features.module.impl.combat.AntiBot;
-import lime.features.module.impl.combat.AutoGapple;
-import lime.features.module.impl.combat.KillAura;
-import lime.features.module.impl.combat.Velocity;
+import lime.features.module.impl.combat.*;
 import lime.features.module.impl.exploit.Blink;
 import lime.features.module.impl.exploit.FastBow;
 import lime.features.module.impl.movement.*;
@@ -26,6 +23,7 @@ public class ModuleManager {
 
         // COMBAT
         registerModule(new AutoGapple());
+        registerModule(new Criticals());
         registerModule(new KillAura());
         registerModule(new Velocity());
         registerModule(new AntiBot());

@@ -26,10 +26,8 @@ public class AutoGapple extends Module {
         if (!InventoryUtils.hasItem(Items.golden_apple, true, true)) return;
 
         if (InventoryUtils.hasItem(Items.golden_apple, false, true) && !InventoryUtils.hasItem(Items.golden_apple, true, false)) {
-            // Get an empty slot to swap to it
             int emptySlot = InventoryUtils.getEmptySlot() == -1 ? 7 : InventoryUtils.getEmptySlot() - 36;
 
-            // Get gapple slot
             int gappleSlot = InventoryUtils.findItem(9, 36, Items.golden_apple);
 
             if(gappleSlot == -1) return;
