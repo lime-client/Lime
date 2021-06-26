@@ -3,6 +3,7 @@ package lime.features.module.impl.combat;
 import lime.core.events.EventTarget;
 import lime.core.events.impl.Event3D;
 import lime.core.events.impl.EventMotion;
+import lime.core.events.impl.EventPacket;
 import lime.features.module.Category;
 import lime.features.module.Module;
 import lime.features.module.ModuleData;
@@ -20,6 +21,7 @@ import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemSword;
 import net.minecraft.network.play.client.C02PacketUseEntity;
+import net.minecraft.network.play.client.C03PacketPlayer;
 import net.minecraft.network.play.client.C07PacketPlayerDigging;
 import net.minecraft.network.play.client.C08PacketPlayerBlockPlacement;
 import net.minecraft.util.BlockPos;
@@ -73,8 +75,9 @@ public class KillAura extends Module {
 
     @Override
     public void onDisable() {
-        if(autoBlock.is("basic") && hasSword() && isBlocking) {
-            mc.getNetHandler().addToSendQueue(new C07PacketPlayerDigging(C07PacketPlayerDigging.Action.RELEASE_USE_ITEM, BlockPos.ORIGIN, EnumFacing.DOWN));
+        if(hasSword() && isBlocking) {
+            mc.playerController.syncCurrentPlayItem();
+            mc.thePlayer.sendQueue.addToSendQueue(new C07PacketPlayerDigging(C07PacketPlayerDigging.Action.RELEASE_USE_ITEM, BlockPos.ORIGIN, EnumFacing.DOWN));
             isBlocking = false;
         }
         entity = null;
@@ -86,6 +89,12 @@ public class KillAura extends Module {
 
     @EventTarget
     public void onMotion(EventMotion e) {
+        if(isBlocking && hasSword() && !autoBlock.is("basic")) {
+            System.out.println("b");
+            mc.playerController.syncCurrentPlayItem();
+            mc.thePlayer.sendQueue.addToSendQueue(new C07PacketPlayerDigging(C07PacketPlayerDigging.Action.RELEASE_USE_ITEM, BlockPos.ORIGIN, EnumFacing.DOWN));
+            isBlocking = false;
+        }
         Entity entity = getEntityByPriority();
 
         if(entity != null && isValid(entity)) {
@@ -134,7 +143,8 @@ public class KillAura extends Module {
             KillAura.entity = null;
             isBlocking = false;
             if(autoBlock.is("basic") && hasSword() && isBlocking) {
-                mc.getNetHandler().addToSendQueue(new C07PacketPlayerDigging(C07PacketPlayerDigging.Action.RELEASE_USE_ITEM, BlockPos.ORIGIN, EnumFacing.DOWN));
+                mc.playerController.syncCurrentPlayItem();
+                mc.thePlayer.sendQueue.addToSendQueue(new C07PacketPlayerDigging(C07PacketPlayerDigging.Action.RELEASE_USE_ITEM, BlockPos.ORIGIN, EnumFacing.DOWN));
                 isBlocking = false;
             }
         }

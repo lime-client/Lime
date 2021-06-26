@@ -53,4 +53,13 @@ public class InventoryUtils implements IUtil {
         return -1;
     }
 
+    public static boolean isInventoryFull() {
+        for(int i = 9; i < 45; i++) {
+            if(!getSlot(i).getHasStack()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
 }

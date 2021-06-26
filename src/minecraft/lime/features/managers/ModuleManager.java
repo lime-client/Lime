@@ -47,6 +47,7 @@ public class ModuleManager {
         // PLAYER
         registerModule(new InventoryMove());
         registerModule(new ClickTeleport());
+        registerModule(new ChestStealer());
         registerModule(new SpeedMine());
         registerModule(new FastPlace());
         registerModule(new AntiVoid());

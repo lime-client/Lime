@@ -570,7 +570,7 @@ public class ItemRenderer
     private void renderFireInFirstPerson(float p_78442_1_)
     {
         // No Fire
-        if(((BoolValue) Lime.getInstance().getSettingsManager().getSetting("No Fire", Lime.getInstance().getModuleManager().getModuleC(Camera.class))).isEnabled()) {
+        if(((BoolValue) Lime.getInstance().getSettingsManager().getSetting("No Fire", Lime.getInstance().getModuleManager().getModuleC(Camera.class))).isEnabled() && Lime.getInstance().getModuleManager().getModuleC(Camera.class).isToggled()) {
             return;
         }
         Tessellator tessellator = Tessellator.getInstance();

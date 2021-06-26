@@ -669,7 +669,7 @@ public class EntityRenderer implements IResourceManagerReloadListener
         // No Hurt Cam
         if (this.mc.getRenderViewEntity() instanceof EntityLivingBase)
         {
-            if(((BoolValue) Lime.getInstance().getSettingsManager().getSetting("No Hurt Cam", Lime.getInstance().getModuleManager().getModuleC(Camera.class))).isEnabled()) {
+            if(((BoolValue) Lime.getInstance().getSettingsManager().getSetting("No Hurt Cam", Lime.getInstance().getModuleManager().getModuleC(Camera.class))).isEnabled() && Lime.getInstance().getModuleManager().getModuleC(Camera.class).isToggled()) {
                 return;
             }
             EntityLivingBase entitylivingbase = (EntityLivingBase)this.mc.getRenderViewEntity();
