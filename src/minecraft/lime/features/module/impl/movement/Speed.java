@@ -36,6 +36,9 @@ public class Speed extends Module {
         }
         this.moveSpeed = MovementUtils.getBaseMoveSpeed();
         stage = 1;
+        if(mode.is("funcraft")) {
+            stage = 3;
+        }
     }
 
     @Override

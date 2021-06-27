@@ -71,6 +71,8 @@ public class Flight extends Module {
             e.setGround(true);
             mc.thePlayer.jumpMovementFactor = 0;
             mc.thePlayer.motionY = 0;
+            if(mc.thePlayer.isCollidedHorizontally)
+                moveSpeed = 0.25;
             if(mc.thePlayer.isMoving()) {
                 mc.timer.timerSpeed = 1.0866f;
                 if(mc.thePlayer.ticksExisted % 5 == 0) {
@@ -79,6 +81,8 @@ public class Flight extends Module {
                 MovementUtils.setSpeed(moveSpeed);
                 if(moveSpeed > 0.25)
                     moveSpeed -= moveSpeed / 159;
+                else
+                    moveSpeed = 0.25;
             } else {
                 MovementUtils.setSpeed(0);
                 moveSpeed = 0.25;

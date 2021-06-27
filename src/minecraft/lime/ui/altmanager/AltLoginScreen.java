@@ -1,5 +1,6 @@
 package lime.ui.altmanager;
 
+import com.thealtening.auth.TheAlteningAuthentication;
 import lime.ui.fields.PasswordField;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
@@ -30,7 +31,17 @@ public class AltLoginScreen extends GuiScreen {
         this.buttonList.add(new GuiButton(2, this.width / 2 - 100, this.height / 2 + 40, 200, 20, "Log In"));
         this.buttonList.add(new GuiButton(4, this.width / 2 - 100, this.height / 2 + 40 + 24, 200, 20, "Copy Mail:Pass"));
         this.buttonList.add(new GuiButton(3, this.width / 2 - 100, this.height / 2 + 40 + 24 + 24, 200, 20, "Back"));
+
+        this.buttonList.add(new GuiButton(20, this.width - 105, 3, 100, 20, "The Altening"));
+
+        Keyboard.enableRepeatEvents(true);
         super.initGui();
+    }
+
+    @Override
+    public void onGuiClosed() {
+        Keyboard.enableRepeatEvents(true);
+        super.onGuiClosed();
     }
 
     @Override
@@ -56,6 +67,7 @@ public class AltLoginScreen extends GuiScreen {
         if(button.id == 3) mc.displayGuiScreen(parentScreen);
         if(button.id == 4) {
             try {
+                TheAlteningAuthentication.mojang();
                 String clipboard = (String) Toolkit.getDefaultToolkit().getSystemClipboard().getData(DataFlavor.stringFlavor);
                 if(!clipboard.contains(":")) return;
                 this.username.setText(clipboard.split(":")[0]);
@@ -67,8 +79,12 @@ public class AltLoginScreen extends GuiScreen {
             }
         }
         if(button.id == 2 && button.enabled) {
+            TheAlteningAuthentication.mojang();
             this.runningThread = new AltLoginThread(username.getText(), password.getText());
             this.runningThread.start();
+        }
+        if(button.id == 20) {
+            mc.displayGuiScreen(new TheAlteningLoginScreen(this));
         }
         super.actionPerformed(button);
     }
@@ -91,5 +107,9 @@ public class AltLoginScreen extends GuiScreen {
         username.textboxKeyTyped(typedChar, keyCode);
         password.textboxKeyTyped(typedChar, keyCode);
         super.keyTyped(typedChar, keyCode);
+    }
+
+    public GuiScreen getParentScreen() {
+        return parentScreen;
     }
 }
