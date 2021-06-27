@@ -25,7 +25,7 @@
     {
       "moduleName": "Criticals",
       "key": -1,
-      "toggled": true,
+      "toggled": false,
       "settings": [
         {
           "name": "Mode",
@@ -72,7 +72,7 @@
         {
           "name": "CPS",
           "type": "slider",
-          "value": 8.0
+          "value": 12.0
         },
         {
           "name": "Players",
@@ -119,7 +119,7 @@
     {
       "moduleName": "Anti Bot",
       "key": -1,
-      "toggled": true
+      "toggled": false
     },
     {
       "moduleName": "Fast Bow",
@@ -156,7 +156,7 @@
         {
           "name": "Only Speed",
           "type": "bool",
-          "value": false
+          "value": true
         }
       ]
     },
@@ -214,7 +214,7 @@
         {
           "name": "Mode",
           "type": "enum",
-          "value": "ncp"
+          "value": "funcraft"
         }
       ]
     },
@@ -250,7 +250,7 @@
     {
       "moduleName": "Inventory Manager",
       "key": 48,
-      "toggled": true,
+      "toggled": false,
       "settings": [
         {
           "name": "Mode",
@@ -303,6 +303,23 @@
           "name": "Randomizer",
           "type": "bool",
           "value": true
+        }
+      ]
+    },
+    {
+      "moduleName": "Auto Armor",
+      "key": -1,
+      "toggled": true,
+      "settings": [
+        {
+          "name": "Mode",
+          "type": "enum",
+          "value": "normal"
+        },
+        {
+          "name": "Delay",
+          "type": "slider",
+          "value": 50.0
         }
       ]
     },

@@ -13,5 +13,6 @@
     <orderEntry type="library" name="minecraft" level="project" />
     <orderEntry type="library" name="viamcp" level="project" />
     <orderEntry type="library" name="1.8.8" level="project" />
+    <orderEntry type="library" name="thealtening-1.0" level="project" />
   </component>
 </module>
