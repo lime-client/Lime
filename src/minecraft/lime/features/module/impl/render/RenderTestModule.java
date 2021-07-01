@@ -1,43 +1,37 @@
 package lime.features.module.impl.render;
 
 import lime.core.events.EventTarget;
-import lime.core.events.impl.Event3D;
+import lime.core.events.impl.Event2D;
 import lime.features.module.Category;
 import lime.features.module.Module;
 import lime.features.module.ModuleData;
-import lime.utils.combat.CombatUtils;
-import lime.utils.render.RenderUtils;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.ResourceLocation;
-import org.lwjgl.opengl.GL11;
+import lime.utils.render.animation.easings.Animate;
+import lime.utils.render.animation.easings.Easing;
+import lime.utils.time.DeltaTime;
+import net.minecraft.client.gui.Gui;
+import net.minecraft.client.gui.ScaledResolution;
+import org.lwjgl.input.Mouse;
 
 @ModuleData(name = "Render Test", category = Category.RENDER)
 public class RenderTestModule extends Module {
+
+    Animate animate;
+
+    @Override
+    public void onEnable() {
+        animate = new Animate();
+        animate.setEase(Easing.CUBIC_IN_OUT);
+        animate.setMin(10);
+        animate.setMax(new ScaledResolution(this.mc).getScaledWidth());
+        animate.setSpeed(350);
+        animate.setReversed(true);
+    }
+
     @EventTarget
-    public void onRender(Event3D e) {
-        for (Entity entity : mc.theWorld.getLoadedEntityList()) {
-            if(entity instanceof EntityLivingBase && entity != mc.thePlayer) {
-                GL11.glPushMatrix();
-                GL11.glTranslated(entity.lastTickPosX + (entity.posX - entity.lastTickPosX) * mc.timer.renderPartialTicks - mc.getRenderManager().renderPosX - 0.5,
-                        entity.lastTickPosY + entity.getEyeHeight() + 0.5 + (entity.posY - entity.lastTickPosY) * mc.timer.renderPartialTicks - mc.getRenderManager().renderPosY,
-                        entity.lastTickPosZ + (entity.posZ - entity.lastTickPosZ) * mc.timer.renderPartialTicks - mc.getRenderManager().renderPosZ - 0.5);
-                GL11.glEnable(GL11.GL_BLEND);
-                GL11.glEnable(GL11.GL_LINE_SMOOTH);
-                //GL11.glDisable(GL11.GL_TEXTURE_2D);
-                GL11.glDisable(GL11.GL_DEPTH_TEST);
-                GL11.glRotatef(-180, 1, 0, 0);
-
-                RenderUtils.drawImage(new ResourceLocation("lime/clickgui/frame/combat.png"), 0, 0, 1, 1);
-
-                GL11.glDisable(GL11.GL_BLEND);
-                //GL11.glEnable(GL11.GL_TEXTURE_2D);
-                GL11.glEnable(GL11.GL_DEPTH_TEST);
-                GL11.glDisable(GL11.GL_LINE_SMOOTH);
-
-                GL11.glPopMatrix();
-            }
-        }
+    public void onRender(Event2D e) {
+        animate.update();
+        Gui.drawRect(animate.getValue(), 5, animate.getValue() + 10, 10, -1);
+        if(Mouse.isButtonDown(1))
+            animate.reset();
     }
 }

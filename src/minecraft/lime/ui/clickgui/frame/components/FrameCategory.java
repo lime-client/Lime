@@ -32,6 +32,8 @@ public class FrameCategory {
     private final ArrayList<Component> components = new ArrayList<>();
     private Module bindingModule;
 
+    private boolean isOpened;
+
     public FrameCategory(Category category, int baseX, int baseY, int width, int height) {
         this.category = category;
         this.x = baseX;
@@ -59,6 +61,7 @@ public class FrameCategory {
                 this.components.add(new SlideSetting(0, 0, 0, 0, set));
             }
         }
+        isOpened = false;
     }
 
     public void drawFrame(int mouseX, int mouseY) {
@@ -81,16 +84,22 @@ public class FrameCategory {
 
         Gui.drawRect(x, y, x + width, y + height, new Color(41, 41, 41).getRGB());
         Gui.drawRect(x, y, x + width, y + 15, new Color(25, 25, 25).getRGB());
-        // arround
+        //arround
         Gui.drawRect(x, y, x + 1, y + height, new Color(25, 25, 25).getRGB());
         Gui.drawRect(x + width - 1, y, x + width, y + height, new Color(25, 25, 25).getRGB());
         Gui.drawRect(x, y + height - 1, x + width, y + height, new Color(25, 25, 25).getRGB());
         GL11.glPushMatrix();
         GL11.glColor4f(1, 1, 1, 1);
-        mc.getTextureManager().bindTexture(new ResourceLocation("lime/clickgui/frame/" + category.name().toLowerCase() + ".png"));
-        Gui.drawModalRectWithCustomSizedTexture(x + width - 12, y + 3, 0, 0, 8, 8, 8, 8);
         GL11.glPopMatrix();
         FontManager.ProductSans18.getFont().drawString(StringUtils.capitalize(category.name().toLowerCase()), x + 3, y + 1.5f, -1, true);
+
+        mc.getTextureManager().bindTexture(new ResourceLocation("lime/clickgui/frame/" + category.name().toLowerCase() + ".png"));
+        Gui.drawModalRectWithCustomSizedTexture(x + width - 12, y + 3, 0, 0, 8, 8, 8, 8);
+
+        if(!isOpened) {
+            height = 15;
+            return;
+        }
 
         // Draw Modules
         int i = 0;
@@ -114,18 +123,6 @@ public class FrameCategory {
                         component.setX(x + 3);
                         component.setY(y + 20 + (i * 16) - 8);
                         component.drawComponent(mouseX, mouseY);
-                        /*
-                        if(component instanceof EnumSetting) {
-                            component.setX(x + 3);
-                            component.setY(y + 20 + (i * 16) - 8);
-                            component.drawComponent(mouseX, mouseY);
-                        }
-                        if(component instanceof BoolSetting) {
-                            component.setX(x + 3);
-                            component.setY(y + 20 + (i * 16) - 8);
-                            component.drawComponent(mouseX, mouseY);
-
-                        }*/
                     }
                 }
             }
@@ -148,62 +145,72 @@ public class FrameCategory {
         return false;
     }
 
-    public void mouseClicked(int mouseX, int mouseY, int mouseButton) {
-        int i = 0;
-        for(Module module : mods.stream().filter(module -> module.getCategory() == category).collect(Collectors.toCollection(ArrayList::new))) {
-            if(hover(x, y + 15 + (i * 16), mouseX, mouseY, width, 16)) {
-                if(mouseButton == 0 && !module.getName().equalsIgnoreCase("clickgui")) module.toggle();
-                if(mouseButton == 1) {
-                    if(openedModules.contains(module))
-                        openedModules.remove(module);
-                    else
+    public boolean mouseClicked(int mouseX, int mouseY, int mouseButton) {
+        boolean dragFrame = true;
+        if(isOpened) {
+            int i = 0;
+            for(Module module : mods.stream().filter(module -> module.getCategory() == category).collect(Collectors.toCollection(ArrayList::new))) {
+                if(hover(x, y + 15 + (i * 16), mouseX, mouseY, width, 16)) {
+                    if(mouseButton == 0 && !module.getName().equalsIgnoreCase("clickgui")) module.toggle();
+                    if(mouseButton == 1) {
+                        if(openedModules.contains(module))
+                            openedModules.remove(module);
+                        else
                         if(module.hasSettings())
                             openedModules.add(module);
-                }
-                if(mouseButton == 2) {
-                    bindingModule = module;
-                }
-                return;
-            }
-            if(openedModules.contains(module)) {
-                i += this.components.stream().filter(component -> component.setting.getParentModule() == module).collect(Collectors.toCollection(ArrayList::new)).size();
-            }
-            ++i;
-        }
-        boolean dragFrame = true;
-        if(!openedModules.isEmpty()) {
-            int settingIndex = 0;
-            for(Module openedModule : openedModules) {
-                for(SettingValue setting : Lime.getInstance().getSettingsManager().getSettingsFromModule(openedModule)) {
-                    settingIndex++;
-                    // Getting I;
-                    int moduleIndex = 0;
-                    for(Module module : mods.stream().filter(module -> module.getCategory() == category).collect(Collectors.toCollection(ArrayList::new))) {
-                        if(openedModule != module) {
-                            ++moduleIndex;
-                        }
-                        else
-                            break;
                     }
+                    if(mouseButton == 2) {
+                        bindingModule = module;
+                    }
+                    return true;
+                }
+                if(openedModules.contains(module)) {
+                    i += this.components.stream().filter(component -> component.setting.getParentModule() == module).collect(Collectors.toCollection(ArrayList::new)).size();
+                }
+                ++i;
+            }
+            if(!openedModules.isEmpty()) {
+                int settingIndex = 0;
+                for(Module openedModule : openedModules) {
+                    for(SettingValue setting : Lime.getInstance().getSettingsManager().getSettingsFromModule(openedModule)) {
+                        settingIndex++;
+                        // Getting I;
+                        int moduleIndex = 0;
+                        for(Module module : mods.stream().filter(module -> module.getCategory() == category).collect(Collectors.toCollection(ArrayList::new))) {
+                            if(openedModule != module) {
+                                ++moduleIndex;
+                            }
+                            else
+                                break;
+                        }
 
-                    moduleIndex = y + 16 + moduleIndex * 16;
+                        moduleIndex = y + 16 + moduleIndex * 16;
 
-                    if(hover(x, moduleIndex + (settingIndex * 16), mouseX, mouseY, width, 13)) {
-                        dragFrame = false;
-                        for(Component component : this.components.stream().filter(component -> component.setting == setting).collect(Collectors.toCollection(ArrayList::new))) {
-                            component.mouseClicked(mouseX, mouseY, mouseButton);
+                        if(hover(x, moduleIndex + (settingIndex * 16), mouseX, mouseY, width, 13)) {
+                            dragFrame = false;
+                            for(Component component : this.components.stream().filter(component -> component.setting == setting).collect(Collectors.toCollection(ArrayList::new))) {
+                                component.mouseClicked(mouseX, mouseY, mouseButton);
+                                return true;
+                            }
                         }
                     }
                 }
             }
         }
 
-        if(hover(x, y, mouseX, mouseY, width, height) && dragFrame) {
+        if(hover(x, y, mouseX, mouseY, width, height) && mouseButton == 1) {
+            isOpened = !isOpened;
+        }
+
+        if(hover(x, y, mouseX, mouseY, width, height) && dragFrame && mouseButton == 0) {
             this.drag = true;
             this.xDrag = this.x - mouseX;
             this.yDrag = this.y - mouseY;
+            return true;
         } else
             drag = false;
+
+        return false;
     }
 
     public void mouseReleased(int mouseX, int mouseY, int state) {

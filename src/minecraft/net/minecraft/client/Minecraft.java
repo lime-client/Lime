@@ -39,6 +39,7 @@ import javax.imageio.ImageIO;
 import lime.core.Lime;
 import lime.core.events.EventBus;
 import lime.core.events.impl.EventKey;
+import lime.utils.time.DeltaTime;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.audio.MusicTicker;
@@ -1061,11 +1062,22 @@ public class Minecraft implements IThreadListener, IPlayerUsage
         System.gc();
     }
 
+    private long lastFrame = getTime();
+
+    private long getTime() {
+        return (Sys.getTime() * 1000) / Sys.getTimerResolution();
+    }
+
     /**
      * Called repeatedly from run()
      */
     private void runGameLoop() throws IOException
     {
+        long currentTime = getTime();
+        int deltaTime = (int) (currentTime - lastFrame);
+        lastFrame = currentTime;
+        DeltaTime.setDeltaTime(deltaTime);
+
         long i = System.nanoTime();
         this.mcProfiler.startSection("root");
 

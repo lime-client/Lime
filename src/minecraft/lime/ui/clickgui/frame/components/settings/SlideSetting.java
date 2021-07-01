@@ -19,8 +19,10 @@ public class SlideSetting extends Component {
 
     @Override
     public void drawComponent(int mouseX, int mouseY) {
-        if(GuiScreen.hover(x, y + 4, mouseX, mouseY, 135, 16))
+        if(GuiScreen.hover(x - 3, y + 4, mouseX, mouseY, 135, 16))
             Gui.drawRect(x - 3, y + 3, x - 3 + 135, y + 19, new Color(25, 25, 25, 150).getRGB());
+        else
+            dragging = false;
 
         SlideValue slide = (SlideValue) setting;
         double diff = Math.min(140, Math.max(0, mouseX - (this.x - 3)));

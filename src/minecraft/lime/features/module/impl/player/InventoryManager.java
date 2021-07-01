@@ -8,9 +8,13 @@ import lime.features.module.ModuleData;
 import lime.features.setting.impl.BoolValue;
 import lime.features.setting.impl.EnumValue;
 import lime.features.setting.impl.SlideValue;
+import lime.utils.other.InventoryUtils;
 import lime.utils.other.Timer;
 import net.minecraft.client.gui.inventory.GuiInventory;
 import net.minecraft.item.*;
+
+import java.util.ArrayList;
+import java.util.Comparator;
 
 import static lime.utils.other.InventoryUtils.*;
 
@@ -32,7 +36,136 @@ public class InventoryManager extends Module {
             if(dropJunk.isEnabled()) {
                 dropJunks();
             }
+
+            getBestSword(36);
+            getBestPickaxe(37);
+            getBestAxe(38);
         }
+    }
+
+    private void getBestSword(int slot) {
+        ArrayList<ItemStack> swords = new ArrayList<>();
+
+        for (int i = 9; i < 45; i++) {
+            if(getSlot(i).getHasStack() & i != slot) {
+                ItemStack itemStack = getSlot(i).getStack();
+                if(itemStack.getItem() instanceof ItemSword && !(itemStack.getDisplayName().contains("§") || itemStack.getDisplayName().contains("right click"))) {
+                    swords.add(itemStack);
+                }
+            }
+        }
+
+        if(swords.isEmpty()) return;
+
+        swords.sort(Comparator.comparingDouble(InventoryUtils::getDamage));
+
+        ItemStack bestSword = swords.get(0);
+
+        if(timer.hasReached((long) delay.getCurrent())) {
+            if(getSlot(slot).getHasStack() && getSlot(slot).getStack().getItem() instanceof ItemSword) {
+                if(getToolEffect(bestSword) <= getToolEffect(getSlot(slot).getStack())) {
+                    drop(findSlotByItem(bestSword));
+                } else {
+                    swap(findSlotByItem(bestSword), slot - 36);
+                }
+            } else {
+                swap(findSlotByItem(bestSword), slot - 36);
+            }
+            timer.reset();
+        } else
+            return;
+
+        swords.remove(bestSword);
+
+        for (ItemStack sword : swords) {
+            if(timer.hasReached((long) delay.getCurrent())) {
+                drop(findSlotByItem(sword));
+                timer.reset();
+            } else
+                break;
+        }
+
+    }
+
+    private void getBestPickaxe(int slot) {
+        ArrayList<ItemStack> pickaxes = new ArrayList<>();
+
+        for (int i = 9; i < 45; i++) {
+            if(getSlot(i).getHasStack() & i != slot) {
+                ItemStack itemStack = getSlot(i).getStack();
+                if(itemStack.getItem() instanceof ItemPickaxe && !(itemStack.getDisplayName().contains("§") || itemStack.getDisplayName().contains("right click"))) {
+                    pickaxes.add(itemStack);
+                }
+            }
+        }
+
+        if(pickaxes.isEmpty()) return;
+
+        pickaxes.sort(Comparator.comparingDouble(InventoryUtils::getToolEffect));
+
+        ItemStack bestPickaxe = pickaxes.get(0);
+
+        if(getSlot(slot).getHasStack() && getSlot(slot).getStack().getItem() instanceof ItemPickaxe) {
+            if(getToolEffect(bestPickaxe) <= getToolEffect(getSlot(slot).getStack())) {
+                drop(findSlotByItem(bestPickaxe));
+            } else {
+                swap(findSlotByItem(bestPickaxe), slot - 36);
+            }
+        } else {
+            swap(findSlotByItem(bestPickaxe), slot - 36);
+        }
+
+        pickaxes.remove(bestPickaxe);
+
+        for (ItemStack pickaxe : pickaxes) {
+            drop(findSlotByItem(pickaxe));
+        }
+    }
+
+
+    private void getBestAxe(int slot) {
+        ArrayList<ItemStack> axes = new ArrayList<>();
+
+        for (int i = 9; i < 45; i++) {
+            if(getSlot(i).getHasStack() & i != slot) {
+                ItemStack itemStack = getSlot(i).getStack();
+                if(itemStack.getItem() instanceof ItemAxe && !(itemStack.getDisplayName().contains("§") || itemStack.getDisplayName().contains("right click"))) {
+                    axes.add(itemStack);
+                }
+            }
+        }
+
+        if(axes.isEmpty()) return;
+
+        axes.sort(Comparator.comparingDouble(InventoryUtils::getToolEffect));
+
+        ItemStack bestAxe = axes.get(0);
+
+        if(getSlot(slot).getHasStack() && getSlot(slot).getStack().getItem() instanceof ItemAxe) {
+            if(getToolEffect(bestAxe) <= getToolEffect(getSlot(slot).getStack())) {
+                drop(findSlotByItem(bestAxe));
+            } else {
+                swap(findSlotByItem(bestAxe), slot - 36);
+            }
+        } else {
+            swap(findSlotByItem(bestAxe), slot - 36);
+        }
+
+        axes.remove(bestAxe);
+
+        for (ItemStack axe : axes) {
+            drop(findSlotByItem(axe));
+        }
+    }
+
+    private int findSlotByItem(ItemStack itemStack) {
+        for(int i = 9; i < 45; ++i) {
+            if(getSlot(i).getHasStack()) {
+                if(getSlot(i).getStack() == itemStack)
+                    return i;
+            }
+        }
+        return -1;
     }
 
     private void dropJunks() {
@@ -42,7 +175,7 @@ public class InventoryManager extends Module {
                 Item item = itemStack.getItem();
                 if(!(item instanceof ItemSword || item instanceof ItemBlock || item instanceof ItemTool || item instanceof ItemFood
                         || item instanceof ItemArmor || item instanceof ItemBow || item.getUnlocalizedName().contains("arrow") ||
-                        item instanceof ItemEnderPearl || (item instanceof ItemPotion))) {
+                        item instanceof ItemEnderPearl || (item instanceof ItemPotion && !isBadPotion(itemStack)))) {
                     String name = itemStack.getDisplayName();
                     if(name.contains("§") || name.toLowerCase().contains("right click")) {
                         continue;

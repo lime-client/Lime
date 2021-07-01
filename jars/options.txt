@@ -14,9 +14,9 @@ difficulty:2
 fancyGraphics:true
 ao:2
 renderClouds:false
-resourcePacks:["§k!§r §1Galactic§r §k!§0.zip"]
+resourcePacks:["! Eum3(315) Blue Revamp.zip"]
 incompatibleResourcePacks:[]
-lastServer:localhost
+lastServer:server.negativity.fr
 lang:en_US
 chatVisibility:0
 chatColors:true

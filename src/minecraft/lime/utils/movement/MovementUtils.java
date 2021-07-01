@@ -2,6 +2,7 @@ package lime.utils.movement;
 
 import lime.core.events.impl.EventMove;
 import lime.utils.IUtil;
+import lime.utils.other.MathUtils;
 import net.minecraft.block.BlockAir;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.potion.Potion;
@@ -21,9 +22,9 @@ public class MovementUtils implements IUtil {
     }
 
     public static double getBPS() {
-        Vec3 lastPos = new Vec3(mc.thePlayer.lastTickPosX, mc.thePlayer.lastTickPosY, mc.thePlayer.lastTickPosZ);
-        Vec3 pos = new Vec3(mc.thePlayer.posX, mc.thePlayer.posY, mc.thePlayer.posZ);
-        return Math.abs(lastPos.distanceTo(pos) * 20d);
+        Vec3 lastPos = new Vec3(mc.thePlayer.lastTickPosX, 0, mc.thePlayer.lastTickPosZ);
+        Vec3 pos = new Vec3(mc.thePlayer.posX, 0, mc.thePlayer.posZ);
+        return MathUtils.roundToPlace(Math.abs(lastPos.distanceTo(pos) * 20d), 2);
     }
 
     public static void vClip(double number) {

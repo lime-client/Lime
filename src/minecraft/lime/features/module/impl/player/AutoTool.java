@@ -6,8 +6,10 @@ import lime.features.module.Category;
 import lime.features.module.Module;
 import lime.features.module.ModuleData;
 import lime.utils.other.InventoryUtils;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockAir;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemTool;
 
 @ModuleData(name = "Auto Tool", category = Category.PLAYER)
 public class AutoTool extends Module {
@@ -20,9 +22,10 @@ public class AutoTool extends Module {
                 for(int i = 36; i < 45; ++i) {
                     if(InventoryUtils.getSlot(i).getHasStack()) {
                         ItemStack itemStack = InventoryUtils.getSlot(i).getStack();
-                        if(itemStack.getStrVsBlock(mc.theWorld.getBlockState(mc.objectMouseOver.getBlockPos()).getBlock()) > max) {
+                        Block block = mc.theWorld.getBlockState(mc.objectMouseOver.getBlockPos()).getBlock();
+                        if(itemStack.getStrVsBlock(block) > max && itemStack.getItem() instanceof ItemTool) {
                             slot = i;
-                            max = itemStack.getStrVsBlock(mc.theWorld.getBlockState(mc.objectMouseOver.getBlockPos()).getBlock());
+                            max = itemStack.getStrVsBlock(block);
                         }
                     }
                 }

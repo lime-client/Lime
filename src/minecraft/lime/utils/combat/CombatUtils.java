@@ -2,6 +2,7 @@ package lime.utils.combat;
 
 import com.google.common.base.Predicates;
 import lime.utils.IUtil;
+import lime.utils.other.MathUtils;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.*;
@@ -15,7 +16,7 @@ public class CombatUtils implements IUtil {
     public static float[] getRotations(double posX, double posY, double posZ) {
         EntityLivingBase player = mc.thePlayer;
         double x = posX - player.posX;
-        double y = posY - player.posY + player.getEyeHeight();
+        double y = posY - player.posY - 0.5;
         double z = posZ - player.posZ;
         double dist = Math.sqrt(x * x + z * z);
         float yaw = (float)(Math.atan2(z, x) * 180.0D / Math.PI) - 90.0F;
@@ -29,7 +30,7 @@ public class CombatUtils implements IUtil {
                 e.posZ) :
                 getRotations(e.posX, e.posY + (double)e.getEyeHeight() - 0.4D, e.posZ);*/
 
-        /*double lastTickPosX = e.ticksExisted > 5 ? e.lastTickPosX : 0;
+        double lastTickPosX = e.ticksExisted > 5 ? e.lastTickPosX : 0;
         double lastTickPosZ = e.ticksExisted > 5 ? e.lastTickPosZ : 0;
 
 
@@ -47,9 +48,9 @@ public class CombatUtils implements IUtil {
             yaw = (float) (-90 +Math.toDegrees(Math.atan(deltaZ / deltaX)));
         }
 
-         */
 
-        double x = e.posX + (e.ticksExisted > 2 ? (e.posX - e.lastTickPosX) : 0) - mc.thePlayer.posX;
+
+        /*double x = e.posX + (e.ticksExisted > 2 ? (e.posX - e.lastTickPosX) : 0) - mc.thePlayer.posX;
         double z = e.posZ + (e.ticksExisted > 2 ? (e.posZ - e.lastTickPosZ) : 0) - mc.thePlayer.posZ;
         double y = e.posY + e.getEyeHeight() * 0.75D - (mc.thePlayer.posY + mc.thePlayer.getEyeHeight());
 
@@ -57,7 +58,7 @@ public class CombatUtils implements IUtil {
 
         float yaw = (float) (Math.atan2(z, x) * 180.0D / Math.PI) - 90.0F;
         float pitch = (float) -((Math.atan2(y, distance) * 180.0D / Math.PI));
-        return new float[] { yaw, pitch };
+        */return new float[] { yaw + (float) Math.random(), pitch };
     }
 
     public static final Vec3 getVectorForRotation(float yaw, float pitch)

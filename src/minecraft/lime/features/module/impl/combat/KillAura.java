@@ -12,6 +12,11 @@ import lime.features.setting.impl.EnumValue;
 import lime.features.setting.impl.SlideValue;
 import lime.utils.combat.CombatUtils;
 import lime.utils.other.Timer;
+import lime.utils.render.ColorUtils;
+import lime.utils.render.RenderUtils;
+import lime.utils.render.animation.easings.Animate;
+import lime.utils.render.animation.easings.Easing;
+import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -28,6 +33,7 @@ import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import org.lwjgl.opengl.GL11;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Comparator;
 
@@ -61,9 +67,8 @@ public class KillAura extends Module {
     private final Timer cpsTimer = new Timer();
 
     // ESP
-    private double yIndex;
     private boolean down;
-    private final Timer timer = new Timer();
+    private Animate animation;
 
     // AutoBlock
     private boolean isBlocking = false;
@@ -71,6 +76,13 @@ public class KillAura extends Module {
     @Override
     public void onEnable() {
         isBlocking = false;
+        animation = new Animate();
+        animation.setEase(Easing.CUBIC_IN_OUT);
+        animation.setSpeed(2);
+        animation.setReversed(false);
+        animation.setMin(0);
+        animation.setMax(2f);
+        down = false;
     }
 
     @Override
@@ -154,45 +166,53 @@ public class KillAura extends Module {
     @EventTarget
     public void on3D(Event3D e) {
         if(KillAura.getEntity() != null && isValid(entity) && targetEsp.is("circle")) {
+            animation.setMax(KillAura.getEntity().height + 0.2f);
+            animation.update();
             GL11.glPushMatrix();
             GlStateManager.disableTexture2D();
-            GlStateManager.disableBlend();
+            GlStateManager.enableBlend();
+            GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
             GL11.glEnable(GL11.GL_LINE_SMOOTH);
+            GL11.glShadeModel(GL11.GL_SMOOTH);
+            GL11.glDisable(GL11.GL_CULL_FACE);
 
             GL11.glLineWidth(2.5f);
-
-            GL11.glColor4f(1, 1, 1, 1);
-            GL11.glBegin(GL11.GL_LINE_STRIP);
 
             double x = KillAura.entity.lastTickPosX + (KillAura.entity.posX - KillAura.entity.lastTickPosX) * mc.timer.renderPartialTicks - mc.getRenderManager().viewerPosX;
             double y = KillAura.entity.lastTickPosY + (KillAura.entity.posY - KillAura.entity.lastTickPosY) * mc.timer.renderPartialTicks - mc.getRenderManager().viewerPosY;
             double z = KillAura.entity.lastTickPosZ + (KillAura.entity.posZ - KillAura.entity.lastTickPosZ) * mc.timer.renderPartialTicks - mc.getRenderManager().viewerPosZ;
 
             double entitySize = KillAura.entity.width * 0.85;
+            GL11.glColor4f(1, 1, 1, 1);
+            Color clientColor = new Color(0, 255, 0);
 
-            for(int i = 0; i < 361; ++i) {
-                GL11.glVertex3d(x + Math.cos(Math.toRadians(i)) * entitySize, y + yIndex, z - Math.sin(Math.toRadians(i)) * entitySize);
-
+            GL11.glBegin(GL11.GL_TRIANGLE_STRIP);
+            {
+                for (int j = 0; j < 361; j++) {
+                    RenderUtils.glColor(ColorUtils.setAlpha(clientColor, 175));
+                    GL11.glVertex3d(x + Math.cos(Math.toRadians(j)) * entitySize, y + animation.getValue(), z - Math.sin(Math.toRadians(j)) * entitySize);
+                    RenderUtils.glColor(ColorUtils.setAlpha(clientColor, 0));
+                    GL11.glVertex3d(x + Math.cos(Math.toRadians(j)) * entitySize, y + animation.getValue() + ((!animation.isReversed() ? -1 * (2 - animation.getValue()) : .5 * animation.getValue())), z - Math.sin(Math.toRadians(j)) * entitySize);
+                }
             }
             GL11.glEnd();
 
+            GL11.glBegin(GL11.GL_LINE_LOOP);
+            for(int i = 0; i < 361; ++i) {
+                GL11.glVertex3d(x + Math.cos(Math.toRadians(i)) * entitySize, y + animation.getValue(), z - Math.sin(Math.toRadians(i)) * entitySize);
+            }
+            GL11.glEnd();
+
+            GL11.glEnable(GL11.GL_CULL_FACE);
             GL11.glDisable(GL11.GL_LINE_SMOOTH);
             GlStateManager.enableBlend();
             GlStateManager.enableTexture2D();
             GlStateManager.resetColor();
 
             GL11.glPopMatrix();
-            if(yIndex > KillAura.entity.height + 0.2) {
-                down = true;
-            } else if(yIndex <= 0.05)
-                down = false;
 
-            if(timer.hasReached(1)) {
-                if(down)
-                    yIndex -= 0.05;
-                else
-                    yIndex += 0.05;
-                timer.reset();
+            if(animation.getValue() == animation.getMin() || animation.getValue() == animation.getMax()) {
+                animation.setReversed(!animation.isReversed());
             }
         }
 

@@ -43,7 +43,8 @@ public class ClickGUI extends GuiScreen {
     @Override
     protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
         for (FrameCategory frame : frames) {
-            frame.mouseClicked(mouseX, mouseY, mouseButton);
+            if(frame.mouseClicked(mouseX, mouseY, mouseButton))
+                break;
         }
         super.mouseClicked(mouseX, mouseY, mouseButton);
     }

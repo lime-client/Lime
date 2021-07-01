@@ -9,6 +9,7 @@ import lime.features.module.impl.movement.*;
 import lime.features.module.impl.player.*;
 import lime.features.module.impl.render.*;
 import lime.features.module.impl.world.NoRotate;
+import lime.features.module.impl.world.Scaffold;
 import lime.features.module.impl.world.TimeChanger;
 import lime.features.module.impl.world.Timer;
 
@@ -72,6 +73,7 @@ public class ModuleManager {
 
         // WORLD
         registerModule(new TimeChanger());
+        registerModule(new Scaffold());
         registerModule(new NoRotate());
         registerModule(new Timer());
     }

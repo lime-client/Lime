@@ -16,4 +16,8 @@ public class ColorUtils {
         int alphaPart = (int) (color1.getAlpha() * inverse_percent + color2.getAlpha() * offset);
         return new Color(redPart, greenPart, bluePart, alphaPart);
     }
+
+    public static Color setAlpha(Color color, int alpha) {
+        return new Color(color.getRed(), color.getGreen(), color.getBlue(), alpha);
+    }
 }

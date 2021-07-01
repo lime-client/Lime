@@ -19,7 +19,7 @@ import net.minecraft.potion.Potion;
 @ModuleData(name = "Speed", category = Category.MOVEMENT)
 public class Speed extends Module {
     private enum Mode {
-        VANILLA, VANILLA_BHOP, VERUS, VERUS_LOWHOP, NCP, FUNCRAFT
+        VANILLA, VANILLA_BHOP, VERUS, VERUS_LOWHOP, NCP, FUNCRAFT, FUNCRAFT_YPORT, HYPIXEL
     }
 
     private final EnumValue mode = new EnumValue("Mode", this, Mode.VANILLA);
@@ -44,6 +44,7 @@ public class Speed extends Module {
     @Override
     public void onDisable() {
         mc.timer.timerSpeed = 1;
+        mc.thePlayer.speedInAir = 0.02f;
     }
 
     @EventTarget
@@ -52,7 +53,8 @@ public class Speed extends Module {
             if(mc.thePlayer.isMoving()) {
                 MovementUtils.setSpeed(1);
                 if(mode.is("vanilla_bhop")) {
-                    if(mc.thePlayer.isMoving() && mc.thePlayer.onGround) mc.thePlayer.motionY = 0.42;
+                    if(mc.thePlayer.isMoving() && mc.thePlayer.onGround)
+                        mc.thePlayer.motionY = 0.42;
                     if(mc.thePlayer.isMoving()) {
                         MovementUtils.setSpeed(0.6);
                     }
@@ -87,6 +89,19 @@ public class Speed extends Module {
                 MovementUtils.setSpeed(0);
         }
 
+        if(mode.is("hypixel")) {
+            mc.timer.timerSpeed = 1.0866f;
+            if(e.isPre()) {
+                if(mc.thePlayer.onGround && mc.thePlayer.isMoving()) {
+                    mc.thePlayer.jump();
+                    mc.thePlayer.motionX *= 1.01;
+                    mc.thePlayer.motionZ *= 1.01;
+                }
+                MovementUtils.strafe();
+                mc.thePlayer.motionY -= 0.0000099;
+            }
+        }
+
         double xDist = mc.thePlayer.posX - mc.thePlayer.prevPosX;
         double zDist = mc.thePlayer.posZ - mc.thePlayer.prevPosZ;
         lastDist = Math.sqrt(xDist * xDist + zDist * zDist);
@@ -101,13 +116,13 @@ public class Speed extends Module {
 
     @EventTarget
     public void onMove(EventMove e) {
-        if(mode.is("ncp") || mode.is("funcraft")) {
+        if(mode.is("ncp") || mode.is("funcraft") || mode.is("funcraft_yport")) {
             if (mc.thePlayer.isMoving()) {
                 mc.timer.timerSpeed = 1.0866f;
                 mc.thePlayer.motionX *= 1.0199999809265137;
                 mc.thePlayer.motionZ *= 1.0199999809265137;
                 if(mc.thePlayer.ticksExisted % 5 == 0 && mode.is("funcraft")) {
-                    mc.timer.timerSpeed = 1.4f;
+                    mc.timer.timerSpeed = 1.75f;
                 }
                 if(mc.thePlayer.onGround)
                     this.stage = 1;
@@ -116,7 +131,7 @@ public class Speed extends Module {
                     this.stage = 1;
                 } else if (stage == 1 && mc.thePlayer.onGround) {
                     stage = 2;
-                    mc.thePlayer.motionY = 0.399399995803833;
+                    if(!mode.is("funcraft_yport")) mc.thePlayer.motionY = 0.399399995803833;
                     e.setY(0.399399995803833);
                     this.moveSpeed *= 2.149;
                 } else if (stage == 2) {

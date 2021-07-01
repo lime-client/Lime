@@ -6,6 +6,8 @@ import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.init.Blocks;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.*;
+import net.minecraft.potion.Potion;
+import net.minecraft.potion.PotionEffect;
 
 public class InventoryUtils implements IUtil {
     public static void swap(int slot1, int hotbarSlot){
@@ -79,6 +81,21 @@ public class InventoryUtils implements IUtil {
             prot += EnchantmentHelper.getEnchantmentLevel(34, stack)/50d;
         }
         return prot;
+    }
+
+    public static boolean isBadPotion(final ItemStack stack) {
+        if (stack != null && stack.getItem() instanceof ItemPotion) {
+            final ItemPotion potion = (ItemPotion) stack.getItem();
+            if (ItemPotion.isSplash(stack.getItemDamage())) {
+                for (final PotionEffect o : potion.getEffects(stack)) {
+                    final PotionEffect effect = o;
+                    if (effect.getPotionID() == Potion.poison.getId() || effect.getPotionID() == Potion.harm.getId() || effect.getPotionID() == Potion.moveSlowdown.getId() || effect.getPotionID() == Potion.weakness.getId()) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
     }
 
     public static float getToolEffect(ItemStack stack){
