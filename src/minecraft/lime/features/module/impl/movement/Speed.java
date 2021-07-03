@@ -1,5 +1,6 @@
 package lime.features.module.impl.movement;
 
+import lime.core.Lime;
 import lime.core.events.EventTarget;
 import lime.core.events.impl.EventMotion;
 import lime.core.events.impl.EventMove;
@@ -8,6 +9,7 @@ import lime.features.module.Category;
 import lime.features.module.Module;
 import lime.features.module.ModuleData;
 import lime.features.module.impl.combat.KillAura;
+import lime.features.module.impl.world.Scaffold;
 import lime.features.setting.impl.EnumValue;
 import lime.utils.combat.CombatUtils;
 import lime.utils.movement.MovementUtils;
@@ -44,7 +46,8 @@ public class Speed extends Module {
     @Override
     public void onDisable() {
         mc.timer.timerSpeed = 1;
-        mc.thePlayer.speedInAir = 0.02f;
+        if(mc.thePlayer != null)
+            mc.thePlayer.speedInAir = 0.02f;
     }
 
     @EventTarget
@@ -118,11 +121,13 @@ public class Speed extends Module {
     public void onMove(EventMove e) {
         if(mode.is("ncp") || mode.is("funcraft") || mode.is("funcraft_yport")) {
             if (mc.thePlayer.isMoving()) {
-                mc.timer.timerSpeed = 1.0866f;
-                mc.thePlayer.motionX *= 1.0199999809265137;
-                mc.thePlayer.motionZ *= 1.0199999809265137;
-                if(mc.thePlayer.ticksExisted % 5 == 0 && mode.is("funcraft")) {
-                    mc.timer.timerSpeed = 1.75f;
+                if(!Lime.getInstance().getModuleManager().getModuleC(Scaffold.class).isToggled()) {
+                    mc.timer.timerSpeed = 1.0866f;
+                    mc.thePlayer.motionX *= 1.0199999809265137;
+                    mc.thePlayer.motionZ *= 1.0199999809265137;
+                    if(mc.thePlayer.ticksExisted % 5 == 0 && mode.is("funcraft")) {
+                        mc.timer.timerSpeed = 1.75f;
+                    }
                 }
                 if(mc.thePlayer.onGround)
                     this.stage = 1;

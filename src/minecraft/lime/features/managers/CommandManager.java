@@ -1,6 +1,7 @@
 package lime.features.managers;
 
 import lime.features.commands.Command;
+import lime.features.commands.impl.Config;
 import lime.features.commands.impl.VClip;
 
 import java.util.ArrayList;
@@ -11,6 +12,7 @@ public class CommandManager {
     public CommandManager() {
         this.commands = new ArrayList<>();
 
+        registerCommand(new Config());
         registerCommand(new VClip());
     }
 

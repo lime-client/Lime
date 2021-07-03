@@ -1,26 +1,32 @@
 {
+  "informations": [
+    {
+      "author": "Lime Auto Save",
+      "time": 1625272177
+    }
+  ],
   "modules": [
     {
       "moduleName": "Auto Gapple",
       "key": -1,
-      "toggled": true,
+      "toggled": false,
       "settings": [
         {
           "name": "Delay",
           "type": "slider",
-          "value": 250.0
+          "value": 100.0
         },
         {
           "name": "Health",
           "type": "slider",
-          "value": 15.0
+          "value": 10.0
         }
       ]
     },
     {
       "moduleName": "Auto Sword",
       "key": -1,
-      "toggled": false
+      "toggled": true
     },
     {
       "moduleName": "Criticals",
@@ -52,27 +58,27 @@
         {
           "name": "Rotations",
           "type": "enum",
-          "value": "basic"
+          "value": "none"
         },
         {
           "name": "Target ESP",
           "type": "enum",
-          "value": "none"
+          "value": "circle"
         },
         {
           "name": "Auto Block",
           "type": "enum",
-          "value": "basic"
+          "value": "fake"
         },
         {
           "name": "Range",
           "type": "slider",
-          "value": 5.8500000000000005
+          "value": 4.800000000000001
         },
         {
           "name": "CPS",
           "type": "slider",
-          "value": 8.0
+          "value": 10.0
         },
         {
           "name": "Players",
@@ -87,7 +93,7 @@
         {
           "name": "Mobs",
           "type": "bool",
-          "value": true
+          "value": false
         },
         {
           "name": "Ray Cast",
@@ -97,12 +103,12 @@
         {
           "name": "Through Walls",
           "type": "bool",
-          "value": true
+          "value": false
         },
         {
           "name": "Keep Sprint",
           "type": "bool",
-          "value": true
+          "value": false
         },
         {
           "name": "Death Check",
@@ -124,12 +130,17 @@
         {
           "name": "Mode",
           "type": "enum",
-          "value": "hypixel"
+          "value": "funcraft"
         }
       ]
     },
     {
       "moduleName": "Fast Bow",
+      "key": -1,
+      "toggled": false
+    },
+    {
+      "moduleName": "No Clip",
       "key": -1,
       "toggled": false
     },
@@ -141,14 +152,14 @@
         {
           "name": "Blink Delay",
           "type": "slider",
-          "value": 350.0
+          "value": 500.0
         }
       ]
     },
     {
       "moduleName": "Target Strafe",
-      "key": -1,
-      "toggled": true,
+      "key": 45,
+      "toggled": false,
       "settings": [
         {
           "name": "Distance",
@@ -168,6 +179,53 @@
       ]
     },
     {
+      "moduleName": "Custom Flight",
+      "key": 49,
+      "toggled": false,
+      "settings": [
+        {
+          "name": "Damage",
+          "type": "enum",
+          "value": "basic"
+        },
+        {
+          "name": "Timer",
+          "type": "slider",
+          "value": 1.0
+        },
+        {
+          "name": "Speed",
+          "type": "slider",
+          "value": 1.0
+        },
+        {
+          "name": "Decrease Speed",
+          "type": "slider",
+          "value": 0.15000000000000002
+        },
+        {
+          "name": "Motion",
+          "type": "slider",
+          "value": 0.0
+        },
+        {
+          "name": "Stop Speed After",
+          "type": "slider",
+          "value": 2000.0
+        },
+        {
+          "name": "Motion After Damage",
+          "type": "bool",
+          "value": true
+        },
+        {
+          "name": "Speed After Damage",
+          "type": "bool",
+          "value": true
+        }
+      ]
+    },
+    {
       "moduleName": "Long Jump",
       "key": 40,
       "toggled": false,
@@ -175,19 +233,19 @@
         {
           "name": "Mode",
           "type": "enum",
-          "value": "vanilla"
+          "value": "verus_bow"
         },
         {
           "name": "Speed",
           "type": "slider",
-          "value": 5.0
+          "value": 9.0
         }
       ]
     },
     {
       "moduleName": "No Slow",
       "key": -1,
-      "toggled": false,
+      "toggled": true,
       "settings": [
         {
           "name": "Mode",
@@ -204,7 +262,7 @@
         {
           "name": "Mode",
           "type": "enum",
-          "value": "vanilla"
+          "value": "funcraft"
         },
         {
           "name": "Bobbing",
@@ -262,7 +320,7 @@
     {
       "moduleName": "Inventory Manager",
       "key": 48,
-      "toggled": true,
+      "toggled": false,
       "settings": [
         {
           "name": "Mode",
@@ -385,12 +443,12 @@
     {
       "moduleName": "No Fall",
       "key": -1,
-      "toggled": true,
+      "toggled": false,
       "settings": [
         {
           "name": "Mode",
           "type": "enum",
-          "value": "vanilla"
+          "value": "verus"
         }
       ]
     },
@@ -412,7 +470,7 @@
         {
           "name": "Mode",
           "type": "enum",
-          "value": "swang"
+          "value": "swing"
         }
       ]
     },
@@ -514,7 +572,7 @@
         {
           "name": "Expand",
           "type": "slider",
-          "value": 0.2
+          "value": 0.3
         },
         {
           "name": "Tower",
@@ -529,12 +587,12 @@
         {
           "name": "No Swing",
           "type": "bool",
-          "value": true
+          "value": false
         },
         {
           "name": "Same Y",
           "type": "bool",
-          "value": true
+          "value": false
         }
       ]
     },

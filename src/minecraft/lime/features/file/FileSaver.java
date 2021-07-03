@@ -14,13 +14,25 @@ import lime.features.setting.impl.SlideValue;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.time.Instant;
 
-public class File {
-    public void saveModules() {
+public class FileSaver {
+    public void saveModules(String path, String author) {
         try {
-            JsonWriter jsonWriter = new JsonWriter(new FileWriter("Lime" + java.io.File.separator + "modules.json"));
+            JsonWriter jsonWriter = new JsonWriter(new FileWriter(path));
             jsonWriter.setIndent("  ");
             jsonWriter.beginObject();
+            // Config Informations
+            jsonWriter.name("informations");
+            jsonWriter.beginArray();
+            jsonWriter.beginObject();
+            jsonWriter.name("author");
+            jsonWriter.value(author);
+            jsonWriter.name("time");
+            jsonWriter.value(Instant.now().getEpochSecond());
+            jsonWriter.endObject();
+            jsonWriter.endArray();
+
             jsonWriter.name("modules");
             jsonWriter.beginArray();
             for(Module module : Lime.getInstance().getModuleManager().getModules()) {
@@ -63,55 +75,60 @@ public class File {
         }
     }
 
-    public void applyJson() {
-        JsonParser jsonParser = new JsonParser();
+    public boolean applyJson(String path) {
         try {
-            JsonElement jsonElement = jsonParser.parse(new FileReader("Lime" + java.io.File.separator + "modules.json"));
+            JsonParser jsonParser = new JsonParser();
+            JsonElement jsonElement = jsonParser.parse(new FileReader(path));
             JsonArray modules = jsonElement.getAsJsonObject().getAsJsonArray("modules");
             for (JsonElement module : modules) {
-                Module m = Lime.getInstance().getModuleManager().getModule(module.getAsJsonObject().get("moduleName").getAsString());
-                if(m == null) continue;
-                if(module.getAsJsonObject().get("toggled").getAsBoolean())
-                    m.toggle();
-                m.setKey(module.getAsJsonObject().get("key").getAsInt());
-                if(module.getAsJsonObject().get("settings") == null) continue;
-                JsonArray settings = module.getAsJsonObject().get("settings").getAsJsonArray();
+                try {
+                    Module m = Lime.getInstance().getModuleManager().getModule(module.getAsJsonObject().get("moduleName").getAsString());
+                    if(m == null) continue;
+                    if(module.getAsJsonObject().get("toggled").getAsBoolean())
+                        m.toggle();
+                    m.setKey(module.getAsJsonObject().get("key").getAsInt());
+                    if(module.getAsJsonObject().get("settings") == null) continue;
+                    JsonArray settings = module.getAsJsonObject().get("settings").getAsJsonArray();
 
-                for(JsonElement setting : settings) {
-                    try {
-                        Enum type = SettingType.valueOf(setting.getAsJsonObject().get("type").getAsString().toUpperCase());
+                    for(JsonElement setting : settings) {
+                        try {
+                            Enum type = SettingType.valueOf(setting.getAsJsonObject().get("type").getAsString().toUpperCase());
 
-                        // Bool Setting
-                        if(type == SettingType.BOOL) {
-                            BoolValue boolSetting = (BoolValue) Lime.getInstance().getSettingsManager().getSetting(setting.getAsJsonObject().get("name").getAsString(), m);
-                            boolSetting.setEnabled(setting.getAsJsonObject().get("value").getAsBoolean());
-                        }
-
-                        // Slider Setting
-                        if(type == SettingType.SLIDER) {
-                            SlideValue slideSetting = (SlideValue) Lime.getInstance().getSettingsManager().getSetting(setting.getAsJsonObject().get("name").getAsString(), m);
-                            slideSetting.setCurrentValue(setting.getAsJsonObject().get("value").getAsDouble());
-                        }
-
-                        // Enum Setting
-                        if(type == SettingType.ENUM) {
-                            EnumValue enumSetting = (EnumValue) Lime.getInstance().getSettingsManager().getSetting(setting.getAsJsonObject().get("name").getAsString(), m);
-                            Enum selected = null;
-                            for(Enum _enum : enumSetting.getModes()) {
-                                if(_enum.name().equalsIgnoreCase(setting.getAsJsonObject().get("value").getAsString())) selected = _enum;
+                            // Bool Setting
+                            if(type == SettingType.BOOL) {
+                                BoolValue boolSetting = (BoolValue) Lime.getInstance().getSettingsManager().getSetting(setting.getAsJsonObject().get("name").getAsString(), m);
+                                boolSetting.setEnabled(setting.getAsJsonObject().get("value").getAsBoolean());
                             }
-                            if(selected == null) continue;
-                            enumSetting.setSelected(selected);
-                        }
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
 
+                            // Slider Setting
+                            if(type == SettingType.SLIDER) {
+                                SlideValue slideSetting = (SlideValue) Lime.getInstance().getSettingsManager().getSetting(setting.getAsJsonObject().get("name").getAsString(), m);
+                                slideSetting.setCurrentValue(setting.getAsJsonObject().get("value").getAsDouble());
+                            }
+
+                            // Enum Setting
+                            if(type == SettingType.ENUM) {
+                                EnumValue enumSetting = (EnumValue) Lime.getInstance().getSettingsManager().getSetting(setting.getAsJsonObject().get("name").getAsString(), m);
+                                Enum selected = null;
+                                for(Enum _enum : enumSetting.getModes()) {
+                                    if(_enum.name().equalsIgnoreCase(setting.getAsJsonObject().get("value").getAsString())) selected = _enum;
+                                }
+                                if(selected == null) continue;
+                                enumSetting.setSelected(selected);
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
+            return true;
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return false;
     }
 
 

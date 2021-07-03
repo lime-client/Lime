@@ -10,6 +10,8 @@ import java.util.Random;
 import lime.core.events.EventBus;
 import lime.core.events.impl.Event2D;
 import lime.core.events.impl.EventScoreboard;
+import lime.features.managers.FontManager;
+import lime.utils.render.ColorUtils;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
@@ -611,7 +613,11 @@ public class GuiIngame extends Gui
                 String s3 = p_180475_1_.getDisplayName();
                 drawRect(j - 2, l - this.getFontRenderer().FONT_HEIGHT - 1, i1, l - 1, 1610612736);
                 drawRect(j - 2, l - 1, i1, l, 1342177280);
-                this.getFontRenderer().drawString(s3, j + i / 2 - this.getFontRenderer().getStringWidth(s3) / 2, l - this.getFontRenderer().FONT_HEIGHT, 553648127);
+                if(s3.equalsIgnoreCase("§6§lFun§f§lCraft§f§o.net")) {
+                    ColorUtils.drawChromaString(FontManager.ProductSans20.getFont(), "limeclient.xyz", j + i / 2 - FontManager.ProductSans20.getFont().getStringWidth("limeclient.xyz") / 2, l + 0.5f - FontManager.ProductSans20.getFont().getFontHeight(), true);
+                } else {
+                    this.getFontRenderer().drawString(s3, j + i / 2 - this.getFontRenderer().getStringWidth(s3) / 2, l - this.getFontRenderer().FONT_HEIGHT, 553648127);
+                }
             }
         }
     }

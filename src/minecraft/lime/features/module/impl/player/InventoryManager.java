@@ -47,7 +47,7 @@ public class InventoryManager extends Module {
         ArrayList<ItemStack> swords = new ArrayList<>();
 
         for (int i = 9; i < 45; i++) {
-            if(getSlot(i).getHasStack() & i != slot) {
+            if(getSlot(i).getHasStack()) {
                 ItemStack itemStack = getSlot(i).getStack();
                 if(itemStack.getItem() instanceof ItemSword && !(itemStack.getDisplayName().contains("§") || itemStack.getDisplayName().contains("right click"))) {
                     swords.add(itemStack);
@@ -61,9 +61,11 @@ public class InventoryManager extends Module {
 
         ItemStack bestSword = swords.get(0);
 
+        if(findSlotByItem(bestSword) == slot) return;
+
         if(timer.hasReached((long) delay.getCurrent())) {
             if(getSlot(slot).getHasStack() && getSlot(slot).getStack().getItem() instanceof ItemSword) {
-                if(getToolEffect(bestSword) <= getToolEffect(getSlot(slot).getStack())) {
+                if(getDamage(bestSword) <= getDamage(getSlot(slot).getStack())) {
                     drop(findSlotByItem(bestSword));
                 } else {
                     swap(findSlotByItem(bestSword), slot - 36);

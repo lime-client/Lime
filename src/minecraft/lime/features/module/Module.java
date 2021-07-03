@@ -2,7 +2,6 @@ package lime.features.module;
 
 import lime.core.Lime;
 import lime.core.events.EventBus;
-import lime.features.file.File;
 import net.minecraft.client.Minecraft;
 
 public abstract class Module {

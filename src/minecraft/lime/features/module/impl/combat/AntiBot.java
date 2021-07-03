@@ -31,7 +31,7 @@ public class AntiBot extends Module {
                 if(ent instanceof AbstractClientPlayer && ent != mc.thePlayer && ent.ticksExisted < 30) {
                     if((((AbstractClientPlayer) ent).getLocationSkin().getResourcePath().equalsIgnoreCase("textures/entity/alex.png") || ((AbstractClientPlayer) ent).getLocationSkin().getResourcePath().equalsIgnoreCase("textures/entity/steve.png")) && ent.ticksExisted < 30) {
                         AbstractClientPlayer player = (AbstractClientPlayer) ent;
-                        if(mc.thePlayer.getDistanceToEntity(player) <= 5 && player.motionY == 0 && !player.onGround) {
+                        if(mc.thePlayer.getDistanceToEntity(player) <= 5 && player.motionY == 0 && !player.onGround && player.rotationYaw != -180 && player.rotationPitch != -8.4375) {
                             mc.theWorld.removeEntity(player);
                         }
                     }

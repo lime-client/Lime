@@ -176,6 +176,8 @@ public class GlyphPageFontRenderer {
             i = this.renderString(text, x, y, color, false);
         }
 
+        GlStateManager.color(1, 1, 1, 1);
+
         return i;
     }
 

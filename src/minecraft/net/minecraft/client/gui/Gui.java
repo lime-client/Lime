@@ -81,6 +81,7 @@ public class Gui
         tessellator.draw();
         GlStateManager.enableTexture2D();
         GlStateManager.disableBlend();
+        GlStateManager.color(1, 1, 1, 1);
     }
 
     /**

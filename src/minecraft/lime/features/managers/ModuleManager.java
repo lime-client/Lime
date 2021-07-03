@@ -5,6 +5,7 @@ import lime.features.module.Module;
 import lime.features.module.impl.combat.*;
 import lime.features.module.impl.exploit.Blink;
 import lime.features.module.impl.exploit.FastBow;
+import lime.features.module.impl.exploit.NoClip;
 import lime.features.module.impl.movement.*;
 import lime.features.module.impl.player.*;
 import lime.features.module.impl.render.*;
@@ -32,10 +33,12 @@ public class ModuleManager {
 
         // EXPLOIT
         registerModule(new FastBow());
+        registerModule(new NoClip());
         registerModule(new Blink());
 
         // MOVEMENT
         registerModule(new TargetStrafe());
+        registerModule(new CustomFlight());
         registerModule(new LongJump());
         registerModule(new NoSlow());
         registerModule(new Flight());

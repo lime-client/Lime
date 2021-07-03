@@ -42,7 +42,7 @@ public class LongJump extends Module {
         if(mode.is("verus_bow")) {
             if(!receivedS12) {
                 MovementUtils.setSpeed(0);
-                mc.thePlayer.motionY = -0.0784000015258789;
+                //mc.thePlayer.motionY = -0.0784000015258789;
                 e.setPitch(-90);
             } else {
                 if(e.isPre()) {
@@ -52,7 +52,7 @@ public class LongJump extends Module {
                     }
                     moveSpeed -= 0.0001;
                     MovementUtils.setSpeed(moveSpeed);
-                    if(MovementUtils.isOnGround(1)) this.toggle();
+                    if(mc.thePlayer.onGround) this.toggle();
                 }
             }
         }
@@ -100,10 +100,9 @@ public class LongJump extends Module {
             }
 
             if(mode.is("verus_bow")) {
-                //MovementUtils.vClip(4);
+                mc.thePlayer.motionY = 1.1;
                 moveSpeed = speed.getCurrent();
                 MovementUtils.setSpeed(moveSpeed);
-                mc.thePlayer.motionY = 1.1;
             }
         }
     }

@@ -36,7 +36,7 @@ public class Flight extends Module {
         if(mode.is("funcraft")) {
             if(mc.thePlayer.onGround) {
                 mc.thePlayer.jump();
-                moveSpeed = 1.875;
+                moveSpeed = 1.7;
             } else
                 moveSpeed = 0.25;
         }
@@ -128,8 +128,9 @@ public class Flight extends Module {
                 MovementUtils.setSpeed(0);
                 moveSpeed = 0.25;
             }
-            if(e.isPre()) {
-                mc.thePlayer.setPosition(mc.thePlayer.posX, mc.thePlayer.posY - 3.33315597345063e-11, mc.thePlayer.posZ);
+            if(e.isPre() && !MovementUtils.isOnGround(0.1)) {
+                // 3.33315597345063e-11
+                mc.thePlayer.setPosition(mc.thePlayer.posX, mc.thePlayer.posY - 0.0000000000333315597345063, mc.thePlayer.posZ);
             }
         }
     }

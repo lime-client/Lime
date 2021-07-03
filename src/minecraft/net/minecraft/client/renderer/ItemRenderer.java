@@ -2,6 +2,7 @@ package net.minecraft.client.renderer;
 
 import lime.core.Lime;
 import lime.features.module.impl.combat.KillAura;
+import lime.features.module.impl.exploit.NoClip;
 import lime.features.module.impl.render.Animations;
 import lime.features.module.impl.render.Camera;
 import lime.features.setting.impl.BoolValue;
@@ -480,7 +481,9 @@ public class ItemRenderer
 
                 if (!Reflector.callBoolean(Reflector.ForgeEventFactory_renderBlockOverlay, new Object[] {this.mc.thePlayer, Float.valueOf(partialTicks), object, iblockstate, blockpos}))
                 {
-                    this.func_178108_a(partialTicks, this.mc.getBlockRendererDispatcher().getBlockModelShapes().getTexture(iblockstate));
+                    if(!Lime.getInstance().getModuleManager().getModuleC(NoClip.class).isToggled()) {
+                        this.func_178108_a(partialTicks, this.mc.getBlockRendererDispatcher().getBlockModelShapes().getTexture(iblockstate));
+                    }
                 }
             }
         }

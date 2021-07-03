@@ -143,12 +143,6 @@ public class GuiMainMenu extends GuiScreen implements GuiYesNoCallback
         this.updateCounter = RANDOM.nextFloat();
         this.openGLWarning1 = "";
 
-        if (!GLContext.getCapabilities().OpenGL20 && !OpenGlHelper.areShadersSupported())
-        {
-            this.openGLWarning1 = I18n.format("title.oldgl1", new Object[0]);
-            this.openGLWarning2 = I18n.format("title.oldgl2", new Object[0]);
-            this.openGLWarningLink = "https://help.mojang.com/customer/portal/articles/325948?ref=game";
-        }
     }
 
     /**

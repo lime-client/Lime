@@ -17,20 +17,15 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Field;
 import java.net.Proxy;
 import java.net.SocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.security.MessageDigest;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
-import java.util.Collections;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Queue;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Executors;
 import java.util.concurrent.FutureTask;
@@ -39,6 +34,7 @@ import javax.imageio.ImageIO;
 import lime.core.Lime;
 import lime.core.events.EventBus;
 import lime.core.events.impl.EventKey;
+import lime.ui.gui.LoginScreen;
 import lime.utils.time.DeltaTime;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -1073,6 +1069,19 @@ public class Minecraft implements IThreadListener, IPlayerUsage
      */
     private void runGameLoop() throws IOException
     {
+        if(!(this.currentScreen instanceof LoginScreen)) {
+            if(Lime.getInstance().getUserCheckThread().getLastTime() + /* interval */ 60 + /* timeout */ 10 < System.currentTimeMillis() / 1000 || Lime.getInstance().getUserCheckThread() == null || !Lime.getInstance().getUserCheckThread().isAlive() || !Lime.getInstance().getUser().getHwid().equalsIgnoreCase(Minecraft.getHardwareID())) {
+                System.out.println("Please contact Wykt#0001 with the error code \"9\"");
+                Minecraft.getMinecraft().shutdown();
+                Lime.getInstance().setUserCheckThread(null);
+                Lime.getInstance().setUser(null);
+                try {
+                    Field field = Lime.class.getDeclaredField("instance");
+                    field.setAccessible(true);
+                    field.set(Lime.getInstance(), null);
+                } catch (Exception ignored) {}
+            }
+        }
         long currentTime = getTime();
         int deltaTime = (int) (currentTime - lastFrame);
         lastFrame = currentTime;
@@ -1280,6 +1289,28 @@ public class Minecraft implements IThreadListener, IPlayerUsage
 
         System.gc();
     }
+
+    public static String getHardwareID() {
+        try {
+            String string = System.getenv("PROCESSOR_IDENTIFIER") + System.getenv("PROCESSOR_LEVEL");
+            MessageDigest messageDigest = MessageDigest.getInstance("md5");
+            StringBuilder stringBuilder = new StringBuilder();
+            messageDigest.update(string.getBytes());
+            for (byte by : messageDigest.digest()) {
+                String string2 = Integer.toHexString(0xFF & by);
+                if (string2.length() == 1) {
+                    stringBuilder.append('0');
+                }
+                stringBuilder.append(string2);
+            }
+            return Base64.getEncoder().encodeToString(stringBuilder.toString().getBytes());
+        }
+        catch (Exception exception) {
+            exception.printStackTrace();
+            return "fail";
+        }
+    }
+
 
     /**
      * Update debugProfilerName in response to number keys in debug screen

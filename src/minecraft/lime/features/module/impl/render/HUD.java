@@ -27,6 +27,7 @@ public class HUD extends Module {
             Gui.drawRect(5 + Math.toRadians(i), 5 + Math.toRadians(i), 5 + Math.toRadians(i) + 3, 5 + Math.toRadians(i) + 3, color.getRGB());
         }
 
+
         ArrayList<Module> modules = new ArrayList<>(Lime.getInstance().getModuleManager().getModules());
 
         modules.sort((o1, o2) -> {

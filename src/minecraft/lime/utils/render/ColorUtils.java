@@ -1,5 +1,7 @@
 package lime.utils.render;
 
+import lime.utils.render.fontRenderer.GlyphPageFontRenderer;
+
 import java.awt.*;
 
 public class ColorUtils {
@@ -19,5 +21,15 @@ public class ColorUtils {
 
     public static Color setAlpha(Color color, int alpha) {
         return new Color(color.getRed(), color.getGreen(), color.getBlue(), alpha);
+    }
+
+    public static void drawChromaString(GlyphPageFontRenderer fontRenderer, String text, float x, float y, boolean shadow) {
+        float tmpX = x;
+        for (char currentChar : text.toCharArray()) {
+            long l = System.currentTimeMillis() - ((long) tmpX * 10 - (long) y * 10);
+            int currentColor = Color.HSBtoRGB(l % (int) 2000.0F / 2000.0F, 0.8F, 0.8F);
+            fontRenderer.drawString(String.valueOf(currentChar), tmpX, y, currentColor, shadow);
+            tmpX += fontRenderer.getStringWidth(String.valueOf(currentChar));
+        }
     }
 }

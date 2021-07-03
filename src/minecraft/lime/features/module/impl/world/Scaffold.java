@@ -59,7 +59,7 @@ public class Scaffold extends Module {
 
     private static final List<Block> blacklistedBlocks = Arrays.asList(Blocks.air, Blocks.water, Blocks.flowing_water, Blocks.lava, Blocks.flowing_lava, Blocks.enchanting_table, Blocks.carpet, Blocks.glass_pane, Blocks.stained_glass_pane, Blocks.iron_bars, Blocks.snow_layer, Blocks.ice, Blocks.packed_ice, Blocks.coal_ore, Blocks.diamond_ore, Blocks.emerald_ore, Blocks.chest, Blocks.torch, Blocks.anvil, Blocks.trapped_chest, Blocks.noteblock, Blocks.jukebox, Blocks.tnt, Blocks.gold_ore, Blocks.iron_ore, Blocks.lapis_ore, Blocks.lit_redstone_ore, Blocks.quartz_ore, Blocks.redstone_ore, Blocks.wooden_pressure_plate, Blocks.stone_pressure_plate, Blocks.light_weighted_pressure_plate, Blocks.heavy_weighted_pressure_plate, Blocks.stone_button, Blocks.wooden_button, Blocks.lever, Blocks.beacon, Blocks.ladder, Blocks.sapling, Blocks.oak_fence, Blocks.red_flower, Blocks.yellow_flower, Blocks.flower_pot, Blocks.red_mushroom, Blocks.brown_mushroom, Blocks.sand, Blocks.tallgrass, Blocks.tripwire_hook, Blocks.tripwire, Blocks.gravel, Blocks.dispenser, Blocks.dropper, Blocks.crafting_table, Blocks.furnace, Blocks.redstone_torch, Blocks.standing_sign, Blocks.wall_sign, Blocks.enchanting_table, Blocks.torch);
     private ItemStack currentItemStack;
-    private Animate animation;
+    private final Animate animation = new Animate();
     private BlockData blockData;
     private double posY;
 
@@ -69,8 +69,10 @@ public class Scaffold extends Module {
 
     @Override
     public void onEnable() {
-        this.posY = mc.thePlayer.posY;
-        this.animation = new Animate();
+        if(mc.thePlayer != null) {
+            this.posY = mc.thePlayer.posY;
+        }
+        this.animation.reset();
         this.animation.setEase(Easing.CUBIC_IN_OUT);
         this.animation.setMin(5);
         //this.animation.setMax(new ScaledResolution(mc).getScaledWidth() / 2 - (mc.fontRendererObj.getStringWidth(getBlocksCount() + " blocks") / 2));

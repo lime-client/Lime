@@ -12,9 +12,12 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
+
+import lime.ui.fields.ButtonField;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.stream.GuiTwitchUserMode;
 import net.minecraft.client.renderer.GlStateManager;
@@ -63,6 +66,8 @@ public abstract class GuiScreen extends Gui implements GuiYesNoCallback
 
     /** The height of the screen object. */
     public int height;
+
+    protected List<ButtonField> customButtonList = Lists.<ButtonField>newArrayList();
     protected List<GuiButton> buttonList = Lists.<GuiButton>newArrayList();
     protected List<GuiLabel> labelList = Lists.<GuiLabel>newArrayList();
     public boolean allowUserInput;
@@ -90,6 +95,10 @@ public abstract class GuiScreen extends Gui implements GuiYesNoCallback
         for (int i = 0; i < this.buttonList.size(); ++i)
         {
             ((GuiButton)this.buttonList.get(i)).drawButton(this.mc, mouseX, mouseY);
+        }
+
+        for (ButtonField buttonField : this.customButtonList) {
+            buttonField.drawButton(mouseX, mouseY);
         }
 
         for (int j = 0; j < this.labelList.size(); ++j)
@@ -507,6 +516,11 @@ public abstract class GuiScreen extends Gui implements GuiYesNoCallback
                     this.actionPerformed(guibutton);
                 }
             }
+            for (ButtonField buttonField : customButtonList) {
+                if(buttonField.isHovered()) {
+                    buttonField.mouseClicked();
+                }
+            }
         }
     }
 
@@ -549,6 +563,7 @@ public abstract class GuiScreen extends Gui implements GuiYesNoCallback
         this.width = width;
         this.height = height;
         this.buttonList.clear();
+        this.customButtonList.clear();
         this.initGui();
     }
 
