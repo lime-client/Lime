@@ -1,5 +1,6 @@
 package lime.ui.fields;
 
+import lime.utils.render.RenderUtils;
 import lime.utils.render.fontRenderer.GlyphPageFontRenderer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
@@ -7,6 +8,7 @@ import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.util.ResourceLocation;
 import org.apache.commons.lang3.StringUtils;
+import org.lwjgl.opengl.GL11;
 
 public class TextField {
     private double x, y, width, height;
@@ -29,15 +31,29 @@ public class TextField {
 
     public void drawTextField(int mouseX, int mouseY) {
         hovered = GuiScreen.hover((int) x, (int) y, mouseX, mouseY, (int) width, (int) height);
+        GL11.glPushMatrix();
+        GL11.glEnable(GL11.GL_SCISSOR_TEST);
+        RenderUtils.prepareScissorBox((float) x, (float) y, (float) x + (float) width, (float) y + (float) height);
         Gui.drawRect(x, y + height - 1, x + width, y + height, -1);
-        fontRenderer.drawStringWithShadow(getText(), (float) x, (float) y + ((float) height - 8) / 2 - 2, -1);
+        fontRenderer.drawStringWithShadow(getText(), (float) x - getOffset(), (float) y + ((float) height - 8) / 2 - 2, -1);
 
         if(this.getText().isEmpty() && !isFocused()) {
-            fontRenderer.drawStringWithShadow("§7" + this.name, (float) x, (float) y + ((float) height - 8) / 2 - 2, -1);
+            fontRenderer.drawStringWithShadow("§7" + this.name, (float) x - getOffset(), (float) y + ((float) height - 8) / 2 - 2, -1);
         }
 
         if(isFocused() && (System.currentTimeMillis() / 500 % 2 == 0)) {
-            fontRenderer.drawStringWithShadow("_", (float) x + fontRenderer.getStringWidth(getText()), (float) y + ((float) height - 8) / 2 - 2, -1);
+            fontRenderer.drawStringWithShadow("_", (float) x + fontRenderer.getStringWidth(getText()) - getOffset(), (float) y + ((float) height - 8) / 2 - 2, -1);
+        }
+        GL11.glDisable(GL11.GL_SCISSOR_TEST);
+        GL11.glPopMatrix();
+    }
+
+    public float getOffset() {
+        float stringWidth = fontRenderer.getStringWidth(this.getText());
+        if(stringWidth > width) {
+            return stringWidth - (float) width;
+        } else {
+            return 0;
         }
     }
 

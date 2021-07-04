@@ -1,10 +1,7 @@
 package net.minecraft.client.entity;
 
 import lime.core.events.EventBus;
-import lime.core.events.impl.EventMotion;
-import lime.core.events.impl.EventMove;
-import lime.core.events.impl.EventSlow;
-import lime.core.events.impl.EventUpdate;
+import lime.core.events.impl.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.MovingSoundMinecartRiding;
 import net.minecraft.client.audio.PositionedSoundRecord;
@@ -847,13 +844,17 @@ public class EntityPlayerSP extends AbstractClientPlayer
             }
             else
             {
-                this.setSprinting(true);
+                EventEntityAction e = new EventEntityAction();
+                EventBus.INSTANCE.call(e);
+                this.setSprinting(e.isShouldSprint());
             }
         }
 
         if (!this.isSprinting() && this.movementInput.moveForward >= f && flag3 && !this.isUsingItem() && !this.isPotionActive(Potion.blindness) && this.mc.gameSettings.keyBindSprint.isKeyDown())
         {
-            this.setSprinting(true);
+            EventEntityAction e = new EventEntityAction();
+            EventBus.INSTANCE.call(e);
+            this.setSprinting(e.isShouldSprint());
         }
 
         if (this.isSprinting() && (this.movementInput.moveForward < f || this.isCollidedHorizontally || !flag3))

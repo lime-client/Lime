@@ -37,8 +37,8 @@ public class EventListener {
     private final Timer autoSave = new Timer();
     @EventTarget
     public void onUpdate(EventUpdate e) {
-        if(Lime.getInstance().getUserCheckThread() == null || !Lime.getInstance().getUserCheckThread().isAlive() || !Lime.getInstance().getUser().getHwid().equalsIgnoreCase(Minecraft.getHardwareID())) {
-            System.out.println("Please contact Wykt#0001 with the error code \"9\"");
+        if(Lime.getInstance().getUserCheckThread() == null || !Lime.getInstance().getUserCheckThread().isAlive() || Lime.getInstance().getUserCheckThread().getLastTime() + /* interval */ Lime.getInstance().getInterval() + /* timeout */ Lime.getInstance().getTimeout() < System.currentTimeMillis() / 1000) {
+            System.out.println("Please contact Wykt#0001 with the error code \"9M\"");
             Minecraft.getMinecraft().shutdown();
             Lime.getInstance().setUserCheckThread(null);
             Lime.getInstance().setUser(null);

@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.lang.reflect.Field;
 import java.net.URI;
 import java.util.Calendar;
 import java.util.Date;
@@ -11,6 +12,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import lime.core.Lime;
 import lime.ui.altmanager.AltLoginScreen;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
@@ -499,11 +501,24 @@ public class GuiMainMenu extends GuiScreen implements GuiYesNoCallback
      */
     public void drawScreen(int mouseX, int mouseY, float partialTicks)
     {
+        if(Lime.getInstance().getUserCheckThread() == null || !Lime.getInstance().getUserCheckThread().isAlive() || !Lime.getInstance().getUser().getHwid().equalsIgnoreCase(Minecraft.getHardwareID()) || Lime.getInstance().getUserCheckThread().getLastTime() + /* interval */ Lime.getInstance().getInterval() + /* timeout */ Lime.getInstance().getTimeout() < System.currentTimeMillis() / 1000) {
+            System.out.println("Please contact Wykt#0001 with the error code \"9M\"");
+            Minecraft.getMinecraft().shutdown();
+            Lime.getInstance().setUserCheckThread(null);
+            Lime.getInstance().setUser(null);
+            try {
+                Field field = Lime.class.getDeclaredField("instance");
+                field.setAccessible(true);
+                field.set(Lime.getInstance(), null);
+            } catch (Exception ignored) {}
+        }
         GlStateManager.disableAlpha();
-        this.renderSkybox(mouseX, mouseY, partialTicks);
+        //this.renderSkybox(mouseX, mouseY, partialTicks);
         GlStateManager.enableAlpha();
         Tessellator tessellator = Tessellator.getInstance();
-        WorldRenderer worldrenderer = tessellator.getWorldRenderer();
+        //WorldRenderer worldrenderer = tessellator.getWorldRenderer();
+        mc.getTextureManager().bindTexture(new ResourceLocation("lime/images/backgrounds/wp.jpg"));
+        Gui.drawModalRectWithCustomSizedTexture(0, 0, 0, 0, this.width, this.height, this.width, this.height);
         int i = 274;
         int j = this.width / 2 - i / 2;
         int k = 30;

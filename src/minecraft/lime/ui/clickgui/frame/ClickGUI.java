@@ -42,6 +42,10 @@ public class ClickGUI extends GuiScreen {
         animate.setReversed(false);
         animate.setEase(Easing.CUBIC_OUT);
         animate.reset();
+
+        for (FrameCategory frame : frames) {
+            frame.initGui();
+        }
         super.initGui();
     }
 

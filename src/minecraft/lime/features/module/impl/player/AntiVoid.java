@@ -24,7 +24,7 @@ public class AntiVoid extends Module {
 
     @EventTarget
     public void onMotion(EventMotion e) {
-        if(MovementUtils.isVoidUnder() && !mc.thePlayer.onGround && mc.thePlayer.isEntityAlive()) {
+        if(!mc.thePlayer.onGround && mc.thePlayer.isEntityAlive()) {
             if(mode.is("motion")) {
                 if(timer.hasReached((int) pullBack.getCurrent())) {
                     timer.reset();

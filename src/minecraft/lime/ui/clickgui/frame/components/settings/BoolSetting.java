@@ -6,6 +6,8 @@ import lime.features.setting.impl.BoolValue;
 import lime.ui.clickgui.frame.components.Component;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.renderer.GlStateManager;
+import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
 
@@ -20,7 +22,22 @@ public class BoolSetting extends Component {
             Gui.drawRect(x - 3, y + 3, x - 3 + 135, y + 19, new Color(25, 25, 25, 150).getRGB());
         }
         FontManager.ProductSans20.getFont().drawString(setting.getSettingName(), x + 2, y + 4, -1);
-        FontManager.ProductSans20.getFont().drawString(((BoolValue) setting).isEnabled() + "", this.x + 127 - FontManager.ProductSans20.getFont().getStringWidth(((BoolValue) setting).isEnabled() + ""), this.y + 4, -1);
+        //FontManager.ProductSans20.getFont().drawString(((BoolValue) setting).isEnabled() + "", this.x + 127 - FontManager.ProductSans20.getFont().getStringWidth(((BoolValue) setting).isEnabled() + ""), this.y + 4, -1);
+        Gui.drawRect(this.x + 120, this.y + 6, this.x + 130, this.y + 16, new Color(25, 25, 25).getRGB());
+        if(((BoolValue) setting).isEnabled()) {
+            GL11.glPushMatrix();
+            GlStateManager.enableTexture2D();
+            GL11.glEnable(GL11.GL_LINE_SMOOTH);
+            GL11.glBegin(3);
+            GL11.glVertex2f(this.x + 121, this.y + 7);
+            GL11.glVertex2f(this.x + 129, this.y + 15);
+            GL11.glEnd();
+            GL11.glBegin(3);
+            GL11.glVertex2f(this.x + 121, this.y + 15);
+            GL11.glVertex2f(this.x + 129, this.y + 7);
+            GL11.glEnd();
+            GL11.glPopMatrix();
+        }
     }
 
     @Override

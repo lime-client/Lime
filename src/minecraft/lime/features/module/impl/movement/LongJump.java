@@ -11,8 +11,16 @@ import lime.features.module.ModuleData;
 import lime.features.setting.impl.EnumValue;
 import lime.features.setting.impl.SlideValue;
 import lime.utils.movement.MovementUtils;
+import lime.utils.other.InventoryUtils;
+import net.minecraft.item.ItemBow;
+import net.minecraft.item.ItemStack;
 import net.minecraft.network.play.client.C03PacketPlayer;
+import net.minecraft.network.play.client.C07PacketPlayerDigging;
+import net.minecraft.network.play.client.C08PacketPlayerBlockPlacement;
+import net.minecraft.network.play.client.C09PacketHeldItemChange;
 import net.minecraft.network.play.server.S12PacketEntityVelocity;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 
 @ModuleData(name = "Long Jump", category = Category.MOVEMENT)
 public class LongJump extends Module {
@@ -27,17 +35,80 @@ public class LongJump extends Module {
     private double moveSpeed = 0;
     private boolean receivedS12 = false;
 
+
+
+    private boolean bowd;
+    private int ticks;
+
     @Override
     public void onEnable() {
         receivedS12 = false;
+        ticks = 0;
+        bowd = false;
+        moveSpeed = 0;
+        if(mode.is("ncp_bow")) {
+            ItemStack bow = null;
+            int slot = -1;
+            for(int i = 36; i < 45; ++i) {
+                if(InventoryUtils.getSlot(i).getHasStack()) {
+                    ItemStack itemStack = InventoryUtils.getSlot(i).getStack();
+                    if(itemStack.getItem() instanceof ItemBow) {
+                        bow = itemStack;
+                        slot = i - 36;
+                    }
+                }
+            }
+
+            if(bow != null) {
+                mc.getNetHandler().addToSendQueue(new C09PacketHeldItemChange(slot));
+                mc.getNetHandler().addToSendQueue(new C08PacketPlayerBlockPlacement(bow));
+            } else {
+                this.toggle();
+                return;
+            }
+        }
         if(mode.is("taka")) mc.getNetHandler().addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY - 4, mc.thePlayer.posX, true));
+        /*mc.thePlayer.sendQueue.addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY + 4, mc.thePlayer.posZ, false));
+        mc.thePlayer.sendQueue.addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY , mc.thePlayer.posZ, false));
+
+
+
+        mc.thePlayer.sendQueue.addToSendQueue(new C03PacketPlayer(true));
+
+
+        mc.thePlayer.sendQueue.addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY + 0.41999998688697815, mc.thePlayer.posZ, false));
+        mc.thePlayer.sendQueue.addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY + 0.36502771690226155, mc.thePlayer.posZ, false));
+        mc.thePlayer.sendQueue.addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY + 0.1647732818260721, mc.thePlayer.posZ, false));
+        mc.thePlayer.sendQueue.addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY + 0.08307781780646721, mc.thePlayer.posZ, true));
+        */
     }
 
     @EventTarget
     public void onMotion(EventMotion e) {
-        if(mode.is("ncp_bow") && !receivedS12) {
-            MovementUtils.setSpeed(0);
-            e.setPitch(-90);
+        if(mode.is("ncp_bow")) {
+            if(!receivedS12) {
+                MovementUtils.setSpeed(0);
+                e.setPitch(-90);
+                if(ticks >= 3 && !bowd) {
+                    bowd = true;
+                    mc.getNetHandler().addToSendQueue(new C07PacketPlayerDigging(C07PacketPlayerDigging.Action.RELEASE_USE_ITEM, new BlockPos(0, 0, 0), EnumFacing.DOWN));
+                    mc.getNetHandler().addToSendQueue(new C09PacketHeldItemChange(mc.thePlayer.inventory.currentItem));
+                }
+            } else {
+                if(e.isPre()) {
+                    if(mc.thePlayer.onGround) {
+                        if(moveSpeed == 0) {
+                            mc.thePlayer.jump();
+                            MovementUtils.setSpeed(moveSpeed = 0.85);
+                        } else {
+                            this.toggle();
+                        }
+                    } else {
+                        MovementUtils.setSpeed(moveSpeed -= moveSpeed / 15);
+                        MovementUtils.strafe();
+                    }
+                }
+            }
         }
         if(mode.is("verus_bow")) {
             if(!receivedS12) {
@@ -56,6 +127,8 @@ public class LongJump extends Module {
                 }
             }
         }
+        if(e.isPre())
+            ticks++;
     }
 
     @EventTarget
@@ -87,15 +160,6 @@ public class LongJump extends Module {
             receivedS12 = true;
             if(mode.is("taka")) {
                 MovementUtils.setSpeed(7);
-                this.toggle();
-            }
-            if(mode.is("ncp_bow")) {
-                mc.thePlayer.motionY = 0.4;
-                if(packet.getMotionY() == 3686) {
-                    MovementUtils.setSpeed(1.4);
-                } else {
-                    MovementUtils.setSpeed(0.8);
-                }
                 this.toggle();
             }
 

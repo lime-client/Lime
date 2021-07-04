@@ -27,6 +27,9 @@ public class HUD extends Module {
             Gui.drawRect(5 + Math.toRadians(i), 5 + Math.toRadians(i), 5 + Math.toRadians(i) + 3, 5 + Math.toRadians(i) + 3, color.getRGB());
         }
 
+        Color c = ColorUtils.blend2colors(new Color(0, 255, 0), new Color(0, 255, 0).darker(), (System.nanoTime() + (0 * 100000000L * 2)) / 1.0E09F % 2.0F);
+        //FontManager.SF.getFont().drawStringWithShadow("Velocity", 3, 3, c.getRGB());
+
 
         ArrayList<Module> modules = new ArrayList<>(Lime.getInstance().getModuleManager().getModules());
 
@@ -43,7 +46,7 @@ public class HUD extends Module {
 
                 Gui.drawRect(e.getScaledResolution().getScaledWidth() - 1, yCount * 12, e.getScaledResolution().getScaledWidth(), yCount * 12 + 12, color.getRGB());
                 //FontManager.ProductSans20.getFont().drawStringWithShadow(module.getName(), (e.getScaledResolution().getScaledWidth() - FontManager.ProductSans20.getFont().getStringWidth(module.getName())) - 4, yCount * 12, new Color(0, 255, 0).getRGB());
-                FontManager.ProductSans20.getFont().drawStringWithShadow(module.getName(), (e.getScaledResolution().getScaledWidth() - FontManager.ProductSans20.getFont().getStringWidth(module.getName())) - 4, yCount * 12, color.getRGB());
+                FontManager.SF.getFont().drawStringWithShadow(module.getName(), (e.getScaledResolution().getScaledWidth() - FontManager.SF.getFont().getStringWidth(module.getName())) - 4, yCount * 12, color.getRGB());
                 ++yCount;
             }
         }

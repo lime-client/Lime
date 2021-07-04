@@ -26,6 +26,9 @@ public class Lime {
     private FileSaver fileSaver;
     private User user;
 
+    private int interval = 300;
+    private int timeout = 30;
+
     public void initClient() {
         System.out.println("Initialising Client");
 
@@ -102,5 +105,21 @@ public class Lime {
 
     public void setUserCheckThread(UserCheckThread userCheckThread) {
         this.userCheckThread = userCheckThread;
+    }
+
+    public int getTimeout() {
+        return timeout;
+    }
+
+    public int getInterval() {
+        return interval;
+    }
+
+    public void setInterval(int interval) {
+        this.interval = interval;
+    }
+
+    public void setTimeout(int timeout) {
+        this.timeout = timeout;
     }
 }

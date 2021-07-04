@@ -93,7 +93,7 @@ public class ESP extends Module {
 
         GL11.glBegin(GL11.GL_LINE_STRIP);
         GL11.glVertex3d(x + factor, y, z - factor);
-        GL11.glVertex3d(x + factor, y + yOffset, z -factor);
+        GL11.glVertex3d(x + factor, y + yOffset, z - factor);
         GL11.glEnd();
     }
 

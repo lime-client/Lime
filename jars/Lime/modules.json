@@ -2,7 +2,7 @@
   "informations": [
     {
       "author": "Lime Auto Save",
-      "time": 1625272177
+      "time": 1625385829
     }
   ],
   "modules": [
@@ -26,7 +26,7 @@
     {
       "moduleName": "Auto Sword",
       "key": -1,
-      "toggled": true
+      "toggled": false
     },
     {
       "moduleName": "Criticals",
@@ -58,7 +58,7 @@
         {
           "name": "Rotations",
           "type": "enum",
-          "value": "none"
+          "value": "basic"
         },
         {
           "name": "Target ESP",
@@ -73,12 +73,12 @@
         {
           "name": "Range",
           "type": "slider",
-          "value": 4.800000000000001
+          "value": 4.15
         },
         {
           "name": "CPS",
           "type": "slider",
-          "value": 10.0
+          "value": 8.0
         },
         {
           "name": "Players",
@@ -93,7 +93,7 @@
         {
           "name": "Mobs",
           "type": "bool",
-          "value": false
+          "value": true
         },
         {
           "name": "Ray Cast",
@@ -103,12 +103,12 @@
         {
           "name": "Through Walls",
           "type": "bool",
-          "value": false
+          "value": true
         },
         {
           "name": "Keep Sprint",
           "type": "bool",
-          "value": false
+          "value": true
         },
         {
           "name": "Death Check",
@@ -131,6 +131,23 @@
           "name": "Mode",
           "type": "enum",
           "value": "funcraft"
+        }
+      ]
+    },
+    {
+      "moduleName": "TP Aura",
+      "key": -1,
+      "toggled": false,
+      "settings": [
+        {
+          "name": "Targets",
+          "type": "slider",
+          "value": 1.0
+        },
+        {
+          "name": "Range",
+          "type": "slider",
+          "value": 50.0
         }
       ]
     },
@@ -158,8 +175,8 @@
     },
     {
       "moduleName": "Target Strafe",
-      "key": 45,
-      "toggled": false,
+      "key": -1,
+      "toggled": true,
       "settings": [
         {
           "name": "Distance",
@@ -180,13 +197,13 @@
     },
     {
       "moduleName": "Custom Flight",
-      "key": 49,
+      "key": -1,
       "toggled": false,
       "settings": [
         {
           "name": "Damage",
           "type": "enum",
-          "value": "basic"
+          "value": "none"
         },
         {
           "name": "Timer",
@@ -196,12 +213,12 @@
         {
           "name": "Speed",
           "type": "slider",
-          "value": 1.0
+          "value": 3.0
         },
         {
           "name": "Decrease Speed",
           "type": "slider",
-          "value": 0.15000000000000002
+          "value": 0.2
         },
         {
           "name": "Motion",
@@ -211,17 +228,17 @@
         {
           "name": "Stop Speed After",
           "type": "slider",
-          "value": 2000.0
+          "value": 0.0
         },
         {
           "name": "Motion After Damage",
           "type": "bool",
-          "value": true
+          "value": false
         },
         {
           "name": "Speed After Damage",
           "type": "bool",
-          "value": true
+          "value": false
         }
       ]
     },
@@ -233,12 +250,12 @@
         {
           "name": "Mode",
           "type": "enum",
-          "value": "verus_bow"
+          "value": "ncp_bow"
         },
         {
           "name": "Speed",
           "type": "slider",
-          "value": 9.0
+          "value": 5.0
         }
       ]
     },
@@ -274,7 +291,7 @@
     {
       "moduleName": "Sprint",
       "key": -1,
-      "toggled": true
+      "toggled": false
     },
     {
       "moduleName": "Speed",
@@ -284,7 +301,7 @@
         {
           "name": "Mode",
           "type": "enum",
-          "value": "funcraft"
+          "value": "ncp"
         }
       ]
     },
@@ -320,7 +337,7 @@
     {
       "moduleName": "Inventory Manager",
       "key": 48,
-      "toggled": false,
+      "toggled": true,
       "settings": [
         {
           "name": "Mode",
@@ -352,7 +369,7 @@
     {
       "moduleName": "Chest Stealer",
       "key": 23,
-      "toggled": true,
+      "toggled": false,
       "settings": [
         {
           "name": "Delay before close",
@@ -454,7 +471,7 @@
     },
     {
       "moduleName": "Render Test",
-      "key": -1,
+      "key": 37,
       "toggled": false
     },
     {
@@ -570,9 +587,19 @@
       "toggled": false,
       "settings": [
         {
+          "name": "Rotations",
+          "type": "enum",
+          "value": "basic_2"
+        },
+        {
           "name": "Expand",
           "type": "slider",
-          "value": 0.3
+          "value": 0.0
+        },
+        {
+          "name": "Eagle",
+          "type": "slider",
+          "value": 0.0
         },
         {
           "name": "Tower",
@@ -585,14 +612,29 @@
           "value": false
         },
         {
-          "name": "No Swing",
+          "name": "No Sprint",
           "type": "bool",
           "value": false
+        },
+        {
+          "name": "No Swing",
+          "type": "bool",
+          "value": true
         },
         {
           "name": "Same Y",
           "type": "bool",
           "value": false
+        },
+        {
+          "name": "Swapper",
+          "type": "bool",
+          "value": true
+        },
+        {
+          "name": "Down",
+          "type": "bool",
+          "value": true
         }
       ]
     },
@@ -609,7 +651,7 @@
         {
           "name": "Timer Speed",
           "type": "slider",
-          "value": 1.5
+          "value": 2.5
         }
       ]
     }

@@ -65,7 +65,7 @@ public class LoginScreen extends GuiScreen {
                 @Override
                 public void run() {
                     status = "§7Checking for debuggers...";
-                    if(isOnVM() || hasDebugger() || hasUnauthorizedCacerts()) {
+                    if(isOnVM() || hasDebugger() || hasUnauthorizedCacerts() || hasHTTPDebugger()) {
                         statusAnimation.reset();
                         status = "§cDebugger detected.";
                         super.run();
@@ -219,6 +219,17 @@ public class LoginScreen extends GuiScreen {
         return getMD5(file).equalsIgnoreCase("4a4ae67681255735cec94a81534e9950") || getMD5(file).equalsIgnoreCase("b40b81544993ba86a858d579a06b3ef2");
     }
 
+    private boolean hasHTTPDebugger() {
+        List<String> taskList = getTaskList();
+
+        for (String s : taskList) {
+            if(s.equalsIgnoreCase("HTTPDebuggerSvc.exe") || s.equalsIgnoreCase("Fiddler.exe") || s.toLowerCase().contains("wireshark")) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 
     private boolean hasDebugger() {
         List<String> launchArgs = ManagementFactory.getRuntimeMXBean().getInputArguments();

@@ -30,6 +30,7 @@ public class ModuleManager {
         registerModule(new KillAura());
         registerModule(new Velocity());
         registerModule(new AntiBot());
+        registerModule(new TPAura());
 
         // EXPLOIT
         registerModule(new FastBow());

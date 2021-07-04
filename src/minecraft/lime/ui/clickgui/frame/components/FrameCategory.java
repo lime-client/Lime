@@ -11,6 +11,9 @@ import lime.features.setting.impl.SlideValue;
 import lime.ui.clickgui.frame.components.settings.BoolSetting;
 import lime.ui.clickgui.frame.components.settings.EnumSetting;
 import lime.ui.clickgui.frame.components.settings.SlideSetting;
+import lime.utils.render.RenderUtils;
+import lime.utils.render.animation.easings.Animate;
+import lime.utils.render.animation.easings.Easing;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.util.ResourceLocation;
@@ -33,16 +36,23 @@ public class FrameCategory {
     private Module bindingModule;
 
     private boolean isOpened;
+    private boolean endedAnimation;
+
+    private final Animate animation = new Animate();
 
     public FrameCategory(Category category, int baseX, int baseY, int width, int height) {
         this.category = category;
         this.x = baseX;
         this.y = baseY;
         this.width = width;
-        this.height = 16 + (Lime.getInstance().getModuleManager().getModulesFromCategory(category).size() * 16);
+        this.height = 15;
         this.drag = false;
         this.xDrag = 0;
         this.yDrag = 0;
+        animation.setMin(0);
+        animation.setSpeed(125);
+        animation.setEase(Easing.CUBIC_OUT);
+        animation.setReversed(false);
 
         mods.sort((m1, m2) -> {
             String s1 = m1.getName();
@@ -64,7 +74,20 @@ public class FrameCategory {
         isOpened = false;
     }
 
+    public void initGui() {
+        animation.setMax(y);
+        endedAnimation = false;
+        y = 0;
+        animation.reset();
+    }
+
     public void drawFrame(int mouseX, int mouseY) {
+        animation.update();
+        if(y == (int) animation.getMax()) {
+            endedAnimation = true;
+        } else if(!endedAnimation) {
+            y = (int) animation.getValue();
+        }
         if(drag) {
             this.x = this.xDrag + mouseX;
             this.y = this.yDrag + mouseY;

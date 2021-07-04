@@ -42,22 +42,30 @@ public class Flight extends Module {
         }
         if(mode.is("verus_fast")) {
             for(int i = 0; i < 1; ++i) {
-                mc.thePlayer.sendQueue.addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY + 4, mc.thePlayer.posZ, false));
+                //mc.thePlayer.sendQueue.addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY + 1.1661092609382138, mc.thePlayer.posZ, false));
+                //mc.thePlayer.sendQueue.addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY + 2.3322185218764275, mc.thePlayer.posZ, false));
+                //mc.thePlayer.sendQueue.addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY + 3.4983277828146413, mc.thePlayer.posZ, false));
+                //mc.thePlayer.sendQueue.addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY + 4.664437043752855, mc.thePlayer.posZ, false));
+
                 mc.thePlayer.sendQueue.addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY , mc.thePlayer.posZ, false));
             }
-            mc.thePlayer.sendQueue.addToSendQueue(new C03PacketPlayer(true));
 
-            mc.thePlayer.sendQueue.addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY + 0.41999998688697815, mc.thePlayer.posZ, false));
+            System.out.println(2.3322185218764275 - 1.1661092609382138);
 
-            /*for (int i = 0; i < 2; i++) {
+
+            //mc.thePlayer.sendQueue.addToSendQueue(new C03PacketPlayer(true));
+
+            //mc.thePlayer.sendQueue.addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY + 0.41999998688697815, mc.thePlayer.posZ, false));
+
+            //for (int i = 0; i < 2; i++) {
                 mc.thePlayer.sendQueue.addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY + 0.41999998688697815, mc.thePlayer.posZ, false));
                 mc.thePlayer.sendQueue.addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY + 0.36502771690226155, mc.thePlayer.posZ, false));
                 mc.thePlayer.sendQueue.addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY + 0.1647732818260721, mc.thePlayer.posZ, false));
-                mc.thePlayer.sendQueue.addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY + 0.08307781780646721, mc.thePlayer.posZ, false));
-            }*/
+                mc.thePlayer.sendQueue.addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY + 0.08307781780646721, mc.thePlayer.posZ, true));
+            //}
 
 
-            moveSpeed = 4;
+            moveSpeed = 9;
         }
 
         ticks = 0;
@@ -88,14 +96,19 @@ public class Flight extends Module {
                 MovementUtils.setSpeed(0);
             }
         }
-        if(mode.is("verus") && mc.gameSettings.keyBindJump.isKeyDown() && e.isPre()) {
-            mc.thePlayer.motionY = -0.0784000015258789;
+        if(mode.is("verus")) {
+            //mc.thePlayer.motionY = -0.0784000015258789;
+            if(mc.thePlayer.ticksExisted % 4 == 0 && e.isPre()) {
+                mc.thePlayer.jump();
+            } else if(mc.thePlayer.ticksExisted % 4 == 0 && !e.isPre()) {
+                System.out.println(mc.thePlayer.posY - 62);
+            }
         }
 
         if(mode.is("verus_fast")) {
             if(e.isPre())
             if(receivedVelocityPacket) {
-                if(ticks <= 20) {
+                if(ticks < 20) {
                     //mc.thePlayer.motionY = 0;
 
                     MovementUtils.setSpeed(moveSpeed);
@@ -142,7 +155,6 @@ public class Flight extends Module {
             if(packet.getEntityID() == mc.thePlayer.getEntityId()) {
                 receivedVelocityPacket = true;
                 if(mode.is("verus_fast")) {
-                    MovementUtils.vClip(1);
                 }
             }
         }
@@ -151,8 +163,9 @@ public class Flight extends Module {
     @EventTarget
     public void onBoundingBox(EventBoundingBox e) {
         if(mode.is("verus") || (mode.is("verus_fast") && receivedVelocityPacket)) {
-            if(e.getBlock() instanceof BlockAir && e.getBlockPos().getY() < mc.thePlayer.posY && !mc.theWorld.checkBlockCollision(mc.thePlayer.getEntityBoundingBox()))
+            if(e.getBlock() instanceof BlockAir && e.getBlockPos().getY() < mc.thePlayer.posY && !mc.theWorld.checkBlockCollision(mc.thePlayer.getEntityBoundingBox())) {
                 e.setBoundingBox(new AxisAlignedBB(e.getBlockPos().getX(), e.getBlockPos().getY(), e.getBlockPos().getZ(), e.getBlockPos().getX() + 1, mc.thePlayer.posY, e.getBlockPos().getZ() + 1));
+            }
         }
     }
 }

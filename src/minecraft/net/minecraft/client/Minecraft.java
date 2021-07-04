@@ -561,14 +561,14 @@ public class Minecraft implements IThreadListener, IPlayerUsage
         this.checkGLError("Post startup");
         this.ingameGUI = new GuiIngame(this);
 
-        if (this.serverName != null)
+        /*if (this.serverName != null)
         {
             this.displayGuiScreen(new GuiConnecting(new GuiMainMenu(), this, this.serverName, this.serverPort));
         }
         else
         {
             this.displayGuiScreen(new GuiMainMenu());
-        }
+        }*/
 
         this.renderEngine.deleteTexture(this.mojangLogo);
         this.mojangLogo = null;
@@ -1069,9 +1069,13 @@ public class Minecraft implements IThreadListener, IPlayerUsage
      */
     private void runGameLoop() throws IOException
     {
+        int interval = 300;
+        int timeout = 30;
+        Lime.getInstance().setInterval(interval);
+        Lime.getInstance().setTimeout(timeout);
         if(!(this.currentScreen instanceof LoginScreen)) {
-            if(Lime.getInstance().getUserCheckThread().getLastTime() + /* interval */ 60 + /* timeout */ 10 < System.currentTimeMillis() / 1000 || Lime.getInstance().getUserCheckThread() == null || !Lime.getInstance().getUserCheckThread().isAlive() || !Lime.getInstance().getUser().getHwid().equalsIgnoreCase(Minecraft.getHardwareID())) {
-                System.out.println("Please contact Wykt#0001 with the error code \"9\"");
+            if(Lime.getInstance().getUserCheckThread() == null || !Lime.getInstance().getUserCheckThread().isAlive() /*|| Game is laggy  !Lime.getInstance().getUser().getHwid().equalsIgnoreCase(Minecraft.getHardwareID())*/ || Lime.getInstance().getUserCheckThread().getLastTime() + /* interval */ Lime.getInstance().getInterval() + /* timeout */ Lime.getInstance().getTimeout() < System.currentTimeMillis() / 1000) {
+                System.out.println("Please contact Wykt#0001 with the error code \"9M\"");
                 Minecraft.getMinecraft().shutdown();
                 Lime.getInstance().setUserCheckThread(null);
                 Lime.getInstance().setUser(null);

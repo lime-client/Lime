@@ -16,7 +16,7 @@ public class UserCheckThread extends Thread {
 
     @Override
     public void run() {
-        final int interval = 60;
+        final int interval = 300;
         final int maxRetries = 3;
         int retry = 0;
         while(true) {

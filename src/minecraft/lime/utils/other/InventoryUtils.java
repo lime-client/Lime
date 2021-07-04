@@ -9,6 +9,8 @@ import net.minecraft.item.*;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 
+import java.util.List;
+
 public class InventoryUtils implements IUtil {
     public static void swap(int slot1, int hotbarSlot){
         mc.playerController.windowClick(mc.thePlayer.inventoryContainer.windowId, slot1, hotbarSlot, 2, mc.thePlayer);
@@ -37,6 +39,36 @@ public class InventoryUtils implements IUtil {
             }
         }
         return false;
+    }
+
+    public static int hasBlock(List blacklistedBlocks, boolean checkInv, boolean checkHotBar) {
+        if(checkInv) {
+            for(int i = 9; i < 36; ++i) {
+                if(getSlot(i).getHasStack()) {
+                    ItemStack itemStack = getSlot(i).getStack();
+                    if(itemStack.getItem() instanceof ItemBlock) {
+                        ItemBlock itemBlock = (ItemBlock) itemStack.getItem();
+                        if(!blacklistedBlocks.contains(itemBlock.getBlock()))
+                            return i;
+                    }
+                }
+            }
+        }
+
+        if(checkHotBar) {
+            for(int i = 36; i < 45; ++i) {
+                if(getSlot(i).getHasStack()) {
+                    ItemStack itemStack = getSlot(i).getStack();
+                    if(itemStack.getItem() instanceof ItemBlock) {
+                        ItemBlock itemBlock = (ItemBlock) itemStack.getItem();
+                        if(!blacklistedBlocks.contains(itemBlock.getBlock()))
+                            return i;
+                    }
+                }
+            }
+        }
+
+        return -1;
     }
 
     public static int getEmptySlot() {

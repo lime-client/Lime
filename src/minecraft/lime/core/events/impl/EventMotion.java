@@ -1,6 +1,7 @@
 package lime.core.events.impl;
 
 import lime.core.events.Event;
+import lime.utils.combat.Rotation;
 
 public class EventMotion extends Event {
     private State type;
@@ -85,6 +86,11 @@ public class EventMotion extends Event {
 
     public void setSneak(boolean sneak) {
         this.sneak = sneak;
+    }
+
+    public void setRotations(Rotation rotation) {
+        this.setYaw(rotation.getYaw());
+        this.setPitch(rotation.getPitch());
     }
 
     public State getState() {

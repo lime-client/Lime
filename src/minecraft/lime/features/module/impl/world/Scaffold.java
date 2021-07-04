@@ -2,11 +2,13 @@ package lime.features.module.impl.world;
 
 import lime.core.events.EventTarget;
 import lime.core.events.impl.Event2D;
+import lime.core.events.impl.EventEntityAction;
 import lime.core.events.impl.EventMotion;
 import lime.features.module.Category;
 import lime.features.module.Module;
 import lime.features.module.ModuleData;
 import lime.features.setting.impl.BoolValue;
+import lime.features.setting.impl.EnumValue;
 import lime.features.setting.impl.SlideValue;
 import lime.utils.combat.CombatUtils;
 import lime.utils.movement.MovementUtils;
@@ -16,6 +18,7 @@ import lime.utils.render.animation.easings.Animate;
 import lime.utils.render.animation.easings.Easing;
 import net.minecraft.block.*;
 import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemBlock;
@@ -25,6 +28,7 @@ import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.Vec3;
+import org.lwjgl.input.Keyboard;
 
 import java.util.Arrays;
 import java.util.List;
@@ -51,17 +55,27 @@ public class Scaffold extends Module {
         }
     }
 
+    private enum Rotations {
+        BASIC, BASIC_2, HYPIXEL, LEGIT
+    }
+
+    private final EnumValue rotations = new EnumValue("Rotations", this, Rotations.BASIC);
     private final SlideValue expand = new SlideValue("Expand", this, 0, 5, 0.3, 0.05);
+    private final SlideValue eagle = new SlideValue("Eagle", this, 0, 5, 1, 1);
     private final BoolValue tower = new BoolValue("Tower", this, true);
     private final BoolValue towerMove = new BoolValue("Tower Move", this, false);
+    private final BoolValue noSprint = new BoolValue("No Sprint", this, false);
     private final BoolValue noSwing = new BoolValue("No Swing", this, false);
     private final BoolValue sameY = new BoolValue("Same Y", this, false);
+    private final BoolValue swapper = new BoolValue("Swapper", this, true);
+    private final BoolValue down = new BoolValue("Down", this, true);
 
     private static final List<Block> blacklistedBlocks = Arrays.asList(Blocks.air, Blocks.water, Blocks.flowing_water, Blocks.lava, Blocks.flowing_lava, Blocks.enchanting_table, Blocks.carpet, Blocks.glass_pane, Blocks.stained_glass_pane, Blocks.iron_bars, Blocks.snow_layer, Blocks.ice, Blocks.packed_ice, Blocks.coal_ore, Blocks.diamond_ore, Blocks.emerald_ore, Blocks.chest, Blocks.torch, Blocks.anvil, Blocks.trapped_chest, Blocks.noteblock, Blocks.jukebox, Blocks.tnt, Blocks.gold_ore, Blocks.iron_ore, Blocks.lapis_ore, Blocks.lit_redstone_ore, Blocks.quartz_ore, Blocks.redstone_ore, Blocks.wooden_pressure_plate, Blocks.stone_pressure_plate, Blocks.light_weighted_pressure_plate, Blocks.heavy_weighted_pressure_plate, Blocks.stone_button, Blocks.wooden_button, Blocks.lever, Blocks.beacon, Blocks.ladder, Blocks.sapling, Blocks.oak_fence, Blocks.red_flower, Blocks.yellow_flower, Blocks.flower_pot, Blocks.red_mushroom, Blocks.brown_mushroom, Blocks.sand, Blocks.tallgrass, Blocks.tripwire_hook, Blocks.tripwire, Blocks.gravel, Blocks.dispenser, Blocks.dropper, Blocks.crafting_table, Blocks.furnace, Blocks.redstone_torch, Blocks.standing_sign, Blocks.wall_sign, Blocks.enchanting_table, Blocks.torch);
     private ItemStack currentItemStack;
     private final Animate animation = new Animate();
     private BlockData blockData;
     private double posY;
+    private int blocksWithoutEagle;
 
     // Keep rotations
     private float yaw;
@@ -79,6 +93,9 @@ public class Scaffold extends Module {
         this.animation.setMax(new ScaledResolution(mc).getScaledHeight() / 2);
         this.animation.setSpeed(250);
         this.animation.setReversed(false);
+        if(noSprint.isEnabled())
+            mc.thePlayer.setSprinting(false);
+        blocksWithoutEagle = 0;
     }
 
     @Override
@@ -102,22 +119,34 @@ public class Scaffold extends Module {
 
     @EventTarget
     public void onMotion(EventMotion e) {
-        if(!hotBarContainsBlock())
+        if(InventoryUtils.hasBlock(blacklistedBlocks, true, true) == -1)
             return;
 
         e.setYaw(yaw);
         e.setPitch(pitch);
         mc.thePlayer.setRotationsTP(e);
+        if(eagle.getCurrent() != 0 && e.isPre()) {
+            if((int) eagle.getCurrent() <= blocksWithoutEagle) {
+                blocksWithoutEagle = 0;
+                mc.gameSettings.keyBindSneak.pressed = true;
+            } else {
+                mc.gameSettings.keyBindSneak.pressed = false;
+            }
+        }
+
+        boolean downFlag = down.isEnabled() && Keyboard.isKeyDown(mc.gameSettings.keyBindSneak.getKeyCode()) && isAirBlock(new BlockPos(mc.thePlayer.posX, mc.thePlayer.posY - 1, mc.thePlayer.posZ).getBlock());
 
         double x = mc.thePlayer.posX;
         double z = mc.thePlayer.posZ;
         if(!mc.thePlayer.isCollidedHorizontally) {
-            double[] coords = getExpandCoords(x, z, mc.thePlayer.moveForward, mc.thePlayer.moveStrafing, mc.thePlayer.rotationYaw);
+            double[] coords = getExpandCoords(x, z, mc.thePlayer.moveForward, mc.thePlayer.moveStrafing, mc.thePlayer.rotationYaw, downFlag ? 1 : expand.getCurrent());
             x = coords[0];
             z = coords[1];
         }
 
-        if(isAirBlock(mc.theWorld.getBlockState(new BlockPos(mc.thePlayer.posX, mc.thePlayer.posY - 1, mc.thePlayer.posZ)).getBlock())) {
+        boolean isAirUnderPos = isAirBlock(mc.theWorld.getBlockState(new BlockPos(mc.thePlayer.posX, mc.thePlayer.posY - 1, mc.thePlayer.posZ)).getBlock());
+
+        if(isAirUnderPos) {
             x = mc.thePlayer.posX;
             z = mc.thePlayer.posZ;
         }
@@ -130,7 +159,7 @@ public class Scaffold extends Module {
             this.posY = mc.thePlayer.posY;
         }
 
-        BlockPos underPos = new BlockPos(x, this.posY - 1, z);
+        BlockPos underPos = new BlockPos(x, this.posY - 1 - (isAirUnderPos ? getBlockData(new BlockPos(x, this.posY - 2, z)) == null ? 0 : downFlag ? 1 : 0 : 0), z);
         Block underBlock = mc.theWorld.getBlockState(underPos).getBlock();
 
         BlockData blockData = getBlockData(underPos);
@@ -166,49 +195,69 @@ public class Scaffold extends Module {
             }
         }
 
-        if(isAirBlock(underBlock) && blockData != null) {
+        if((isAirBlock(underBlock) && blockData != null) || down.isEnabled()) {
             if(e.isPre()) {
-                this.blockData = blockData;
-                float[] rots = getRotations(blockData.getBlockPos(), blockData.getEnumFacing());
-                e.setYaw(rots[0]);
-                e.setPitch(rots[1]);
-                this.yaw = rots[0];
-                this.pitch = rots[1];
-                mc.thePlayer.setRotationsTP(e);
+                if(blockData != null) {
+                    this.blockData = blockData;
+                    float[] rots = getRotations(blockData.getBlockPos(), blockData.getEnumFacing());
+                    e.setYaw(rots[0]);
+                    e.setPitch(rots[1]);
+                    this.yaw = rots[0];
+                    this.pitch = rots[1];
+                    mc.thePlayer.setRotationsTP(e);
 
+                }
                 if(mc.gameSettings.keyBindJump.pressed && mc.thePlayer.onGround && MovementUtils.isOnGround(0.001) && mc.thePlayer.isCollidedVertically) {
                     e.setGround(false);
                 }
             } else {
+
                 int slot = mc.thePlayer.inventory.currentItem;
 
-                int blockSlot = -1;
+                int blockSlot = InventoryUtils.hasBlock(blacklistedBlocks, false, true);
 
-                for(int i = 36; i < 45; ++i) {
-                    if(InventoryUtils.getSlot(i).getHasStack()) {
-                        ItemStack itemStack = InventoryUtils.getSlot(i).getStack();
-                        if(itemStack.getItem() instanceof ItemBlock) {
-                            ItemBlock itemBlock = (ItemBlock) itemStack.getItem();
-                            if(!blacklistedBlocks.contains(itemBlock) && !itemStack.getUnlocalizedName().equalsIgnoreCase("tile.cactus")) {
-                                this.currentItemStack = itemStack;
-                                blockSlot = i - 36;
-                            }
-                        }
-                    }
+                if(blockSlot == -1) {
+                    int blockInvSlot = InventoryUtils.hasBlock(blacklistedBlocks, true, false);
+
+                    if(blockInvSlot != -1) {
+                        InventoryUtils.swap(blockInvSlot, 6);
+                    } else
+                        return;
                 }
 
-                if(blockSlot == -1) return;
+                this.currentItemStack = InventoryUtils.getSlot(blockSlot).getStack();
+
+                blockSlot = blockSlot - 36;
 
                 if(slot != blockSlot) {
                     mc.thePlayer.inventory.currentItem = blockSlot;
                     mc.playerController.updateController();
                 }
 
-                if(mc.playerController.onPlayerRightClick(mc.thePlayer, mc.theWorld, mc.thePlayer.inventory.getCurrentItem(), blockData.blockPos, blockData.enumFacing, getVec3(blockData.getBlockPos(), blockData.getEnumFacing()))) {
-                    if(noSwing.isEnabled())
+                if(blockData != null && isAirBlock(underBlock) && mc.playerController.onPlayerRightClick(mc.thePlayer, mc.theWorld, mc.thePlayer.inventory.getCurrentItem(), blockData.blockPos, blockData.enumFacing, getVec3(blockData.getBlockPos(), blockData.getEnumFacing()))) {
+                    if (noSwing.isEnabled())
                         mc.getNetHandler().addToSendQueue(new C0APacketAnimation());
                     else
                         mc.thePlayer.swingItem();
+                    blocksWithoutEagle++;
+                }
+
+                // Downwards
+                if(down.isEnabled() && Keyboard.isKeyDown(mc.gameSettings.keyBindSneak.getKeyCode()) && !downFlag) {
+                    BlockPos underPosDown = new BlockPos(underPos.add(0, -1, 0));
+
+                    if(isAirBlock(underPosDown.getBlock())) {
+                        BlockData blockData1 = getBlockData(underPosDown);
+
+                        if(blockData1 != null) {
+                            mc.playerController.onPlayerRightClick(mc.thePlayer, mc.theWorld, mc.thePlayer.inventory.getCurrentItem(),
+                                    blockData1.getBlockPos(), blockData1.enumFacing, getVec3(blockData1.getBlockPos(), blockData1.enumFacing));
+                            if (noSwing.isEnabled())
+                                mc.getNetHandler().addToSendQueue(new C0APacketAnimation());
+                            else
+                                mc.thePlayer.swingItem();
+                        }
+                    }
                 }
 
                 if(slot != blockSlot) {
@@ -216,6 +265,16 @@ public class Scaffold extends Module {
                     mc.playerController.updateController();
                 }
             }
+        }
+    }
+
+    @EventTarget
+    public void onEntityAction(EventEntityAction e) {
+        if(down.isEnabled()) {
+            e.setShouldSneak(false);
+        }
+        if(noSprint.isEnabled()) {
+            e.setShouldSprint(false);
         }
     }
 
@@ -260,22 +319,28 @@ public class Scaffold extends Module {
         double d3 = MathHelper.sqrt_double(x * x + z * z);
         float yaw = (float) (Math.atan2(z, x) * 360.0D / Math.PI) - 90.0F;
         float pitch = (float) (Math.atan2(d1, d3) * 180.0D / Math.PI);
-        switch(face){
-            case NORTH:
-                yaw = 0;
-                break;
-            case WEST:
-                yaw = -90;
-                break;
-            case EAST:
-                yaw = 90;
-                break;
-            case SOUTH:
-                yaw = 180;
-                break;
-        }
-        if(true) {
+        if(rotations.is("legit")) {
+            switch(face){
+                case NORTH:
+                    yaw = 0;
+                    break;
+                case WEST:
+                    yaw = -90;
+                    break;
+                case EAST:
+                    yaw = 90;
+                    break;
+                case SOUTH:
+                    yaw = 180;
+                    break;
+            }
+        } else if(rotations.is("basic_2")) {
             yaw = MathHelper.wrapAngleTo180_float((float) Math.toDegrees(Math.atan2(z,x)) - 90);
+        } else if(rotations.is("hypixel")) {
+            Vec3 vec = getVec3(block, face);
+            float[] rots = CombatUtils.getRotations(vec.xCoord, vec.yCoord, vec.zCoord);
+            yaw = rots[0];
+            pitch = rots[1];
         }
         if (yaw < 0.0F) {
             yaw += 360f;
@@ -284,12 +349,12 @@ public class Scaffold extends Module {
         return new float[]{yaw, pitch};
     }
 
-    private double[] getExpandCoords(double x, double z, double forward, double strafe, float YAW){
+    private double[] getExpandCoords(double x, double z, double forward, double strafe, float YAW, double expand){
         BlockPos underPos = new BlockPos(x, mc.thePlayer.posY - 1, z);
         Block underBlock = mc.theWorld.getBlockState(underPos).getBlock();
         double xCalc = -999, zCalc = -999;
         double dist = 0;
-        double expandDist = expand.getCurrent() * 2;
+        double expandDist = expand * 2;
         while(!isAirBlock(underBlock)){
             xCalc = x;
             zCalc = z;
@@ -346,6 +411,9 @@ public class Scaffold extends Module {
     }
 
     private BlockData getBlockData(BlockPos pos) {
+        if(isPosSolid(pos.add(0, 1, 0))) {
+            return new BlockData(pos.add(0, 1, 0), EnumFacing.DOWN);
+        }
         if (isPosSolid(pos.add(0, -1, 0))) {
             return new BlockData(pos.add(0, -1, 0), EnumFacing.UP);
         }
@@ -567,4 +635,5 @@ public class Scaffold extends Module {
         }
         return null;
     }
+
 }

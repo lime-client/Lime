@@ -4,6 +4,7 @@ import lime.core.Lime;
 import lime.features.module.impl.movement.TargetStrafe;
 import lime.utils.IUtil;
 import net.minecraft.client.gui.Gui;
+import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.ResourceLocation;
@@ -47,6 +48,12 @@ public class RenderUtils implements IUtil {
         GL11.glDisable(GL11.GL_LINE_SMOOTH);
 
         GL11.glPopMatrix();
+    }
+
+    public static void prepareScissorBox(float x2, float y2, float x22, float y22) {
+        ScaledResolution scale = new ScaledResolution(mc);
+        int factor = scale.getScaleFactor();
+        GL11.glScissor((int)(x2 * (float)factor), (int)(((float)scale.getScaledHeight() - y22) * (float)factor), (int)((x22 - x2) * (float)factor), (int)((y22 - y2) * (float)factor));
     }
 
     public static void drawImage(ResourceLocation image, int x, int y, int width, int height) {
