@@ -9,10 +9,7 @@ import lime.features.module.impl.exploit.NoClip;
 import lime.features.module.impl.movement.*;
 import lime.features.module.impl.player.*;
 import lime.features.module.impl.render.*;
-import lime.features.module.impl.world.NoRotate;
-import lime.features.module.impl.world.Scaffold;
-import lime.features.module.impl.world.TimeChanger;
-import lime.features.module.impl.world.Timer;
+import lime.features.module.impl.world.*;
 
 import java.util.ArrayList;
 import java.util.stream.Collectors;
@@ -53,10 +50,12 @@ public class ModuleManager {
         registerModule(new InventoryMove());
         registerModule(new ClickTeleport());
         registerModule(new ChestStealer());
+        registerModule(new ChatBypass());
         registerModule(new AutoArmor());
         registerModule(new SpeedMine());
         registerModule(new FastPlace());
         registerModule(new AutoTool());
+        registerModule(new KillSult());
         registerModule(new AntiVoid());
         registerModule(new Freecam());
         registerModule(new FastEat());
@@ -67,6 +66,7 @@ public class ModuleManager {
         registerModule(new NoScoreboard());
         registerModule(new Animations());
         registerModule(new FullBright());
+        registerModule(new Nametags());
         registerModule(new ClickGUI());
         registerModule(new Tracers());
         registerModule(new Camera());
@@ -79,6 +79,7 @@ public class ModuleManager {
         registerModule(new TimeChanger());
         registerModule(new Scaffold());
         registerModule(new NoRotate());
+        registerModule(new Breaker());
         registerModule(new Timer());
     }
 

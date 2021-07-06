@@ -2,7 +2,7 @@
   "informations": [
     {
       "author": "Lime Auto Save",
-      "time": 1625385829
+      "time": 1625542499
     }
   ],
   "modules": [
@@ -73,7 +73,7 @@
         {
           "name": "Range",
           "type": "slider",
-          "value": 4.15
+          "value": 4.800000000000001
         },
         {
           "name": "CPS",
@@ -93,7 +93,7 @@
         {
           "name": "Mobs",
           "type": "bool",
-          "value": true
+          "value": false
         },
         {
           "name": "Ray Cast",
@@ -136,7 +136,7 @@
     },
     {
       "moduleName": "TP Aura",
-      "key": -1,
+      "key": 21,
       "toggled": false,
       "settings": [
         {
@@ -169,14 +169,14 @@
         {
           "name": "Blink Delay",
           "type": "slider",
-          "value": 500.0
+          "value": 0.0
         }
       ]
     },
     {
       "moduleName": "Target Strafe",
       "key": -1,
-      "toggled": true,
+      "toggled": false,
       "settings": [
         {
           "name": "Distance",
@@ -250,7 +250,7 @@
         {
           "name": "Mode",
           "type": "enum",
-          "value": "ncp_bow"
+          "value": "verus_bow"
         },
         {
           "name": "Speed",
@@ -291,7 +291,7 @@
     {
       "moduleName": "Sprint",
       "key": -1,
-      "toggled": false
+      "toggled": true
     },
     {
       "moduleName": "Speed",
@@ -301,7 +301,7 @@
         {
           "name": "Mode",
           "type": "enum",
-          "value": "ncp"
+          "value": "funcraft_yport"
         }
       ]
     },
@@ -369,7 +369,7 @@
     {
       "moduleName": "Chest Stealer",
       "key": 23,
-      "toggled": false,
+      "toggled": true,
       "settings": [
         {
           "name": "Delay before close",
@@ -399,6 +399,11 @@
       ]
     },
     {
+      "moduleName": "Chat Bypass",
+      "key": -1,
+      "toggled": false
+    },
+    {
       "moduleName": "Auto Armor",
       "key": -1,
       "toggled": true,
@@ -411,7 +416,7 @@
         {
           "name": "Delay",
           "type": "slider",
-          "value": 50.0
+          "value": 85.0
         }
       ]
     },
@@ -427,6 +432,11 @@
     },
     {
       "moduleName": "Auto Tool",
+      "key": -1,
+      "toggled": true
+    },
+    {
+      "moduleName": "KillSult",
       "key": -1,
       "toggled": true
     },
@@ -465,7 +475,7 @@
         {
           "name": "Mode",
           "type": "enum",
-          "value": "verus"
+          "value": "vanilla"
         }
       ]
     },
@@ -493,6 +503,11 @@
     },
     {
       "moduleName": "Full Bright",
+      "key": -1,
+      "toggled": true
+    },
+    {
+      "moduleName": "Nametags",
       "key": -1,
       "toggled": true
     },
@@ -550,7 +565,7 @@
     {
       "moduleName": "ESP",
       "key": -1,
-      "toggled": true,
+      "toggled": false,
       "settings": [
         {
           "name": "Mode",
@@ -609,7 +624,7 @@
         {
           "name": "Tower Move",
           "type": "bool",
-          "value": false
+          "value": true
         },
         {
           "name": "No Sprint",
@@ -642,6 +657,28 @@
       "moduleName": "No Rotate",
       "key": -1,
       "toggled": false
+    },
+    {
+      "moduleName": "Breaker",
+      "key": -1,
+      "toggled": false,
+      "settings": [
+        {
+          "name": "Range",
+          "type": "slider",
+          "value": 4.0
+        },
+        {
+          "name": "Through Walls",
+          "type": "bool",
+          "value": true
+        },
+        {
+          "name": "No Swing",
+          "type": "bool",
+          "value": true
+        }
+      ]
     },
     {
       "moduleName": "Timer",

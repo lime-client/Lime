@@ -16,7 +16,7 @@ ao:2
 renderClouds:false
 resourcePacks:["! Eum3(315) Blue Revamp.zip"]
 incompatibleResourcePacks:[]
-lastServer:ultimismc.com
+lastServer:localhost
 lang:en_US
 chatVisibility:0
 chatColors:true

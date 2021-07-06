@@ -9,6 +9,7 @@ import lime.features.managers.FontManager;
 import lime.features.module.Category;
 import lime.features.module.Module;
 import lime.features.module.ModuleData;
+import lime.utils.movement.MovementUtils;
 import lime.utils.render.ColorUtils;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
@@ -27,14 +28,10 @@ public class HUD extends Module {
             Gui.drawRect(5 + Math.toRadians(i), 5 + Math.toRadians(i), 5 + Math.toRadians(i) + 3, 5 + Math.toRadians(i) + 3, color.getRGB());
         }
 
-        Color c = ColorUtils.blend2colors(new Color(0, 255, 0), new Color(0, 255, 0).darker(), (System.nanoTime() + (0 * 100000000L * 2)) / 1.0E09F % 2.0F);
-        //FontManager.SF.getFont().drawStringWithShadow("Velocity", 3, 3, c.getRGB());
-
-
         ArrayList<Module> modules = new ArrayList<>(Lime.getInstance().getModuleManager().getModules());
 
         modules.sort((o1, o2) -> {
-            if(FontManager.ProductSans20.getFont().getStringWidth(o1.getName()) > FontManager.ProductSans20.getFont().getStringWidth(o2.getName()))
+            if(FontManager.SF.getFont().getStringWidth(o1.getName()) > FontManager.SF.getFont().getStringWidth(o2.getName()))
                 return -1;
             else
                 return 1;

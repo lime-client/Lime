@@ -187,17 +187,17 @@ public class KillAura extends Module {
             GL11.glShadeModel(GL11.GL_SMOOTH);
             GL11.glDisable(GL11.GL_CULL_FACE);
             final double size = entity.width * 0.85;
-            final double yOffset = entity.height - 1.8 * (height);
+            final double yOffset =  2 * (height);
 
             Color clientColor = new Color(0, 255, 0);
 
             GL11.glBegin(GL11.GL_TRIANGLE_STRIP);
             {
                 for (int j = 0; j < 361; j++) {
-                    RenderUtils.glColor(ColorUtils.setAlpha(clientColor, (int) (down ? 255 * height : 255 * (1 - height))));
+                    RenderUtils.glColor(ColorUtils.setAlpha(clientColor, (int) (!down ? 255 * height : 255 * (1 - height))));
                     GL11.glVertex3d(x + Math.cos(Math.toRadians(j)) * size, y + yOffset, z - Math.sin(Math.toRadians(j)) * size);
                     RenderUtils.glColor(ColorUtils.setAlpha(clientColor, 0));
-                    GL11.glVertex3d(x + Math.cos(Math.toRadians(j)) * size, y + yOffset + ((down ? -1 * (1 - height) : .5 * height)), z - Math.sin(Math.toRadians(j)) * size);
+                    GL11.glVertex3d(x + Math.cos(Math.toRadians(j)) * size, y + yOffset + ((!down ? -1 * (1 - height) : .5 * height)), z - Math.sin(Math.toRadians(j)) * size);
                 }
             }
             GL11.glEnd();

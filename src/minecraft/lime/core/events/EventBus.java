@@ -17,7 +17,7 @@ public class EventBus {
 		registerEvents(Event2D.class, EventUpdate.class, EventKey.class, EventPacket.class,
 				EventMotion.class, EventBoundingBox.class, EventScoreboard.class,
 				Event3D.class, EventMove.class, EventSlow.class, EventRendererEntity.class,
-				EventEntityAction.class);
+				EventEntityAction.class, EventLivingLabel.class);
 	}
 
 	@SafeVarargs

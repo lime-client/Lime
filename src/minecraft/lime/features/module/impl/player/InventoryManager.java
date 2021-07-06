@@ -14,6 +14,7 @@ import net.minecraft.client.gui.inventory.GuiInventory;
 import net.minecraft.item.*;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 
 import static lime.utils.other.InventoryUtils.*;
@@ -47,7 +48,7 @@ public class InventoryManager extends Module {
         ArrayList<ItemStack> swords = new ArrayList<>();
 
         for (int i = 9; i < 45; i++) {
-            if(getSlot(i).getHasStack()) {
+            if(getSlot(i).getHasStack() && i != slot) {
                 ItemStack itemStack = getSlot(i).getStack();
                 if(itemStack.getItem() instanceof ItemSword && !(itemStack.getDisplayName().contains("§") || itemStack.getDisplayName().contains("right click"))) {
                     swords.add(itemStack);
@@ -59,9 +60,14 @@ public class InventoryManager extends Module {
 
         swords.sort(Comparator.comparingDouble(InventoryUtils::getDamage));
 
+        Collections.reverse(swords);
+
         ItemStack bestSword = swords.get(0);
 
-        if(findSlotByItem(bestSword) == slot) return;
+
+        if(findSlotByItem(bestSword) == slot) {
+            return;
+        }
 
         if(timer.hasReached((long) delay.getCurrent())) {
             if(getSlot(slot).getHasStack() && getSlot(slot).getStack().getItem() instanceof ItemSword) {
@@ -105,6 +111,8 @@ public class InventoryManager extends Module {
 
         pickaxes.sort(Comparator.comparingDouble(InventoryUtils::getToolEffect));
 
+        Collections.reverse(pickaxes);
+
         ItemStack bestPickaxe = pickaxes.get(0);
 
         if(getSlot(slot).getHasStack() && getSlot(slot).getStack().getItem() instanceof ItemPickaxe) {
@@ -140,6 +148,8 @@ public class InventoryManager extends Module {
         if(axes.isEmpty()) return;
 
         axes.sort(Comparator.comparingDouble(InventoryUtils::getToolEffect));
+
+        Collections.reverse(axes);
 
         ItemStack bestAxe = axes.get(0);
 

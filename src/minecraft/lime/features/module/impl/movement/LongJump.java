@@ -46,7 +46,7 @@ public class LongJump extends Module {
         ticks = 0;
         bowd = false;
         moveSpeed = 0;
-        if(mode.is("ncp_bow")) {
+        if(mode.is("ncp_bow") || mode.is("verus_bow")) {
             ItemStack bow = null;
             int slot = -1;
             for(int i = 36; i < 45; ++i) {
@@ -85,16 +85,19 @@ public class LongJump extends Module {
 
     @EventTarget
     public void onMotion(EventMotion e) {
+        // Auto Bow
+        if((mode.is("verus_bow") || mode.is("ncp_bow")) && !bowd) {
+            MovementUtils.setSpeed(0);
+            e.setPitch(-90);
+            if(ticks >= 3 && !bowd) {
+                bowd = true;
+                mc.getNetHandler().addToSendQueue(new C07PacketPlayerDigging(C07PacketPlayerDigging.Action.RELEASE_USE_ITEM, new BlockPos(0, 0, 0), EnumFacing.DOWN));
+                mc.getNetHandler().addToSendQueue(new C09PacketHeldItemChange(mc.thePlayer.inventory.currentItem));
+            }
+        }
+
         if(mode.is("ncp_bow")) {
-            if(!receivedS12) {
-                MovementUtils.setSpeed(0);
-                e.setPitch(-90);
-                if(ticks >= 3 && !bowd) {
-                    bowd = true;
-                    mc.getNetHandler().addToSendQueue(new C07PacketPlayerDigging(C07PacketPlayerDigging.Action.RELEASE_USE_ITEM, new BlockPos(0, 0, 0), EnumFacing.DOWN));
-                    mc.getNetHandler().addToSendQueue(new C09PacketHeldItemChange(mc.thePlayer.inventory.currentItem));
-                }
-            } else {
+            if(receivedS12) {
                 if(e.isPre()) {
                     if(mc.thePlayer.onGround) {
                         if(moveSpeed == 0) {
@@ -164,7 +167,8 @@ public class LongJump extends Module {
             }
 
             if(mode.is("verus_bow")) {
-                mc.thePlayer.motionY = 1.1;
+                //mc.thePlayer.motionY = 0;
+                MovementUtils.vClip(4);
                 moveSpeed = speed.getCurrent();
                 MovementUtils.setSpeed(moveSpeed);
             }

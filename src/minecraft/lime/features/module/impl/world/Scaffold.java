@@ -24,10 +24,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.play.client.C0APacketAnimation;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.MathHelper;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.*;
 import org.lwjgl.input.Keyboard;
 
 import java.util.Arrays;
@@ -76,6 +73,8 @@ public class Scaffold extends Module {
     private BlockData blockData;
     private double posY;
     private int blocksWithoutEagle;
+
+    private final lime.utils.other.Timer timer = new lime.utils.other.Timer();
 
     // Keep rotations
     private float yaw;
@@ -151,7 +150,7 @@ public class Scaffold extends Module {
             z = mc.thePlayer.posZ;
         }
 
-        if(sameY.isEnabled()) {
+        if(sameY.isEnabled() && !downFlag) {
             if(mc.thePlayer.fallDistance > 1.2 || (!mc.thePlayer.isMoving() && mc.gameSettings.keyBindJump.pressed)) {
                 this.posY = mc.thePlayer.posY;
             }
@@ -186,14 +185,21 @@ public class Scaffold extends Module {
                         mc.thePlayer.motionZ = 0;
                         mc.thePlayer.jumpMovementFactor = 0;
                         if (isAirBlock(underBlock) && blockData != null) {
-                            mc.thePlayer.motionY = 0.4196;
-                            mc.thePlayer.motionX *= 0.75;
-                            mc.thePlayer.motionZ *= 0.75;
+                            mc.timer.timerSpeed = 5f;
+                            mc.thePlayer.motionY = 0.41982;
+                            mc.thePlayer.motionX = 0;
+                            mc.thePlayer.motionZ = 0;
+                            if(timer.hasReached(2500)) {
+                                mc.timer.timerSpeed = 1;
+                                mc.thePlayer.motionY -= 0.28;
+                                timer.reset();
+                            }
                         }
                     }
                 }
             }
-        }
+        } else
+            mc.timer.timerSpeed = 1;
 
         if((isAirBlock(underBlock) && blockData != null) || down.isEnabled()) {
             if(e.isPre()) {
@@ -315,6 +321,8 @@ public class Scaffold extends Module {
         double x = block.getX() + 0.5 - mc.thePlayer.posX +  (double) face.getFrontOffsetX()/2;
         double z = block.getZ() + 0.5 - mc.thePlayer.posZ +  (double) face.getFrontOffsetZ()/2;
         double y = (block.getY() + 0.5);
+
+        double diffXZ = MathHelper.sqrt_double(x * x + z * z);
         double d1 = mc.thePlayer.posY + mc.thePlayer.getEyeHeight() - y;
         double d3 = MathHelper.sqrt_double(x * x + z * z);
         float yaw = (float) (Math.atan2(z, x) * 360.0D / Math.PI) - 90.0F;
@@ -346,6 +354,7 @@ public class Scaffold extends Module {
             yaw += 360f;
         }
         //yaw += 90;
+
         return new float[]{yaw, pitch};
     }
 

@@ -10,11 +10,14 @@ import lime.features.setting.impl.EnumValue;
 import lime.features.setting.impl.SlideValue;
 import lime.utils.other.InventoryUtils;
 import lime.utils.other.Timer;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiChat;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
+
+import java.lang.reflect.Field;
 
 @ModuleData(name = "Auto Armor", category = Category.PLAYER)
 public class AutoArmor extends Module {
@@ -59,16 +62,24 @@ public class AutoArmor extends Module {
                     currentProtection = armorProtection;
                     current = armor;
                     slot = i;
+                } else if(this.checkArmor(armor, b) && (currentProtection > armorProtection || currentProtection == armorProtection)) {
+                    if(timer.hasReached((long) delay.getCurrent())) {
+                        InventoryUtils.drop(i);
+                        timer.reset();
+                        break;
+                    }
                 }
             }
         }
 
         if (slot != -1) {
             boolean isNull = mc.thePlayer.inventoryContainer.getSlot(b).getStack() == null;
-            if (!isNull) {
-                InventoryUtils.drop(b);
-            } else {
-                InventoryUtils.shiftClick(slot);
+            if(timer.hasReached((long) delay.getCurrent())) {
+                if (!isNull) {
+                    InventoryUtils.drop(b);
+                } else {
+                    InventoryUtils.shiftClick(slot);
+                }
             }
             return true;
         } else {

@@ -32,6 +32,10 @@ public class SlideValue extends SettingValue {
         return current;
     }
 
+    public int intValue() {
+        return (int) getCurrent();
+    }
+
     public double getIncrement() {
         return increment;
     }
