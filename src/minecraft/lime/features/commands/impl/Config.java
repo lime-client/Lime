@@ -32,14 +32,14 @@ public class Config extends Command {
         switch(args[1].toLowerCase()) {
             case "save":
                 if(args.length == 4) {
-                    Lime.getInstance().getFileSaver().saveModules("Lime" + File.separator + "configs" + File.separator + args[2] + ".json", args[3]);
+                    Lime.getInstance().getFileSaver().saveModules("Lime" + File.separator + "configs" + File.separator + args[2] + ".json", args[3], false);
                 } else if(args.length == 3) {
-                    Lime.getInstance().getFileSaver().saveModules("Lime" + File.separator + "configs" + File.separator + args[2] + ".json", "unknown");
+                    Lime.getInstance().getFileSaver().saveModules("Lime" + File.separator + "configs" + File.separator + args[2] + ".json", "unknown", false);
                 }
                 ChatUtils.sendMessage("Saved config to §aLime" + File.separator + "configs" + File.separator + args[2] + ".json");
                 break;
             case "load":
-                Lime.getInstance().getFileSaver().applyJson("Lime" + File.separator + "configs" + File.separator + args[2] + ".json");
+                Lime.getInstance().getFileSaver().applyJson("Lime" + File.separator + "configs" + File.separator + args[2] + ".json", false);
                 ChatUtils.sendMessage("Loaded §a" + args[2] + " config");
                 break;
             case "delete":

@@ -19,22 +19,22 @@ public class SlideSetting extends Component {
 
     @Override
     public void drawComponent(int mouseX, int mouseY) {
-        if(GuiScreen.hover(x - 3, y + 4, mouseX, mouseY, 135, 16))
-            Gui.drawRect(x - 3, y + 3, x - 3 + 135, y + 19, new Color(25, 25, 25, 150).getRGB());
+        if(GuiScreen.hover(x - 3, y + 4, mouseX, mouseY, width, 16))
+            Gui.drawRect(x - 3, y + 3, x - 3 + width, y + 19, new Color(25, 25, 25, 150).getRGB());
         else
             dragging = false;
 
         SlideValue slide = (SlideValue) setting;
-        double diff = Math.min(140, Math.max(0, mouseX - (this.x - 3)));
+        double diff = Math.min(width + 5, Math.max(0, mouseX - (this.x - 3)));
         double min = slide.getMin();
         double max = slide.getMax();
-        double renderWidth = 135 * (slide.getCurrent() - min) / (max - min);
+        double renderWidth = width * (slide.getCurrent() - min) / (max - min);
         Gui.drawRect(x - 3, y + 3, x - 3 + renderWidth, y + 19, new Color(25, 25, 25, 200).getRGB());
         if(dragging) {
             if(diff == 0) {
                 slide.setCurrentValue(min);
             } else {
-                double newValue = MathUtils.roundToPlace(((diff / 135) * (max - min) + min), 2);
+                double newValue = MathUtils.roundToPlace(((diff / width) * (max - min) + min), 2);
                 if(newValue <= max){
                     this.setValue(newValue);
                 }
@@ -57,7 +57,7 @@ public class SlideSetting extends Component {
 
     @Override
     public void mouseClicked(int mouseX, int mouseY, int mouseButton) {
-        dragging = GuiScreen.hover(x, y + 4, mouseX, mouseY, 135, 16) && mouseButton == 0;
+        dragging = GuiScreen.hover(x, y + 4, mouseX, mouseY, width, 16) && mouseButton == 0;
     }
 
     @Override
@@ -67,6 +67,11 @@ public class SlideSetting extends Component {
 
     @Override
     public void onGuiClosed() {
+
+    }
+
+    @Override
+    public void onKeyTyped(char typedChar, int key) {
 
     }
 }

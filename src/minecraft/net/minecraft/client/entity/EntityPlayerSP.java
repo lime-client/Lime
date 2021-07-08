@@ -197,8 +197,8 @@ public class EntityPlayerSP extends AbstractClientPlayer
     public void setRotationsTP(EventMotion eventMotion){
         if(Minecraft.getMinecraft().gameSettings.thirdPersonView != 0){
             rotationYawHead = eventMotion.getYaw();
-            renderYawOffset = eventMotion.getYaw();
-            renderArmYaw = eventMotion.getYaw();
+            //renderYawOffset = eventMotion.getYaw();
+            //renderArmYaw = eventMotion.getYaw();
             renderArmPitch = eventMotion.getPitch();
             rotationPitchHead = eventMotion.getPitch();
 

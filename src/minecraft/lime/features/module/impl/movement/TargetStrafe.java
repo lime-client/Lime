@@ -24,6 +24,7 @@ public class TargetStrafe extends Module {
     public final SlideValue distance = new SlideValue("Distance", this, 1, 5, 2.5, 0.1);
     private final BoolValue circle = new BoolValue("Circle", this, true);
     private final BoolValue onlySpeed = new BoolValue("Only Speed", this, false);
+    private final BoolValue spaceOnly = new BoolValue("Space Only", this, true);
 
     public static int direction = 1;
     public static boolean canMove;
@@ -99,5 +100,6 @@ public class TargetStrafe extends Module {
         } else {
             canMove = false;
         }
+        if(spaceOnly.isEnabled() && !mc.gameSettings.keyBindJump.isKeyDown()) canMove = false;
     }
 }

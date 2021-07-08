@@ -5,6 +5,7 @@ import lime.core.events.impl.Event3D;
 import lime.features.module.Category;
 import lime.features.module.Module;
 import lime.features.module.ModuleData;
+import lime.utils.render.RenderUtils;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -29,7 +30,7 @@ public class Tracers extends Module {
                 GlStateManager.disableDepth();
                 GlStateManager.enableBlend();
 
-                GL11.glColor4f(1, 1, 1, 1);
+                RenderUtils.glColor(HUD.getColor(0));
                 GL11.glLineWidth(1.5f);
 
                 GL11.glBegin(GL11.GL_LINE_STRIP);

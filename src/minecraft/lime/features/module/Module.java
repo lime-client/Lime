@@ -2,6 +2,8 @@ package lime.features.module;
 
 import lime.core.Lime;
 import lime.core.events.EventBus;
+import lime.utils.render.animation.easings.Animate;
+import lime.utils.render.animation.easings.Easing;
 import net.minecraft.client.Minecraft;
 
 public abstract class Module {
@@ -9,6 +11,11 @@ public abstract class Module {
     private final String name;
     private final Category category;
     private int key;
+
+    // Animation (for HUD)
+    public final Animate hudAnimation = new Animate();
+
+    private String suffix;
 
     private boolean isToggled = false;
 
@@ -18,10 +25,20 @@ public abstract class Module {
         this.name = moduleData.name();
         this.category = moduleData.category();
         this.key = moduleData.key();
+        this.hudAnimation.setEase(Easing.CUBIC_OUT);
+        hudAnimation.setSpeed(125);
     }
 
     public String getName() {
         return name;
+    }
+
+    public String getSuffix() {
+        return suffix;
+    }
+
+    public void setSuffix(String suffix) {
+        this.suffix = suffix;
     }
 
     public Category getCategory() {
@@ -38,6 +55,16 @@ public abstract class Module {
 
     public boolean isToggled() {
         return isToggled;
+    }
+
+    public void enableModule() {
+        if(!isToggled())
+            toggle();
+    }
+
+    public void disableModule() {
+        if(isToggled())
+            toggle();
     }
 
     public void toggle() {

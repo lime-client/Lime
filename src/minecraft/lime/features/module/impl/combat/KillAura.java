@@ -7,6 +7,7 @@ import lime.core.events.impl.EventPacket;
 import lime.features.module.Category;
 import lime.features.module.Module;
 import lime.features.module.ModuleData;
+import lime.features.module.impl.render.HUD;
 import lime.features.setting.impl.BoolValue;
 import lime.features.setting.impl.EnumValue;
 import lime.features.setting.impl.SlideValue;
@@ -59,6 +60,7 @@ public class KillAura extends Module {
     private final BoolValue players = new BoolValue("Players", this, true);
     private final BoolValue passives = new BoolValue("Passives", this, false);
     private final BoolValue mobs = new BoolValue("Mobs", this, true);
+    private final BoolValue teams = new BoolValue("Teams", this, true);
     private final BoolValue rayCast = new BoolValue("Ray Cast", this, false);
     private final BoolValue throughWalls = new BoolValue("Through Walls", this, true);
     private final BoolValue keepSprint = new BoolValue("Keep Sprint", this, true);
@@ -189,7 +191,7 @@ public class KillAura extends Module {
             final double size = entity.width * 0.85;
             final double yOffset =  2 * (height);
 
-            Color clientColor = new Color(0, 255, 0);
+            Color clientColor = HUD.getColor(0);
 
             GL11.glBegin(GL11.GL_TRIANGLE_STRIP);
             {
@@ -229,7 +231,7 @@ public class KillAura extends Module {
         ArrayList<Entity> entities = new ArrayList<>();
 
         for(Entity entity : mc.theWorld.getLoadedEntityList()) {
-            if(this.isValid(entity) && mc.thePlayer != entity && entity instanceof EntityLivingBase && mc.thePlayer.getDistanceToEntity(entity) <= this.range.getCurrent())
+            if(mc.thePlayer != entity && entity instanceof EntityLivingBase && this.isValid(entity) && mc.thePlayer.getDistanceToEntity(entity) <= this.range.getCurrent())
                 entities.add(entity);
         }
 
@@ -248,6 +250,7 @@ public class KillAura extends Module {
     }
 
     private boolean isValid(Entity entity) {
+        if(teams.isEnabled() && entity instanceof EntityLivingBase && mc.thePlayer.isOnSameTeam((EntityLivingBase) entity)) return false;
         if((deathCheck.isEnabled() && !entity.isEntityAlive()) || (!mc.thePlayer.canEntityBeSeen(entity) && !throughWalls.isEnabled())) return false;
         return (entity instanceof EntityPlayer && this.players.isEnabled()) || ((entity instanceof EntityVillager || entity instanceof EntityAnimal) && this.passives.isEnabled()) || (entity instanceof EntityMob && this.mobs.isEnabled()) && mc.thePlayer.getDistanceToEntity(entity) <= this.range.getCurrent();
     }

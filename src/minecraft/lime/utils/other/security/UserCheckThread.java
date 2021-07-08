@@ -3,6 +3,7 @@ package lime.utils.other.security;
 import lime.core.Lime;
 import lime.utils.other.WebUtils;
 import net.minecraft.client.Minecraft;
+import viamcp.ViaFabric;
 
 import java.lang.reflect.Field;
 
@@ -16,6 +17,11 @@ public class UserCheckThread extends Thread {
 
     @Override
     public void run() {
+        try {
+            new ViaFabric().onInitialize();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         final int interval = 300;
         final int maxRetries = 3;
         int retry = 0;

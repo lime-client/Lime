@@ -19,6 +19,41 @@ public class ColorUtils {
         return new Color(redPart, greenPart, bluePart, alphaPart);
     }
 
+    public static Color fade(Color color, int index, int count) {
+        float[] hsb = new float[3];
+
+        Color.RGBtoHSB(color.getRed(), color.getGreen(), color.getBlue(), hsb);
+
+        float brightness = Math.abs(((float)(System.currentTimeMillis() % 2000L) / 1000.0F + (float)index / (float)(count + 1) * 2.0F) % 2.0F - 1.0F);
+        brightness = 0.5F + 0.5F * brightness;
+        hsb[2] = brightness % 2.0F;
+
+        return Color.getHSBColor(hsb[0], hsb[1], hsb[2]);
+    }
+
+    public static int getAstolfo(int delay, float offset) {
+        int yStart = 20;
+        float speed = 3000f;
+        float index = 0.3f;
+        float hue = (float) (System.currentTimeMillis() % delay) + (offset);
+        while (hue > speed) {
+            hue -= speed;
+        }
+        hue /= speed;
+        if (hue > 0.5) {
+            hue = 0.5F - (hue - 0.5f);
+        }
+        hue += 0.5F;
+        return Color.HSBtoRGB(hue, 0.5F, 1F);
+    }
+
+    public static Color rainbow(long d, float brightness, float speed) {
+        float hue = (float) (System.nanoTime() + (d * speed)) / 1.0E09F % 1.0F;
+        long color = Long.parseLong(Integer.toHexString(Color.HSBtoRGB(hue, brightness, 1F)), 16);
+        Color c = new Color((int) color);
+        return new Color(c.getRed()/255.0F, c.getGreen()/255.0F, c.getBlue()/255.0F, c.getAlpha()/255.0F);
+    }
+
     public static Color setAlpha(Color color, int alpha) {
         return new Color(color.getRed(), color.getGreen(), color.getBlue(), alpha);
     }

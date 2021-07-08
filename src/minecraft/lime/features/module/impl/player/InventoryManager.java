@@ -33,7 +33,7 @@ public class InventoryManager extends Module {
 
     @EventTarget
     public void onMotion(EventMotion e) {
-        if((mode.is("open_inv") && mc.currentScreen instanceof GuiInventory) || mode.is("normal")) {
+        if((mode.is("open_inv") && mc.currentScreen instanceof GuiInventory) || (mode.is("normal") && mc.currentScreen == null)  && timer.hasReached((long) delay.intValue())) {
             if(dropJunk.isEnabled()) {
                 dropJunks();
             }
@@ -107,7 +107,7 @@ public class InventoryManager extends Module {
             }
         }
 
-        if(pickaxes.isEmpty()) return;
+        if(pickaxes.isEmpty() || !timer.hasReached(delay.intValue())) return;
 
         pickaxes.sort(Comparator.comparingDouble(InventoryUtils::getToolEffect));
 
@@ -128,6 +128,8 @@ public class InventoryManager extends Module {
         pickaxes.remove(bestPickaxe);
 
         for (ItemStack pickaxe : pickaxes) {
+            if(!timer.hasReached(delay.intValue()))
+                break;
             drop(findSlotByItem(pickaxe));
         }
     }
@@ -145,7 +147,7 @@ public class InventoryManager extends Module {
             }
         }
 
-        if(axes.isEmpty()) return;
+        if(axes.isEmpty() || !timer.hasReached(delay.intValue())) return;
 
         axes.sort(Comparator.comparingDouble(InventoryUtils::getToolEffect));
 
@@ -166,6 +168,8 @@ public class InventoryManager extends Module {
         axes.remove(bestAxe);
 
         for (ItemStack axe : axes) {
+            if(!timer.hasReached(delay.intValue()))
+                break;
             drop(findSlotByItem(axe));
         }
     }
@@ -182,6 +186,8 @@ public class InventoryManager extends Module {
 
     private void dropJunks() {
         for(int i = 9; i < 45; i++) {
+            if(!timer.hasReached(delay.intValue()))
+                break;
             if(getSlot(i).getHasStack()) {
                 ItemStack itemStack = getSlot(i).getStack();
                 Item item = itemStack.getItem();

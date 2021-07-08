@@ -1,5 +1,6 @@
 package lime.ui.clickgui.frame;
 
+import lime.core.Lime;
 import lime.features.managers.FontManager;
 import lime.features.module.Category;
 import lime.ui.clickgui.frame.components.FrameCategory;
@@ -27,7 +28,7 @@ public class ClickGUI extends GuiScreen {
 
         int i = 0;
         for(Category category : Category.values()) {
-            this.frames.add(new FrameCategory(category, 10 + (i * 155), 10, 135, 250));
+            this.frames.add(new FrameCategory(category, 10 + (i * 125), 10, 120, 250));
             i++;
         }
 
@@ -54,7 +55,7 @@ public class ClickGUI extends GuiScreen {
         boolean cancel = false;
         for(FrameCategory frame : frames) {
             if(!cancel)
-                cancel = frame.keyTyped(keyCode);
+                cancel = frame.keyTyped(typedChar, keyCode);
         }
         if(!cancel) {
             super.keyTyped(typedChar, keyCode);
@@ -84,6 +85,20 @@ public class ClickGUI extends GuiScreen {
             if(frame.mouseClicked(mouseX, mouseY, mouseButton))
                 break;
         }
+
+        File configPath = new File("Lime" + File.separator + "configs");
+
+        ScaledResolution sr = new ScaledResolution(this.mc);
+        double width = sr.getScaledWidth_double();
+        double height = sr.getScaledHeight_double() - animate.getValue();
+        int i = 0;
+        for (String s : configPath.list()) {
+            if(hover((int) width - 25, (int) height - 76 + 15 + (i * 16), mouseX, mouseY, 25, 16) && mouseButton == 0) {
+                Lime.getInstance().getCommandManager().callCommand(".config load " + s.replace(".json", ""));
+            }
+            ++i;
+        }
+
         super.mouseClicked(mouseX, mouseY, mouseButton);
     }
 
@@ -127,7 +142,7 @@ public class ClickGUI extends GuiScreen {
         int i = 0;
         for (String s : configPath.list()) {
             FontManager.ProductSans20.getFont().drawStringWithShadow(s.replace(".json", ""), (float) width - 132, (float) height - 76 + 15 + (i * 16), -1);
-            Gui.drawRect(width - 25, height - 76 + 15 + (i * 16), width, height - 76 + 15 + (i * 16) + 16, arroundColor.getRGB());
+            Gui.drawRect(width - 25, height - 76 + 15 + (i * 16), width, height - 76 + 15 + (i * 16) + 16, hover((int) width - 25, (int) height - 76 + 15 + (i * 16), mouseX, mouseY, 25, 16) ? arroundColor.darker().getRGB() : arroundColor.getRGB());
             Gui.drawRect(width - 25 - 15, height - 76 + 15 + (i * 16), width - 25, height - 76 + 15 + (i * 16) + 16, hover((int) width  - 25 - 15, (int) height - 76 + 15 + (i * 16), mouseX, mouseY, 15, 16) ? new Color(255, 0, 0).darker().getRGB() : new Color(255, 0, 0).getRGB());
             FontManager.ProductSans18.getFont().drawStringWithShadow("Load", (float) width - 23.5f,(float) height - 76 + 15 + (i * 16) + 1, -1);
             ++i;

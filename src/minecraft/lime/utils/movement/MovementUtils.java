@@ -58,6 +58,15 @@ public class MovementUtils implements IUtil {
         mc.thePlayer.setPosition(mc.thePlayer.posX + -MathHelper.sin(getDirection()) * offset, mc.thePlayer.posY, mc.thePlayer.posZ + MathHelper.cos(getDirection()) * offset);
     }
 
+    public static double getJumpBoostModifier(double baseJumpHeight) {
+        if (mc.thePlayer.isPotionActive(Potion.jump)) {
+            int amplifier = mc.thePlayer.getActivePotionEffect(Potion.jump).getAmplifier();
+            baseJumpHeight += (float) (amplifier + 1) * 0.1F;
+        }
+
+        return baseJumpHeight;
+    }
+
     public static void setSpeed(double speed) {
         mc.thePlayer.motionX = -MathHelper.sin(getDirection()) * speed;
         mc.thePlayer.motionZ = MathHelper.cos(getDirection()) * speed;

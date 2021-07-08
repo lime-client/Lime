@@ -11,19 +11,21 @@ import net.minecraft.network.play.client.C07PacketPlayerDigging;
 import net.minecraft.network.play.client.C08PacketPlayerBlockPlacement;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
+import org.apache.commons.lang3.StringUtils;
 
 @ModuleData(name = "No Slow", category = Category.MOVEMENT)
 public class NoSlow extends Module {
 
     private enum Mode {
-        VANILLA, NCP
+        Vanilla, NCP
     }
 
-    private final EnumValue mode = new EnumValue("Mode", this, Mode.NCP);
+    private final EnumValue mode = new EnumValue("Mode", this, Mode.Vanilla);
 
     @EventTarget
     public void onMotion(EventMotion e) {
-        if(mc.thePlayer.isBlocking() || (mc.thePlayer.isEating() && mc.thePlayer.ticksExisted % 100 == 0) && mode.is("ncp")) {
+        this.setSuffix(mode.getSelected().name());
+        if(mc.thePlayer.isBlocking() || (mc.thePlayer.isEating() && mc.thePlayer.ticksExisted % 10000 == 0) && mode.is("ncp")) {
             if(e.isPre())
                 mc.thePlayer.sendQueue.addToSendQueue(new C07PacketPlayerDigging(C07PacketPlayerDigging.Action.RELEASE_USE_ITEM, BlockPos.ORIGIN, EnumFacing.DOWN));
             else

@@ -49,7 +49,7 @@ public class EventListener {
             } catch (Exception ignored) {}
         }
         if(autoSave.hasReached(30 * 1000)) {
-            Lime.getInstance().getFileSaver().saveModules("Lime" + java.io.File.separator + "modules.json", "Lime Auto Save");
+            Lime.getInstance().getFileSaver().saveModules("Lime" + java.io.File.separator + "modules.json", "Lime Auto Save", true);
             autoSave.reset();
         }
     }

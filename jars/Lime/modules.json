@@ -2,7 +2,7 @@
   "informations": [
     {
       "author": "Lime Auto Save",
-      "time": 1625542499
+      "time": 1625722336
     }
   ],
   "modules": [
@@ -58,7 +58,7 @@
         {
           "name": "Rotations",
           "type": "enum",
-          "value": "basic"
+          "value": "none"
         },
         {
           "name": "Target ESP",
@@ -73,7 +73,7 @@
         {
           "name": "Range",
           "type": "slider",
-          "value": 4.800000000000001
+          "value": 4.9
         },
         {
           "name": "CPS",
@@ -92,6 +92,11 @@
         },
         {
           "name": "Mobs",
+          "type": "bool",
+          "value": true
+        },
+        {
+          "name": "Teams",
           "type": "bool",
           "value": false
         },
@@ -135,10 +140,32 @@
       ]
     },
     {
+      "moduleName": "Auto Pot",
+      "key": -1,
+      "toggled": false,
+      "settings": [
+        {
+          "name": "Health",
+          "type": "slider",
+          "value": 10.0
+        },
+        {
+          "name": "Delay",
+          "type": "slider",
+          "value": 1000.0
+        }
+      ]
+    },
+    {
       "moduleName": "TP Aura",
       "key": 21,
       "toggled": false,
       "settings": [
+        {
+          "name": "CPS",
+          "type": "slider",
+          "value": 1.0
+        },
         {
           "name": "Targets",
           "type": "slider",
@@ -148,6 +175,35 @@
           "name": "Range",
           "type": "slider",
           "value": 50.0
+        }
+      ]
+    },
+    {
+      "moduleName": "Sigma Jello",
+      "key": -1,
+      "toggled": false,
+      "settings": [
+        {
+          "name": "FPS Booster",
+          "type": "bool",
+          "value": true
+        },
+        {
+          "name": "Sigma ESP",
+          "type": "bool",
+          "value": true
+        }
+      ]
+    },
+    {
+      "moduleName": "Disabler",
+      "key": -1,
+      "toggled": false,
+      "settings": [
+        {
+          "name": "Mode",
+          "type": "enum",
+          "value": "verus_combat"
         }
       ]
     },
@@ -169,13 +225,13 @@
         {
           "name": "Blink Delay",
           "type": "slider",
-          "value": 0.0
+          "value": 850.0
         }
       ]
     },
     {
       "moduleName": "Target Strafe",
-      "key": -1,
+      "key": 45,
       "toggled": false,
       "settings": [
         {
@@ -192,12 +248,17 @@
           "name": "Only Speed",
           "type": "bool",
           "value": false
+        },
+        {
+          "name": "Space Only",
+          "type": "bool",
+          "value": true
         }
       ]
     },
     {
       "moduleName": "Custom Flight",
-      "key": -1,
+      "key": 36,
       "toggled": false,
       "settings": [
         {
@@ -250,12 +311,12 @@
         {
           "name": "Mode",
           "type": "enum",
-          "value": "verus_bow"
+          "value": "funcraft"
         },
         {
           "name": "Speed",
           "type": "slider",
-          "value": 5.0
+          "value": 3.0
         }
       ]
     },
@@ -301,7 +362,7 @@
         {
           "name": "Mode",
           "type": "enum",
-          "value": "funcraft_yport"
+          "value": "funcraft"
         }
       ]
     },
@@ -337,7 +398,7 @@
     {
       "moduleName": "Inventory Manager",
       "key": 48,
-      "toggled": true,
+      "toggled": false,
       "settings": [
         {
           "name": "Mode",
@@ -405,8 +466,8 @@
     },
     {
       "moduleName": "Auto Armor",
-      "key": -1,
-      "toggled": true,
+      "key": 48,
+      "toggled": false,
       "settings": [
         {
           "name": "Mode",
@@ -416,7 +477,7 @@
         {
           "name": "Delay",
           "type": "slider",
-          "value": 85.0
+          "value": 50.0
         }
       ]
     },
@@ -431,6 +492,18 @@
       "toggled": true
     },
     {
+      "moduleName": "Streamer",
+      "key": -1,
+      "toggled": true,
+      "settings": [
+        {
+          "name": "Name",
+          "type": "text",
+          "value": "Wykt"
+        }
+      ]
+    },
+    {
       "moduleName": "Auto Tool",
       "key": -1,
       "toggled": true
@@ -438,7 +511,7 @@
     {
       "moduleName": "KillSult",
       "key": -1,
-      "toggled": true
+      "toggled": false
     },
     {
       "moduleName": "Anti Void",
@@ -475,19 +548,53 @@
         {
           "name": "Mode",
           "type": "enum",
-          "value": "vanilla"
+          "value": "verus"
+        }
+      ]
+    },
+    {
+      "moduleName": "Derp",
+      "key": -1,
+      "toggled": false,
+      "settings": [
+        {
+          "name": "Rotations Speed",
+          "type": "slider",
+          "value": 50.0
+        },
+        {
+          "name": "Sneak",
+          "type": "bool",
+          "value": true
         }
       ]
     },
     {
       "moduleName": "Render Test",
-      "key": 37,
+      "key": -1,
       "toggled": false
+    },
+    {
+      "moduleName": "Block Overlay",
+      "key": -1,
+      "toggled": true
     },
     {
       "moduleName": "No Scoreboard",
       "key": -1,
       "toggled": false
+    },
+    {
+      "moduleName": "Skeleton ESP",
+      "key": -1,
+      "toggled": true,
+      "settings": [
+        {
+          "name": "Width",
+          "type": "slider",
+          "value": 1.5
+        }
+      ]
     },
     {
       "moduleName": "Animations",
@@ -498,6 +605,11 @@
           "name": "Mode",
           "type": "enum",
           "value": "swing"
+        },
+        {
+          "name": "Swing Slowdown",
+          "type": "slider",
+          "value": 2.3000000000000003
         }
       ]
     },
@@ -524,9 +636,21 @@
       ]
     },
     {
+      "moduleName": "Chest ESP",
+      "key": -1,
+      "toggled": true,
+      "settings": [
+        {
+          "name": "Mode",
+          "type": "enum",
+          "value": "outline"
+        }
+      ]
+    },
+    {
       "moduleName": "Tracers",
       "key": -1,
-      "toggled": true
+      "toggled": false
     },
     {
       "moduleName": "Camera",
@@ -540,6 +664,11 @@
         },
         {
           "name": "No Fire",
+          "type": "bool",
+          "value": true
+        },
+        {
+          "name": "No FOV",
           "type": "bool",
           "value": true
         }
@@ -565,7 +694,7 @@
     {
       "moduleName": "ESP",
       "key": -1,
-      "toggled": false,
+      "toggled": true,
       "settings": [
         {
           "name": "Mode",
@@ -577,7 +706,29 @@
     {
       "moduleName": "HUD",
       "key": -1,
-      "toggled": true
+      "toggled": true,
+      "settings": [
+        {
+          "name": "Client Name",
+          "type": "text",
+          "value": "Astolfo"
+        },
+        {
+          "name": "Color",
+          "type": "enum",
+          "value": "astolfo"
+        },
+        {
+          "name": "Custom Font",
+          "type": "bool",
+          "value": true
+        },
+        {
+          "name": "Suffix",
+          "type": "bool",
+          "value": true
+        }
+      ]
     },
     {
       "moduleName": "Time Changer",
@@ -617,6 +768,11 @@
           "value": 0.0
         },
         {
+          "name": "Keep Rotations",
+          "type": "bool",
+          "value": true
+        },
+        {
           "name": "Tower",
           "type": "bool",
           "value": true
@@ -634,7 +790,7 @@
         {
           "name": "No Swing",
           "type": "bool",
-          "value": true
+          "value": false
         },
         {
           "name": "Same Y",
@@ -688,9 +844,58 @@
         {
           "name": "Timer Speed",
           "type": "slider",
-          "value": 2.5
+          "value": 6.800000000000001
         }
       ]
+    },
+    {
+      "moduleName": "Auto Clicker",
+      "key": -1,
+      "toggled": false
+    },
+    {
+      "moduleName": "Trigger Bot",
+      "key": -1,
+      "toggled": false,
+      "settings": [
+        {
+          "name": "CPS",
+          "type": "slider",
+          "value": 19.0
+        }
+      ]
+    },
+    {
+      "moduleName": "Hitbox",
+      "key": -1,
+      "toggled": false
+    },
+    {
+      "moduleName": "Aim Bot",
+      "key": -1,
+      "toggled": false,
+      "settings": [
+        {
+          "name": "Range",
+          "type": "slider",
+          "value": 3.5
+        },
+        {
+          "name": "Only if clicking",
+          "type": "bool",
+          "value": false
+        },
+        {
+          "name": "Smooth",
+          "type": "bool",
+          "value": false
+        }
+      ]
+    },
+    {
+      "moduleName": "Reach",
+      "key": -1,
+      "toggled": false
     }
   ]
 }

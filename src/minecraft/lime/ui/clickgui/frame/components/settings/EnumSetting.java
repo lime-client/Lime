@@ -17,14 +17,19 @@ public class EnumSetting extends Component {
     }
 
     @Override
+    public void onKeyTyped(char typedChar, int key) {
+
+    }
+
+    @Override
     public void drawComponent(int mouseX, int mouseY) {
-        if(GuiScreen.hover(x, y + 4, mouseX, mouseY, 135, 16)) {
-            Gui.drawRect(x - 3, y + 3, x - 3 + 135, y + 19, new Color(25, 25, 25, 150).getRGB());
+        if(GuiScreen.hover(x, y + 4, mouseX, mouseY, width, 16)) {
+            Gui.drawRect(x - 3, y + 3, x - 3 + width, y + 19, new Color(25, 25, 25, 150).getRGB());
         }
         FontManager.ProductSans20.getFont().drawString(this.setting.getSettingName(), this.x + 2, this.y + 4f, -1);
 
         EnumValue enumValue = (EnumValue) setting;
-        FontManager.ProductSans20.getFont().drawString(enumValue.getSelected().name().replaceAll("_", " "), this.x + 127 - FontManager.ProductSans20.getFont().getStringWidth(enumValue.getSelected().name().replaceAll("_", " ")), this.y + 4, -1);
+        FontManager.ProductSans20.getFont().drawString(enumValue.getSelected().name().replaceAll("_", " "), this.x + (width - 8) - FontManager.ProductSans20.getFont().getStringWidth(enumValue.getSelected().name().replaceAll("_", " ")), this.y + 4, -1);
     }
 
     @Override

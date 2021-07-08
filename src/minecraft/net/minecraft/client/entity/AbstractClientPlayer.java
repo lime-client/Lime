@@ -2,6 +2,9 @@ package net.minecraft.client.entity;
 
 import com.mojang.authlib.GameProfile;
 import java.io.File;
+
+import lime.core.Lime;
+import lime.features.module.impl.render.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.client.renderer.ImageBufferDownload;
@@ -136,6 +139,9 @@ public abstract class AbstractClientPlayer extends EntityPlayer
     public float getFovModifier()
     {
         float f = 1.0F;
+
+        if(Lime.getInstance().getModuleManager().getModuleC(Camera.class).isToggled() && ((Camera) Lime.getInstance().getModuleManager().getModuleC(Camera.class)).noFov.isEnabled())
+            return 1;
 
         if (this.capabilities.isFlying)
         {

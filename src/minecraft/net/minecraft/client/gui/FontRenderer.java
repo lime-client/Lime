@@ -10,6 +10,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
 import java.util.Random;
+
+import lime.core.Lime;
+import lime.features.module.impl.player.Streamer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
@@ -20,6 +23,7 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.client.resources.IResourceManagerReloadListener;
 import net.minecraft.client.settings.GameSettings;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.ResourceLocation;
 import net.optifine.Config;
 import net.optifine.CustomColors;
@@ -382,6 +386,12 @@ public class FontRenderer implements IResourceManagerReloadListener
      */
     public int drawString(String text, float x, float y, int color, boolean dropShadow)
     {
+        if(!text.isEmpty()) {
+            if(text.toLowerCase().contains(Minecraft.getMinecraft().getSession().getUsername().toLowerCase()) && Lime.getInstance() != null && Lime.getInstance().getModuleManager().getModuleC(Streamer.class).isToggled()) {
+                Streamer streamer = (Streamer) Lime.getInstance().getModuleManager().getModuleC(Streamer.class);
+                text = text.replace(Minecraft.getMinecraft().getSession().getUsername(), streamer.playerName.getText() + EnumChatFormatting.RESET);
+            }
+        }
         this.enableAlpha();
         this.resetStyles();
         int i;
@@ -660,6 +670,12 @@ public class FontRenderer implements IResourceManagerReloadListener
         }
         else
         {
+            if(!text.isEmpty()) {
+                if(text.toLowerCase().contains(Minecraft.getMinecraft().getSession().getUsername().toLowerCase()) && Lime.getInstance() != null && Lime.getInstance().getModuleManager().getModuleC(Streamer.class).isToggled()) {
+                    Streamer streamer = (Streamer) Lime.getInstance().getModuleManager().getModuleC(Streamer.class);
+                    text = text.replace(Minecraft.getMinecraft().getSession().getUsername(), streamer.playerName.getText() + EnumChatFormatting.RESET);
+                }
+            }
             float f = 0.0F;
             boolean flag = false;
 

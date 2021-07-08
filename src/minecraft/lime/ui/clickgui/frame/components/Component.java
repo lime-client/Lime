@@ -18,6 +18,8 @@ public abstract class Component {
     public abstract void mouseReleased(int mouseX, int mouseY, int state);
     public abstract void onGuiClosed();
 
+    public abstract void onKeyTyped(char typedChar, int key);
+
     public void setX(int x) {
         this.x = x;
     }

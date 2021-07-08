@@ -2,10 +2,9 @@ package lime.features.managers;
 
 import lime.features.module.Category;
 import lime.features.module.Module;
+import lime.features.module.impl.exploit.*;
+import lime.features.module.impl.ghost.*;
 import lime.features.module.impl.combat.*;
-import lime.features.module.impl.exploit.Blink;
-import lime.features.module.impl.exploit.FastBow;
-import lime.features.module.impl.exploit.NoClip;
 import lime.features.module.impl.movement.*;
 import lime.features.module.impl.player.*;
 import lime.features.module.impl.render.*;
@@ -27,9 +26,12 @@ public class ModuleManager {
         registerModule(new KillAura());
         registerModule(new Velocity());
         registerModule(new AntiBot());
+        registerModule(new AutoPot());
         registerModule(new TPAura());
 
         // EXPLOIT
+        registerModule(new SigmaJello());
+        registerModule(new Disabler());
         registerModule(new FastBow());
         registerModule(new NoClip());
         registerModule(new Blink());
@@ -54,20 +56,25 @@ public class ModuleManager {
         registerModule(new AutoArmor());
         registerModule(new SpeedMine());
         registerModule(new FastPlace());
+        registerModule(new Streamer());
         registerModule(new AutoTool());
         registerModule(new KillSult());
         registerModule(new AntiVoid());
         registerModule(new Freecam());
         registerModule(new FastEat());
         registerModule(new NoFall());
+        registerModule(new Derp());
 
         // RENDER
         registerModule(new RenderTestModule());
+        registerModule(new BlockOverlay());
         registerModule(new NoScoreboard());
+        registerModule(new SkeletonESP());
         registerModule(new Animations());
         registerModule(new FullBright());
         registerModule(new Nametags());
         registerModule(new ClickGUI());
+        registerModule(new ChestESP());
         registerModule(new Tracers());
         registerModule(new Camera());
         registerModule(new Chams());
@@ -81,6 +88,13 @@ public class ModuleManager {
         registerModule(new NoRotate());
         registerModule(new Breaker());
         registerModule(new Timer());
+
+        // GHOST
+        registerModule(new AutoClicker());
+        registerModule(new TriggerBot());
+        registerModule(new Hitbox());
+        registerModule(new AimBot());
+        registerModule(new Reach());
     }
 
     public ArrayList<Module> getModules() {

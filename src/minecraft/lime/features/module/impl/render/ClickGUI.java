@@ -10,7 +10,7 @@ import lime.features.setting.impl.EnumValue;
 public class ClickGUI extends Module {
 
     private enum Mode {
-        FRAME, PANEL
+        FRAME
     }
 
     private EnumValue mode = new EnumValue("Mode", this, Mode.FRAME);

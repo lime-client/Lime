@@ -25,6 +25,7 @@ import java.util.Comparator;
 @ModuleData(name = "TP Aura", category = Category.COMBAT)
 public class TPAura extends Module {
 
+    private final SlideValue cps = new SlideValue("CPS", this, 1, 20, 5, 1);
     private final SlideValue _targets = new SlideValue("Targets", this, 1, 10, 1, 1);
     private final SlideValue range = new SlideValue("Range", this, 5, 100, 50, 5);
 
@@ -72,7 +73,7 @@ public class TPAura extends Module {
 
     @EventTarget
     public void onUpdate(EventUpdate e) {
-        if(cpsTimer.hasReached(20 / 5 * 50)) {
+        if(cpsTimer.hasReached(20 / cps.intValue() * 50)) {
             ArrayList<Entity> entities = getTargets();
             this.targets = entities;
             if(!entities.isEmpty()) {

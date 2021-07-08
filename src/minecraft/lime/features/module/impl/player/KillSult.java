@@ -14,7 +14,7 @@ import java.util.concurrent.ThreadLocalRandom;
 public class KillSult extends Module {
     @EventTarget
     public void onPacket(EventPacket e) {
-        if(e.getPacket() instanceof S02PacketChat) {
+        if(e.getPacket() instanceof S02PacketChat && mc.getIntegratedServer() == null) {
             String message = ((S02PacketChat) e.getPacket()).getChatComponent().getUnformattedText();
 
             if(message.toLowerCase().contains(mc.session.getUsername().toLowerCase()) && (message.toLowerCase().contains("tué") || message.toLowerCase().contains("slain") || message.toLowerCase().contains("killed") || message.toLowerCase().contains("rekt"))) {

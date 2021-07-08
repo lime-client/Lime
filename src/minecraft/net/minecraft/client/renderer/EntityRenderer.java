@@ -1,5 +1,6 @@
 package net.minecraft.client.renderer;
 
+import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import com.google.gson.JsonSyntaxException;
 import java.io.IOException;
@@ -313,7 +314,30 @@ public class EntityRenderer implements IResourceManagerReloadListener
 
             if (this.shaderIndex != shaderCount)
             {
-                this.loadShader(shaderResourceLocations[this.shaderIndex]);
+                //this.loadShader(shaderResourceLocations[this.shaderIndex]);
+                this.loadShader(shaderResourceLocations[1]);
+            }
+            else
+            {
+                this.theShaderGroup = null;
+            }
+        }
+    }
+
+    public void loadShader(int index) {
+        if (OpenGlHelper.shadersSupported && this.mc.getRenderViewEntity() instanceof EntityPlayer)
+        {
+            if (this.theShaderGroup != null)
+            {
+                this.theShaderGroup.deleteShaderGroup();
+            }
+
+            this.shaderIndex = (this.shaderIndex + 1) % (shaderResourceLocations.length + 1);
+
+            if (this.shaderIndex != shaderCount)
+            {
+                //this.loadShader(shaderResourceLocations[this.shaderIndex]);
+                this.loadShader(shaderResourceLocations[index]);
             }
             else
             {
@@ -496,7 +520,7 @@ public class EntityRenderer implements IResourceManagerReloadListener
             this.pointedEntity = null;
             Vec3 vec33 = null;
             float f = 1.0F;
-            List list = this.mc.theWorld.getEntitiesInAABBexcluding(entity, entity.getEntityBoundingBox().addCoord(vec31.xCoord * d0, vec31.yCoord * d0, vec31.zCoord * d0).expand((double)f, (double)f, (double)f), Predicates.and(EntitySelectors.NOT_SPECTATING, new EntityRenderer$1(this)));
+            List list = this.mc.theWorld.getEntitiesInAABBexcluding(entity, entity.getEntityBoundingBox().addCoord(vec31.xCoord * d0, vec31.yCoord * d0, vec31.zCoord * d0).expand((double)f, (double)f, (double)f), Predicates.and(EntitySelectors.NOT_SPECTATING, new EntityRendererPredicate(this)));
             double d2 = d1;
 
             for (int i = 0; i < list.size(); ++i)
@@ -1401,7 +1425,7 @@ public class EntityRenderer implements IResourceManagerReloadListener
                 {
                     CrashReport crashreport = CrashReport.makeCrashReport(throwable, "Rendering screen");
                     CrashReportCategory crashreportcategory = crashreport.makeCategory("Screen render details");
-                    crashreportcategory.addCrashSectionCallable("Screen name", new EntityRenderer$2(this));
+                    //crashreportcategory.addCrashSectionCallable("Screen name", new EntityRendererPredicate(this));
                     crashreportcategory.addCrashSectionCallable("Mouse location", new Callable()
                     {
                         private static final String __OBFID = "CL_00000950";
@@ -2836,6 +2860,25 @@ public class EntityRenderer implements IResourceManagerReloadListener
             this.loadShader(new ResourceLocation("shaders/post/fxaa_of_" + p_setFxaaShader_1_ + "x.json"));
             this.fxaaShaders[p_setFxaaShader_1_] = this.theShaderGroup;
             return this.useShader;
+        }
+    }
+
+    public class EntityRendererPredicate implements Predicate {
+        final EntityRenderer field_90032_a;
+
+        EntityRendererPredicate(EntityRenderer p_i1243_1_)
+        {
+            this.field_90032_a = p_i1243_1_;
+        }
+
+        public boolean apply(Entity p_apply_1_)
+        {
+            return p_apply_1_.canBeCollidedWith();
+        }
+
+        public boolean apply(Object p_apply_1_)
+        {
+            return this.apply((Entity)p_apply_1_);
         }
     }
 }

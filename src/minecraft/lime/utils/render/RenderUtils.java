@@ -143,6 +143,7 @@ public class RenderUtils implements IUtil {
             GL11.glVertex3d(x + radius, y, z);
             GL11.glVertex3d(x + radius, y, z + radius);
             GL11.glVertex3d(x, y, z + radius);
+            GL11.glVertex3d(x, y, z);
 
             GL11.glEnd();
 

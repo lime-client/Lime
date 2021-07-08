@@ -60,6 +60,6 @@ ofDynamicFov:true
 ofDynamicLights:3
 ofFullscreenMode:Default
 ofFastMath:false
-ofFastRender:true
+ofFastRender:false
 ofTranslucentBlocks:0
 key_of.key.zoom:46

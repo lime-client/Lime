@@ -14,21 +14,22 @@ import lime.utils.other.Timer;
 public class AntiVoid extends Module {
 
     private enum Mode {
-        MOTION
+        Motion
     }
 
-    private final EnumValue mode = new EnumValue("Mode", this, Mode.MOTION);
+    private final EnumValue mode = new EnumValue("Mode", this, Mode.Motion);
     private final SlideValue pullBack = new SlideValue("Pullback", this, 500, 3000, 500, 500);
 
     private final Timer timer = new Timer();
 
     @EventTarget
     public void onMotion(EventMotion e) {
-        if(!mc.thePlayer.onGround && mc.thePlayer.isEntityAlive()) {
+        this.setSuffix(mode.getSelected().name());
+        if(!mc.thePlayer.onGround && mc.thePlayer.isEntityAlive() && MovementUtils.isVoidUnder()) {
             if(mode.is("motion")) {
                 if(timer.hasReached((int) pullBack.getCurrent())) {
                     timer.reset();
-                    mc.thePlayer.motionY = 0;
+                    mc.thePlayer.motionY = 1;
                 }
             }
         } else timer.reset();

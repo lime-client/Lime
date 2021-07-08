@@ -5,13 +5,8 @@ import lime.features.managers.FontManager;
 import lime.features.module.Category;
 import lime.features.module.Module;
 import lime.features.setting.SettingValue;
-import lime.features.setting.impl.BoolValue;
-import lime.features.setting.impl.EnumValue;
-import lime.features.setting.impl.SlideValue;
-import lime.ui.clickgui.frame.components.settings.BoolSetting;
-import lime.ui.clickgui.frame.components.settings.EnumSetting;
-import lime.ui.clickgui.frame.components.settings.SlideSetting;
-import lime.utils.render.RenderUtils;
+import lime.features.setting.impl.*;
+import lime.ui.clickgui.frame.components.settings.*;
 import lime.utils.render.animation.easings.Animate;
 import lime.utils.render.animation.easings.Easing;
 import net.minecraft.client.Minecraft;
@@ -70,6 +65,9 @@ public class FrameCategory {
             if(set instanceof SlideValue) {
                 this.components.add(new SlideSetting(0, 0, 0, 0, set));
             }
+            if(set instanceof TextValue) {
+                this.components.add(new TextSetting(0, 0, 0, 0, ((TextValue) set).getText(), set));
+            }
         }
         isOpened = false;
     }
@@ -82,6 +80,10 @@ public class FrameCategory {
     }
 
     public void drawFrame(int mouseX, int mouseY) {
+        if(y < 0 && endedAnimation) {
+            y = 0;
+        }
+
         animation.update();
         if(y == (int) animation.getMax()) {
             endedAnimation = true;
@@ -124,13 +126,23 @@ public class FrameCategory {
             return;
         }
 
+
+        for (Component component : this.components) {
+            if(component instanceof TextSetting) {
+                TextSetting textSetting = (TextSetting) component;
+                if(!this.openedModules.contains(textSetting.setting.getParentModule()) && textSetting.isFocused) {
+                    textSetting.setFocused(false);
+                }
+            }
+        }
+
         // Draw Modules
         int i = 0;
         for(Module module : mods.stream().filter(module -> module.getCategory() == category).collect(Collectors.toCollection(ArrayList::new))) {
             if(hover(x, y + 15 + (i * 16), mouseX, mouseY, width, 16)) {
                 Gui.drawRect(x, y + 15 + (i * 16), x + width, y + 15 + (i * 16) + 16, new Color(25, 25, 25, 150).getRGB());
             }
-            FontManager.ProductSans20.getFont().drawString(module.getName() + (module == bindingModule ? " [Binding...]" : "") + (Keyboard.isKeyDown(29) && module.getKey() != -1 ? " [" + Keyboard.getKeyName(module.getKey()) + "]" : ""), x + 3, y + 16 + (i * 16), module.isToggled() ? new Color(125, 125, 125).getRGB() : -1, true);
+            FontManager.ProductSans20.getFont().drawString(module.getName() + (module == bindingModule ? " [Binding...]" : "") + (Keyboard.isKeyDown(29) && Keyboard.isKeyDown(42) && module.getKey() != -1 ? " [" + Keyboard.getKeyName(module.getKey()) + "]" : ""), x + 3, y + 16 + (i * 16), module.isToggled() ? new Color(125, 125, 125).getRGB() : -1, true);
             if(module.hasSettings()) {
                 GL11.glPushMatrix();
                 GL11.glColor4f(1, 1, 1, 1);
@@ -145,6 +157,7 @@ public class FrameCategory {
                         ++i;
                         component.setX(x + 3);
                         component.setY(y + 20 + (i * 16) - 8);
+                        component.setWidth(width);
                         component.drawComponent(mouseX, mouseY);
                     }
                 }
@@ -154,7 +167,7 @@ public class FrameCategory {
         height = i * 16 + 16;
     }
 
-    public boolean keyTyped(int keyCode) {
+    public boolean keyTyped(char typedChar, int keyCode) {
         if(bindingModule != null) {
             if(keyCode == 1) {
                 bindingModule.setKey(-1);
@@ -164,6 +177,10 @@ public class FrameCategory {
             bindingModule.setKey(keyCode);
             bindingModule = null;
             return false;
+        }
+
+        for (Component component : components) {
+            component.onKeyTyped(typedChar, keyCode);
         }
         return false;
     }
@@ -244,6 +261,9 @@ public class FrameCategory {
     }
 
     public void onGuiClosed() {
+        for (Component component : this.components) {
+            component.onGuiClosed();
+        }
         this.drag = false;
     }
 

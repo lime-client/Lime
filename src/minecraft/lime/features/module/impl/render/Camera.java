@@ -9,6 +9,8 @@ import lime.features.setting.impl.BoolValue;
 public class Camera extends Module {
     // No Hurt Cam : EntityRenderer
     // No Fire : ItemRenderer
+    // No FOV : AbstractClientPlayer#getFovModifier
     public final BoolValue noHurtCam = new BoolValue("No Hurt Cam", this, true);
     public final BoolValue noFire = new BoolValue("No Fire", this, true);
+    public final BoolValue noFov = new BoolValue("No FOV", this, true);
 }

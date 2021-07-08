@@ -6,22 +6,25 @@ import lime.features.module.Category;
 import lime.features.module.Module;
 import lime.features.module.ModuleData;
 import lime.features.setting.impl.EnumValue;
+import lime.utils.render.RenderUtils;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import org.apache.commons.lang3.StringUtils;
 import org.lwjgl.opengl.GL11;
 
 @ModuleData(name = "ESP", category = Category.RENDER)
 public class ESP extends Module {
 
     private enum Mode {
-        BOX, CYLINDER
+        Box, Cylinder
     }
 
-    private final EnumValue mode = new EnumValue("Mode", this, Mode.BOX);
+    private final EnumValue mode = new EnumValue("Mode", this, Mode.Box);
 
     @EventTarget
     public void on3D(Event3D e) {
+        this.setSuffix(mode.getSelected().name());
         for(Entity entity : mc.theWorld.getLoadedEntityList()) {
             if(entity == mc.thePlayer) continue;
             if(entity instanceof EntityPlayer) {
@@ -32,7 +35,7 @@ public class ESP extends Module {
                 GlStateManager.disableTexture2D();
                 GlStateManager.disableDepth();
 
-                GL11.glColor4f(1, 1, 1, 1);
+                RenderUtils.glColor(HUD.getColor(0));
                 GL11.glLineWidth(2.5f);
 
                 double factor = entity.width - 0.15;
@@ -57,6 +60,7 @@ public class ESP extends Module {
                 GL11.glPopMatrix();
             }
         }
+        GL11.glColor4f(1, 1, 1, 1);
     }
 
     public void drawBox(double x, double y, double z, double factor, double yOffset) {

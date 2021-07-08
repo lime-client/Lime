@@ -15,24 +15,30 @@ import net.minecraft.block.BlockAir;
 import net.minecraft.network.play.client.C03PacketPlayer;
 import net.minecraft.network.play.server.S12PacketEntityVelocity;
 import net.minecraft.util.AxisAlignedBB;
+import org.apache.commons.lang3.StringUtils;
 
 @ModuleData(name = "Flight", category = Category.MOVEMENT)
 public class Flight extends Module {
 
     private enum Mode {
-        VANILLA, FUNCRAFT, VERUS, VERUS_FAST
+        Vanilla, Funcraft, Funcraft_Gamer, Verus, Verus_Fast, Astral
     }
 
     //Settings
-    private final EnumValue mode = new EnumValue("Mode", this, Mode.VANILLA);
+    private final EnumValue mode = new EnumValue("Mode", this, Mode.Vanilla);
     private final BoolValue bobbing = new BoolValue("Bobbing", this, true);
 
     private int ticks;
     private double moveSpeed;
     private boolean receivedVelocityPacket;
+    private double lastDist;
 
     @Override
     public void onEnable() {
+        if(mc.thePlayer == null) {
+            this.toggle();
+            return;
+        }
         if(mode.is("funcraft")) {
             if(mc.thePlayer.onGround) {
                 mc.thePlayer.jump();
@@ -40,34 +46,7 @@ public class Flight extends Module {
             } else
                 moveSpeed = 0.25;
         }
-        if(mode.is("verus_fast")) {
-            for(int i = 0; i < 1; ++i) {
-                //mc.thePlayer.sendQueue.addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY + 1.1661092609382138, mc.thePlayer.posZ, false));
-                //mc.thePlayer.sendQueue.addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY + 2.3322185218764275, mc.thePlayer.posZ, false));
-                //mc.thePlayer.sendQueue.addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY + 3.4983277828146413, mc.thePlayer.posZ, false));
-                //mc.thePlayer.sendQueue.addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY + 4.664437043752855, mc.thePlayer.posZ, false));
-
-                mc.thePlayer.sendQueue.addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY , mc.thePlayer.posZ, false));
-            }
-
-            System.out.println(2.3322185218764275 - 1.1661092609382138);
-
-
-            //mc.thePlayer.sendQueue.addToSendQueue(new C03PacketPlayer(true));
-
-            //mc.thePlayer.sendQueue.addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY + 0.41999998688697815, mc.thePlayer.posZ, false));
-
-            //for (int i = 0; i < 2; i++) {
-                mc.thePlayer.sendQueue.addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY + 0.41999998688697815, mc.thePlayer.posZ, false));
-                mc.thePlayer.sendQueue.addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY + 0.36502771690226155, mc.thePlayer.posZ, false));
-                mc.thePlayer.sendQueue.addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY + 0.1647732818260721, mc.thePlayer.posZ, false));
-                mc.thePlayer.sendQueue.addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY + 0.08307781780646721, mc.thePlayer.posZ, true));
-            //}
-
-
-            moveSpeed = 9;
-        }
-
+        lastDist = 0;
         ticks = 0;
         receivedVelocityPacket = false;
     }
@@ -85,6 +64,7 @@ public class Flight extends Module {
 
     @EventTarget
     public void onMotion(EventMotion e) {
+        this.setSuffix(mode.getSelected().name());
         if(bobbing.isEnabled() && mc.thePlayer.isMoving()) {
             mc.thePlayer.cameraYaw = 0.116f;
         }
@@ -116,7 +96,6 @@ public class Flight extends Module {
                     if(moveSpeed > 0.25) {
                         moveSpeed -= 0.21;
                     }
-                    ticks++;
                 }
             }
         }
@@ -124,13 +103,19 @@ public class Flight extends Module {
         if(mode.is("funcraft")) {
             e.setGround(true);
             mc.thePlayer.jumpMovementFactor = 0;
-            mc.thePlayer.motionY = 0;
+            if(e.isPre()) {
+                mc.thePlayer.motionY = 0;
+                if(ticks > 200) {
+                    ticks = 0;
+                    mc.thePlayer.motionY = -0.12;
+                }
+            }
             if(mc.thePlayer.isCollidedHorizontally)
                 moveSpeed = 0.25;
             if(mc.thePlayer.isMoving()) {
                 mc.timer.timerSpeed = 1.0866f;
                 if(mc.thePlayer.ticksExisted % 5 == 0) {
-                    mc.timer.timerSpeed = 1.4f;
+                    mc.timer.timerSpeed = 1.75f;
                 }
                 MovementUtils.setSpeed(moveSpeed);
                 if(moveSpeed > 0.25)
@@ -146,6 +131,38 @@ public class Flight extends Module {
                 mc.thePlayer.setPosition(mc.thePlayer.posX, mc.thePlayer.posY - 0.0000000000333315597345063, mc.thePlayer.posZ);
             }
         }
+
+        if(mode.is("funcraft_gamer")) {
+            mc.timer.timerSpeed = 1.5f;
+            mc.thePlayer.setSprinting(false);
+            mc.thePlayer.onGround = true;
+            mc.thePlayer.motionY *= 0.3;
+        }
+
+        if(mode.is("astral") && e.isPre()) {
+            if(mc.thePlayer.isMoving())
+                mc.timer.timerSpeed = 2;
+            else
+                mc.timer.timerSpeed = 1;
+            if(mc.thePlayer.motionY < -0.20) {
+                e.setGround(true);
+                mc.thePlayer.motionY = 0.2;
+                if(mc.thePlayer.isMoving()) {
+                    MovementUtils.setSpeed(0.8);
+                }
+            } else if(mc.thePlayer.motionY > 0.1) {
+                if(mc.thePlayer.isMoving()) {
+                    MovementUtils.setSpeed(0.8);
+                }
+            }
+        }
+
+        double xDist = mc.thePlayer.posX - mc.thePlayer.prevPosX;
+        double zDist = mc.thePlayer.posZ - mc.thePlayer.prevPosZ;
+        lastDist = Math.sqrt(xDist * xDist + zDist * zDist);
+
+        if(e.isPre())
+            ticks++;
     }
 
     @EventTarget

@@ -17,14 +17,15 @@ import lime.utils.other.MathUtils;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.network.play.server.S08PacketPlayerPosLook;
 import net.minecraft.potion.Potion;
+import org.apache.commons.lang3.StringUtils;
 
 @ModuleData(name = "Speed", category = Category.MOVEMENT)
 public class Speed extends Module {
     private enum Mode {
-        VANILLA, VANILLA_BHOP, VERUS, VERUS_LOWHOP, NCP, FUNCRAFT, FUNCRAFT_YPORT, HYPIXEL
+        Vanilla, Vanilla_BHOP, Verus, Verus_LOWHOP, NCP, Funcraft, Funcraft_YPORT, Hypixel, Mineplex
     }
 
-    private final EnumValue mode = new EnumValue("Mode", this, Mode.VANILLA);
+    private final EnumValue mode = new EnumValue("Mode", this, Mode.Vanilla);
 
     private double moveSpeed;
     private double lastDist;
@@ -52,6 +53,7 @@ public class Speed extends Module {
 
     @EventTarget
     public void onMotion(EventMotion e) {
+        this.setSuffix(mode.getSelected().name());
         if(mode.is("vanilla") || mode.is("vanilla_bhop")) {
             if(mc.thePlayer.isMoving()) {
                 MovementUtils.setSpeed(1);
@@ -97,11 +99,25 @@ public class Speed extends Module {
             if(e.isPre()) {
                 if(mc.thePlayer.onGround && mc.thePlayer.isMoving()) {
                     mc.thePlayer.jump();
-                    mc.thePlayer.motionX *= 1.01;
-                    mc.thePlayer.motionZ *= 1.01;
                 }
                 MovementUtils.strafe();
                 mc.thePlayer.motionY -= 0.0000099;
+            }
+        }
+
+        if(mode.is("mineplex")) {
+            if(!mc.thePlayer.isMoving()) return;
+            MovementUtils.strafe();
+            if(mc.thePlayer.onGround) {
+                stage = 1;
+                moveSpeed = MovementUtils.getSpeed();
+                mc.thePlayer.jump();
+                MovementUtils.setSpeed(-0.07);
+            } else {
+                if(stage == 1) {
+                    MovementUtils.setSpeed(moveSpeed + 0.6);
+                    stage = 2;
+                }
             }
         }
 

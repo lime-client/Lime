@@ -33,7 +33,7 @@ public class AutoArmor extends Module {
 
     @EventTarget
     public void onTick(EventUpdate event) {
-        if (timer.hasReached((long)delay.getCurrent()) && !mc.thePlayer.capabilities.isCreativeMode && (mc.currentScreen != null || !mode.is("openinv")) && !(mc.currentScreen instanceof GuiChat)) {
+        if (timer.hasReached((long)delay.getCurrent()) && !mc.thePlayer.capabilities.isCreativeMode && (mc.currentScreen != null || (!mode.is("openinv") && mc.currentScreen == null)) && !(mc.currentScreen instanceof GuiChat)) {
             for(int b = 5; b <= 8; ++b) {
                 if (equipArmor(b)) {
                     timer.reset();

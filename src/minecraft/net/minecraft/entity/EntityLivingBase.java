@@ -9,9 +9,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
+
+import lime.core.Lime;
+import lime.features.module.impl.render.Animations;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.BaseAttributeMap;
@@ -1324,9 +1328,10 @@ public abstract class EntityLivingBase extends Entity
      * Returns an integer indicating the end point of the swing animation, used by {@link #swingProgress} to provide a
      * progress indicator. Takes dig speed enchantments into account.
      */
-    private int getArmSwingAnimationEnd()
+    private float getArmSwingAnimationEnd()
     {
-        return this.isPotionActive(Potion.digSpeed) ? 6 - (1 + this.getActivePotionEffect(Potion.digSpeed).getAmplifier()) * 1 : (this.isPotionActive(Potion.digSlowdown) ? 6 + (1 + this.getActivePotionEffect(Potion.digSlowdown).getAmplifier()) * 2 : 6);
+        double multiplier = this != Minecraft.getMinecraft().thePlayer ? 1 : ((Animations) Lime.getInstance().getModuleManager().getModuleC(Animations.class)).swingSlowdown.getCurrent();
+        return this.isPotionActive(Potion.digSpeed) ? 6 - (1 + this.getActivePotionEffect(Potion.digSpeed).getAmplifier()) * 1 : (this.isPotionActive(Potion.digSlowdown) ? 6 + (1 + this.getActivePotionEffect(Potion.digSlowdown).getAmplifier()) * 2 : 6) * (float) multiplier;
     }
 
     /**
@@ -1394,7 +1399,7 @@ public abstract class EntityLivingBase extends Entity
      */
     protected void updateArmSwingProgress()
     {
-        int i = this.getArmSwingAnimationEnd();
+        float i = this.getArmSwingAnimationEnd();
 
         if (this.isSwingInProgress)
         {

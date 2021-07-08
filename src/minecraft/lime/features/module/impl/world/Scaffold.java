@@ -27,6 +27,7 @@ import net.minecraft.network.play.client.C0APacketAnimation;
 import net.minecraft.util.*;
 import org.lwjgl.input.Keyboard;
 
+import java.awt.*;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
@@ -59,6 +60,7 @@ public class Scaffold extends Module {
     private final EnumValue rotations = new EnumValue("Rotations", this, Rotations.BASIC);
     private final SlideValue expand = new SlideValue("Expand", this, 0, 5, 0.3, 0.05);
     private final SlideValue eagle = new SlideValue("Eagle", this, 0, 5, 1, 1);
+    private final BoolValue keepRotations = new BoolValue("Keep Rotations", this, true);
     private final BoolValue tower = new BoolValue("Tower", this, true);
     private final BoolValue towerMove = new BoolValue("Tower Move", this, false);
     private final BoolValue noSprint = new BoolValue("No Sprint", this, false);
@@ -82,9 +84,11 @@ public class Scaffold extends Module {
 
     @Override
     public void onEnable() {
-        if(mc.thePlayer != null) {
-            this.posY = mc.thePlayer.posY;
+        if(mc.thePlayer == null) {
+            this.toggle();
+            return;
         }
+        this.posY = mc.thePlayer.posY;
         this.animation.reset();
         this.animation.setEase(Easing.CUBIC_IN_OUT);
         this.animation.setMin(5);
@@ -113,7 +117,8 @@ public class Scaffold extends Module {
             RenderHelper.enableStandardItemLighting();
             mc.getRenderItem().renderItemAndEffectIntoGUI(currentItemStack, new ScaledResolution(mc).getScaledWidth() / 2 - 8, (int) this.animation.getValue() - 24);
         }
-        mc.fontRendererObj.drawStringWithShadow(getBlocksCount() + " blocks", e.getScaledResolution().getScaledWidth() / 2 - (mc.fontRendererObj.getStringWidth(getBlocksCount() + " blocks") / 2), this.animation.getValue(), -1);
+        int blocks = getBlocksCount();
+        mc.fontRendererObj.drawStringWithShadow(blocks + " blocks", e.getScaledResolution().getScaledWidth() / 2 - (mc.fontRendererObj.getStringWidth(getBlocksCount() + " blocks") / 2), this.animation.getValue(), blocks > 64 ? new Color(0, 255, 0).getRGB() : new Color(255, 0, 0).getRGB());
     }
 
     @EventTarget
@@ -121,8 +126,10 @@ public class Scaffold extends Module {
         if(InventoryUtils.hasBlock(blacklistedBlocks, true, true) == -1)
             return;
 
-        e.setYaw(yaw);
-        e.setPitch(pitch);
+        if(keepRotations.isEnabled()) {
+            e.setYaw(yaw);
+            e.setPitch(pitch);
+        }
         mc.thePlayer.setRotationsTP(e);
         if(eagle.getCurrent() != 0 && e.isPre()) {
             if((int) eagle.getCurrent() <= blocksWithoutEagle) {
@@ -203,7 +210,7 @@ public class Scaffold extends Module {
 
         if((isAirBlock(underBlock) && blockData != null) || down.isEnabled()) {
             if(e.isPre()) {
-                if(blockData != null) {
+                if(blockData != null && (isAirBlock(underBlock) && blockData != null)) {
                     this.blockData = blockData;
                     float[] rots = getRotations(blockData.getBlockPos(), blockData.getEnumFacing());
                     e.setYaw(rots[0]);

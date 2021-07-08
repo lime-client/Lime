@@ -17,24 +17,30 @@ public class BoolSetting extends Component {
     }
 
     @Override
+    public void onKeyTyped(char typedChar, int key) {
+
+    }
+
+    @Override
     public void drawComponent(int mouseX, int mouseY) {
-        if(GuiScreen.hover(x, y + 4, mouseX, mouseY, 135, 16)) {
-            Gui.drawRect(x - 3, y + 3, x - 3 + 135, y + 19, new Color(25, 25, 25, 150).getRGB());
+        if(GuiScreen.hover(x, y + 4, mouseX, mouseY, width, 16)) {
+            Gui.drawRect(x - 3, y + 3, x - 3 + width, y + 19, new Color(25, 25, 25, 150).getRGB());
         }
         FontManager.ProductSans20.getFont().drawString(setting.getSettingName(), x + 2, y + 4, -1);
         //FontManager.ProductSans20.getFont().drawString(((BoolValue) setting).isEnabled() + "", this.x + 127 - FontManager.ProductSans20.getFont().getStringWidth(((BoolValue) setting).isEnabled() + ""), this.y + 4, -1);
-        Gui.drawRect(this.x + 120, this.y + 6, this.x + 130, this.y + 16, new Color(25, 25, 25).getRGB());
+        Gui.drawRect(this.x + width - 15, this.y + 6, this.x + width - 5, this.y + 16, new Color(25, 25, 25).getRGB());
         if(((BoolValue) setting).isEnabled()) {
             GL11.glPushMatrix();
             GlStateManager.enableTexture2D();
             GL11.glEnable(GL11.GL_LINE_SMOOTH);
+            GL11.glLineWidth(0.25f);
             GL11.glBegin(3);
-            GL11.glVertex2f(this.x + 121, this.y + 7);
-            GL11.glVertex2f(this.x + 129, this.y + 15);
+            GL11.glVertex2f(this.x + width - 14, this.y + 7);
+            GL11.glVertex2f(this.x + width - 6, this.y + 15);
             GL11.glEnd();
             GL11.glBegin(3);
-            GL11.glVertex2f(this.x + 121, this.y + 15);
-            GL11.glVertex2f(this.x + 129, this.y + 7);
+            GL11.glVertex2f(this.x + width - 14, this.y + 15);
+            GL11.glVertex2f(this.x + width - 6, this.y + 7);
             GL11.glEnd();
             GL11.glPopMatrix();
         }

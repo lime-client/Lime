@@ -50,19 +50,14 @@ public class Lime {
         moduleManager = new ModuleManager();
         commandManager = new CommandManager();
         fileSaver = new FileSaver();
+
+        if((new File("Lime" + java.io.File.separator + "modules.json").exists()))
+            fileSaver.applyJson("Lime" + java.io.File.separator + "modules.json", true);
+
         clickGUI = new ClickGUI();
 
 
         new EventListener();
-
-        try {
-            new ViaFabric().onInitialize();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        if((new File("Lime" + java.io.File.separator + "modules.json").exists()))
-            fileSaver.applyJson("Lime" + java.io.File.separator + "modules.json");
 
         System.out.println("Client started");
     }

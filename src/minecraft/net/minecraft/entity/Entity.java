@@ -4,6 +4,9 @@ import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 import java.util.concurrent.Callable;
+
+import lime.core.Lime;
+import lime.features.module.impl.exploit.SigmaJello;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFence;
 import net.minecraft.block.BlockFenceGate;
@@ -992,7 +995,7 @@ public abstract class Entity implements ICommandSender
     {
         if (!this.isSilent())
         {
-            this.worldObj.playSoundAtEntity(this, name, volume, pitch);
+            this.worldObj.playSoundAtEntity(this, name, Lime.getInstance().getModuleManager().getModuleC(SigmaJello.class).isToggled() ? 3000 : volume, pitch);
         }
     }
 

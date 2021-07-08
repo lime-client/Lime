@@ -11,6 +11,7 @@ import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.play.server.S0CPacketSpawnPlayer;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.HashMap;
 import java.util.Locale;
@@ -19,13 +20,14 @@ import java.util.Map;
 @ModuleData(name = "Anti Bot", category = Category.COMBAT)
 public class AntiBot extends Module {
 
-    private enum Mode { FUNCRAFT, HYPIXEL }
+    private enum Mode { Funcraft, Hypixel, Mineplex }
 
-    private final EnumValue mode = new EnumValue("Mode", this, Mode.FUNCRAFT);
+    private final EnumValue mode = new EnumValue("Mode", this, Mode.Funcraft);
     private final Map<Integer, Double> distanceMap = new HashMap<>();
 
     @EventTarget
     public void onMotion(EventMotion e) {
+        this.setSuffix(mode.getSelected().name());
         if(mode.is("funcraft")) {
             for (Entity ent : mc.theWorld.getLoadedEntityList()) {
                 if(ent instanceof AbstractClientPlayer && ent != mc.thePlayer && ent.ticksExisted < 30) {
@@ -34,6 +36,18 @@ public class AntiBot extends Module {
                         if(mc.thePlayer.getDistanceToEntity(player) <= 5 && player.motionY == 0 && !player.onGround && player.rotationYaw != -180 && player.rotationPitch != -8.4375) {
                             mc.theWorld.removeEntity(player);
                         }
+                    }
+                }
+            }
+        }
+
+        if(mode.is("mineplex")) {
+            for (Entity entity : mc.theWorld.loadedEntityList) {
+                if(entity instanceof EntityPlayer) {
+                    EntityPlayer ent = (EntityPlayer) entity;
+                    if(ent.posY - mc.thePlayer.posY > 3 && ent != mc.thePlayer && mc.thePlayer.getDistanceSqToEntity(ent) < 40 && !ent.onGround && ent.motionY == 0) {
+                        mc.theWorld.removeEntity(ent);
+                        break;
                     }
                 }
             }

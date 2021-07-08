@@ -8,18 +8,20 @@ import lime.features.module.Module;
 import lime.features.module.ModuleData;
 import lime.features.module.impl.movement.LongJump;
 import lime.features.setting.impl.EnumValue;
+import org.apache.commons.lang3.StringUtils;
 
 @ModuleData(name = "No Fall", category = Category.PLAYER)
 public class NoFall extends Module {
 
     private enum Mode {
-        VANILLA, VERUS
+        Vanilla, Verus
     }
 
-    private EnumValue mode = new EnumValue("Mode", this, Mode.VERUS);
+    private EnumValue mode = new EnumValue("Mode", this, Mode.Vanilla);
 
     @EventTarget
     public void onUpdate(EventMotion e) {
+        this.setSuffix(mode.getSelected().name());
         if(e.isPre()) {
             if(mc.thePlayer.fallDistance > 2.5) {
                 if(mode.is("vanilla")) {

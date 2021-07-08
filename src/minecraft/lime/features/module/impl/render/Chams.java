@@ -11,6 +11,7 @@ import lime.features.setting.impl.EnumValue;
 import lime.utils.render.RenderUtils;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.player.EntityPlayer;
+import org.apache.commons.lang3.StringUtils;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
@@ -18,14 +19,15 @@ import java.awt.*;
 @ModuleData(name = "Chams", category = Category.RENDER)
 public class Chams extends Module {
     private enum Mode {
-        COLORED
+        Colored
     }
 
-    private final EnumValue mode = new EnumValue("Mode", this, Mode.COLORED);
+    private final EnumValue mode = new EnumValue("Mode", this, Mode.Colored);
     private final BoolValue onlyTargets = new BoolValue("Only Targets", this, false);
 
     @EventTarget
     public void onRendererLivingEntity(EventRendererEntity e) {
+        this.setSuffix(mode.getSelected().name());
         e.setCanceled(true);
         if(e.isPre()) {
             // Only colored
@@ -40,7 +42,7 @@ public class Chams extends Module {
                     GlStateManager.disableTexture2D();
                     GlStateManager.disableDepth();
                     GL11.glDisable(GL11.GL_LIGHTING);
-                    Color color = new Color(255, 0, 0);
+                    Color color = HUD.getColor(0);
                     if(e.getEntity().hurtTime > 0) color = color.darker();
                     RenderUtils.glColor(color);
                     e.getModel().render(e.getEntity(), e.getX(), e.getY(), e.getZ(), e.getX2(), e.getY2(), e.getZ2());

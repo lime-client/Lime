@@ -10,6 +10,7 @@ import lime.features.setting.SettingValue;
 import lime.features.setting.impl.BoolValue;
 import lime.features.setting.impl.EnumValue;
 import lime.features.setting.impl.SlideValue;
+import lime.features.setting.impl.TextValue;
 
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -17,7 +18,7 @@ import java.io.IOException;
 import java.time.Instant;
 
 public class FileSaver {
-    public void saveModules(String path, String author) {
+    public void saveModules(String path, String author, boolean keyBinds) {
         try {
             JsonWriter jsonWriter = new JsonWriter(new FileWriter(path));
             jsonWriter.setIndent("  ");
@@ -39,8 +40,10 @@ public class FileSaver {
                 jsonWriter.beginObject();
                 jsonWriter.name("moduleName");
                 jsonWriter.value(module.getName());
-                jsonWriter.name("key");
-                jsonWriter.value(module.getKey());
+                if(keyBinds) {
+                    jsonWriter.name("key");
+                    jsonWriter.value(module.getKey());
+                }
                 jsonWriter.name("toggled");
                 jsonWriter.value(module.isToggled());
                 if(Lime.getInstance().getSettingsManager().getSettingsFromModule(module) != null && !Lime.getInstance().getSettingsManager().getSettingsFromModule(module).isEmpty()) {
@@ -59,6 +62,8 @@ public class FileSaver {
                             jsonWriter.value(((SlideValue) settingValue).getCurrent());
                         } else if(this.getSettingType(settingValue) == SettingType.BOOL) {
                             jsonWriter.value(((BoolValue) settingValue).isEnabled());
+                        } else if(this.getSettingType(settingValue) == SettingType.TEXT) {
+                            jsonWriter.value(((TextValue) settingValue).getText());
                         }
                         jsonWriter.endObject();
                     }
@@ -75,7 +80,7 @@ public class FileSaver {
         }
     }
 
-    public boolean applyJson(String path) {
+    public boolean applyJson(String path, boolean keyBinds) {
         try {
             JsonParser jsonParser = new JsonParser();
             JsonElement jsonElement = jsonParser.parse(new FileReader(path));
@@ -85,14 +90,23 @@ public class FileSaver {
                     Module m = Lime.getInstance().getModuleManager().getModule(module.getAsJsonObject().get("moduleName").getAsString());
                     if(m == null) continue;
                     if(module.getAsJsonObject().get("toggled").getAsBoolean())
-                        m.toggle();
-                    m.setKey(module.getAsJsonObject().get("key").getAsInt());
+                        m.enableModule();
+                    else
+                        m.disableModule();
+                    if(keyBinds) {
+                        m.setKey(module.getAsJsonObject().get("key").getAsInt());
+                    }
                     if(module.getAsJsonObject().get("settings") == null) continue;
                     JsonArray settings = module.getAsJsonObject().get("settings").getAsJsonArray();
 
                     for(JsonElement setting : settings) {
                         try {
                             Enum type = SettingType.valueOf(setting.getAsJsonObject().get("type").getAsString().toUpperCase());
+
+                            if(type == SettingType.TEXT) {
+                                TextValue textValue = (TextValue) Lime.getInstance().getSettingsManager().getSetting(setting.getAsJsonObject().get("name").getAsString(), m);
+                                textValue.setText(setting.getAsJsonObject().get("value").getAsString());
+                            }
 
                             // Bool Setting
                             if(type == SettingType.BOOL) {
@@ -139,12 +153,14 @@ public class FileSaver {
             return SettingType.SLIDER;
         if(setting instanceof BoolValue)
             return SettingType.BOOL;
+        if(setting instanceof TextValue)
+            return SettingType.TEXT;
 
         // wtf?
         return null;
     }
 
     private enum SettingType {
-        ENUM, SLIDER, BOOL
+        ENUM, SLIDER, BOOL, TEXT
     }
 }
