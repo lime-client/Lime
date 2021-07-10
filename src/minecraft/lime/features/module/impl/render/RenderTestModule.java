@@ -1,36 +1,24 @@
 package lime.features.module.impl.render;
 
+import lime.core.Lime;
 import lime.core.events.EventTarget;
 import lime.core.events.impl.Event2D;
+import lime.managers.FontManager;
 import lime.features.module.Category;
 import lime.features.module.Module;
 import lime.features.module.ModuleData;
-import lime.utils.movement.MovementUtils;
-import lime.utils.movement.pathfinder.CustomVec;
-import lime.utils.movement.pathfinder.utils.PathComputer;
-import lime.utils.other.PlayerUtils;
-import lime.utils.render.animation.easings.Animate;
-import lime.utils.render.animation.easings.Easing;
-import lime.utils.time.DeltaTime;
-import net.minecraft.client.gui.Gui;
-import net.minecraft.client.gui.ScaledResolution;
-import net.minecraft.network.play.client.C03PacketPlayer;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.MathHelper;
-import org.lwjgl.input.Mouse;
+import lime.features.setting.impl.ColorValue;
 
-import java.util.ArrayList;
+import java.awt.*;
 
 @ModuleData(name = "Render Test", category = Category.RENDER)
 public class RenderTestModule extends Module {
-    @Override
-    public void onEnable() {
-        CustomVec to = new CustomVec(mc.thePlayer.posX + -MathHelper.sin(MovementUtils.getDirection()) * 1000, mc.thePlayer.posY, mc.thePlayer.posZ + MathHelper.cos(MovementUtils.getDirection()) * 1000);
-        ArrayList<CustomVec> paths = PathComputer.computePath(new CustomVec(mc.thePlayer.posX, mc.thePlayer.posY, mc.thePlayer.posZ), to);
-        for (CustomVec path : paths) {
-            mc.getNetHandler().addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(path.getX(), path.getY(), path.getZ(), true));
-        }
 
-        mc.thePlayer.setPosition(to.getX(), to.getY(), to.getZ());
+    private final ColorValue colorPicker = new ColorValue("Color Picker", this, Color.GREEN.getRGB());
+
+    @EventTarget
+    public void on2D(Event2D e) {
+        Lime.getInstance().getNotificationManager().getNotifications().clear();
+        FontManager.ProductSans20.getFont().drawStringWithShadow("Salutation le khey", 3, 30, colorPicker.getColor());
     }
 }

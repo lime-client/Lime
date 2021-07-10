@@ -5,24 +5,19 @@ import lime.core.events.EventTarget;
 import lime.core.events.impl.Event2D;
 
 import lime.core.events.impl.EventScoreboard;
-import lime.features.managers.FontManager;
+import lime.managers.FontManager;
 import lime.features.module.Category;
 import lime.features.module.Module;
 import lime.features.module.ModuleData;
-import lime.features.module.impl.movement.Flight;
 import lime.features.setting.impl.BoolValue;
 import lime.features.setting.impl.EnumValue;
 import lime.features.setting.impl.TextValue;
-import lime.utils.movement.MovementUtils;
 import lime.utils.render.ColorUtils;
-import lime.utils.render.animation.easings.Easing;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
-import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.Comparator;
 
 @ModuleData(name = "HUD", category = Category.RENDER)
 public class HUD extends Module {

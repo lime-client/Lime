@@ -2,6 +2,7 @@ package lime.features.module;
 
 import lime.core.Lime;
 import lime.core.events.EventBus;
+import lime.ui.notifications.Notification;
 import lime.utils.render.animation.easings.Animate;
 import lime.utils.render.animation.easings.Easing;
 import net.minecraft.client.Minecraft;

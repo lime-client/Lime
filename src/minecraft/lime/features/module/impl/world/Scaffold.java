@@ -4,6 +4,7 @@ import lime.core.events.EventTarget;
 import lime.core.events.impl.Event2D;
 import lime.core.events.impl.EventEntityAction;
 import lime.core.events.impl.EventMotion;
+import lime.core.events.impl.EventSafeWalk;
 import lime.features.module.Category;
 import lime.features.module.Module;
 import lime.features.module.ModuleData;
@@ -23,6 +24,7 @@ import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.play.client.C09PacketHeldItemChange;
 import net.minecraft.network.play.client.C0APacketAnimation;
 import net.minecraft.util.*;
 import org.lwjgl.input.Keyboard;
@@ -36,8 +38,8 @@ import java.util.Random;
 public class Scaffold extends Module {
 
     private class BlockData {
-        private BlockPos blockPos;
-        private EnumFacing enumFacing;
+        private final BlockPos blockPos;
+        private final EnumFacing enumFacing;
         
         public BlockData(BlockPos blockPos, EnumFacing enumFacing) {
             this.blockPos = blockPos;
@@ -54,13 +56,24 @@ public class Scaffold extends Module {
     }
 
     private enum Rotations {
-        BASIC, BASIC_2, HYPIXEL, LEGIT
+        NONE, BASIC, BASIC_2, HYPIXEL, LEGIT
     }
 
-    private final EnumValue rotations = new EnumValue("Rotations", this, Rotations.BASIC);
+    private enum State {
+        PRE, POST
+    }
+
+    private enum ItemSpoof {
+        PICK, SPOOF, KEEPSPOOF
+    }
+
+    private final EnumValue state = new EnumValue("State", this, State.POST);
+    private final EnumValue itemSpoof = new EnumValue("Item Spoof", this, ItemSpoof.SPOOF);
+    private final EnumValue rotations = new EnumValue("Rotations", this, Rotations.BASIC_2);
     private final SlideValue expand = new SlideValue("Expand", this, 0, 5, 0.3, 0.05);
     private final SlideValue eagle = new SlideValue("Eagle", this, 0, 5, 1, 1);
     private final BoolValue keepRotations = new BoolValue("Keep Rotations", this, true);
+    private final BoolValue safeWalk = new BoolValue("SafeWalk", this, false);
     private final BoolValue tower = new BoolValue("Tower", this, true);
     private final BoolValue towerMove = new BoolValue("Tower Move", this, false);
     private final BoolValue noSprint = new BoolValue("No Sprint", this, false);
@@ -69,18 +82,30 @@ public class Scaffold extends Module {
     private final BoolValue swapper = new BoolValue("Swapper", this, true);
     private final BoolValue down = new BoolValue("Down", this, true);
 
-    private static final List<Block> blacklistedBlocks = Arrays.asList(Blocks.air, Blocks.water, Blocks.flowing_water, Blocks.lava, Blocks.flowing_lava, Blocks.enchanting_table, Blocks.carpet, Blocks.glass_pane, Blocks.stained_glass_pane, Blocks.iron_bars, Blocks.snow_layer, Blocks.ice, Blocks.packed_ice, Blocks.coal_ore, Blocks.diamond_ore, Blocks.emerald_ore, Blocks.chest, Blocks.torch, Blocks.anvil, Blocks.trapped_chest, Blocks.noteblock, Blocks.jukebox, Blocks.tnt, Blocks.gold_ore, Blocks.iron_ore, Blocks.lapis_ore, Blocks.lit_redstone_ore, Blocks.quartz_ore, Blocks.redstone_ore, Blocks.wooden_pressure_plate, Blocks.stone_pressure_plate, Blocks.light_weighted_pressure_plate, Blocks.heavy_weighted_pressure_plate, Blocks.stone_button, Blocks.wooden_button, Blocks.lever, Blocks.beacon, Blocks.ladder, Blocks.sapling, Blocks.oak_fence, Blocks.red_flower, Blocks.yellow_flower, Blocks.flower_pot, Blocks.red_mushroom, Blocks.brown_mushroom, Blocks.sand, Blocks.tallgrass, Blocks.tripwire_hook, Blocks.tripwire, Blocks.gravel, Blocks.dispenser, Blocks.dropper, Blocks.crafting_table, Blocks.furnace, Blocks.redstone_torch, Blocks.standing_sign, Blocks.wall_sign, Blocks.enchanting_table, Blocks.torch);
+    private static final List<Block> blacklistedBlocks = Arrays.asList(
+            Blocks.air, Blocks.water, Blocks.flowing_water, Blocks.lava, Blocks.flowing_lava,
+            Blocks.enchanting_table, Blocks.carpet, Blocks.glass_pane, Blocks.stained_glass_pane, Blocks.iron_bars,
+            Blocks.snow_layer, Blocks.ice, Blocks.packed_ice, Blocks.coal_ore, Blocks.diamond_ore, Blocks.emerald_ore,
+            Blocks.chest, Blocks.trapped_chest, Blocks.torch, Blocks.anvil, Blocks.trapped_chest, Blocks.noteblock, Blocks.jukebox, Blocks.tnt,
+            Blocks.gold_ore, Blocks.iron_ore, Blocks.lapis_ore, Blocks.lit_redstone_ore, Blocks.quartz_ore, Blocks.redstone_ore,
+            Blocks.wooden_pressure_plate, Blocks.stone_pressure_plate, Blocks.light_weighted_pressure_plate, Blocks.heavy_weighted_pressure_plate,
+            Blocks.stone_button, Blocks.wooden_button, Blocks.lever, Blocks.tallgrass, Blocks.tripwire, Blocks.tripwire_hook, Blocks.rail, Blocks.waterlily,
+            Blocks.red_flower, Blocks.red_mushroom, Blocks.brown_mushroom, Blocks.vine, Blocks.trapdoor, Blocks.yellow_flower, Blocks.ladder, Blocks.furnace,
+            Blocks.sand, Blocks.cactus, Blocks.dispenser, Blocks.noteblock, Blocks.dropper, Blocks.crafting_table, Blocks.web, Blocks.pumpkin, Blocks.sapling, Blocks.cobblestone_wall, Blocks.oak_fence);
     private ItemStack currentItemStack;
     private final Animate animation = new Animate();
     private BlockData blockData;
     private double posY;
     private int blocksWithoutEagle;
+    private int slot;
 
     private final lime.utils.other.Timer timer = new lime.utils.other.Timer();
 
     // Keep rotations
     private float yaw;
     private float pitch;
+
+    private final MouseFilter yawMouseFilter =  new MouseFilter();
 
     @Override
     public void onEnable() {
@@ -93,32 +118,39 @@ public class Scaffold extends Module {
         this.animation.setEase(Easing.CUBIC_IN_OUT);
         this.animation.setMin(5);
         //this.animation.setMax(new ScaledResolution(mc).getScaledWidth() / 2 - (mc.fontRendererObj.getStringWidth(getBlocksCount() + " blocks") / 2));
-        this.animation.setMax(new ScaledResolution(mc).getScaledHeight() / 2);
+        this.animation.setMax(new ScaledResolution(mc).getScaledHeight() / 2F);
         this.animation.setSpeed(250);
         this.animation.setReversed(false);
         if(noSprint.isEnabled())
             mc.thePlayer.setSprinting(false);
+
+        this.slot = mc.thePlayer.inventory.currentItem;
         blocksWithoutEagle = 0;
     }
 
     @Override
     public void onDisable() {
-        this.yaw = mc.thePlayer.rotationYaw;
-        this.pitch = mc.thePlayer.rotationPitch;
+        this.yaw = 999;
+        this.pitch = 999;
         this.currentItemStack = null;
         this.blockData = null;
+
+        if(itemSpoof.is("pick") || itemSpoof.is("keepspoof")) {
+            mc.thePlayer.inventory.currentItem = slot;
+            mc.playerController.updateController();
+        }
     }
 
     @EventTarget
     public void on2D(Event2D e) {
         this.animation.update();
         if(currentItemStack != null) {
-            this.animation.setMax(e.getScaledResolution().getScaledHeight() / 2 + 25);
+            this.animation.setMax(e.getScaledResolution().getScaledHeight() / 2F + 25);
             RenderHelper.enableStandardItemLighting();
             mc.getRenderItem().renderItemAndEffectIntoGUI(currentItemStack, new ScaledResolution(mc).getScaledWidth() / 2 - 8, (int) this.animation.getValue() - 24);
         }
         int blocks = getBlocksCount();
-        mc.fontRendererObj.drawStringWithShadow(blocks + " blocks", e.getScaledResolution().getScaledWidth() / 2 - (mc.fontRendererObj.getStringWidth(getBlocksCount() + " blocks") / 2), this.animation.getValue(), blocks > 64 ? new Color(0, 255, 0).getRGB() : new Color(255, 0, 0).getRGB());
+        mc.fontRendererObj.drawStringWithShadow(blocks + " blocks", e.getScaledResolution().getScaledWidth() / 2F - (mc.fontRendererObj.getStringWidth(getBlocksCount() + " blocks") / 2F), this.animation.getValue(), blocks > 64 ? new Color(0, 255, 0).getRGB() : new Color(255, 0, 0).getRGB());
     }
 
     @EventTarget
@@ -126,7 +158,7 @@ public class Scaffold extends Module {
         if(InventoryUtils.hasBlock(blacklistedBlocks, true, true) == -1)
             return;
 
-        if(keepRotations.isEnabled()) {
+        if(keepRotations.isEnabled() && !(rotations.is("none") || yaw == 999)) {
             e.setYaw(yaw);
             e.setPitch(pitch);
         }
@@ -144,7 +176,7 @@ public class Scaffold extends Module {
 
         double x = mc.thePlayer.posX;
         double z = mc.thePlayer.posZ;
-        if(!mc.thePlayer.isCollidedHorizontally) {
+        if(!mc.thePlayer.isCollidedHorizontally && (int) expand.getCurrent() != 0) {
             double[] coords = getExpandCoords(x, z, mc.thePlayer.moveForward, mc.thePlayer.moveStrafing, mc.thePlayer.rotationYaw, downFlag ? 1 : expand.getCurrent());
             x = coords[0];
             z = coords[1];
@@ -210,7 +242,7 @@ public class Scaffold extends Module {
 
         if((isAirBlock(underBlock) && blockData != null) || down.isEnabled()) {
             if(e.isPre()) {
-                if(blockData != null && (isAirBlock(underBlock) && blockData != null)) {
+                if(blockData != null && (isAirBlock(underBlock)) && !rotations.is("none")) {
                     this.blockData = blockData;
                     float[] rots = getRotations(blockData.getBlockPos(), blockData.getEnumFacing());
                     e.setYaw(rots[0]);
@@ -220,16 +252,16 @@ public class Scaffold extends Module {
                     mc.thePlayer.setRotationsTP(e);
 
                 }
-                if(mc.gameSettings.keyBindJump.pressed && mc.thePlayer.onGround && MovementUtils.isOnGround(0.001) && mc.thePlayer.isCollidedVertically) {
-                    e.setGround(false);
-                }
-            } else {
+            }
 
+            if(e.getState().name().equalsIgnoreCase(state.getSelected().name())) {
                 int slot = mc.thePlayer.inventory.currentItem;
 
                 int blockSlot = InventoryUtils.hasBlock(blacklistedBlocks, false, true);
 
                 if(blockSlot == -1) {
+                    if(!swapper.isEnabled())
+                        return;
                     int blockInvSlot = InventoryUtils.hasBlock(blacklistedBlocks, true, false);
 
                     if(blockInvSlot != -1) {
@@ -243,8 +275,13 @@ public class Scaffold extends Module {
                 blockSlot = blockSlot - 36;
 
                 if(slot != blockSlot) {
-                    mc.thePlayer.inventory.currentItem = blockSlot;
-                    mc.playerController.updateController();
+                    if(itemSpoof.is("spoof") || itemSpoof.is("keepspoof")) {
+                        mc.thePlayer.inventory.currentItem = blockSlot;
+                        mc.playerController.updateController();
+                    } else if(itemSpoof.is("pick")) {
+                        mc.thePlayer.inventory.currentItem = blockSlot;
+                        mc.playerController.updateController();
+                    }
                 }
 
                 if(blockData != null && isAirBlock(underBlock) && mc.playerController.onPlayerRightClick(mc.thePlayer, mc.theWorld, mc.thePlayer.inventory.getCurrentItem(), blockData.blockPos, blockData.enumFacing, getVec3(blockData.getBlockPos(), blockData.getEnumFacing()))) {
@@ -274,11 +311,19 @@ public class Scaffold extends Module {
                 }
 
                 if(slot != blockSlot) {
-                    mc.thePlayer.inventory.currentItem = slot;
-                    mc.playerController.updateController();
+                    if(itemSpoof.is("spoof") || itemSpoof.is("keepSpoof")) {
+                        mc.thePlayer.inventory.currentItem = slot;
+                        if(itemSpoof.is("spoof"))
+                            mc.playerController.updateController();
+                    }
                 }
             }
         }
+    }
+
+    @EventTarget
+    public void onSafeWalk(EventSafeWalk e) {
+        e.setCanceled(safeWalk.isEnabled());
     }
 
     @EventTarget
@@ -362,7 +407,7 @@ public class Scaffold extends Module {
         }
         //yaw += 90;
 
-        return new float[]{yaw, pitch};
+        return new float[]{rotations.is("legit") ? this.yawMouseFilter.smooth(yaw, 0.4f) : yaw, pitch};
     }
 
     private double[] getExpandCoords(double x, double z, double forward, double strafe, float YAW, double expand){

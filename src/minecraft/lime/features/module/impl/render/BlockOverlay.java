@@ -8,6 +8,7 @@ import lime.features.module.ModuleData;
 import lime.utils.render.RenderUtils;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.MovingObjectPosition;
+import org.lwjgl.opengl.GL11;
 
 import java.awt.Color;
 
@@ -18,7 +19,12 @@ public class BlockOverlay extends Module {
         if(mc.objectMouseOver != null && mc.objectMouseOver.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK) {
             BlockPos pos = mc.objectMouseOver.getBlockPos();
             if(!pos.getBlock().isFullBlock()) return;
+            GL11.glPushMatrix();
+            GL11.glLineWidth(2.5f);
+            RenderUtils.glColor(HUD.getColor(0).getRGB());
             RenderUtils.drawBox(pos.getX(), pos.getY(), pos.getZ(), 1, HUD.getColor(0), true, false);
+            GL11.glLineWidth(1);
+            GL11.glPopMatrix();
         }
     }
 }

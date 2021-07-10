@@ -10,6 +10,7 @@ import lime.utils.render.RenderUtils;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.util.BlockPos;
+import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
 
@@ -27,8 +28,10 @@ public class ChestESP extends Module {
         for (TileEntity tileEntity : mc.theWorld.loadedTileEntityList) {
             if(tileEntity instanceof TileEntityChest) {
                 BlockPos pos = tileEntity.getPos();
-
+                GL11.glPushMatrix();
+                GL11.glLineWidth(2.5f);
                 RenderUtils.drawBox(pos.getX(), pos.getY(), pos.getZ(), 1, HUD.getColor(0), true, mode.is("fill"));
+                GL11.glPopMatrix();
             }
         }
     }

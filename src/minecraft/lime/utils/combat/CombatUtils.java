@@ -24,6 +24,12 @@ public class CombatUtils implements IUtil {
         return new float[] { yaw, pitch };
     }
 
+    public static float getRotationFromPosition(final double x, final double z) {
+        final double xDiff = x - mc.thePlayer.posX;
+        final double zDiff = z - mc.thePlayer.posZ;
+        return (float) (Math.atan2(zDiff, xDiff) * 180.0D / Math.PI) - 90.0f;
+    }
+
     public static float[] getEntityRotations(EntityLivingBase e, boolean random) {
         /*return random ? getRotations(e.posX,
                 e.posY + (double)e.getEyeHeight() - 0.4D,

@@ -35,6 +35,7 @@ import lime.core.Lime;
 import lime.core.events.EventBus;
 import lime.core.events.impl.EventKey;
 import lime.ui.gui.LoginScreen;
+import lime.ui.gui.MainScreen;
 import lime.utils.time.DeltaTime;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -973,7 +974,7 @@ public class Minecraft implements IThreadListener, IPlayerUsage
 
         if (guiScreenIn == null && this.theWorld == null)
         {
-            guiScreenIn = new GuiMainMenu();
+            guiScreenIn = new MainScreen();
         }
         else if (guiScreenIn == null && this.thePlayer.getHealth() <= 0.0F)
         {
@@ -2382,6 +2383,7 @@ public class Minecraft implements IThreadListener, IPlayerUsage
      */
     public void loadWorld(WorldClient worldClientIn, String loadingMessage)
     {
+        //TODO: EventWorldChange
         if (worldClientIn == null)
         {
             NetHandlerPlayClient nethandlerplayclient = this.getNetHandler();

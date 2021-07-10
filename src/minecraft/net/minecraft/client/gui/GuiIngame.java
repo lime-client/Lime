@@ -10,7 +10,7 @@ import java.util.Random;
 import lime.core.events.EventBus;
 import lime.core.events.impl.Event2D;
 import lime.core.events.impl.EventScoreboard;
-import lime.features.managers.FontManager;
+import lime.managers.FontManager;
 import lime.utils.render.ColorUtils;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;

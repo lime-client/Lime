@@ -14,6 +14,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import lime.core.Lime;
 import lime.ui.altmanager.AltLoginScreen;
+import lime.utils.render.GLSLSandboxShader;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
@@ -33,6 +34,7 @@ import org.apache.commons.io.Charsets;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GLContext;
 import org.lwjgl.util.glu.Project;
 
@@ -74,6 +76,11 @@ public class GuiMainMenu extends GuiScreen implements GuiYesNoCallback
     private static final ResourceLocation splashTexts = new ResourceLocation("texts/splashes.txt");
     private static final ResourceLocation minecraftTitleTextures = new ResourceLocation("textures/gui/title/minecraft.png");
 
+
+    private final long initTime;
+
+    private GLSLSandboxShader glslSandboxShader;
+
     /** An array of all the paths to the panorama pictures. */
     private static final ResourceLocation[] titlePanoramaPaths = new ResourceLocation[] {new ResourceLocation("textures/gui/title/background/panorama_0.png"), new ResourceLocation("textures/gui/title/background/panorama_1.png"), new ResourceLocation("textures/gui/title/background/panorama_2.png"), new ResourceLocation("textures/gui/title/background/panorama_3.png"), new ResourceLocation("textures/gui/title/background/panorama_4.png"), new ResourceLocation("textures/gui/title/background/panorama_5.png")};
     public static final String field_96138_a = "Please click " + EnumChatFormatting.UNDERLINE + "here" + EnumChatFormatting.RESET + " for more information.";
@@ -90,6 +97,12 @@ public class GuiMainMenu extends GuiScreen implements GuiYesNoCallback
 
     public GuiMainMenu()
     {
+        this.initTime = System.currentTimeMillis();
+        try {
+            glslSandboxShader = new GLSLSandboxShader("/shader.vsh");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         this.openGLWarning2 = field_96138_a;
         this.splashText = "missingno";
         BufferedReader bufferedreader = null;
@@ -517,8 +530,20 @@ public class GuiMainMenu extends GuiScreen implements GuiYesNoCallback
         GlStateManager.enableAlpha();
         Tessellator tessellator = Tessellator.getInstance();
         //WorldRenderer worldrenderer = tessellator.getWorldRenderer();
-        mc.getTextureManager().bindTexture(new ResourceLocation("lime/images/backgrounds/wp.jpg"));
-        Gui.drawModalRectWithCustomSizedTexture(0, 0, 0, 0, this.width, this.height, this.width, this.height);
+        //mc.getTextureManager().bindTexture(new ResourceLocation("lime/images/backgrounds/wp.jpg"));
+        //Gui.drawModalRectWithCustomSizedTexture(0, 0, 0, 0, this.width, this.height, this.width, this.height);
+
+        GlStateManager.disableAlpha();
+        GlStateManager.disableCull();
+        this.glslSandboxShader.useShader(this.width + 935, this.height + 500, mouseX, mouseY, (System.currentTimeMillis() - initTime) / 1000F);
+        GL11.glBegin(GL11.GL_QUADS);
+        GL11.glVertex2f(-1f, -1f);
+        GL11.glVertex2f(-1f, 1f);
+        GL11.glVertex2f(1f, 1f);
+        GL11.glVertex2f(1f, -1f);
+        GL11.glEnd();
+        GL20.glUseProgram(0);
+        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
         int i = 274;
         int j = this.width / 2 - i / 2;
         int k = 30;

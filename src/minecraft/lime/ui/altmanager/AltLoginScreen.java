@@ -2,10 +2,14 @@ package lime.ui.altmanager;
 
 import com.thealtening.auth.TheAlteningAuthentication;
 import lime.ui.fields.PasswordField;
+import lime.utils.render.GLSLSandboxShader;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
+import net.minecraft.client.renderer.GlStateManager;
 import org.lwjgl.input.Keyboard;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL20;
 
 import java.awt.*;
 import java.awt.datatransfer.DataFlavor;
@@ -18,8 +22,18 @@ public class AltLoginScreen extends GuiScreen {
     private AltLoginThread runningThread;
     private final GuiScreen parentScreen;
 
+    private final long initTime;
+
+    private GLSLSandboxShader glslSandboxShader;
+
     public AltLoginScreen(GuiScreen parentScreen) {
         this.parentScreen = parentScreen;
+        this.initTime = System.currentTimeMillis();
+        try {
+            glslSandboxShader = new GLSLSandboxShader("/shader.vsh");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -46,7 +60,19 @@ public class AltLoginScreen extends GuiScreen {
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        this.drawDefaultBackground();
+        //this.drawDefaultBackground();
+        GlStateManager.disableAlpha();
+        GlStateManager.disableCull();
+        this.glslSandboxShader.useShader(this.width + 935, this.height + 500, mouseX, mouseY, (System.currentTimeMillis() - initTime) / 1000F);
+        GL11.glBegin(GL11.GL_QUADS);
+        GL11.glVertex2f(-1f, -1f);
+        GL11.glVertex2f(-1f, 1f);
+        GL11.glVertex2f(1f, 1f);
+        GL11.glVertex2f(1f, -1f);
+        GL11.glEnd();
+        GL20.glUseProgram(0);
+        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+
         this.buttonList.get(0).enabled = !username.getText().isEmpty();
 
         username.drawTextBox();

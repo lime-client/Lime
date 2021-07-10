@@ -1,7 +1,7 @@
 package lime.ui.gui;
 
 import lime.core.Lime;
-import lime.features.managers.FontManager;
+import lime.managers.FontManager;
 import lime.ui.fields.ButtonField;
 import lime.ui.fields.TextField;
 import lime.utils.other.WebUtils;
@@ -10,7 +10,6 @@ import lime.utils.other.security.UserCheckThread;
 import lime.utils.render.animation.easings.Animate;
 import lime.utils.render.animation.easings.Easing;
 import net.minecraft.client.gui.Gui;
-import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiMainMenu;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.util.ResourceLocation;
@@ -60,7 +59,7 @@ public class LoginScreen extends GuiScreen {
 
         logInTextField = new TextField(FontManager.ProductSans20.getFont(), "Username", width / 2 - 75, 3, 150, 20);
 
-        this.customButtonList.add(logInButton = new ButtonField(FontManager.ProductSans20.getFont(), "Log In", width / 2 - 75, 25, 150, 20, new Color(23, 201, 115), () -> {
+        this.customButtonList.add(logInButton = new ButtonField(FontManager.ProductSans20.getFont(), "Log In", width / 2 - 75, height / 2, 150, 20, new Color(23, 201, 115), () -> {
             new Thread() {
                 @Override
                 public void run() {
@@ -162,7 +161,7 @@ public class LoginScreen extends GuiScreen {
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         if(Lime.getInstance().getUser() != null && Lime.getInstance().getUserCheckThread() != null && statusAnimation.getValue() == statusAnimation.getMax()) {
-            mc.displayGuiScreen(new GuiMainMenu());
+            mc.displayGuiScreen(new MainScreen());
             return;
         }
         lime.update();
@@ -174,7 +173,7 @@ public class LoginScreen extends GuiScreen {
         FontManager.ProductSans20.getFont().drawStringWithShadow("Lime", this.width / 2 - (FontManager.ProductSans20.getFont().getStringWidth("Lime") / 2), lime.getValue(), -1);
         FontManager.ProductSans20.getFont().drawStringWithShadow(status, this.width / 2 - (FontManager.ProductSans20.getFont().getStringWidth(status) / 2), statusAnimation.getValue(), -1);
         logInTextField.setY(loginRectAnimation.getValue() - 22);
-        logInButton.setY(loginRectAnimation.getValue() + 2);
+        //logInButton.setY(loginRectAnimation.getValue() + 2);
         logInTextField.drawTextField(mouseX, mouseY);
         super.drawScreen(mouseX, mouseY, partialTicks);
     }

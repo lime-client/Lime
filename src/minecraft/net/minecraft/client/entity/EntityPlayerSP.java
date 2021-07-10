@@ -1,5 +1,6 @@
 package net.minecraft.client.entity;
 
+import lime.core.Lime;
 import lime.core.events.EventBus;
 import lime.core.events.impl.*;
 import net.minecraft.client.Minecraft;
@@ -197,8 +198,8 @@ public class EntityPlayerSP extends AbstractClientPlayer
     public void setRotationsTP(EventMotion eventMotion){
         if(Minecraft.getMinecraft().gameSettings.thirdPersonView != 0){
             rotationYawHead = eventMotion.getYaw();
-            //renderYawOffset = eventMotion.getYaw();
-            //renderArmYaw = eventMotion.getYaw();
+            renderYawOffset = eventMotion.getYaw();
+            renderArmYaw = eventMotion.getYaw();
             renderArmPitch = eventMotion.getPitch();
             rotationPitchHead = eventMotion.getPitch();
 
@@ -472,6 +473,7 @@ public class EntityPlayerSP extends AbstractClientPlayer
 
     protected boolean pushOutOfBlocks(double x, double y, double z)
     {
+        if(Lime.getInstance().getModuleManager().getModule("Phase").isToggled()) return false;
         if (this.noClip)
         {
             return false;

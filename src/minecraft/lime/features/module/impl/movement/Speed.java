@@ -11,18 +11,15 @@ import lime.features.module.ModuleData;
 import lime.features.module.impl.combat.KillAura;
 import lime.features.module.impl.world.Scaffold;
 import lime.features.setting.impl.EnumValue;
-import lime.utils.combat.CombatUtils;
 import lime.utils.movement.MovementUtils;
-import lime.utils.other.MathUtils;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.network.play.server.S08PacketPlayerPosLook;
 import net.minecraft.potion.Potion;
-import org.apache.commons.lang3.StringUtils;
 
 @ModuleData(name = "Speed", category = Category.MOVEMENT)
 public class Speed extends Module {
     private enum Mode {
-        Vanilla, Vanilla_BHOP, Verus, Verus_LOWHOP, NCP, Funcraft, Funcraft_YPORT, Hypixel, Mineplex
+        Vanilla, Vanilla_BHOP, Verus, Verus_LOWHOP, NCP, Funcraft, Funcraft_YPORT, Hypixel, HypixelNew, Mineplex
     }
 
     private final EnumValue mode = new EnumValue("Mode", this, Mode.Vanilla);
@@ -135,6 +132,25 @@ public class Speed extends Module {
 
     @EventTarget
     public void onMove(EventMove e) {
+        if(mode.is("hypixelnew")) {
+            if(mc.thePlayer.onGround && mc.thePlayer.isMoving()) {
+                e.setY(mc.thePlayer.motionY = 0.42);
+                if(mc.thePlayer.onGround) {
+                    e.setY(e.getY() + 2.4E-6);
+                }
+                moveSpeed = MovementUtils.getBaseMoveSpeed() * 1.4491283290 * 0.8;
+                stage = 0;
+            } else {
+                mc.timer.timerSpeed = 1;
+                if(stage == 0) {
+                    moveSpeed -= 0.66 * (moveSpeed - MovementUtils.getBaseMoveSpeed());
+                    stage = 1;
+                } else {
+                    moveSpeed -= moveSpeed / 159;
+                }
+            }
+            MovementUtils.setSpeed(e, moveSpeed);
+        }
         if(mode.is("ncp") || mode.is("funcraft") || mode.is("funcraft_yport")) {
             if (mc.thePlayer.isMoving()) {
                 if(!Lime.getInstance().getModuleManager().getModuleC(Scaffold.class).isToggled()) {
@@ -174,9 +190,9 @@ public class Speed extends Module {
             }
 
             this.moveSpeed = Math.max(this.moveSpeed, MovementUtils.getBaseMoveSpeed());
-            if (TargetStrafe.canMove && KillAura.getEntity() != null && KillAura.getEntity() instanceof EntityLivingBase) {
-                EntityLivingBase entity = (EntityLivingBase) KillAura.getEntity(); 
-                MovementUtils.setSpeed(e, moveSpeed, CombatUtils.getRotations(entity.posX + MathUtils.random(0.03D, -0.03D), entity.posY + entity.getEyeHeight() - 0.4D + MathUtils.random(0.07D, -0.07D), entity.posZ + MathUtils.random(0.03D, -0.03D))[0], TargetStrafe.direction, 0);
+            if (KillAura.getEntity() != null && KillAura.getEntity() instanceof EntityLivingBase) {
+                TargetStrafe targetStrafe2 = (TargetStrafe) Lime.getInstance().getModuleManager().getModuleC(TargetStrafe.class);
+                targetStrafe2.setMoveSpeed(e, moveSpeed);
             } else {
                 MovementUtils.setSpeed(e, moveSpeed);
             }

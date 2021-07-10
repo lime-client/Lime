@@ -18,7 +18,7 @@ public class ChatBypass extends Module {
             C01PacketChatMessage packet = (C01PacketChatMessage) e.getPacket();
             String message = packet.getMessage();
             
-            if(!message.startsWith("/")) {
+            if(!message.startsWith("/") && !message.startsWith(".")) {
                 StringBuilder bypassedChatMessage = new StringBuilder();
                 for (char c : message.toCharArray()) {
                     bypassedChatMessage.append(c + (ThreadLocalRandom.current().nextBoolean() ? "\u061D" : ""));

@@ -1,6 +1,6 @@
 package lime.ui.clickgui.frame.components.settings;
 
-import lime.features.managers.FontManager;
+import lime.managers.FontManager;
 import lime.features.setting.SettingValue;
 import lime.features.setting.impl.SlideValue;
 import lime.ui.clickgui.frame.components.Component;

@@ -1,12 +1,13 @@
 package lime.ui.clickgui.frame.components;
 
 import lime.core.Lime;
-import lime.features.managers.FontManager;
+import lime.managers.FontManager;
 import lime.features.module.Category;
 import lime.features.module.Module;
 import lime.features.setting.SettingValue;
 import lime.features.setting.impl.*;
 import lime.ui.clickgui.frame.components.settings.*;
+import lime.utils.render.RenderUtils;
 import lime.utils.render.animation.easings.Animate;
 import lime.utils.render.animation.easings.Easing;
 import net.minecraft.client.Minecraft;
@@ -23,7 +24,8 @@ import java.util.stream.Collectors;
 public class FrameCategory {
     private final Minecraft mc = Minecraft.getMinecraft();
     private final Category category;
-    private int x, y, width, height, xDrag, yDrag;
+    private int x, y, height, xDrag, yDrag;
+    private final int width;
     private boolean drag;
     private final ArrayList<Module> mods = new ArrayList<>(Lime.getInstance().getModuleManager().getModules());
     private final ArrayList<Module> openedModules = new ArrayList<>();
@@ -35,7 +37,7 @@ public class FrameCategory {
 
     private final Animate animation = new Animate();
 
-    public FrameCategory(Category category, int baseX, int baseY, int width, int height) {
+    public FrameCategory(Category category, int baseX, int baseY, int width) {
         this.category = category;
         this.x = baseX;
         this.y = baseY;
@@ -67,6 +69,9 @@ public class FrameCategory {
             }
             if(set instanceof TextValue) {
                 this.components.add(new TextSetting(0, 0, 0, 0, ((TextValue) set).getText(), set));
+            }
+            if(set instanceof ColorValue) {
+                this.components.add(new ColorSetting(0, 0, 0, 0, ((ColorValue) set).getColor(), set));
             }
         }
         isOpened = false;
@@ -136,11 +141,18 @@ public class FrameCategory {
             }
         }
 
+        GL11.glPushMatrix();
+        GL11.glEnable(GL11.GL_SCISSOR_TEST);
+        RenderUtils.prepareScissorBox(x, y, x + width, y + height);
+
         // Draw Modules
         int i = 0;
         for(Module module : mods.stream().filter(module -> module.getCategory() == category).collect(Collectors.toCollection(ArrayList::new))) {
-            if(hover(x, y + 15 + (i * 16), mouseX, mouseY, width, 16)) {
+            if(module.isToggled()) {
                 Gui.drawRect(x, y + 15 + (i * 16), x + width, y + 15 + (i * 16) + 16, new Color(25, 25, 25, 150).getRGB());
+            }
+            if(hover(x, y + 15 + (i * 16), mouseX, mouseY, width, 16)) {
+                Gui.drawRect(x, y + 15 + (i * 16), x + width, y + 15 + (i * 16) + 16, module.isToggled() ? new Color(25, 25, 25, 150).darker().getRGB() : new Color(25, 25, 25, 150).getRGB());
             }
             FontManager.ProductSans20.getFont().drawString(module.getName() + (module == bindingModule ? " [Binding...]" : "") + (Keyboard.isKeyDown(29) && Keyboard.isKeyDown(42) && module.getKey() != -1 ? " [" + Keyboard.getKeyName(module.getKey()) + "]" : ""), x + 3, y + 16 + (i * 16), module.isToggled() ? new Color(125, 125, 125).getRGB() : -1, true);
             if(module.hasSettings()) {
@@ -159,12 +171,18 @@ public class FrameCategory {
                         component.setY(y + 20 + (i * 16) - 8);
                         component.setWidth(width);
                         component.drawComponent(mouseX, mouseY);
+                        if(component instanceof ColorSetting) {
+                            i += 7;
+                        }
                     }
                 }
             }
             ++i;
         }
         height = i * 16 + 16;
+
+        GL11.glDisable(GL11.GL_SCISSOR_TEST);
+        GL11.glPopMatrix();
     }
 
     public boolean keyTyped(char typedChar, int keyCode) {
@@ -205,7 +223,8 @@ public class FrameCategory {
                     return true;
                 }
                 if(openedModules.contains(module)) {
-                    i += this.components.stream().filter(component -> component.setting.getParentModule() == module).collect(Collectors.toCollection(ArrayList::new)).size();
+                    ArrayList<Component> components = this.components.stream().filter(component -> component.setting.getParentModule() == module).collect(Collectors.toCollection(ArrayList::new));
+                    i += components.size() + components.stream().filter(component -> component instanceof ColorSetting).collect(Collectors.toCollection(ArrayList::new)).size() * 7;
                 }
                 ++i;
             }
@@ -226,13 +245,15 @@ public class FrameCategory {
 
                         moduleIndex = y + 16 + moduleIndex * 16;
 
-                        if(hover(x, moduleIndex + (settingIndex * 16), mouseX, mouseY, width, 13)) {
+                        if(hover(x, moduleIndex + (settingIndex * 16), mouseX, mouseY, width, setting instanceof ColorValue ? 125  : 13)) {
                             dragFrame = false;
                             for(Component component : this.components.stream().filter(component -> component.setting == setting).collect(Collectors.toCollection(ArrayList::new))) {
                                 component.mouseClicked(mouseX, mouseY, mouseButton);
                                 return true;
                             }
                         }
+
+                        if(setting instanceof ColorValue) settingIndex += 7;
                     }
                 }
             }

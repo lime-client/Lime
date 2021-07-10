@@ -8,6 +8,10 @@ public class Timer {
         return System.nanoTime() / 1000000L;
     }
 
+    public long getTimeElapsed() {
+        return getCurrentMS() - lastMS;
+    }
+
     public boolean hasReached(long milliseconds){
         return getCurrentMS() - lastMS >= milliseconds;
     }

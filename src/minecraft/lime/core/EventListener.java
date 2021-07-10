@@ -2,10 +2,10 @@ package lime.core;
 
 import lime.core.events.EventBus;
 import lime.core.events.EventTarget;
+import lime.core.events.impl.Event2D;
 import lime.core.events.impl.EventKey;
 import lime.core.events.impl.EventPacket;
 import lime.core.events.impl.EventUpdate;
-import lime.features.file.FileSaver;
 import lime.features.module.Module;
 import lime.utils.other.Timer;
 import net.minecraft.client.Minecraft;
@@ -32,6 +32,11 @@ public class EventListener {
                 e.setCanceled(true);
             }
         }
+    }
+
+    @EventTarget
+    public void on2D(Event2D e) {
+        Lime.getInstance().getNotificationManager().renderNotifications(e);
     }
 
     private final Timer autoSave = new Timer();

@@ -52,6 +52,7 @@ public class ESP extends Module {
                     drawCylinder(x, y, z, factor, yOffset);
                 }
 
+                GL11.glLineWidth(1);
                 GL11.glDisable(GL11.GL_LINE_SMOOTH);
                 GlStateManager.enableDepth();
                 GlStateManager.enableTexture2D();
@@ -60,7 +61,6 @@ public class ESP extends Module {
                 GL11.glPopMatrix();
             }
         }
-        GL11.glColor4f(1, 1, 1, 1);
     }
 
     public void drawBox(double x, double y, double z, double factor, double yOffset) {

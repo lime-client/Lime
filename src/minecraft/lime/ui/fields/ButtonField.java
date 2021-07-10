@@ -1,5 +1,7 @@
 package lime.ui.fields;
 
+import lime.utils.render.animation.easings.Animate;
+import lime.utils.render.animation.easings.Easing;
 import lime.utils.render.fontRenderer.GlyphPageFontRenderer;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiScreen;
@@ -14,6 +16,8 @@ public class ButtonField {
     private final Color bgColor;
     private boolean hovered;
 
+    private final Animate animation;
+
     private final IButtonAction iButtonAction;
 
     public ButtonField(GlyphPageFontRenderer fontRenderer, String buttonName, double x, double y, double width, double height, Color bgColor, IButtonAction iButtonAction) {
@@ -26,13 +30,20 @@ public class ButtonField {
         this.bgColor = bgColor;
         this.iButtonAction = iButtonAction;
         this.hovered = false;
+
+        this.animation = new Animate();
+        animation.setMin(0);
+        animation.setEase(Easing.CUBIC_OUT);
+        animation.setMax((float)y);
+        animation.setSpeed(225);
     }
 
     public void drawButton(int mouseX, int mouseY) {
-        hovered = GuiScreen.hover((int) x, (int) y, mouseX, mouseY, (int) width, (int) height);
-        Gui.drawRect(x, y, x + width, y + height, isHovered() ? bgColor.darker().getRGB() : bgColor.getRGB());
+        animation.update();
+        hovered = GuiScreen.hover((int) x, (int) animation.getValue(), mouseX, mouseY, (int) width, (int) height);
+        Gui.drawRect(x, animation.getValue(), x + width, animation.getValue() + height, isHovered() ? bgColor.darker().getRGB() : bgColor.getRGB());
 
-        fontRenderer.drawStringWithShadow(buttonName, (float)(x + (width / 2) - (fontRenderer.getStringWidth(buttonName) / 2)), (float) (this.y + (this.height - 8) / 2) - 3, -1);
+        fontRenderer.drawStringWithShadow(buttonName, (float)(x + (width / 2) - (fontRenderer.getStringWidth(buttonName) / 2)), (float) (this.animation.getValue() + (this.height - 8) / 2) - 3, -1);
     }
 
     public void mouseClicked() {

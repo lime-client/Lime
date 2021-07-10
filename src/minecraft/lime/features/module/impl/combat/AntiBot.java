@@ -31,9 +31,9 @@ public class AntiBot extends Module {
         if(mode.is("funcraft")) {
             for (Entity ent : mc.theWorld.getLoadedEntityList()) {
                 if(ent instanceof AbstractClientPlayer && ent != mc.thePlayer && ent.ticksExisted < 30) {
-                    if((((AbstractClientPlayer) ent).getLocationSkin().getResourcePath().equalsIgnoreCase("textures/entity/alex.png") || ((AbstractClientPlayer) ent).getLocationSkin().getResourcePath().equalsIgnoreCase("textures/entity/steve.png")) && ent.ticksExisted < 30) {
+                    if(!((AbstractClientPlayer) ent).hasSkin() && ent.ticksExisted < 25) {
                         AbstractClientPlayer player = (AbstractClientPlayer) ent;
-                        if(mc.thePlayer.getDistanceToEntity(player) <= 5 && player.motionY == 0 && !player.onGround && player.rotationYaw != -180 && player.rotationPitch != -8.4375) {
+                        if(mc.thePlayer.getDistanceToEntity(player) <= 5 && player.motionY == 0 && !player.onGround && player.rotationYaw != -180 && player.rotationPitch != 0) {
                             mc.theWorld.removeEntity(player);
                         }
                     }

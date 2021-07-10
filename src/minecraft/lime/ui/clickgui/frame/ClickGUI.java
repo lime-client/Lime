@@ -1,7 +1,7 @@
 package lime.ui.clickgui.frame;
 
 import lime.core.Lime;
-import lime.features.managers.FontManager;
+import lime.managers.FontManager;
 import lime.features.module.Category;
 import lime.ui.clickgui.frame.components.FrameCategory;
 import lime.utils.render.animation.easings.Animate;
@@ -28,7 +28,7 @@ public class ClickGUI extends GuiScreen {
 
         int i = 0;
         for(Category category : Category.values()) {
-            this.frames.add(new FrameCategory(category, 10 + (i * 125), 10, 120, 250));
+            this.frames.add(new FrameCategory(category, 10 + (i * 125), 10, 120));
             i++;
         }
 

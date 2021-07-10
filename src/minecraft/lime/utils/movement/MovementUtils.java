@@ -3,9 +3,12 @@ package lime.utils.movement;
 import lime.core.events.impl.EventMove;
 import lime.utils.IUtil;
 import lime.utils.other.MathUtils;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockAir;
+import net.minecraft.block.BlockHopper;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.potion.Potion;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.Vec3;
@@ -65,6 +68,24 @@ public class MovementUtils implements IUtil {
         }
 
         return baseJumpHeight;
+    }
+
+    public static boolean isInsideBlock() {
+        for (int x = MathHelper.floor_double(mc.thePlayer.getEntityBoundingBox().minX); x < MathHelper.floor_double(mc.thePlayer.getEntityBoundingBox().maxX) + 1; x++) {
+            for (int y = MathHelper.floor_double(mc.thePlayer.getEntityBoundingBox().minY); y < MathHelper.floor_double(mc.thePlayer.getEntityBoundingBox().maxY) + 1; y++) {
+                for (int z = MathHelper.floor_double(mc.thePlayer.getEntityBoundingBox().minZ); z < MathHelper.floor_double(mc.thePlayer.getEntityBoundingBox().maxZ) + 1; z++) {
+                    Block block = mc.theWorld.getBlockState(new BlockPos(x, y, z)).getBlock();
+                    if (block != null && !(block instanceof BlockAir)) {
+                        AxisAlignedBB boundingBox = block.getCollisionBoundingBox(mc.theWorld, new BlockPos(x, y, z), mc.theWorld.getBlockState(new BlockPos(x, y, z)));
+                        if (block instanceof BlockHopper)
+                            boundingBox = new AxisAlignedBB(x, y, z, x + 1, y + 1, z + 1);
+                        if (boundingBox != null && mc.thePlayer.getEntityBoundingBox().intersectsWith(boundingBox))
+                            return true;
+                    }
+                }
+            }
+        }
+        return false;
     }
 
     public static void setSpeed(double speed) {

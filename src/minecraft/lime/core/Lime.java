@@ -1,18 +1,20 @@
 package lime.core;
 
-import lime.features.file.FileSaver;
-import lime.features.managers.CommandManager;
-import lime.features.managers.ModuleManager;
+import lime.ui.notifications.utils.NotificationManager;
+import lime.utils.other.file.FileSaver;
+import lime.managers.CommandManager;
+import lime.managers.ModuleManager;
 import lime.features.setting.SettingsManager;
 import lime.ui.clickgui.frame.ClickGUI;
 import lime.ui.gui.LoginScreen;
 import lime.utils.other.security.User;
 import lime.utils.other.security.UserCheckThread;
+import lime.utils.render.GLSLSandboxShader;
 import net.minecraft.client.Minecraft;
 import org.lwjgl.opengl.Display;
-import viamcp.ViaFabric;
 
 import java.io.File;
+import java.io.IOException;
 
 public class Lime {
     private final static Lime instance = new Lime();
@@ -20,11 +22,14 @@ public class Lime {
     private SettingsManager settingsManager;
     private ModuleManager moduleManager;
     private CommandManager commandManager;
+    private NotificationManager notificationManager;
     private ClickGUI clickGUI;
 
     private UserCheckThread userCheckThread;
     private FileSaver fileSaver;
     private User user;
+
+    private GLSLSandboxShader shader;
 
     private int interval = 300;
     private int timeout = 30;
@@ -49,7 +54,14 @@ public class Lime {
         settingsManager = new SettingsManager();
         moduleManager = new ModuleManager();
         commandManager = new CommandManager();
+        notificationManager = new NotificationManager();
         fileSaver = new FileSaver();
+
+        try {
+            shader = new GLSLSandboxShader("/shader.vsh");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         if((new File("Lime" + java.io.File.separator + "modules.json").exists()))
             fileSaver.applyJson("Lime" + java.io.File.separator + "modules.json", true);
@@ -74,12 +86,20 @@ public class Lime {
         return settingsManager;
     }
 
+    public NotificationManager getNotificationManager() {
+        return notificationManager;
+    }
+
     public ModuleManager getModuleManager() {
         return moduleManager;
     }
 
     public static Lime getInstance() {
         return instance;
+    }
+
+    public GLSLSandboxShader getShader() {
+        return shader;
     }
 
     public FileSaver getFileSaver() {

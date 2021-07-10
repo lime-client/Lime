@@ -175,6 +175,10 @@ public class LongJump extends Module {
 
 
         if(mode.is("funcraft")) {
+            if(mc.thePlayer.isCollidedHorizontally)  {
+                this.toggle();
+                return;
+            }
             if(MovementUtils.isOnGround(0.01)) {
                 if(boosted) {
                     this.toggle();
@@ -192,6 +196,8 @@ public class LongJump extends Module {
 
                 if(mc.thePlayer.motionY < -0.12 && moveSpeed > 1.42) {
                     e.setY(mc.thePlayer.motionY = -0.12);
+                } else if(moveSpeed < 1.42) {
+                    e.setY(e.getY() * 0.7);
                 }
             }
             MovementUtils.setSpeed(e, moveSpeed);
@@ -206,7 +212,7 @@ public class LongJump extends Module {
             receivedS12 = true;
 
             if(mode.is("verus_bow")) {
-                mc.thePlayer.motionY = 1;
+                MovementUtils.vClip(4);
                 moveSpeed = speed.getCurrent();
                 MovementUtils.setSpeed(moveSpeed);
             }

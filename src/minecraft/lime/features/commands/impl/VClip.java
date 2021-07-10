@@ -18,6 +18,6 @@ public class VClip extends Command {
     @Override
     public void onCommand(String[] args) throws Exception {
         MovementUtils.vClip(Double.parseDouble(args[1]));
-        ChatUtils.sendMessage("VCliped " + args[1] + " blocks");
+        ChatUtils.sendMessage("VCliped §a" + args[1] + " §7blocks");
     }
 }

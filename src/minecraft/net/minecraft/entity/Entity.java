@@ -6,6 +6,8 @@ import java.util.UUID;
 import java.util.concurrent.Callable;
 
 import lime.core.Lime;
+import lime.core.events.EventBus;
+import lime.core.events.impl.EventSafeWalk;
 import lime.features.module.impl.exploit.SigmaJello;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFence;
@@ -613,10 +615,13 @@ public abstract class Entity implements ICommandSender
                 this.motionZ = 0.0D;
             }
 
+            EventSafeWalk esf = new EventSafeWalk();
+            EventBus.INSTANCE.call(esf);
+
             double d3 = x;
             double d4 = y;
             double d5 = z;
-            boolean flag = this.onGround && this.isSneaking() && this instanceof EntityPlayer;
+            boolean flag = this.onGround && (this.isSneaking() || esf.isCanceled()) && this instanceof EntityPlayer;
 
             if (flag)
             {
@@ -1217,6 +1222,7 @@ public abstract class Entity implements ICommandSender
     public void moveFlying(float strafe, float forward, float friction)
     {
         float f = strafe * strafe + forward * forward;
+
 
         if (f >= 1.0E-4F)
         {

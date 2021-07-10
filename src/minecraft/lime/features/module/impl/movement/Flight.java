@@ -78,11 +78,6 @@ public class Flight extends Module {
         }
         if(mode.is("verus")) {
             //mc.thePlayer.motionY = -0.0784000015258789;
-            if(mc.thePlayer.ticksExisted % 4 == 0 && e.isPre()) {
-                mc.thePlayer.jump();
-            } else if(mc.thePlayer.ticksExisted % 4 == 0 && !e.isPre()) {
-                System.out.println(mc.thePlayer.posY - 62);
-            }
         }
 
         if(mode.is("verus_fast")) {
@@ -105,11 +100,12 @@ public class Flight extends Module {
             mc.thePlayer.jumpMovementFactor = 0;
             if(e.isPre()) {
                 mc.thePlayer.motionY = 0;
-                if(ticks > 200) {
+                if(ticks > 175 && moveSpeed < 0.26) {
                     ticks = 0;
-                    mc.thePlayer.motionY = -0.12;
+                    mc.thePlayer.setPosition(mc.thePlayer.posX, mc.thePlayer.posY - 0.03, mc.thePlayer.posZ);
                 }
             }
+
             if(mc.thePlayer.isCollidedHorizontally)
                 moveSpeed = 0.25;
             if(mc.thePlayer.isMoving()) {
@@ -141,7 +137,7 @@ public class Flight extends Module {
 
         if(mode.is("astral") && e.isPre()) {
             if(mc.thePlayer.isMoving())
-                mc.timer.timerSpeed = 2;
+                mc.timer.timerSpeed = 1.5f;
             else
                 mc.timer.timerSpeed = 1;
             if(mc.thePlayer.motionY < -0.20) {

@@ -1,6 +1,6 @@
 package lime.ui.clickgui.frame.components.settings;
 
-import lime.features.managers.FontManager;
+import lime.managers.FontManager;
 import lime.features.setting.SettingValue;
 import lime.features.setting.impl.TextValue;
 import lime.ui.clickgui.frame.components.Component;
@@ -37,7 +37,7 @@ public class TextSetting extends Component {
         if(isFocused) {
             Gui.drawRect(mouseX + 5, mouseY - 3, mouseX + 9 + FontManager.ProductSans20.getFont().getStringWidth(this.setting.getSettingName()), mouseY - 3 + FontManager.ProductSans20.getFont().getFontHeight(), new Color(25, 25, 25).getRGB());
             FontManager.ProductSans20.getFont().drawString(this.setting.getSettingName(), mouseX + 6, mouseY - 3, -1);
-        } else if(text.isEmpty() && !isFocused) {
+        } else if(text.isEmpty()) {
             FontManager.ProductSans20.getFont().drawString(this.setting.getSettingName(), this.x + 1, this.y + 4f, -1);
         }
     }
