@@ -92,10 +92,7 @@ public class Flight extends Module {
         }
 
         if(mode.is("verus_fast")) {
-            if(ticks == 0) {
-
-            }
-            if(verusGlide.isEnabled() && receivedVelocityPacket) {
+            if(verusGlide.isEnabled() && receivedVelocityPacket && mc.thePlayer.motionY < 0) {
                 mc.thePlayer.motionY = -0.0784000015258789;
             }
             if(ticks <=  24 && receivedVelocityPacket && e.isPre()) {

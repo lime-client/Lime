@@ -2,7 +2,7 @@
   "informations": [
     {
       "author": "Lime Auto Save",
-      "time": 1626107639
+      "time": 1626113334
     }
   ],
   "modules": [
@@ -43,7 +43,7 @@
     {
       "moduleName": "Kill Aura",
       "key": 19,
-      "toggled": true,
+      "toggled": false,
       "settings": [
         {
           "name": "State",
@@ -343,7 +343,7 @@
         {
           "name": "Speed",
           "type": "slider",
-          "value": 9.0
+          "value": 2.5
         }
       ]
     },
@@ -372,7 +372,7 @@
         {
           "name": "Speed",
           "type": "slider",
-          "value": 9.5
+          "value": 9.0
         },
         {
           "name": "Bobbing",
