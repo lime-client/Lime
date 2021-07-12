@@ -9,9 +9,10 @@ import net.minecraft.client.gui.GuiScreen;
 import java.awt.*;
 
 public class ButtonField {
-    private double x, y, width, height;
+    private double x;
+    private final double width, height;
     private final GlyphPageFontRenderer fontRenderer;
-    private final String buttonName;
+    private String buttonName;
 
     private final Color bgColor;
     private boolean hovered;
@@ -22,7 +23,6 @@ public class ButtonField {
 
     public ButtonField(GlyphPageFontRenderer fontRenderer, String buttonName, double x, double y, double width, double height, Color bgColor, IButtonAction iButtonAction) {
         this.x = x;
-        this.y = y;
         this.width = width;
         this.height = height;
         this.fontRenderer = fontRenderer;
@@ -60,8 +60,8 @@ public class ButtonField {
         this.x = x;
     }
 
-    public void setY(double y) {
-        this.y = y;
+    public void setButtonName(String name) {
+        this.buttonName = name;
     }
 
     public interface IButtonAction {

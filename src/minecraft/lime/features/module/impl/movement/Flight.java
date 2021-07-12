@@ -1,21 +1,18 @@
 package lime.features.module.impl.movement;
 
 import lime.core.events.EventTarget;
-import lime.core.events.impl.Event2D;
-import lime.core.events.impl.EventBoundingBox;
-import lime.core.events.impl.EventMotion;
-import lime.core.events.impl.EventPacket;
+import lime.core.events.impl.*;
 import lime.features.module.Category;
 import lime.features.module.Module;
 import lime.features.module.ModuleData;
 import lime.features.setting.impl.BoolValue;
 import lime.features.setting.impl.EnumValue;
+import lime.features.setting.impl.SlideValue;
 import lime.utils.movement.MovementUtils;
+import lime.utils.other.PlayerUtils;
 import net.minecraft.block.BlockAir;
-import net.minecraft.network.play.client.C03PacketPlayer;
 import net.minecraft.network.play.server.S12PacketEntityVelocity;
 import net.minecraft.util.AxisAlignedBB;
-import org.apache.commons.lang3.StringUtils;
 
 @ModuleData(name = "Flight", category = Category.MOVEMENT)
 public class Flight extends Module {
@@ -26,7 +23,9 @@ public class Flight extends Module {
 
     //Settings
     private final EnumValue mode = new EnumValue("Mode", this, Mode.Vanilla);
+    private final SlideValue speed = new SlideValue("Speed", this, 0.5, 10, 1.5, 0.5).onlyIf(mode.getSettingName(), "enum", "vanilla", "verus_fast");
     private final BoolValue bobbing = new BoolValue("Bobbing", this, true);
+    private final BoolValue verusGlide = new BoolValue("Verus Glide", this, false).onlyIf(mode.getSettingName(), "enum", "verus_fast");
 
     private int ticks;
     private double moveSpeed;
@@ -46,6 +45,10 @@ public class Flight extends Module {
             } else
                 moveSpeed = 0.25;
         }
+        if(mode.is("verus_fast")) {
+            mc.thePlayer.jump();
+            PlayerUtils.verusDamage();
+        }
         lastDist = 0;
         ticks = 0;
         receivedVelocityPacket = false;
@@ -63,6 +66,14 @@ public class Flight extends Module {
     }
 
     @EventTarget
+    public void onMove(EventMove e) {
+        if(mode.is("verus_fast") && !receivedVelocityPacket) {
+            e.setX(0);
+            e.setZ(0);
+        }
+    }
+
+    @EventTarget
     public void onMotion(EventMotion e) {
         this.setSuffix(mode.getSelected().name());
         if(bobbing.isEnabled() && mc.thePlayer.isMoving()) {
@@ -71,7 +82,7 @@ public class Flight extends Module {
         if(mode.is("vanilla")) {
             mc.thePlayer.motionY = mc.gameSettings.keyBindJump.isKeyDown() ? 0.80 : mc.gameSettings.keyBindSneak.isKeyDown() ? -0.80 : 0;
             if(mc.thePlayer.isMoving()) {
-                MovementUtils.setSpeed(0.8);
+                MovementUtils.setSpeed(speed.getCurrent());
             } else {
                 MovementUtils.setSpeed(0);
             }
@@ -81,17 +92,16 @@ public class Flight extends Module {
         }
 
         if(mode.is("verus_fast")) {
-            if(e.isPre())
-            if(receivedVelocityPacket) {
-                if(ticks < 20) {
-                    //mc.thePlayer.motionY = 0;
+            if(ticks == 0) {
 
-                    MovementUtils.setSpeed(moveSpeed);
-
-                    if(moveSpeed > 0.25) {
-                        moveSpeed -= 0.21;
-                    }
-                }
+            }
+            if(verusGlide.isEnabled() && receivedVelocityPacket) {
+                mc.thePlayer.motionY = -0.0784000015258789;
+            }
+            if(ticks <=  24 && receivedVelocityPacket && e.isPre()) {
+                MovementUtils.setSpeed(speed.getCurrent());
+            } else if(ticks == 25) {
+                MovementUtils.setSpeed(0);
             }
         }
 
@@ -167,15 +177,13 @@ public class Flight extends Module {
             S12PacketEntityVelocity packet = (S12PacketEntityVelocity) e.getPacket();
             if(packet.getEntityID() == mc.thePlayer.getEntityId()) {
                 receivedVelocityPacket = true;
-                if(mode.is("verus_fast")) {
-                }
             }
         }
     }
 
     @EventTarget
     public void onBoundingBox(EventBoundingBox e) {
-        if(mode.is("verus") || (mode.is("verus_fast") && receivedVelocityPacket)) {
+        if(mode.is("verus") || (mode.is("verus_fast") && receivedVelocityPacket && !verusGlide.isEnabled())) {
             if(e.getBlock() instanceof BlockAir && e.getBlockPos().getY() < mc.thePlayer.posY && !mc.theWorld.checkBlockCollision(mc.thePlayer.getEntityBoundingBox())) {
                 e.setBoundingBox(new AxisAlignedBB(e.getBlockPos().getX(), e.getBlockPos().getY(), e.getBlockPos().getZ(), e.getBlockPos().getX() + 1, mc.thePlayer.posY, e.getBlockPos().getZ() + 1));
             }

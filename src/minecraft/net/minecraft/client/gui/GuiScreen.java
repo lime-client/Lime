@@ -17,6 +17,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
+import lime.core.Lime;
+import lime.core.events.impl.Event2D;
 import lime.ui.fields.ButtonField;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.stream.GuiTwitchUserMode;
@@ -105,6 +107,8 @@ public abstract class GuiScreen extends Gui implements GuiYesNoCallback
         {
             ((GuiLabel)this.labelList.get(j)).drawLabel(this.mc, mouseX, mouseY);
         }
+
+        Lime.getInstance().getNotificationManager().renderNotifications(new Event2D(new ScaledResolution(mc), partialTicks));
     }
 
     /**

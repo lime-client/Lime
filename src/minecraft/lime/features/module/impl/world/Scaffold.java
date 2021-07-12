@@ -24,6 +24,7 @@ import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.play.client.C03PacketPlayer;
 import net.minecraft.network.play.client.C09PacketHeldItemChange;
 import net.minecraft.network.play.client.C0APacketAnimation;
 import net.minecraft.util.*;
@@ -70,6 +71,7 @@ public class Scaffold extends Module {
     private final EnumValue state = new EnumValue("State", this, State.POST);
     private final EnumValue itemSpoof = new EnumValue("Item Spoof", this, ItemSpoof.SPOOF);
     private final EnumValue rotations = new EnumValue("Rotations", this, Rotations.BASIC_2);
+    private final SlideValue speedModifier = new SlideValue("Speed Modifier", this, 0.1, 5, 1, 0.1);
     private final SlideValue expand = new SlideValue("Expand", this, 0, 5, 0.3, 0.05);
     private final SlideValue eagle = new SlideValue("Eagle", this, 0, 5, 1, 1);
     private final BoolValue keepRotations = new BoolValue("Keep Rotations", this, true);
@@ -91,7 +93,7 @@ public class Scaffold extends Module {
             Blocks.wooden_pressure_plate, Blocks.stone_pressure_plate, Blocks.light_weighted_pressure_plate, Blocks.heavy_weighted_pressure_plate,
             Blocks.stone_button, Blocks.wooden_button, Blocks.lever, Blocks.tallgrass, Blocks.tripwire, Blocks.tripwire_hook, Blocks.rail, Blocks.waterlily,
             Blocks.red_flower, Blocks.red_mushroom, Blocks.brown_mushroom, Blocks.vine, Blocks.trapdoor, Blocks.yellow_flower, Blocks.ladder, Blocks.furnace,
-            Blocks.sand, Blocks.cactus, Blocks.dispenser, Blocks.noteblock, Blocks.dropper, Blocks.crafting_table, Blocks.web, Blocks.pumpkin, Blocks.sapling, Blocks.cobblestone_wall, Blocks.oak_fence);
+            Blocks.sand, Blocks.cactus, Blocks.dispenser, Blocks.noteblock, Blocks.dropper, Blocks.crafting_table, Blocks.web, Blocks.pumpkin, Blocks.sapling, Blocks.cobblestone_wall, Blocks.oak_fence, Blocks.yellow_flower, Blocks.red_flower);
     private ItemStack currentItemStack;
     private final Animate animation = new Animate();
     private BlockData blockData;
@@ -171,6 +173,15 @@ public class Scaffold extends Module {
                 mc.gameSettings.keyBindSneak.pressed = false;
             }
         }
+
+        if(noSprint.isEnabled()) {
+            e.setSprint(false);
+        }
+
+        if(mc.thePlayer.isMoving()) {
+            //MovementUtils.setSpeed(0.05);
+        }
+
 
         boolean downFlag = down.isEnabled() && Keyboard.isKeyDown(mc.gameSettings.keyBindSneak.getKeyCode()) && isAirBlock(new BlockPos(mc.thePlayer.posX, mc.thePlayer.posY - 1, mc.thePlayer.posZ).getBlock());
 
@@ -289,6 +300,11 @@ public class Scaffold extends Module {
                         mc.getNetHandler().addToSendQueue(new C0APacketAnimation());
                     else
                         mc.thePlayer.swingItem();
+
+                    if(mc.thePlayer.onGround) {
+                        mc.thePlayer.motionX *= speedModifier.getCurrent();
+                        mc.thePlayer.motionZ *= speedModifier.getCurrent();
+                    }
                     blocksWithoutEagle++;
                 }
 
@@ -379,7 +395,7 @@ public class Scaffold extends Module {
         double d3 = MathHelper.sqrt_double(x * x + z * z);
         float yaw = (float) (Math.atan2(z, x) * 360.0D / Math.PI) - 90.0F;
         float pitch = (float) (Math.atan2(d1, d3) * 180.0D / Math.PI);
-        if(rotations.is("legit")) {
+        if(rotations.is("legit") || rotations.is("hypixel")) {
             switch(face){
                 case NORTH:
                     yaw = 0;
@@ -396,18 +412,13 @@ public class Scaffold extends Module {
             }
         } else if(rotations.is("basic_2")) {
             yaw = MathHelper.wrapAngleTo180_float((float) Math.toDegrees(Math.atan2(z,x)) - 90);
-        } else if(rotations.is("hypixel")) {
-            Vec3 vec = getVec3(block, face);
-            float[] rots = CombatUtils.getRotations(vec.xCoord, vec.yCoord, vec.zCoord);
-            yaw = rots[0];
-            pitch = rots[1];
         }
         if (yaw < 0.0F) {
             yaw += 360f;
         }
         //yaw += 90;
 
-        return new float[]{rotations.is("legit") ? this.yawMouseFilter.smooth(yaw, 0.4f) : yaw, pitch};
+        return new float[]{rotations.is("hypixel") ? this.yawMouseFilter.smooth(yaw, 0.4f) : yaw, pitch};
     }
 
     private double[] getExpandCoords(double x, double z, double forward, double strafe, float YAW, double expand){

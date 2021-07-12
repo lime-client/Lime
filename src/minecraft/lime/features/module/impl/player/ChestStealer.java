@@ -73,7 +73,7 @@ public class ChestStealer extends Module {
             ContainerChest chest = (ContainerChest) mc.thePlayer.openContainer;
 
             // Close if inventory full or chest empty
-            if((isChestEmpty(chest) && closeTimer.hasReached((long) delayBeforeClose.getCurrent())) || (InventoryUtils.isInventoryFull()) && (chest.getLowerChestInventory().getDisplayName().getUnformattedText().toLowerCase().contains("chest") || chest.getLowerChestInventory().getDisplayName().getUnformattedText().toLowerCase().contains("coffre"))) {
+            if(((isChestEmpty(chest) && closeTimer.hasReached((long) delayBeforeClose.getCurrent())) || (InventoryUtils.isInventoryFull())) && (chest.getLowerChestInventory().getDisplayName().getUnformattedText().toLowerCase().contains("chest") || chest.getLowerChestInventory().getDisplayName().getUnformattedText().toLowerCase().contains("coffre"))) {
                 mc.thePlayer.closeScreen();
             }
 

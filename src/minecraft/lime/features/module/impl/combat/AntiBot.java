@@ -56,7 +56,7 @@ public class AntiBot extends Module {
         if(mode.is("hypixel")) {
             for(Entity entity : mc.theWorld.getLoadedEntityList()) {
 
-                if(entity.getName().contains("npc")) continue;
+                if(entity.getDisplayName().getFormattedText().toLowerCase().contains("npc")) continue;
 
                 if((entity instanceof EntityPlayer)) {
                     double distance = 0;
@@ -64,10 +64,6 @@ public class AntiBot extends Module {
                         distance = distanceMap.get(entity.getEntityId());
                     }
                     if(entity.getName().contains("\247") || entity.getDisplayName().getFormattedText().startsWith("ยง") || (distance > 14.5 && distance < 17)) {
-                        mc.theWorld.removeEntity(entity);
-                    }
-
-                    if(!isOnTab(entity) && mc.thePlayer.ticksExisted > 100 && entity.ticksExisted > 5 && entity.ticksExisted < 200) {
                         mc.theWorld.removeEntity(entity);
                     }
                 }

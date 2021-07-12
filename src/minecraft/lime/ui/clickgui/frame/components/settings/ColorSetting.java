@@ -107,10 +107,11 @@ public class ColorSetting extends Component {
         GlStateManager.disableBlend();
         GlStateManager.enableAlpha();
         GlStateManager.enableTexture2D();
+        Color[][] a = {{Color.RED, Color.ORANGE}, {Color.ORANGE, Color.YELLOW}, {Color.YELLOW, Color.GREEN}, {Color.GREEN, Color.CYAN}, {Color.CYAN, Color.BLUE}, {Color.BLUE, Color.MAGENTA}, {Color.MAGENTA, Color.PINK}, {Color.PINK, Color.RED}};
         Color[][] arrayOfColor = {{Color.DARK_GRAY, Color.MAGENTA}, {Color.MAGENTA, Color.BLUE}, {Color.BLUE, Color.GREEN}, {Color.GREEN, Color.RED}, {Color.RED, Color.ORANGE}, {Color.ORANGE, Color.YELLOW}};
-        float f = width / arrayOfColor.length;
-        for (int i = 0; i < arrayOfColor.length; i++) {
-            drawGradientRect(x + i * f, y + height + 10.0F, f, 15.0F, arrayOfColor[i][0].getRGB(), arrayOfColor[i][1].getRGB());
+        float f = width / a.length;
+        for (int i = 0; i < a.length; i++) {
+            drawGradientRect(x + i * f, y + height + 10.0F, f, 15.0F, a[i][0].getRGB(), a[i][1].getRGB());
         }
     }
 

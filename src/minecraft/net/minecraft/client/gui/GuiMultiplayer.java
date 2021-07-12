@@ -2,17 +2,24 @@ package net.minecraft.client.gui;
 
 import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
+
+import java.awt.*;
 import java.io.IOException;
 import java.util.List;
+
+import lime.managers.FontManager;
+import lime.ui.fields.ButtonField;
 import net.minecraft.client.multiplayer.GuiConnecting;
 import net.minecraft.client.multiplayer.ServerData;
 import net.minecraft.client.multiplayer.ServerList;
 import net.minecraft.client.network.LanServerDetector;
 import net.minecraft.client.network.OldServerPinger;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.resources.I18n;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.lwjgl.input.Keyboard;
+import org.lwjgl.opengl.GL11;
 import viamcp.ViaMCP;
 import viamcp.gui.GuiProtocolSelector;
 import viamcp.protocols.ProtocolCollection;
@@ -92,6 +99,8 @@ public class GuiMultiplayer extends GuiScreen implements GuiYesNoCallback
         this.serverListSelector.handleMouseInput();
     }
 
+    private boolean isOpened = false;
+
     public void createButtons()
     {
         this.buttonList.add(this.btnEditServer = new GuiButton(7, this.width / 2 - 154, this.height - 28, 70, 20, I18n.format("selectServer.edit", new Object[0])));
@@ -101,7 +110,10 @@ public class GuiMultiplayer extends GuiScreen implements GuiYesNoCallback
         this.buttonList.add(new GuiButton(3, this.width / 2 + 4 + 50, this.height - 52, 100, 20, I18n.format("selectServer.add", new Object[0])));
         this.buttonList.add(new GuiButton(8, this.width / 2 + 4, this.height - 28, 70, 20, I18n.format("selectServer.refresh", new Object[0])));
         this.buttonList.add(new GuiButton(0, this.width / 2 + 4 + 76, this.height - 28, 75, 20, I18n.format("gui.cancel", new Object[0])));
-        this.buttonList.add(new GuiButton(420, 5, 38, 98, 20, ProtocolCollection.getProtocolById(ViaMCP.getInstance().getVersion()).getName()));
+
+        this.customButtonList.add(new ButtonField(FontManager.ProductSans20.getFont(), ProtocolCollection.getProtocolById(ViaMCP.getInstance().getVersion()).getName().replace("(May Not Work)", ""), width - 105, 5, 100, 20, new Color(25, 25, 25), () ->  {
+            isOpened = !isOpened;
+        }));
         this.selectServer(this.serverListSelector.func_148193_k());
     }
 
@@ -143,8 +155,6 @@ public class GuiMultiplayer extends GuiScreen implements GuiYesNoCallback
      */
     protected void actionPerformed(GuiButton button) throws IOException
     {
-        if(button.id == 420)
-            mc.displayGuiScreen(new GuiProtocolSelector(this));
         if (button.enabled)
         {
             GuiListExtended.IGuiListEntry guilistextended$iguilistentry = this.serverListSelector.func_148193_k() < 0 ? null : this.serverListSelector.getListEntry(this.serverListSelector.func_148193_k());
@@ -383,6 +393,18 @@ public class GuiMultiplayer extends GuiScreen implements GuiYesNoCallback
         {
             this.drawHoveringText(Lists.newArrayList(Splitter.on("\n").split(this.hoveringText)), mouseX, mouseY);
         }
+
+        if(isOpened) {
+            int[] versions = {5, 47, 110, 340, 578, 754, 755, 756};
+            int i = 0;
+            for (int version : versions) {
+                GL11.glColor4f(1, 1, 1, 1);
+                GlStateManager.resetColor();
+                Gui.drawRect(width - 105, 25 + (i * 20), width - 5, 25 + (i * 20) + 20, hover(width - 105, 25 + (i * 20), mouseX, mouseY, 100, 20) ? new Color(25, 25, 25).darker().getRGB() : new Color(25, 25, 25).getRGB());
+                FontManager.ProductSans20.getFont().drawStringWithShadow(ProtocolCollection.getProtocolById(version).getName().replace("(May Not Work)", ""), width - 55 - (FontManager.ProductSans20.getFont().getStringWidth(ProtocolCollection.getProtocolById(version).getName().replace("(May Not Work)", "")) / 2F), 25 + (i * 20) + 5, -1);
+                ++i;
+            }
+        }
     }
 
     public void connectToSelected()
@@ -441,6 +463,19 @@ public class GuiMultiplayer extends GuiScreen implements GuiYesNoCallback
     protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException
     {
         super.mouseClicked(mouseX, mouseY, mouseButton);
+        if(isOpened) {
+            int[] versions = {5, 47, 110, 340, 578, 754, 755, 756};
+            int i = 0;
+            for (int version : versions) {
+                if(hover(width - 105, 25 + (i * 20), mouseX, mouseY, 100, 20) && mouseButton == 0) {
+                    isOpened = false;
+                    ViaMCP.getInstance().setVersion(version);
+                    this.customButtonList.get(0).setButtonName(ProtocolCollection.getProtocolById(version).getName().replace("(May Not Work)", ""));
+                    return;
+                }
+                ++i;
+            }
+        }
         this.serverListSelector.mouseClicked(mouseX, mouseY, mouseButton);
     }
 

@@ -16,7 +16,7 @@ public class GLSLSandboxShader {
     public GLSLSandboxShader(String fragmentShaderLocation) throws IOException {
         int program = glCreateProgram();
 
-        glAttachShader(program, createShader(GLSLSandboxShader.class.getResourceAsStream("/passthrought.vsh"), GL_VERTEX_SHADER));
+        glAttachShader(program, createShader(GLSLSandboxShader.class.getResourceAsStream("/assets/minecraft/lime/shaders/passthrought.vsh"), GL_VERTEX_SHADER));
         glAttachShader(program, createShader(GLSLSandboxShader.class.getResourceAsStream(fragmentShaderLocation), GL_FRAGMENT_SHADER));
 
         glLinkProgram(program);

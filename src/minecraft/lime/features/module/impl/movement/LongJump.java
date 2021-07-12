@@ -12,6 +12,7 @@ import lime.features.setting.impl.EnumValue;
 import lime.features.setting.impl.SlideValue;
 import lime.utils.movement.MovementUtils;
 import lime.utils.other.InventoryUtils;
+import lime.utils.other.PlayerUtils;
 import net.minecraft.block.BlockAir;
 import net.minecraft.item.ItemBow;
 import net.minecraft.item.ItemStack;
@@ -29,11 +30,11 @@ import org.apache.commons.lang3.StringUtils;
 public class LongJump extends Module {
 
     private enum Mode {
-        Vanilla, Funcraft, NCP_Bow, Verus_Bow, Mineplex
+        Vanilla, Funcraft, NCP_Bow, Verus, Verus_Bow, Mineplex, Kokscraft
     }
 
     private final EnumValue mode = new EnumValue("Mode", this, Mode.Vanilla);
-    private final SlideValue speed = new SlideValue("Speed", this, 1, 9, 5, 0.5);
+    private final SlideValue speed = new SlideValue("Speed", this, 1, 9, 5, 0.5).onlyIf(mode.getSettingName(), "enum", "verus_bow", "verus");
 
     private double moveSpeed = 0;
     private boolean receivedS12 = false;
@@ -70,19 +71,37 @@ public class LongJump extends Module {
                 return;
             }
         }
-        /*mc.thePlayer.sendQueue.addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY + 4, mc.thePlayer.posZ, false));
-        mc.thePlayer.sendQueue.addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY , mc.thePlayer.posZ, false));
 
+        if(mode.is("verus")) {
+            PlayerUtils.verusDamage();
+            mc.thePlayer.jump();
+        }
 
-
-        mc.thePlayer.sendQueue.addToSendQueue(new C03PacketPlayer(true));
-
-
-        mc.thePlayer.sendQueue.addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY + 0.41999998688697815, mc.thePlayer.posZ, false));
-        mc.thePlayer.sendQueue.addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY + 0.36502771690226155, mc.thePlayer.posZ, false));
-        mc.thePlayer.sendQueue.addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY + 0.1647732818260721, mc.thePlayer.posZ, false));
-        mc.thePlayer.sendQueue.addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY + 0.08307781780646721, mc.thePlayer.posZ, true));
-        */
+        if(mode.is("kokscraft")) {
+            double[] jumpValues = new double[] {
+                    0,
+                    0.41999998688698,
+                    0.7531999805212,
+                    1.00133597911215,
+                    1.166109260938214,
+                    1.24918707874468,
+                    1.25220334025373,
+                    1.17675927506424,
+                    1.024424088213685,
+                    0.7967356006687,
+                    0.495200877005914,
+                    0.121296840539195,
+                    0
+            };
+            double startPosY = mc.thePlayer.posY;
+            for (int i = 0;i < 3;i++) {
+                for (double jumpValue : jumpValues) {
+                    mc.getNetHandler().sendPacketNoEvent(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, startPosY + jumpValue, mc.thePlayer.posZ, false));
+                }
+            }
+            mc.getNetHandler().sendPacketNoEvent(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, startPosY, mc.thePlayer.posZ, true));
+            mc.getNetHandler().sendPacketNoEvent(new C03PacketPlayer(true));
+        }
     }
 
     @EventTarget
@@ -135,6 +154,17 @@ public class LongJump extends Module {
             }
         }
 
+        if(mode.is("verus")) {
+            if(mc.thePlayer.motionY < 0 && MovementUtils.isOnGround(5)) {
+                mc.thePlayer.motionY = -0.0784000015258789;
+                if(mc.thePlayer.onGround) this.toggle();
+            }
+            if(moveSpeed - 0.21 > 0.25) {
+                moveSpeed -= 0.21;
+                MovementUtils.setSpeed(moveSpeed);
+            }
+        }
+
         if(mode.is("mineplex")) {
             if(!mc.thePlayer.isMoving()) return;
             MovementUtils.strafe();
@@ -165,7 +195,7 @@ public class LongJump extends Module {
     @EventTarget
     public void onMove(EventMove e) {
         if(!receivedS12 ) {
-            if(mode.is("verus_bow")) {
+            if(mode.is("verus_bow") || mode.is("verus")) {
                 e.setX(0);
                 e.setZ(0);
             } else if(mode.is("ncp_bow")) {
@@ -211,10 +241,22 @@ public class LongJump extends Module {
             if(packet.getEntityID() != mc.thePlayer.getEntityId()) return;
             receivedS12 = true;
 
+            if(mode.is("verus")) {
+                mc.thePlayer.motionY += 0.8;
+                MovementUtils.setSpeed(moveSpeed = speed.getCurrent());
+            }
+
             if(mode.is("verus_bow")) {
                 MovementUtils.vClip(4);
                 moveSpeed = speed.getCurrent();
                 MovementUtils.setSpeed(moveSpeed);
+            }
+
+            if(mode.is("kokscraft")) {
+                e.setCanceled(true);
+                mc.thePlayer.motionY = 0.8;
+                MovementUtils.setSpeed(1);
+                this.toggle();
             }
         }
     }

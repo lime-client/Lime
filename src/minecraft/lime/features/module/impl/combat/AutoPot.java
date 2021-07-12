@@ -57,7 +57,7 @@ public class AutoPot extends Module {
     private final SlideValue health = new SlideValue("Health", this, 1, 20, 10, 0.5);
     private final SlideValue delay = new SlideValue("Delay", this, 100, 1000, 500, 100);
     private final BoolValue heal = new BoolValue("Heal", this, true);
-    private final BoolValue speed = new BoolValue("Heal", this, true);
+    private final BoolValue speed = new BoolValue("Speed", this, true);
     private final BoolValue soup = new BoolValue("Soup", this, false);
 
     private final Timer timer = new Timer();

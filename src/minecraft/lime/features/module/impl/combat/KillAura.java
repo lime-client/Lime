@@ -12,6 +12,7 @@ import lime.features.setting.impl.BoolValue;
 import lime.features.setting.impl.EnumValue;
 import lime.features.setting.impl.SlideValue;
 import lime.utils.combat.CombatUtils;
+import lime.utils.combat.Rotation;
 import lime.utils.other.Timer;
 import lime.utils.render.ColorUtils;
 import lime.utils.render.RenderUtils;
@@ -47,7 +48,7 @@ public class KillAura extends Module {
     private enum State { PRE, POST }
     private enum AutoBlock { NONE, FAKE, BASIC }
     private enum Priority { DISTANCE, HEALTH }
-    private enum Rotations { NONE, BASIC }
+    private enum Rotations { NONE, BASIC, SMOOTH }
     private enum TargetESP { NONE, CIRCLE }
 
     private final EnumValue state = new EnumValue("State", this, State.PRE);
@@ -55,6 +56,8 @@ public class KillAura extends Module {
     private final EnumValue rotations = new EnumValue("Rotations", this, Rotations.BASIC);
     private final EnumValue targetEsp = new EnumValue("Target ESP", this, TargetESP.CIRCLE);
     private final EnumValue autoBlock = new EnumValue("Auto Block", this, AutoBlock.FAKE);
+    private final SlideValue rotationsSpeedMin = new SlideValue("Rotations Min", this, 5, 100, 50, 1).onlyIf(rotations.getSettingName(), "enum", "smooth");
+    private final SlideValue rotationsSpeedMax = new SlideValue("Rotations Max", this, 5, 100, 90, 1).onlyIf(rotations.getSettingName(), "enum", "smooth");
     private final SlideValue range = new SlideValue("Range", this, 2.8, 6, 4.2, 0.05);
     private final SlideValue cps = new SlideValue("CPS", this, 1, 20, 8, 1);
     private final BoolValue players = new BoolValue("Players", this, true);
@@ -73,18 +76,32 @@ public class KillAura extends Module {
     // AutoBlock
     private boolean isBlocking = false;
 
+    // Smooth rotations
+    private float currentYaw, currentPitch;
+
     @Override
     public void onEnable() {
+        if(mc.thePlayer == null) {
+            this.toggle();
+            return;
+        } else {
+            currentYaw = mc.thePlayer.rotationYaw;
+            currentPitch = mc.thePlayer.rotationPitch;
+        }
         isBlocking = false;
         down = false;
     }
 
     @Override
     public void onDisable() {
-        if(hasSword() && isBlocking) {
-            mc.playerController.syncCurrentPlayItem();
-            mc.thePlayer.sendQueue.addToSendQueue(new C07PacketPlayerDigging(C07PacketPlayerDigging.Action.RELEASE_USE_ITEM, BlockPos.ORIGIN, EnumFacing.DOWN));
-            isBlocking = false;
+        if(mc.thePlayer != null) {
+            if(hasSword() && isBlocking) {
+                mc.playerController.syncCurrentPlayItem();
+                mc.thePlayer.sendQueue.addToSendQueue(new C07PacketPlayerDigging(C07PacketPlayerDigging.Action.RELEASE_USE_ITEM, BlockPos.ORIGIN, EnumFacing.DOWN));
+                isBlocking = false;
+            }
+        } else {
+            return;
         }
         entity = null;
     }
@@ -95,6 +112,7 @@ public class KillAura extends Module {
 
     @EventTarget
     public void onMotion(EventMotion e) {
+
         if(isBlocking && hasSword() && !autoBlock.is("basic")) {
             System.out.println("b");
             mc.playerController.syncCurrentPlayItem();
@@ -112,19 +130,29 @@ public class KillAura extends Module {
                     case "basic":
                         rotations = CombatUtils.getEntityRotations((EntityLivingBase) entity, false);
                         break;
+                    case "smooth":
+                        rotations = CombatUtils.getEntityRotations((EntityLivingBase) entity, false);
+                        float[] crt = new float[] {currentYaw, currentPitch};
+                        Rotation rotation = CombatUtils.smoothAngle(new float[]{rotations[0], rotations[1]}, crt, 15, 20);
+                        rotations[0] = rotation.getYaw();
+                        rotations[1] = rotation.getPitch();
+                        currentYaw = rotations[0];
+                        currentPitch = rotations[1];
+                        break;
                 }
 
-                if(rotations == null) return;
+                if(rotations == null || rotations[1] > 90 || rotations[1] < -90) return;
 
                 e.setYaw(rotations[0]);
                 e.setPitch(rotations[1]);
+                //mc.thePlayer.rotationYaw = rotations[0];
+                //mc.thePlayer.rotationPitch = rotations[1];
 
                 mc.thePlayer.setRotationsTP(e);
 
                 // Ray Cast
                 if(this.rayCast.isEnabled()) {
                     entity = CombatUtils.raycastEntity(this.range.getCurrent(), rotations);
-
                     if(entity == null) return;
                 }
             }
@@ -146,8 +174,9 @@ public class KillAura extends Module {
                 cpsTimer.reset();
             }
         } else {
+            currentYaw = mc.thePlayer.rotationYaw;
+            currentPitch = mc.thePlayer.rotationPitch;
             KillAura.entity = null;
-            isBlocking = false;
             if(autoBlock.is("basic") && hasSword() && isBlocking) {
                 mc.playerController.syncCurrentPlayItem();
                 mc.thePlayer.sendQueue.addToSendQueue(new C07PacketPlayerDigging(C07PacketPlayerDigging.Action.RELEASE_USE_ITEM, BlockPos.ORIGIN, EnumFacing.DOWN));

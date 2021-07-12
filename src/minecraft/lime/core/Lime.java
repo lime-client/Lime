@@ -11,10 +11,14 @@ import lime.utils.other.security.User;
 import lime.utils.other.security.UserCheckThread;
 import lime.utils.render.GLSLSandboxShader;
 import net.minecraft.client.Minecraft;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.lwjgl.opengl.Display;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.Proxy;
+import java.util.logging.Level;
 
 public class Lime {
     private final static Lime instance = new Lime();
@@ -29,13 +33,19 @@ public class Lime {
     private FileSaver fileSaver;
     private User user;
 
+    private Proxy proxy = Proxy.NO_PROXY;
+
     private GLSLSandboxShader shader;
+
+    public boolean theAltening;
 
     private int interval = 300;
     private int timeout = 30;
 
     public void initClient() {
-        System.out.println("Initialising Client");
+        Logger logger = LogManager.getLogger("Lime");
+
+        logger.info("[LIME] Starting client");
 
         Minecraft.getMinecraft().displayGuiScreen(new LoginScreen());
 
@@ -58,7 +68,7 @@ public class Lime {
         fileSaver = new FileSaver();
 
         try {
-            shader = new GLSLSandboxShader("/shader.vsh");
+            shader = new GLSLSandboxShader("/assets/minecraft/lime/shaders/shader.vsh");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -71,7 +81,7 @@ public class Lime {
 
         new EventListener();
 
-        System.out.println("Client started");
+        logger.info("[LIME] Client initialised.");
     }
 
     public CommandManager getCommandManager() {
@@ -136,5 +146,13 @@ public class Lime {
 
     public void setTimeout(int timeout) {
         this.timeout = timeout;
+    }
+
+    public Proxy getProxy() {
+        return proxy;
+    }
+
+    public void setProxy(Proxy proxy) {
+        this.proxy = proxy;
     }
 }

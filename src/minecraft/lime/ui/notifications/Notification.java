@@ -22,6 +22,9 @@ public class Notification {
         ERROR, SUCCESS, WARNING, INFORMATION
     }
 
+    private final Animate animationY;
+    private int lastKnownY;
+
     private final String name, information;
     private final Enum _enum;
     private final int seconds;
@@ -44,6 +47,12 @@ public class Notification {
         animate.setSpeed(300);
         animate.setMin(0);
         animate.setMax(FontManager.ProductSans20.getFont().getStringWidth(ChatUtils.removeColors(information)) + 48);
+
+        this.animationY = new Animate();
+        animationY.setEase(Easing.CUBIC_OUT);
+        animationY.setSpeed(300);
+        animationY.setMin(0);
+        lastKnownY = -1;
     }
 
     public Notification(String name, String information, Type type) {
@@ -51,11 +60,20 @@ public class Notification {
     }
 
     public void render(Event2D e, int yOffset) {
+        if(lastKnownY == -1)
+            lastKnownY = yOffset;
+
+        if(lastKnownY != yOffset) {
+
+        }
         animate.update();
-        RenderUtils.drawBluredRect(e.getScaledResolution().getScaledWidth() - animate.getValue(), yOffset, e.getScaledResolution().getScaledWidth() - animate.getValue() + FontManager.ProductSans20.getFont().getStringWidth(ChatUtils.removeColors(information)) + 44, yOffset + 36, new Color(25, 25, 25, 200).getRGB(), 10);
+        animationY.update();
+        RenderUtils.drawBluredRect(e.getScaledResolution().getScaledWidth() - animate.getValue(), lastKnownY != yOffset ? animationY.getValue() : yOffset, e.getScaledResolution().getScaledWidth() - animate.getValue() + FontManager.ProductSans20.getFont().getStringWidth(ChatUtils.removeColors(information)) + 44, (lastKnownY != yOffset ? animationY.getValue() : yOffset) + 36, new Color(25, 25, 25, 200).getRGB(), 10);
         Minecraft.getMinecraft().getTextureManager().bindTexture(new ResourceLocation("lime/images/" + getType().name().toLowerCase() + ".png"));
         GL11.glPushMatrix();
         GL11.glScaled(0.5, 0.5, 1);
+        GL11.glColor4f(1, 1, 1, 1);
+        GlStateManager.resetColor();
         Gui.drawModalRectWithCustomSizedTexture((e.getScaledResolution().getScaledWidth() - animate.getValue() + 2) * 2, (yOffset + 2)  * 2, 0, 0, 64, 64, 64, 64);
         GL11.glPopMatrix();
         FontManager.ProductSans24.getFont().drawStringWithShadow(name, e.getScaledResolution().getScaledWidth() - animate.getValue() + 36, yOffset, -1);
@@ -67,6 +85,10 @@ public class Notification {
             if(animate.getValue() == animate.getMin()) {
                 finished = true;
             }
+        }
+
+        if(animationY.getValue() == animationY.getMax()) {
+            lastKnownY = yOffset;
         }
     }
 

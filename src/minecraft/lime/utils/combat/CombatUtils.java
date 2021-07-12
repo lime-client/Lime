@@ -64,7 +64,36 @@ public class CombatUtils implements IUtil {
 
         float yaw = (float) (Math.atan2(z, x) * 180.0D / Math.PI) - 90.0F;
         float pitch = (float) -((Math.atan2(y, distance) * 180.0D / Math.PI));
-        */return new float[] { yaw + (float) Math.random(), pitch };
+        */return new float[] { yaw + MathUtils.random(0.4, -0.4), pitch };
+    }
+
+    public static Rotation smoothAngle(float[] dst, float[] src, float randMin, float randMax) {
+        float[] smoothedAngle = new float[]{src[0] - dst[0], src[1] - dst[1]};
+        smoothedAngle = constrainAngle(smoothedAngle);
+        smoothedAngle[0] = src[0] - smoothedAngle[0] / 100.0F * MathUtils.random(randMin, randMax);
+        smoothedAngle[1] = src[1] - smoothedAngle[1] / 100.0F * MathUtils.random(randMin, randMax);
+        return new Rotation(smoothedAngle[0], smoothedAngle[1]);
+    }
+
+    public static float[] constrainAngle(float[] vector) {
+        vector[0] %= 360.0F;
+
+        for(vector[1] %= 360.0F; vector[0] <= -180.0F; vector[0] += 360.0F) {
+        }
+
+        while(vector[1] <= -180.0F) {
+            vector[1] += 360.0F;
+        }
+
+        while(vector[0] > 180.0F) {
+            vector[0] -= 360.0F;
+        }
+
+        while(vector[1] > 180.0F) {
+            vector[1] -= 360.0F;
+        }
+
+        return vector;
     }
 
     public static final Vec3 getVectorForRotation(float yaw, float pitch)

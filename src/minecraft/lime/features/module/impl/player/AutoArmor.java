@@ -9,9 +9,9 @@ import lime.features.module.ModuleData;
 import lime.features.setting.impl.EnumValue;
 import lime.features.setting.impl.SlideValue;
 import lime.utils.other.InventoryUtils;
-import lime.utils.other.Timer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiChat;
+import net.minecraft.client.gui.inventory.GuiInventory;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.item.ItemArmor;
@@ -29,14 +29,12 @@ public class AutoArmor extends Module {
     private final EnumValue mode = new EnumValue("Mode", this, Mode.NORMAL);
     private final SlideValue delay = new SlideValue("Delay", this, 0, 100, 50, 5);
 
-    private final Timer timer = new Timer();
-
     @EventTarget
     public void onTick(EventUpdate event) {
-        if (timer.hasReached((long)delay.getCurrent()) && !mc.thePlayer.capabilities.isCreativeMode && (mc.currentScreen != null || (!mode.is("openinv") && mc.currentScreen == null)) && !(mc.currentScreen instanceof GuiChat)) {
+        if (InventoryManager.getTimer().hasReached((long)delay.getCurrent()) && !mc.thePlayer.capabilities.isCreativeMode && ((mc.currentScreen instanceof GuiInventory && mode.is("openinv")) || mode.is("normal"))) {
             for(int b = 5; b <= 8; ++b) {
                 if (equipArmor(b)) {
-                    timer.reset();
+                    InventoryManager.getTimer().reset();
                     break;
                 }
             }
@@ -63,9 +61,9 @@ public class AutoArmor extends Module {
                     current = armor;
                     slot = i;
                 } else if(this.checkArmor(armor, b) && (currentProtection > armorProtection || currentProtection == armorProtection)) {
-                    if(timer.hasReached((long) delay.getCurrent())) {
+                    if(InventoryManager.getTimer().hasReached((long) delay.getCurrent())) {
                         InventoryUtils.drop(i);
-                        timer.reset();
+                        InventoryManager.getTimer().reset();
                         break;
                     }
                 }
@@ -74,12 +72,13 @@ public class AutoArmor extends Module {
 
         if (slot != -1) {
             boolean isNull = mc.thePlayer.inventoryContainer.getSlot(b).getStack() == null;
-            if(timer.hasReached((long) delay.getCurrent())) {
+            if(InventoryManager.getTimer().hasReached((long) delay.getCurrent())) {
                 if (!isNull) {
                     InventoryUtils.drop(b);
                 } else {
                     InventoryUtils.shiftClick(slot);
                 }
+                InventoryManager.getTimer().reset();
             }
             return true;
         } else {

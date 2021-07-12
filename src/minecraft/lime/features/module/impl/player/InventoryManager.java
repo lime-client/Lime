@@ -29,17 +29,29 @@ public class InventoryManager extends Module {
     private final SlideValue delay = new SlideValue("Delay", this, 5, 100, 80, 5);
     private final BoolValue dropJunk = new BoolValue("Drop Junk", this, true);
 
-    private final Timer timer = new Timer();
+    private static final Timer timer = new Timer();
+
+    public static Timer getTimer() {
+        return timer;
+    }
 
     @EventTarget
     public void onMotion(EventMotion e) {
-        if((mode.is("open_inv") && mc.currentScreen instanceof GuiInventory) || (mode.is("normal") && mc.currentScreen == null)  && timer.hasReached((long) delay.intValue())) {
+        if((mode.is("open_inv") && mc.currentScreen instanceof GuiInventory) || (mode.is("normal"))  && timer.hasReached((long) delay.intValue())) {
             if(dropJunk.isEnabled()) {
                 dropJunks();
             }
 
+            if(!timer.hasReached((long) delay.intValue())) return;
+
             getBestSword(36);
+
+            if(!timer.hasReached((long) delay.intValue())) return;
+
             getBestPickaxe(37);
+
+            if(!timer.hasReached((long) delay.intValue())) return;
+
             getBestAxe(38);
         }
     }
@@ -202,6 +214,7 @@ public class InventoryManager extends Module {
                     if(timer.hasReached((long) delay.getCurrent())) {
                         drop(i);
                         timer.reset();
+                        break;
                     }
                 }
             }

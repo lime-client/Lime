@@ -25,7 +25,7 @@ public class NoSlow extends Module {
     @EventTarget
     public void onMotion(EventMotion e) {
         this.setSuffix(mode.getSelected().name());
-        if(mc.thePlayer.isBlocking() || (mc.thePlayer.isEating() && mc.thePlayer.ticksExisted % 10000 == 0) && mode.is("ncp")) {
+        if((mc.thePlayer.isBlocking() || (mc.thePlayer.isEating() && mc.thePlayer.ticksExisted % 10000 == 0)) && mode.is("ncp")) {
             if(e.isPre())
                 mc.thePlayer.sendQueue.addToSendQueue(new C07PacketPlayerDigging(C07PacketPlayerDigging.Action.RELEASE_USE_ITEM, BlockPos.ORIGIN, EnumFacing.DOWN));
             else

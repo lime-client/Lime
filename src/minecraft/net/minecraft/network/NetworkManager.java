@@ -23,6 +23,7 @@ import io.netty.channel.local.LocalChannel;
 import io.netty.channel.local.LocalEventLoopGroup;
 import io.netty.channel.local.LocalServerChannel;
 import io.netty.channel.nio.NioEventLoopGroup;
+import io.netty.channel.oio.OioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.timeout.ReadTimeoutHandler;
@@ -31,13 +32,16 @@ import io.netty.util.AttributeKey;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
 import java.net.InetAddress;
+import java.net.Proxy;
 import java.net.SocketAddress;
 import java.util.Queue;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import javax.crypto.SecretKey;
 
+import lime.core.Lime;
 import lime.core.events.EventBus;
 import lime.core.events.impl.EventPacket;
+import lime.ui.proxymanager.ProxyAdapter;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.CryptManager;
@@ -365,7 +369,7 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet>
 
     public static NetworkManager func_181124_a(InetAddress p_181124_0_, int p_181124_1_, boolean p_181124_2_)
     {
-        final NetworkManager networkmanager = new NetworkManager(EnumPacketDirection.CLIENTBOUND);
+        /*final NetworkManager networkmanager = new NetworkManager(EnumPacketDirection.CLIENTBOUND);
         Class <? extends SocketChannel > oclass;
         LazyLoadBase <? extends EventLoopGroup > lazyloadbase;
 
@@ -404,6 +408,78 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet>
             }
         })).channel(oclass)).connect(p_181124_0_, p_181124_1_).syncUninterruptibly();
         return networkmanager;
+
+         */
+
+        if(Lime.getInstance().getProxy() != Proxy.NO_PROXY) {
+            final NetworkManager var2 = new NetworkManager(EnumPacketDirection.CLIENTBOUND);
+            ((Bootstrap) ((Bootstrap) ((Bootstrap) (new Bootstrap())
+                    .group(new OioEventLoopGroup())).handler(new ChannelInitializer() {
+                private static final String __OBFID = "CL_00002312";
+
+                protected void initChannel(Channel p_initChannel_1_) {
+                    try {
+                        p_initChannel_1_.config().setOption(ChannelOption.IP_TOS, Integer.valueOf(24));
+                    } catch (ChannelException var4) {
+                        ;
+                    }
+
+                    try {
+                        p_initChannel_1_.config().setOption(ChannelOption.TCP_NODELAY, Boolean.valueOf(false));
+                    } catch (ChannelException var3) {
+                        ;
+                    }
+                    p_initChannel_1_.pipeline().addLast("timeout", new ReadTimeoutHandler(20))
+                            .addLast("splitter", new MessageDeserializer2())
+                            .addLast("decoder", new MessageDeserializer(EnumPacketDirection.CLIENTBOUND))
+                            .addLast("prepender", new MessageSerializer2())
+                            .addLast("encoder", new MessageSerializer(EnumPacketDirection.SERVERBOUND))
+                            .addLast("packet_handler", var2);
+
+                    if (p_initChannel_1_ instanceof SocketChannel && ViaMCP.getInstance().getVersion() != ViaMCP.PROTOCOL_VERSION)
+                    {
+                        UserConnection user = new UserConnectionImpl(p_initChannel_1_, true);
+                        new ProtocolPipelineImpl(user);
+                        p_initChannel_1_.pipeline().addBefore("encoder", CommonTransformer.HANDLER_ENCODER_NAME, new VREncodeHandler(user)).addBefore("decoder", CommonTransformer.HANDLER_DECODER_NAME, new VRDecodeHandler(user));
+                    }
+                }
+            })).channelFactory(new ProxyAdapter(Lime.getInstance().getProxy()))).connect(p_181124_0_, p_181124_1_).syncUninterruptibly();
+            return var2;
+        }
+        final NetworkManager var2 = new NetworkManager(EnumPacketDirection.CLIENTBOUND);
+        ((Bootstrap)((Bootstrap)((Bootstrap)(new Bootstrap()).group((EventLoopGroup)CLIENT_NIO_EVENTLOOP.getValue())).handler(new ChannelInitializer()
+        {
+            private static final String __OBFID = "CL_00002312";
+            protected void initChannel(Channel p_initChannel_1_)
+            {
+                try
+                {
+                    p_initChannel_1_.config().setOption(ChannelOption.IP_TOS, Integer.valueOf(24));
+                }
+                catch (ChannelException var4)
+                {
+                    ;
+                }
+
+                try
+                {
+                    p_initChannel_1_.config().setOption(ChannelOption.TCP_NODELAY, Boolean.valueOf(false));
+                }
+                catch (ChannelException var3)
+                {
+                    ;
+                }
+
+                p_initChannel_1_.pipeline().addLast("timeout", new ReadTimeoutHandler(20)).addLast("splitter", new MessageDeserializer2()).addLast("decoder", new MessageDeserializer(EnumPacketDirection.CLIENTBOUND)).addLast("prepender", new MessageSerializer2()).addLast("encoder", new MessageSerializer(EnumPacketDirection.SERVERBOUND)).addLast("packet_handler", var2);
+                if (p_initChannel_1_ instanceof SocketChannel && ViaMCP.getInstance().getVersion() != ViaMCP.PROTOCOL_VERSION)
+                {
+                    UserConnection user = new UserConnectionImpl(p_initChannel_1_, true);
+                    new ProtocolPipelineImpl(user);
+                    p_initChannel_1_.pipeline().addBefore("encoder", CommonTransformer.HANDLER_ENCODER_NAME, new VREncodeHandler(user)).addBefore("decoder", CommonTransformer.HANDLER_DECODER_NAME, new VRDecodeHandler(user));
+                }
+            }
+        })).channel(NioSocketChannel.class)).connect(p_181124_0_, p_181124_1_).syncUninterruptibly();
+        return var2;
     }
 
     /**

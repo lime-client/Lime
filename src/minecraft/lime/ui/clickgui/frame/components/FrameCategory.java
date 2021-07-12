@@ -133,6 +133,7 @@ public class FrameCategory {
 
 
         for (Component component : this.components) {
+            component.setting.constantCheck();
             if(component instanceof TextSetting) {
                 TextSetting textSetting = (TextSetting) component;
                 if(!this.openedModules.contains(textSetting.setting.getParentModule()) && textSetting.isFocused) {
@@ -166,6 +167,7 @@ public class FrameCategory {
                     ArrayList<Component> moduleComponents = this.components.stream().filter(component -> component.setting.getParentModule() == module).collect(Collectors.toCollection(ArrayList::new));
 
                     for(Component component : moduleComponents) {
+                        if(component.setting.isHide()) continue;
                         ++i;
                         component.setX(x + 3);
                         component.setY(y + 20 + (i * 16) - 8);
@@ -223,7 +225,7 @@ public class FrameCategory {
                     return true;
                 }
                 if(openedModules.contains(module)) {
-                    ArrayList<Component> components = this.components.stream().filter(component -> component.setting.getParentModule() == module).collect(Collectors.toCollection(ArrayList::new));
+                    ArrayList<Component> components = this.components.stream().filter(component -> !component.setting.isHide()).filter(component -> component.setting.getParentModule() == module).collect(Collectors.toCollection(ArrayList::new));
                     i += components.size() + components.stream().filter(component -> component instanceof ColorSetting).collect(Collectors.toCollection(ArrayList::new)).size() * 7;
                 }
                 ++i;
@@ -232,6 +234,7 @@ public class FrameCategory {
                 int settingIndex = 0;
                 for(Module openedModule : openedModules) {
                     for(SettingValue setting : Lime.getInstance().getSettingsManager().getSettingsFromModule(openedModule)) {
+                        if(setting.isHide()) continue;
                         settingIndex++;
                         // Getting I;
                         int moduleIndex = 0;

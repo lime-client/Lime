@@ -10,13 +10,13 @@ bobView:true
 anaglyph3d:false
 maxFps:260
 fboEnable:true
-difficulty:2
+difficulty:1
 fancyGraphics:true
 ao:2
 renderClouds:false
-resourcePacks:["!                  §1FANTASY §3[16x].zip"]
+resourcePacks:["!     §ba§3z§bure§f. §8[§3256§7x§8].zip"]
 incompatibleResourcePacks:[]
-lastServer:nulcraft.fr
+lastServer:localhost
 lang:en_US
 chatVisibility:0
 chatColors:true

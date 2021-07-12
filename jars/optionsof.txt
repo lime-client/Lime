@@ -10,7 +10,7 @@ ofClouds:3
 ofCloudsHeight:0.0
 ofTrees:0
 ofDroppedItems:0
-ofRain:0
+ofRain:3
 ofAnimatedWater:0
 ofAnimatedLava:0
 ofAnimatedFire:true
