@@ -81,12 +81,17 @@ public class Speed extends Module {
                 double tickBoost = mc.thePlayer.ticksExisted % 20 == 0 ? 0.1 : 0; // 0.25 max, mais le bhop est moins smooth
                 double amplifier = mc.thePlayer.isPotionActive(Potion.moveSpeed) ? mc.thePlayer.getActivePotionEffect(Potion.moveSpeed).getAmplifier() : 0;
                 double speedBoost = mc.thePlayer.isPotionActive(Potion.moveSpeed) ? amplifier == 1 ? 0.035 : amplifier > 1 ? 0.035 * (amplifier / 2) : 0.035 / 2 : 0;
+                double motionBoost = MovementUtils.isOnGround(0.15) && !mc.thePlayer.onGround ? 0.045 : 0;
+                if(MovementUtils.isOnGround(0.15)) {
+                    mc.thePlayer.motionY -= 0.0075;
+                }
                 if (mc.thePlayer.onGround)
                     mc.thePlayer.jump();
                 if(mc.thePlayer.moveStrafing == 0)
-                    MovementUtils.setSpeed(0.3345 + speedBoost + tickBoost);
+                    MovementUtils.setSpeed(0.3345 + speedBoost + tickBoost + motionBoost);
                 else
-                    MovementUtils.setSpeed(0.333 + speedBoost + tickBoost);
+                    MovementUtils.setSpeed(0.333 + speedBoost + tickBoost + motionBoost);
+
             } else
                 MovementUtils.setSpeed(0);
         }

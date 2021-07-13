@@ -377,6 +377,7 @@ public class ItemRenderer
                     case BLOCK:
                         Animations animations = (Animations) Lime.getInstance().getModuleManager().getModuleC(Animations.class);
                         float progress;
+                        float var15 = MathHelper.sin(MathHelper.sqrt_float(f1) * (float) Math.PI);
                         switch (animations.mode.getSelected().name()) {
                             case "VANILLA":
                                 this.transformFirstPersonItem(f, f1);
@@ -418,6 +419,37 @@ public class ItemRenderer
                                 GlStateManager.rotate(-progress * 1.0F / 19.0F, progress / 20.0F, -0.0F, 9.0F);
                                 GlStateManager.rotate(-progress * 30.0F, 10.0F, progress / 50.0F, 0.0F);
                                 this.func_178103_d();
+                                break;
+                            case "SPIN":
+                                float angle = System.currentTimeMillis() % (360 * 20) * (float) 0.5;
+                                GlStateManager.translate(0.54F, -0.4F, -0.81999997F);
+                                GlStateManager.translate(0.0F, 0f, 0.0F);
+                                GlStateManager.scale(0.4f, 0.4f, 0.4f);
+                                GlStateManager.rotate(72.0F, 0.0F, 1.0F, 0.0F);
+                                GlStateManager.rotate(angle, 0f, 0.1f, 0f);
+                                break;
+                            case "ASTOLFO":
+                                GlStateManager.rotate(System.currentTimeMillis() % 360, 0, 0, -0.1f);
+                                this.transformFirstPersonItem(f / 1.6f, 0);
+                                this.func_178103_d();
+                                break;
+                            case "NUF":
+                                transformFirstPersonItem(-0.25f, f1);
+                                func_178103_d();
+                                break;
+                            case "OHARE":
+                                transformFirstPersonItem(f, 0.0F);
+                                func_178103_d();
+                                GlStateManager.translate(-0.05F, 0.6F, 0.3F);
+                                GlStateManager.rotate(-var15 * 70.0F / 2.0F, -8.0F, -0.0F, 9.0F);
+                                GlStateManager.rotate(-var15 * 70.0F, 1.5F, -0.4F, -0.0F);
+                                break;
+                            case "LUCKY":
+                                transformFirstPersonItem(f, 0.0F);
+                                func_178103_d();
+                                GL11.glTranslated(-0.3D, 0.3D, 0.0D);
+                                GL11.glRotatef(-var15 * 70.0F / 2.0F, -8.0F, 0.0F, 9.0F);
+                                GL11.glRotatef(-var15 * 70.0F, 1.0F, -0.4F, -0.0F);
                                 break;
                         }
 

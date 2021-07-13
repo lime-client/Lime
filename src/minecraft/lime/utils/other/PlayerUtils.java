@@ -1,6 +1,7 @@
 package lime.utils.other;
 
 import lime.utils.IUtil;
+import net.minecraft.client.gui.Gui;
 import net.minecraft.network.play.client.C03PacketPlayer;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
@@ -28,6 +29,7 @@ public class PlayerUtils implements IUtil {
             mc.getNetHandler().addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, posY += 0.08307781780646906, mc.thePlayer.posZ, true));
         }
 
+
         // Packet fall
         while(posY > mc.thePlayer.posY) {
             posY -= 0.07840000152587834;
@@ -35,9 +37,11 @@ public class PlayerUtils implements IUtil {
         }
 
         // Saying that we reached the ground
-        mc.getNetHandler().addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY, mc.thePlayer.posZ, true));
+        mc.getNetHandler().sendPacketNoEvent(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY, mc.thePlayer.posZ, true));
 
         // Simulating velocity
-        mc.getNetHandler().addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY + 0.41999998688697815, mc.thePlayer.posZ, false));
+        mc.getNetHandler().sendPacketNoEvent(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY + 0.41999998688697815, mc.thePlayer.posZ, false));
+
+        //TODO: Bypass Timer 11B Detection
     }
 }

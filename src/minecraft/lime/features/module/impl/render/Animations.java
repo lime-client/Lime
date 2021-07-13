@@ -9,7 +9,7 @@ import lime.features.setting.impl.SlideValue;
 @ModuleData(name = "Animations", category = Category.RENDER)
 public class Animations extends Module {
     private enum Mode {
-        VANILLA, SWANG, SWANK, SWING, SWONG, SWAING
+        VANILLA, SWANG, SWANK, SWING, SWONG, SWAING, SPIN, ASTOLFO, NUF, OHARE, LUCKY
     }
 
     public final EnumValue mode = new EnumValue("Mode", this, Mode.SWING);

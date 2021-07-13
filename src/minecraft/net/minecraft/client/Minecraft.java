@@ -34,6 +34,7 @@ import javax.imageio.ImageIO;
 import lime.core.Lime;
 import lime.core.events.EventBus;
 import lime.core.events.impl.EventKey;
+import lime.features.module.impl.player.ChestStealer;
 import lime.ui.gui.LoginScreen;
 import lime.ui.gui.MainScreen;
 import lime.utils.time.DeltaTime;
@@ -56,6 +57,7 @@ import net.minecraft.client.gui.GuiYesNo;
 import net.minecraft.client.gui.GuiYesNoCallback;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.gui.achievement.GuiAchievement;
+import net.minecraft.client.gui.inventory.GuiChest;
 import net.minecraft.client.gui.inventory.GuiInventory;
 import net.minecraft.client.gui.stream.GuiStreamUnavailable;
 import net.minecraft.client.main.GameConfiguration;
@@ -126,6 +128,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.Bootstrap;
 import net.minecraft.init.Items;
+import net.minecraft.inventory.ContainerChest;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
@@ -244,7 +247,7 @@ public class Minecraft implements IThreadListener, IPlayerUsage
     public EntityRenderer entityRenderer;
 
     /** Mouse left click counter */
-    private int leftClickCounter;
+    public int leftClickCounter;
 
     /** Display width */
     private int tempDisplayWidth;
@@ -1503,7 +1506,9 @@ public class Minecraft implements IThreadListener, IPlayerUsage
     {
         if (this.inGameHasFocus)
         {
-            KeyBinding.unPressAllKeys();
+            if(Lime.getInstance() != null && !Lime.getInstance().getModuleManager().getModuleC(ChestStealer.class).isToggled() && thePlayer != null && thePlayer.openContainer instanceof ContainerChest && ChestStealer.isValidChest((ContainerChest) thePlayer.openContainer)) {
+                KeyBinding.unPressAllKeys();
+            }
             this.inGameHasFocus = false;
             this.mouseHelper.ungrabMouseCursor();
         }

@@ -1,5 +1,6 @@
 package lime.features.module.impl.movement;
 
+import lime.core.Lime;
 import lime.core.events.EventTarget;
 import lime.core.events.impl.*;
 import lime.features.module.Category;
@@ -8,11 +9,13 @@ import lime.features.module.ModuleData;
 import lime.features.setting.impl.BoolValue;
 import lime.features.setting.impl.EnumValue;
 import lime.features.setting.impl.SlideValue;
+import lime.ui.notifications.Notification;
 import lime.utils.movement.MovementUtils;
 import lime.utils.other.PlayerUtils;
 import net.minecraft.block.BlockAir;
 import net.minecraft.network.play.server.S12PacketEntityVelocity;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.BlockPos;
 
 @ModuleData(name = "Flight", category = Category.MOVEMENT)
 public class Flight extends Module {
@@ -46,6 +49,11 @@ public class Flight extends Module {
                 moveSpeed = 0.25;
         }
         if(mode.is("verus_fast")) {
+            if((!mc.thePlayer.onGround || new BlockPos(mc.thePlayer.posX, mc.thePlayer.posY - 1, mc.thePlayer.posZ).getBlock() instanceof BlockAir)) {
+                Lime.getInstance().getNotificationManager().addNotification(new Notification("Error", "Can damage only on the ground!", Notification.Type.ERROR));
+                this.toggle();
+                return;
+            }
             mc.thePlayer.jump();
             PlayerUtils.verusDamage();
         }
@@ -56,8 +64,10 @@ public class Flight extends Module {
 
     @Override
     public void onDisable() {
-        MovementUtils.setSpeed(0);
-        mc.timer.timerSpeed = 1;
+        if(mc.thePlayer != null) {
+            MovementUtils.setSpeed(0);
+            mc.timer.timerSpeed = 1;
+        }
     }
 
     @EventTarget

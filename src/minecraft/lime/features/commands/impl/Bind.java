@@ -22,13 +22,15 @@ public class Bind extends Command {
         Module module = getModule(args[1]);
 
         if(module == null) {
-            ChatUtils.sendMessage("Module §a" + args[1] + "§7was not found.");
+            ChatUtils.sendMessage("Module §a" + args[1] + " §7was not found.");
             return;
         }
 
-        int key = Keyboard.getKeyIndex(args[2]);
+        int key = Keyboard.getKeyIndex(args[2].toUpperCase());
 
         module.setKey(key);
+
+        ChatUtils.sendMessage("§a" + module.getName() + "§7 is now bind to §a" + args[2] + "§7.");
     }
 
     private Module getModule(String name) {

@@ -31,6 +31,8 @@ public class ChestStealer extends Module {
     private final SlideValue delay = new SlideValue("Delay", this, 0, 150, 50, 5);
     private final BoolValue ignoreJunk = new BoolValue("Ignore Junk", this, true);
     private final BoolValue randomizer = new BoolValue("Randomizer", this, true);
+    public final BoolValue silent = new BoolValue("Silent", this, false);
+    public final BoolValue showChest = new BoolValue("Show Chest", this, true).onlyIf(silent.getSettingName(), "bool", "true");
     private final BoolValue aura = new BoolValue("Aura", this, false);
 
     private boolean chestOpened;
@@ -73,11 +75,11 @@ public class ChestStealer extends Module {
             ContainerChest chest = (ContainerChest) mc.thePlayer.openContainer;
 
             // Close if inventory full or chest empty
-            if(((isChestEmpty(chest) && closeTimer.hasReached((long) delayBeforeClose.getCurrent())) || (InventoryUtils.isInventoryFull())) && (chest.getLowerChestInventory().getDisplayName().getUnformattedText().toLowerCase().contains("chest") || chest.getLowerChestInventory().getDisplayName().getUnformattedText().toLowerCase().contains("coffre"))) {
+            if(((isChestEmpty(chest) && closeTimer.hasReached((long) delayBeforeClose.getCurrent())) || (InventoryUtils.isInventoryFull())) && (isValidChest(chest))) {
                 mc.thePlayer.closeScreen();
             }
 
-            if(chest.getLowerChestInventory().getDisplayName().getUnformattedText().toLowerCase().contains("chest") || chest.getLowerChestInventory().getDisplayName().getUnformattedText().toLowerCase().contains("coffre")) {
+            if(isValidChest(chest)) {
                 if(randomizer.isEnabled()) {
                     ArrayList<Integer> slots = new ArrayList<>();
                     for (int i = 0; i < chest.getLowerChestInventory().getSizeInventory(); i++) {
@@ -154,5 +156,9 @@ public class ChestStealer extends Module {
             }
         }
         return true;
+    }
+
+    public static boolean isValidChest(ContainerChest chest) {
+        return chest.getLowerChestInventory().getDisplayName().getUnformattedText().toLowerCase().contains("chest") || chest.getLowerChestInventory().getDisplayName().getUnformattedText().toLowerCase().contains("coffre");
     }
 }

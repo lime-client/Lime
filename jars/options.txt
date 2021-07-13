@@ -10,11 +10,11 @@ bobView:true
 anaglyph3d:false
 maxFps:260
 fboEnable:true
-difficulty:0
+difficulty:1
 fancyGraphics:true
 ao:2
 renderClouds:false
-resourcePacks:["!     §ba§3z§bure§f. §8[§3256§7x§8].zip"]
+resourcePacks:["!          §5§lPurple 32x (Clean).zip"]
 incompatibleResourcePacks:[]
 lastServer:localhost
 lang:en_US

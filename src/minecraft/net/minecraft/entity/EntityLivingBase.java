@@ -1330,7 +1330,7 @@ public abstract class EntityLivingBase extends Entity
      */
     private float getArmSwingAnimationEnd()
     {
-        double multiplier = this != Minecraft.getMinecraft().thePlayer ? 1 : ((Animations) Lime.getInstance().getModuleManager().getModuleC(Animations.class)).swingSlowdown.getCurrent();
+        double multiplier = this != Minecraft.getMinecraft().thePlayer ? 1 : Lime.getInstance().getModuleManager().getModuleC(Animations.class).isToggled() ? ((Animations) Lime.getInstance().getModuleManager().getModuleC(Animations.class)).swingSlowdown.getCurrent() : 1;
         return this.isPotionActive(Potion.digSpeed) ? 6 - (1 + this.getActivePotionEffect(Potion.digSpeed).getAmplifier()) * 1 : (this.isPotionActive(Potion.digSlowdown) ? 6 + (1 + this.getActivePotionEffect(Potion.digSlowdown).getAmplifier()) * 2 : 6) * (float) multiplier;
     }
 
