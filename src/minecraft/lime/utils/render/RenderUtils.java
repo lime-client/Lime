@@ -134,6 +134,32 @@ public class RenderUtils implements IUtil {
         GlStateManager.resetColor();
     }
 
+    public static void enable(final boolean disableDepth) {
+        if (disableDepth) {
+            GL11.glDepthMask(false);
+            GL11.glDisable(2929);
+        }
+        GL11.glDisable(3008);
+        GL11.glEnable(3042);
+        GL11.glDisable(3553);
+        GL11.glBlendFunc(770, 771);
+        GL11.glEnable(2848);
+        GL11.glHint(3154, 4354);
+        GL11.glLineWidth(1.0f);
+    }
+
+    public static void disable(final boolean enableDepth) {
+        if (enableDepth) {
+            GL11.glDepthMask(true);
+            GL11.glEnable(2929);
+        }
+        GL11.glEnable(3553);
+        GL11.glDisable(3042);
+        GL11.glEnable(3008);
+        GL11.glDisable(2848);
+        GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+    }
+
     public static void startSmooth() {
         GL11.glEnable(2848);
         GL11.glEnable(2881);

@@ -54,10 +54,6 @@ public class GuiInventory extends InventoryEffectRenderer
     {
         this.buttonList.clear();
 
-        this.buttonList.add(new GuiButton(3, 3, 3, 150, 20, "Disable Inventory Manager"));
-        this.buttonList.add(new GuiButton(4, 3, 3 + 22, 150, 20, "Disable Chest Stealer"));
-        this.buttonList.add(new GuiButton(5, 3, 3 + (22 * 2), 150, 20, "Disable Kill Aura"));
-
         if (this.mc.playerController.isInCreativeMode())
         {
             this.mc.displayGuiScreen(new GuiContainerCreative(this.mc.thePlayer));
@@ -84,17 +80,7 @@ public class GuiInventory extends InventoryEffectRenderer
         super.drawScreen(mouseX, mouseY, partialTicks);
         this.oldMouseX = (float)mouseX;
         this.oldMouseY = (float)mouseY;
-        for (GuiButton guiButton : this.buttonList) {
-            if(guiButton.id == 3) {
-                guiButton.enabled = Lime.getInstance().getModuleManager().getModuleC(InventoryManager.class).isToggled();
-            }
-            if(guiButton.id == 4) {
-                guiButton.enabled = Lime.getInstance().getModuleManager().getModuleC(ChestStealer.class).isToggled();
-            }
-            if(guiButton.id == 5) {
-                guiButton.enabled = Lime.getInstance().getModuleManager().getModuleC(KillAura.class).isToggled();
-            }
-        }
+
     }
 
     /**
@@ -166,16 +152,6 @@ public class GuiInventory extends InventoryEffectRenderer
         if (button.id == 1)
         {
             this.mc.displayGuiScreen(new GuiStats(this, this.mc.thePlayer.getStatFileWriter()));
-        }
-
-        if(button.id == 3) {
-            Lime.getInstance().getModuleManager().getModuleC(InventoryManager.class).disableModule();
-        }
-        if(button.id == 4) {
-            Lime.getInstance().getModuleManager().getModuleC(ChestStealer.class).disableModule();
-        }
-        if(button.id == 5) {
-            Lime.getInstance().getModuleManager().getModuleC(KillAura.class).disableModule();
         }
     }
 }

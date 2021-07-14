@@ -5,8 +5,11 @@ import java.io.IOException;
 import java.util.Set;
 
 import lime.core.Lime;
+import lime.features.module.impl.combat.KillAura;
 import lime.features.module.impl.player.ChestStealer;
+import lime.features.module.impl.player.InventoryManager;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
@@ -113,7 +116,25 @@ public abstract class GuiContainer extends GuiScreen
                 }
             }
         }
+
+        this.buttonList.add(new GuiButton(3, 3, 3, 150, 20, "Disable Inventory Manager"));
+        this.buttonList.add(new GuiButton(4, 3, 3 + 22, 150, 20, "Disable Chest Stealer"));
+        this.buttonList.add(new GuiButton(5, 3, 3 + (22 * 2), 150, 20, "Disable Kill Aura"));
         super.initGui();
+    }
+
+    @Override
+    protected void actionPerformed(GuiButton button) throws IOException {
+        if(button.id == 3) {
+            Lime.getInstance().getModuleManager().getModuleC(InventoryManager.class).disableModule();
+        }
+        if(button.id == 4) {
+            Lime.getInstance().getModuleManager().getModuleC(ChestStealer.class).disableModule();
+        }
+        if(button.id == 5) {
+            Lime.getInstance().getModuleManager().getModuleC(KillAura.class).disableModule();
+        }
+        super.actionPerformed(button);
     }
 
     /**
@@ -121,6 +142,17 @@ public abstract class GuiContainer extends GuiScreen
      */
     public void drawScreen(int mouseX, int mouseY, float partialTicks)
     {
+        for (GuiButton guiButton : this.buttonList) {
+            if(guiButton.id == 3) {
+                guiButton.enabled = Lime.getInstance().getModuleManager().getModuleC(InventoryManager.class).isToggled();
+            }
+            if(guiButton.id == 4) {
+                guiButton.enabled = Lime.getInstance().getModuleManager().getModuleC(ChestStealer.class).isToggled();
+            }
+            if(guiButton.id == 5) {
+                guiButton.enabled = Lime.getInstance().getModuleManager().getModuleC(KillAura.class).isToggled();
+            }
+        }
         this.drawDefaultBackground();
         int i = this.guiLeft;
         int j = this.guiTop;

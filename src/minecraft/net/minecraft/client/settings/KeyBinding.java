@@ -4,7 +4,13 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import java.util.List;
 import java.util.Set;
+
+import lime.core.Lime;
+import lime.features.module.impl.player.ChestStealer;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.inventory.GuiChest;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.inventory.ContainerChest;
 import net.minecraft.util.IntHashMap;
 
 public class KeyBinding implements Comparable<KeyBinding>

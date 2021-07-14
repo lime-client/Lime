@@ -14,6 +14,7 @@ import net.minecraft.client.gui.GuiChat;
 import net.minecraft.client.gui.inventory.GuiInventory;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.inventory.ContainerChest;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 
@@ -31,6 +32,7 @@ public class AutoArmor extends Module {
 
     @EventTarget
     public void onTick(EventUpdate event) {
+        if(mc.thePlayer.openContainer instanceof ContainerChest) return;
         if (InventoryManager.getTimer().hasReached((long)delay.getCurrent()) && !mc.thePlayer.capabilities.isCreativeMode && ((mc.currentScreen instanceof GuiInventory && mode.is("openinv")) || mode.is("normal"))) {
             for(int b = 5; b <= 8; ++b) {
                 if (equipArmor(b)) {

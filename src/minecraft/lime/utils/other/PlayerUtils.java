@@ -2,7 +2,9 @@ package lime.utils.other;
 
 import lime.utils.IUtil;
 import net.minecraft.client.gui.Gui;
+import net.minecraft.network.play.client.C00PacketKeepAlive;
 import net.minecraft.network.play.client.C03PacketPlayer;
+import net.minecraft.network.play.client.C0FPacketConfirmTransaction;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 
@@ -39,7 +41,7 @@ public class PlayerUtils implements IUtil {
         // Saying that we reached the ground
         mc.getNetHandler().sendPacketNoEvent(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY, mc.thePlayer.posZ, true));
 
-        // Simulating velocity
+        // Simulating velocity so verus accept Velocity Packet
         mc.getNetHandler().sendPacketNoEvent(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY + 0.41999998688697815, mc.thePlayer.posZ, false));
 
         //TODO: Bypass Timer 11B Detection

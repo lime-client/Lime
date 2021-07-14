@@ -8,17 +8,16 @@ import lime.features.module.Category;
 import lime.features.module.Module;
 import lime.features.module.ModuleData;
 import lime.features.setting.impl.ColorValue;
+import lime.utils.other.PlayerUtils;
 
 import java.awt.*;
 
 @ModuleData(name = "Render Test", category = Category.RENDER)
 public class RenderTestModule extends Module {
 
-    private final ColorValue colorPicker = new ColorValue("Color Picker", this, Color.GREEN.getRGB());
-
-    @EventTarget
-    public void on2D(Event2D e) {
-        Lime.getInstance().getNotificationManager().getNotifications().clear();
-        FontManager.ProductSans20.getFont().drawStringWithShadow("Salutation le khey", 3, 30, colorPicker.getColor());
+    @Override
+    public void onEnable() {
+        PlayerUtils.verusDamage();
+        mc.thePlayer.jump();
     }
 }

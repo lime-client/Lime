@@ -2,7 +2,7 @@
   "informations": [
     {
       "author": "Lime Auto Save",
-      "time": 1626170545
+      "time": 1626267149
     }
   ],
   "modules": [
@@ -43,7 +43,7 @@
     {
       "moduleName": "Kill Aura",
       "key": 19,
-      "toggled": false,
+      "toggled": true,
       "settings": [
         {
           "name": "State",
@@ -73,7 +73,7 @@
         {
           "name": "Rotations Min",
           "type": "slider",
-          "value": 50.0
+          "value": 79.0
         },
         {
           "name": "Rotations Max",
@@ -83,7 +83,7 @@
         {
           "name": "Range",
           "type": "slider",
-          "value": 3.45
+          "value": 3.7
         },
         {
           "name": "CPS",
@@ -135,7 +135,14 @@
     {
       "moduleName": "Velocity",
       "key": -1,
-      "toggled": true
+      "toggled": true,
+      "settings": [
+        {
+          "name": "Mode",
+          "type": "enum",
+          "value": "packet"
+        }
+      ]
     },
     {
       "moduleName": "Anti Bot",
@@ -152,7 +159,7 @@
     {
       "moduleName": "Auto Pot",
       "key": -1,
-      "toggled": true,
+      "toggled": false,
       "settings": [
         {
           "name": "Health",
@@ -343,19 +350,19 @@
         {
           "name": "Speed",
           "type": "slider",
-          "value": 9.0
+          "value": 2.5
         }
       ]
     },
     {
       "moduleName": "No Slow",
       "key": -1,
-      "toggled": false,
+      "toggled": true,
       "settings": [
         {
           "name": "Mode",
           "type": "enum",
-          "value": "ncp"
+          "value": "vanilla"
         }
       ]
     },
@@ -367,12 +374,12 @@
         {
           "name": "Mode",
           "type": "enum",
-          "value": "astral"
+          "value": "verus_fast"
         },
         {
           "name": "Speed",
           "type": "slider",
-          "value": 7.0
+          "value": 9.0
         },
         {
           "name": "Bobbing",
@@ -382,7 +389,7 @@
         {
           "name": "Verus Glide",
           "type": "bool",
-          "value": false
+          "value": true
         }
       ]
     },
@@ -399,7 +406,7 @@
         {
           "name": "Mode",
           "type": "enum",
-          "value": "hypixelnew"
+          "value": "verus"
         }
       ]
     },
@@ -472,7 +479,7 @@
     {
       "moduleName": "Chest Stealer",
       "key": 23,
-      "toggled": true,
+      "toggled": false,
       "settings": [
         {
           "name": "Delay before close",
@@ -497,12 +504,12 @@
         {
           "name": "Silent",
           "type": "bool",
-          "value": true
+          "value": false
         },
         {
           "name": "Show Chest",
           "type": "bool",
-          "value": false
+          "value": true
         },
         {
           "name": "Aura",
@@ -546,12 +553,12 @@
     {
       "moduleName": "Streamer",
       "key": -1,
-      "toggled": true,
+      "toggled": false,
       "settings": [
         {
           "name": "Name",
           "type": "text",
-          "value": "gamer"
+          "value": "lime epic user"
         }
       ]
     },
@@ -624,14 +631,7 @@
     {
       "moduleName": "Render Test",
       "key": -1,
-      "toggled": false,
-      "settings": [
-        {
-          "name": "Color Picker",
-          "type": "color",
-          "value": -16711936
-        }
-      ]
+      "toggled": false
     },
     {
       "moduleName": "Block Overlay",
@@ -654,6 +654,11 @@
           "value": 1.0
         }
       ]
+    },
+    {
+      "moduleName": "Projectiles",
+      "key": -1,
+      "toggled": true
     },
     {
       "moduleName": "Animations",
@@ -770,7 +775,7 @@
         {
           "name": "Client Name",
           "type": "text",
-          "value": "§4Verus Happy Customer"
+          "value": "§3Verus §fHappy §cCustomer"
         },
         {
           "name": "Color",
@@ -814,7 +819,7 @@
         {
           "name": "State",
           "type": "enum",
-          "value": "post"
+          "value": "pre"
         },
         {
           "name": "Item Spoof",
@@ -824,7 +829,7 @@
         {
           "name": "Rotations",
           "type": "enum",
-          "value": "legit"
+          "value": "none"
         },
         {
           "name": "Speed Modifier",
@@ -834,7 +839,7 @@
         {
           "name": "Expand",
           "type": "slider",
-          "value": 0.0
+          "value": 3.95
         },
         {
           "name": "Eagle",
@@ -874,7 +879,7 @@
         {
           "name": "Same Y",
           "type": "bool",
-          "value": false
+          "value": true
         },
         {
           "name": "Swapper",

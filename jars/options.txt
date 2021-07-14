@@ -14,7 +14,7 @@ difficulty:1
 fancyGraphics:true
 ao:2
 renderClouds:false
-resourcePacks:["!          §5§lPurple 32x (Clean).zip"]
+resourcePacks:["!    §4Vex §8[§f32x§8].zip"]
 incompatibleResourcePacks:[]
 lastServer:localhost
 lang:en_US

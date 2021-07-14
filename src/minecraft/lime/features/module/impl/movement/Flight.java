@@ -12,6 +12,8 @@ import lime.features.setting.impl.SlideValue;
 import lime.ui.notifications.Notification;
 import lime.utils.movement.MovementUtils;
 import lime.utils.other.PlayerUtils;
+import lime.utils.other.Timer;
+import lime.utils.render.Graph;
 import net.minecraft.block.BlockAir;
 import net.minecraft.network.play.server.S12PacketEntityVelocity;
 import net.minecraft.util.AxisAlignedBB;
@@ -23,6 +25,9 @@ public class Flight extends Module {
     private enum Mode {
         Vanilla, Funcraft, Funcraft_Gamer, Verus, Verus_Fast, Astral
     }
+
+    private final Graph speedGraph = new Graph(10, 110, "Speed");
+    private final Timer timer = new Timer();
 
     //Settings
     private final EnumValue mode = new EnumValue("Mode", this, Mode.Vanilla);
@@ -72,7 +77,11 @@ public class Flight extends Module {
 
     @EventTarget
     public void on2D(Event2D e) {
-        mc.fontRendererObj.drawStringWithShadow("BP/S: " + MovementUtils.getBPS(), 3, 3, -1);
+        speedGraph.renderGraphs();
+        if(timer.hasReached(50)) {
+            speedGraph.addValue((float) MovementUtils.getBPS());
+            timer.reset();
+        }
     }
 
     @EventTarget

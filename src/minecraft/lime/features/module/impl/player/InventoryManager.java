@@ -11,6 +11,7 @@ import lime.features.setting.impl.SlideValue;
 import lime.utils.other.InventoryUtils;
 import lime.utils.other.Timer;
 import net.minecraft.client.gui.inventory.GuiInventory;
+import net.minecraft.inventory.ContainerChest;
 import net.minecraft.item.*;
 
 import java.util.ArrayList;
@@ -37,6 +38,7 @@ public class InventoryManager extends Module {
 
     @EventTarget
     public void onMotion(EventMotion e) {
+        if(mc.thePlayer.openContainer instanceof ContainerChest) return;
         if((mode.is("open_inv") && mc.currentScreen instanceof GuiInventory) || (mode.is("normal"))  && timer.hasReached((long) delay.intValue())) {
             if(dropJunk.isEnabled()) {
                 dropJunks();

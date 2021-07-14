@@ -1506,9 +1506,7 @@ public class Minecraft implements IThreadListener, IPlayerUsage
     {
         if (this.inGameHasFocus)
         {
-            if(Lime.getInstance() != null && !Lime.getInstance().getModuleManager().getModuleC(ChestStealer.class).isToggled() && thePlayer != null && thePlayer.openContainer instanceof ContainerChest && ChestStealer.isValidChest((ContainerChest) thePlayer.openContainer)) {
-                KeyBinding.unPressAllKeys();
-            }
+            KeyBinding.unPressAllKeys();
             this.inGameHasFocus = false;
             this.mouseHelper.ungrabMouseCursor();
         }

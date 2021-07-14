@@ -73,6 +73,7 @@ public class ModuleManager {
         registerModule(new BlockOverlay());
         registerModule(new NoScoreboard());
         registerModule(new SkeletonESP());
+        registerModule(new Projectiles());
         registerModule(new Animations());
         registerModule(new FullBright());
         registerModule(new Nametags());
