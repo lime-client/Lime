@@ -10,11 +10,11 @@ bobView:true
 anaglyph3d:false
 maxFps:260
 fboEnable:true
-difficulty:1
+difficulty:2
 fancyGraphics:true
 ao:2
 renderClouds:false
-resourcePacks:["!    §4Vex §8[§f32x§8].zip"]
+resourcePacks:["Minesense"]
 incompatibleResourcePacks:[]
 lastServer:localhost
 lang:en_US

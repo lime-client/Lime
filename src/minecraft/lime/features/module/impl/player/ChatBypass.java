@@ -17,16 +17,17 @@ public class ChatBypass extends Module {
         if(e.getPacket() instanceof C01PacketChatMessage) {
             C01PacketChatMessage packet = (C01PacketChatMessage) e.getPacket();
             String message = packet.getMessage();
+
+            // \u001D
             
             if(!message.startsWith("/") && !message.startsWith(".")) {
                 StringBuilder bypassedChatMessage = new StringBuilder();
                 for (char c : message.toCharArray()) {
-                    bypassedChatMessage.append(c + (ThreadLocalRandom.current().nextBoolean() ? "\u061D" : ""));
+                    bypassedChatMessage.append(c).append(ThreadLocalRandom.current().nextBoolean() ? "\u061D" : "");
                 }
 
                 packet.setMessage(bypassedChatMessage.toString());
             }
         }
-
     }
 }

@@ -21,7 +21,7 @@ public class WorldProviderHell extends WorldProvider
     }
 
     /**
-     * Return Vec3D with biome specific fog color
+     * Return Vec3 with biome specific fog color
      */
     public Vec3 getFogColor(float p_76562_1_, float p_76562_2_)
     {

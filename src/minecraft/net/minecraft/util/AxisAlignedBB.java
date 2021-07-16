@@ -236,7 +236,7 @@ public class AxisAlignedBB
     }
 
     /**
-     * Returns if the supplied Vec3D is completely inside the bounding box
+     * Returns if the supplied Vec3 is completely inside the bounding box
      */
     public boolean isVecInside(Vec3 vec)
     {
@@ -377,7 +377,7 @@ public class AxisAlignedBB
     }
 
     /**
-     * Checks if the specified vector is within the YZ dimensions of the bounding box. Args: Vec3D
+     * Checks if the specified vector is within the YZ dimensions of the bounding box. Args: Vec3
      */
     private boolean isVecInYZ(Vec3 vec)
     {
@@ -385,7 +385,7 @@ public class AxisAlignedBB
     }
 
     /**
-     * Checks if the specified vector is within the XZ dimensions of the bounding box. Args: Vec3D
+     * Checks if the specified vector is within the XZ dimensions of the bounding box. Args: Vec3
      */
     private boolean isVecInXZ(Vec3 vec)
     {
@@ -393,7 +393,7 @@ public class AxisAlignedBB
     }
 
     /**
-     * Checks if the specified vector is within the XY dimensions of the bounding box. Args: Vec3D
+     * Checks if the specified vector is within the XY dimensions of the bounding box. Args: Vec3
      */
     private boolean isVecInXY(Vec3 vec)
     {

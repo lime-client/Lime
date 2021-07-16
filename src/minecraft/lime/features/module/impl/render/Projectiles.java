@@ -1,7 +1,5 @@
 package lime.features.module.impl.render;
 
-import com.sun.javafx.geom.Vec3d;
-import lime.core.Lime;
 import lime.core.events.EventTarget;
 import lime.core.events.impl.Event3D;
 import lime.features.module.Category;

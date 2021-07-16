@@ -45,7 +45,8 @@ public class KillSult extends Module {
         entityName + ", tu préfères le chocolat ou les noirs ?", entityName + ", fly pas trop tu vas te faire kick chacal", entityName + ", vise l'ennemi la prochaine fois",
         "Imposteur éliminé: " + entityName + " !", "Désolé " + entityName + ", j'ai glissé sur ma touche pour te violer!", "Honnêtement, t'étais claqué cette game " + entityName,
         "J'ai cru t'étais un bot " + entityName + "...", "J't'ai tapé autant vite que eminem rape " + entityName, "Dégustation en live de " + entityName + " !",
-        "Un billet vers le goulag a été offert à " + entityName + " !"};
+        "Un billet vers le goulag a été offert à " + entityName + " !", "T'es un peu le seul mec à finir 3ème dans un 1vs1 " + entityName, "J'ai du mal à faire la différence entre " + entityName + " et un armor stand :/",
+        entityName + ", ton skill c'est comme une eclipse, il est bien qu'une fois par an", "Savoir jouer est un art qui t'es inconnu " + entityName};
 
         return messages[ThreadLocalRandom.current().nextInt(messages.length)];
     }

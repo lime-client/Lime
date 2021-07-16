@@ -334,6 +334,34 @@ public class RenderUtils implements IUtil {
         GL11.glPopMatrix();
     }
 
+    public static void drawFilledCircle(final float xx, final float yy, final float radius, final Color color) {
+        int sections = 50;
+        double dAngle = 2 * Math.PI / sections;
+        float x, y;
+
+        glPushAttrib(GL_ENABLE_BIT);
+
+        glEnable(GL_BLEND);
+        glDisable(GL_TEXTURE_2D);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        glEnable(GL_LINE_SMOOTH);
+        glBegin(GL_TRIANGLE_FAN);
+
+        for (int i = 0; i < sections; i++) {
+            x = (float) (radius * Math.sin((i * dAngle)));
+            y = (float) (radius * Math.cos((i * dAngle)));
+
+            glColor(color);
+            glVertex2f(xx + x, yy + y);
+        }
+
+        glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+
+        glEnd();
+
+        glPopAttrib();
+    }
+
     public static void drawBluredRect(double x, double y, double x2, double y2, final int c, final int blue) {
         GlStateManager.pushMatrix();
         GlStateManager.scale(0.3, 0.3, 1.0);
@@ -378,7 +406,6 @@ public class RenderUtils implements IUtil {
     }
 
     public static void glColor(Color color) {
-
         GlStateManager.color((float) color.getRed() / 255F, (float) color.getGreen() / 255F, (float) color.getBlue() / 255F, (float) color.getAlpha() / 255F);
     }
 

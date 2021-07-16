@@ -76,6 +76,7 @@ public class ModuleManager {
         registerModule(new Projectiles());
         registerModule(new Animations());
         registerModule(new FullBright());
+        registerModule(new ClickGUI2());
         registerModule(new Nametags());
         registerModule(new ClickGUI());
         registerModule(new ChestESP());

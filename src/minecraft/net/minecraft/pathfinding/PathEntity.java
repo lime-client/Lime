@@ -84,7 +84,7 @@ public class PathEntity
     }
 
     /**
-     * returns the current PathEntity target node as Vec3D
+     * returns the current PathEntity target node as Vec3
      */
     public Vec3 getPosition(Entity entityIn)
     {
@@ -119,7 +119,7 @@ public class PathEntity
     }
 
     /**
-     * Returns true if the final PathPoint in the PathEntity is equal to Vec3D coords.
+     * Returns true if the final PathPoint in the PathEntity is equal to Vec3 coords.
      */
     public boolean isDestinationSame(Vec3 vec)
     {
