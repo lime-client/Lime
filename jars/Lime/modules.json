@@ -2,7 +2,7 @@
   "informations": [
     {
       "author": "Lime Auto Save",
-      "time": 1626478632
+      "time": 1626527325
     }
   ],
   "modules": [
@@ -26,7 +26,7 @@
     {
       "moduleName": "Auto Sword",
       "key": -1,
-      "toggled": true
+      "toggled": false
     },
     {
       "moduleName": "Criticals",
@@ -58,7 +58,7 @@
         {
           "name": "Rotations",
           "type": "enum",
-          "value": "none"
+          "value": "basic"
         },
         {
           "name": "Target ESP",
@@ -68,7 +68,7 @@
         {
           "name": "Auto Block",
           "type": "enum",
-          "value": "fake"
+          "value": "basic"
         },
         {
           "name": "Rotations Min",
@@ -83,7 +83,7 @@
         {
           "name": "Range",
           "type": "slider",
-          "value": 4.9
+          "value": 3.5500000000000003
         },
         {
           "name": "CPS",
@@ -108,12 +108,12 @@
         {
           "name": "Teams",
           "type": "bool",
-          "value": false
+          "value": true
         },
         {
           "name": "Ray Cast",
           "type": "bool",
-          "value": false
+          "value": true
         },
         {
           "name": "Through Walls",
@@ -147,7 +147,7 @@
     {
       "moduleName": "Anti Bot",
       "key": -1,
-      "toggled": true,
+      "toggled": false,
       "settings": [
         {
           "name": "Mode",
@@ -159,7 +159,7 @@
     {
       "moduleName": "Auto Pot",
       "key": -1,
-      "toggled": true,
+      "toggled": false,
       "settings": [
         {
           "name": "Health",
@@ -263,7 +263,7 @@
     },
     {
       "moduleName": "Phase",
-      "key": 35,
+      "key": -1,
       "toggled": false,
       "settings": [
         {
@@ -281,7 +281,7 @@
         {
           "name": "Distance",
           "type": "slider",
-          "value": 2.5
+          "value": 1.1
         },
         {
           "name": "Space Only",
@@ -345,12 +345,12 @@
         {
           "name": "Mode",
           "type": "enum",
-          "value": "funcraft"
+          "value": "verus"
         },
         {
           "name": "Speed",
           "type": "slider",
-          "value": 3.0
+          "value": 5.0
         }
       ]
     },
@@ -362,7 +362,7 @@
         {
           "name": "Mode",
           "type": "enum",
-          "value": "ncp"
+          "value": "vanilla"
         }
       ]
     },
@@ -374,17 +374,17 @@
         {
           "name": "Mode",
           "type": "enum",
-          "value": "funcraft"
+          "value": "vanilla"
         },
         {
           "name": "Speed",
           "type": "slider",
-          "value": 9.5
+          "value": 2.0
         },
         {
           "name": "Bobbing",
           "type": "bool",
-          "value": true
+          "value": false
         },
         {
           "name": "Verus Glide",
@@ -396,7 +396,7 @@
     {
       "moduleName": "Sprint",
       "key": -1,
-      "toggled": true
+      "toggled": false
     },
     {
       "moduleName": "Speed",
@@ -489,7 +489,7 @@
         {
           "name": "Delay",
           "type": "slider",
-          "value": 80.0
+          "value": 55.0
         },
         {
           "name": "Ignore Junk",
@@ -558,19 +558,19 @@
         {
           "name": "Name",
           "type": "text",
-          "value": "Wykt"
+          "value": "lime epic user"
         }
       ]
     },
     {
       "moduleName": "Auto Tool",
       "key": -1,
-      "toggled": true
+      "toggled": false
     },
     {
       "moduleName": "KillSult",
       "key": -1,
-      "toggled": true
+      "toggled": false
     },
     {
       "moduleName": "Anti Void",
@@ -602,7 +602,7 @@
     {
       "moduleName": "No Fall",
       "key": -1,
-      "toggled": false,
+      "toggled": true,
       "settings": [
         {
           "name": "Mode",
@@ -680,11 +680,11 @@
     {
       "moduleName": "Full Bright",
       "key": -1,
-      "toggled": false
+      "toggled": true
     },
     {
       "moduleName": "ClickGUI2",
-      "key": 38,
+      "key": -1,
       "toggled": false
     },
     {
@@ -763,7 +763,7 @@
     {
       "moduleName": "ESP",
       "key": -1,
-      "toggled": true,
+      "toggled": false,
       "settings": [
         {
           "name": "Mode",
@@ -780,7 +780,7 @@
         {
           "name": "Client Name",
           "type": "text",
-          "value": "Lime"
+          "value": "§3Verus §fHappy §cCustomer"
         },
         {
           "name": "Color",
@@ -824,17 +824,17 @@
         {
           "name": "State",
           "type": "enum",
-          "value": "post"
+          "value": "pre"
         },
         {
           "name": "Item Spoof",
           "type": "enum",
-          "value": "spoof"
+          "value": "pick"
         },
         {
           "name": "Rotations",
           "type": "enum",
-          "value": "basic_2"
+          "value": "none"
         },
         {
           "name": "Speed Modifier",
@@ -844,7 +844,7 @@
         {
           "name": "Expand",
           "type": "slider",
-          "value": 0.45
+          "value": 0.0
         },
         {
           "name": "Eagle",
@@ -864,12 +864,12 @@
         {
           "name": "Tower",
           "type": "bool",
-          "value": true
+          "value": false
         },
         {
           "name": "Tower Move",
           "type": "bool",
-          "value": true
+          "value": false
         },
         {
           "name": "No Sprint",
@@ -879,12 +879,12 @@
         {
           "name": "No Swing",
           "type": "bool",
-          "value": true
+          "value": false
         },
         {
           "name": "Same Y",
           "type": "bool",
-          "value": true
+          "value": false
         },
         {
           "name": "Swapper",

@@ -159,10 +159,13 @@ public class KillAura extends Module {
 
             KillAura.entity = entity;
 
-            if(!e.isPre() && hasSword() && autoBlock.is("basic")) {
+            if(!e.isPre() && hasSword() && autoBlock.is("basic") && !isBlocking) {
                 mc.getNetHandler().addToSendQueue(new C08PacketPlayerBlockPlacement(mc.thePlayer.getHeldItem()));
                 mc.thePlayer.setItemInUse(mc.thePlayer.getHeldItem(), 32767);
                 isBlocking = true;
+            }
+            if(isBlocking) {
+                mc.thePlayer.setItemInUse(mc.thePlayer.getHeldItem(), 32767);
             }
 
             if(!state.is(e.getState().name())) return;
