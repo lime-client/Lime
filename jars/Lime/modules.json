@@ -2,7 +2,7 @@
   "informations": [
     {
       "author": "Lime Auto Save",
-      "time": 1626527325
+      "time": 1626821767
     }
   ],
   "modules": [
@@ -43,7 +43,7 @@
     {
       "moduleName": "Kill Aura",
       "key": 19,
-      "toggled": false,
+      "toggled": true,
       "settings": [
         {
           "name": "State",
@@ -68,7 +68,7 @@
         {
           "name": "Auto Block",
           "type": "enum",
-          "value": "basic"
+          "value": "fake"
         },
         {
           "name": "Rotations Min",
@@ -83,12 +83,12 @@
         {
           "name": "Range",
           "type": "slider",
-          "value": 3.5500000000000003
+          "value": 3.5
         },
         {
           "name": "CPS",
           "type": "slider",
-          "value": 11.0
+          "value": 9.0
         },
         {
           "name": "Players",
@@ -276,7 +276,7 @@
     {
       "moduleName": "Target Strafe",
       "key": -1,
-      "toggled": true,
+      "toggled": false,
       "settings": [
         {
           "name": "Distance",
@@ -374,22 +374,22 @@
         {
           "name": "Mode",
           "type": "enum",
-          "value": "vanilla"
+          "value": "funcraft"
         },
         {
           "name": "Speed",
           "type": "slider",
-          "value": 2.0
+          "value": 1.5
         },
         {
           "name": "Bobbing",
           "type": "bool",
-          "value": false
+          "value": true
         },
         {
           "name": "Verus Glide",
           "type": "bool",
-          "value": true
+          "value": false
         }
       ]
     },
@@ -406,7 +406,7 @@
         {
           "name": "Mode",
           "type": "enum",
-          "value": "funcraft"
+          "value": "verus"
         }
       ]
     },
@@ -442,7 +442,7 @@
     {
       "moduleName": "Inventory Manager",
       "key": 48,
-      "toggled": true,
+      "toggled": false,
       "settings": [
         {
           "name": "Mode",
@@ -479,7 +479,7 @@
     {
       "moduleName": "Chest Stealer",
       "key": 23,
-      "toggled": true,
+      "toggled": false,
       "settings": [
         {
           "name": "Delay before close",
@@ -526,7 +526,7 @@
     {
       "moduleName": "Auto Armor",
       "key": 37,
-      "toggled": true,
+      "toggled": false,
       "settings": [
         {
           "name": "Mode",
@@ -558,7 +558,7 @@
         {
           "name": "Name",
           "type": "text",
-          "value": "lime epic user"
+          "value": "e"
         }
       ]
     },
@@ -602,7 +602,7 @@
     {
       "moduleName": "No Fall",
       "key": -1,
-      "toggled": true,
+      "toggled": false,
       "settings": [
         {
           "name": "Mode",
@@ -683,11 +683,6 @@
       "toggled": true
     },
     {
-      "moduleName": "ClickGUI2",
-      "key": -1,
-      "toggled": false
-    },
-    {
       "moduleName": "Nametags",
       "key": -1,
       "toggled": true
@@ -761,6 +756,11 @@
       ]
     },
     {
+      "moduleName": "ESP2D",
+      "key": -1,
+      "toggled": true
+    },
+    {
       "moduleName": "ESP",
       "key": -1,
       "toggled": false,
@@ -818,7 +818,7 @@
     },
     {
       "moduleName": "Scaffold",
-      "key": 34,
+      "key": 0,
       "toggled": false,
       "settings": [
         {
@@ -941,6 +941,98 @@
       "moduleName": "Eagle",
       "key": -1,
       "toggled": false
+    },
+    {
+      "moduleName": "Scaffold 2",
+      "key": 34,
+      "toggled": false,
+      "settings": [
+        {
+          "name": "State",
+          "type": "enum",
+          "value": "pre"
+        },
+        {
+          "name": "Rotations",
+          "type": "enum",
+          "value": "none"
+        },
+        {
+          "name": "Item Spoof",
+          "type": "enum",
+          "value": "pick"
+        },
+        {
+          "name": "Tower",
+          "type": "enum",
+          "value": "none"
+        },
+        {
+          "name": "Speed Modifier",
+          "type": "slider",
+          "value": 1.0
+        },
+        {
+          "name": "Expand",
+          "type": "slider",
+          "value": 0.0
+        },
+        {
+          "name": "Delay",
+          "type": "slider",
+          "value": 0.0
+        },
+        {
+          "name": "Keep Rotations",
+          "type": "bool",
+          "value": false
+        },
+        {
+          "name": "Tower Move",
+          "type": "bool",
+          "value": true
+        },
+        {
+          "name": "Safewalk",
+          "type": "bool",
+          "value": false
+        },
+        {
+          "name": "No Sprint",
+          "type": "bool",
+          "value": false
+        },
+        {
+          "name": "Spoof Sprint",
+          "type": "bool",
+          "value": false
+        },
+        {
+          "name": "Same Y",
+          "type": "bool",
+          "value": false
+        },
+        {
+          "name": "No Swing",
+          "type": "bool",
+          "value": false
+        },
+        {
+          "name": "Swapper",
+          "type": "bool",
+          "value": true
+        },
+        {
+          "name": "Downwards",
+          "type": "bool",
+          "value": true
+        },
+        {
+          "name": "Random Vec",
+          "type": "bool",
+          "value": true
+        }
+      ]
     },
     {
       "moduleName": "Auto Clicker",

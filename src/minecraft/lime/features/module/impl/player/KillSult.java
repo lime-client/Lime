@@ -41,7 +41,7 @@ public class KillSult extends Module {
     }
 
     private String getMessage(String entityName) {
-        String[] messages = new String[] { "Windows 11 > " + entityName, entityName + ", désolé du viol, tu veux de la ventoline ?",
+        String[] messages = new String[] { entityName + ", désolé du viol, tu veux de la ventoline ?",
         entityName + ", tu préfères le chocolat ou les noirs ?", entityName + ", fly pas trop tu vas te faire kick chacal", entityName + ", vise l'ennemi la prochaine fois",
         "Imposteur éliminé: " + entityName + " !", "Désolé " + entityName + ", j'ai glissé sur ma touche pour te violer!", "Honnêtement, t'étais claqué cette game " + entityName,
         "J'ai cru t'étais un bot " + entityName + "...", "J't'ai tapé autant vite que eminem rape " + entityName, "Dégustation en live de " + entityName + " !",

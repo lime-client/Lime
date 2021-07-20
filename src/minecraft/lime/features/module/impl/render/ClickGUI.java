@@ -10,15 +10,17 @@ import lime.features.setting.impl.EnumValue;
 public class ClickGUI extends Module {
 
     private enum Mode {
-        FRAME
+        FRAME, FRAMENEW
     }
 
-    private EnumValue mode = new EnumValue("Mode", this, Mode.FRAME);
+    private final EnumValue mode = new EnumValue("Mode", this, Mode.FRAME);
 
     @Override
     public void onEnable() {
         if(mode.is("frame"))
             mc.displayGuiScreen(Lime.getInstance().getClickGUI());
+        if(mode.is("framenew"))
+            mc.displayGuiScreen(Lime.getInstance().getClickGUI2());
         this.toggle();
     }
 }

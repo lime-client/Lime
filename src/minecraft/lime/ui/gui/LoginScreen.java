@@ -66,6 +66,7 @@ public class LoginScreen extends GuiScreen {
                     status = "§7Checking for debuggers...";
                     if(isOnVM() || hasDebugger() || hasUnauthorizedCacerts() || hasHTTPDebugger()) {
                         statusAnimation.reset();
+                        System.out.println(isOnVM() + " " + hasDebugger() + " " + hasUnauthorizedCacerts() + " " + hasHTTPDebugger());
                         status = "§cDebugger detected.";
                         super.run();
                         return;
@@ -233,7 +234,7 @@ public class LoginScreen extends GuiScreen {
     private boolean hasDebugger() {
         List<String> launchArgs = ManagementFactory.getRuntimeMXBean().getInputArguments();
         for (String launchArg : launchArgs) {
-            if (launchArg.startsWith("-Xbootclasspath") || launchArg.startsWith("-Xdebug") || (launchArg.startsWith("-agentlib") && !launchArg.startsWith("-agentlib:jdwp=transport=dt_socket,address=")) || (launchArg.startsWith("-javaagent:") && !launchArg.equalsIgnoreCase("-javaagent:C:\\Users\\Moi\\AppData\\Local\\JetBrains\\IntelliJIdea2021.1\\captureAgent\\debugger-agent.jar"))
+            if (launchArg.startsWith("-Xbootclasspath") || launchArg.startsWith("-Xdebug") || (launchArg.startsWith("-agentlib") && !launchArg.startsWith("-agentlib:jdwp=transport=dt_socket,address=")) || (launchArg.startsWith("-javaagent:") && !launchArg.equalsIgnoreCase("-javaagent:C:\\Users\\E\\AppData\\Local\\JetBrains\\IdeaIC2021.1\\captureAgent\\debugger-agent.jar"))
                     || launchArg.startsWith("-Xrunjdwp:") || launchArg.startsWith("-verbose")) {
                 return true;
             }

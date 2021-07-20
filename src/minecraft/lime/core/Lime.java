@@ -28,6 +28,7 @@ public class Lime {
     private CommandManager commandManager;
     private NotificationManager notificationManager;
     private ClickGUI clickGUI;
+    private lime.ui.clickgui.frame2.ClickGUI clickGUI2;
 
     private UserCheckThread userCheckThread;
     private FileSaver fileSaver;
@@ -77,6 +78,7 @@ public class Lime {
             fileSaver.applyJson("Lime" + java.io.File.separator + "modules.json", true);
 
         clickGUI = new ClickGUI();
+        clickGUI2 = new lime.ui.clickgui.frame2.ClickGUI();
 
 
         new EventListener();
@@ -90,6 +92,10 @@ public class Lime {
 
     public ClickGUI getClickGUI() {
         return clickGUI;
+    }
+
+    public lime.ui.clickgui.frame2.ClickGUI getClickGUI2() {
+        return clickGUI2;
     }
 
     public SettingsManager getSettingsManager() {

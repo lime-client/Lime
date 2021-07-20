@@ -44,6 +44,7 @@ public class ModuleManager {
         registerModule(new LongJump());
         registerModule(new NoSlow());
         registerModule(new Flight());
+        ((Flight) this.getModuleC(Flight.class)).init();
         registerModule(new Sprint());
         registerModule(new Speed());
         registerModule(new Glide());
@@ -76,13 +77,13 @@ public class ModuleManager {
         registerModule(new Projectiles());
         registerModule(new Animations());
         registerModule(new FullBright());
-        registerModule(new ClickGUI2());
         registerModule(new Nametags());
         registerModule(new ClickGUI());
         registerModule(new ChestESP());
         registerModule(new Tracers());
         registerModule(new Camera());
         registerModule(new Chams());
+        registerModule(new ESP2D());
         registerModule(new ESP());
         registerModule(new HUD());
 
@@ -94,6 +95,8 @@ public class ModuleManager {
         registerModule(new Breaker());
         registerModule(new Timer());
         registerModule(new Eagle());
+
+        registerModule(new Scaffold2());
 
         // GHOST
         registerModule(new AutoClicker());

@@ -38,6 +38,23 @@ public class MathHelper
     private static final double[] field_181165_f;
     private static final String __OBFID = "CL_00001496";
 
+    public static double wrapDegrees(double value)
+    {
+        value = value % 360.0D;
+
+        if (value >= 180.0D)
+        {
+            value -= 360.0D;
+        }
+
+        if (value < -180.0D)
+        {
+            value += 360.0D;
+        }
+
+        return value;
+    }
+
     /**
      * sin looked up in a table
      */

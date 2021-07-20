@@ -180,7 +180,7 @@ public class KillAura extends Module {
             currentYaw = mc.thePlayer.rotationYaw;
             currentPitch = mc.thePlayer.rotationPitch;
             KillAura.entity = null;
-            if(autoBlock.is("basic") && hasSword() && isBlocking) {
+            if(autoBlock.is("basic") && hasSword()) {
                 mc.playerController.syncCurrentPlayItem();
                 mc.thePlayer.sendQueue.addToSendQueue(new C07PacketPlayerDigging(C07PacketPlayerDigging.Action.RELEASE_USE_ITEM, BlockPos.ORIGIN, EnumFacing.DOWN));
                 isBlocking = false;

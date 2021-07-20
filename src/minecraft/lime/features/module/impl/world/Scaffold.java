@@ -107,7 +107,7 @@ public class Scaffold extends Module {
     private float yaw;
     private float pitch;
 
-    private final MouseFilter yawMouseFilter =  new MouseFilter();
+    private final MouseFilter yawMouseFilter = new MouseFilter();
 
     @Override
     public void onEnable() {

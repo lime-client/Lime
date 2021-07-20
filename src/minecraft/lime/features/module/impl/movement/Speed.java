@@ -10,6 +10,7 @@ import lime.features.module.Module;
 import lime.features.module.ModuleData;
 import lime.features.module.impl.combat.KillAura;
 import lime.features.module.impl.world.Scaffold;
+import lime.features.module.impl.world.Scaffold2;
 import lime.features.setting.impl.EnumValue;
 import lime.utils.movement.MovementUtils;
 import net.minecraft.entity.EntityLivingBase;
@@ -19,7 +20,7 @@ import net.minecraft.potion.Potion;
 @ModuleData(name = "Speed", category = Category.MOVEMENT)
 public class Speed extends Module {
     private enum Mode {
-        Vanilla, Vanilla_BHOP, Verus, Verus_LOWHOP, NCP, Funcraft, Funcraft_YPORT, Hypixel, HypixelNew, Mineplex
+        Vanilla, Vanilla_BHOP, Verus, Verus_LOWHOP, NCP, Funcraft, Funcraft2, Funcraft_YPORT, Hypixel, HypixelNew, Mineplex
     }
 
     private final EnumValue mode = new EnumValue("Mode", this, Mode.Vanilla);
@@ -62,6 +63,20 @@ public class Speed extends Module {
                     }
                     if(mc.thePlayer.ticksExisted % 3 == 0) mc.thePlayer.motionY -= 0.04;
                 }
+            }
+        }
+        if(mode.is("funcraft2"))
+        {
+            if(mc.thePlayer.isMoving())
+            {
+                if(mc.thePlayer.onGround)
+                {
+                    mc.thePlayer.motionY = 0.399399995803833;
+                    moveSpeed = 0.4;
+                }
+
+                MovementUtils.setSpeed(moveSpeed);
+
             }
         }
         if(mode.is("verus") || mode.is("verus_lowhop")) {
@@ -193,6 +208,7 @@ public class Speed extends Module {
                 this.lastDist = 0;
                 this.moveSpeed = MovementUtils.getBaseMoveSpeed();
             }
+
 
             this.moveSpeed = Math.max(this.moveSpeed, MovementUtils.getBaseMoveSpeed());
             if (KillAura.getEntity() != null && KillAura.getEntity() instanceof EntityLivingBase) {

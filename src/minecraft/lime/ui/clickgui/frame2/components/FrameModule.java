@@ -50,6 +50,10 @@ public class FrameModule implements Priority {
                 {
                     this.components.add(new EnumSetting(0, 0, this, setting));
                 }
+                if(setting instanceof SlideValue)
+                {
+                    this.components.add(new SlideSetting(0, 0, this, setting));
+                }
             });
         }
     }

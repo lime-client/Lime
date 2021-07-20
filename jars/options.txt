@@ -8,13 +8,13 @@ guiScale:2
 particles:0
 bobView:true
 anaglyph3d:false
-maxFps:260
+maxFps:120
 fboEnable:true
-difficulty:1
+difficulty:2
 fancyGraphics:true
 ao:2
 renderClouds:false
-resourcePacks:["Minesense"]
+resourcePacks:["!   §5amethyst §8[§516§7x§8].zip"]
 incompatibleResourcePacks:[]
 lastServer:localhost
 lang:en_US
