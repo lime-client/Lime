@@ -3,6 +3,8 @@ package lime.utils.render;
 import lime.core.Lime;
 import lime.features.module.impl.render.HUD;
 import lime.utils.IUtil;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GLAllocation;
@@ -30,109 +32,6 @@ public class RenderUtils implements IUtil {
     private static final IntBuffer viewport = GLAllocation.createDirectIntBuffer(16);
     private static final FloatBuffer modelview = GLAllocation.createDirectFloatBuffer(16);
     private static final FloatBuffer projection = GLAllocation.createDirectFloatBuffer(16);
-
-    public static void drawRadius(Entity entity, double rad) {
-        int sides = 6;
-        glPushMatrix();
-        glDisable(GL_TEXTURE_2D);
-        glEnable(GL_LINE_SMOOTH);
-        glEnable(GL_POLYGON_SMOOTH);
-        glEnable(GL_POINT_SMOOTH);
-        glEnable(GL_BLEND);
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-        glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
-        glHint(GL_POLYGON_SMOOTH_HINT, GL_NICEST);
-        glHint(GL_POINT_SMOOTH_HINT, GL_NICEST);
-        glDisable(GL_DEPTH_TEST);
-        glDepthMask(false);
-        glLineWidth(6.0f);
-        glBegin(GL_LINE_STRIP);
-
-        double x = entity.lastTickPosX + (entity.posX - entity.lastTickPosX) * mc.timer.elapsedPartialTicks - mc.getRenderManager().viewerPosX;
-        double y = entity.lastTickPosY + (entity.posY - entity.lastTickPosY) * mc.timer.elapsedPartialTicks - mc.getRenderManager().viewerPosY;
-        double z = entity.lastTickPosZ + (entity.posZ - entity.lastTickPosZ) * mc.timer.elapsedPartialTicks - mc.getRenderManager().viewerPosZ;
-
-        double pix2 = Math.PI * 2.0D;
-        for (int i = 0; i <= 90; ++i) {
-            glColor(HUD.getColor(i));
-            glVertex3d(x + rad * Math.cos(i * pix2 / sides), y, z + rad * Math.sin(i * pix2 / sides));
-        }
-
-        glEnd();
-        glDepthMask(true);
-        glEnable(GL_DEPTH_TEST);
-        glDisable(GL_LINE_SMOOTH);
-        glDisable(GL_POLYGON_SMOOTH);
-        glEnable(GL_POINT_SMOOTH);
-        glEnable(GL_TEXTURE_2D);
-        glPopMatrix();
-
-        glPushMatrix();
-        glDisable(GL_TEXTURE_2D);
-        glEnable(GL_LINE_SMOOTH);
-        glEnable(GL_POLYGON_SMOOTH);
-        glEnable(GL_POINT_SMOOTH);
-        glEnable(GL_BLEND);
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-        glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
-        glHint(GL_POLYGON_SMOOTH_HINT, GL_NICEST);
-        glHint(GL_POINT_SMOOTH_HINT, GL_NICEST);
-        glDisable(GL_DEPTH_TEST);
-        glDepthMask(false);
-        glLineWidth(2.0f);
-        glBegin(GL_LINE_STRIP);
-
-        float r1 = ((float) 1 / 255) * Color.black.getRed();
-        float g1 = ((float) 1 / 255) * Color.black.getGreen();
-        float b1 = ((float) 1 / 255) * Color.black.getBlue();
-
-        for (int i = 0; i <= 90; ++i) {
-            glColor3f(r1, g1, b1);
-            glVertex3d(x + (rad + 0.01) * Math.cos(i * pix2 / sides), y, z + (rad + 0.01) * Math.sin(i * pix2 / sides));
-        }
-
-        glEnd();
-        glDepthMask(true);
-        glEnable(GL_DEPTH_TEST);
-        glDisable(GL_LINE_SMOOTH);
-        glDisable(GL_POLYGON_SMOOTH);
-        glEnable(GL_POINT_SMOOTH);
-        glEnable(GL_TEXTURE_2D);
-        glPopMatrix();
-
-        glPushMatrix();
-        glDisable(GL_TEXTURE_2D);
-        glEnable(GL_LINE_SMOOTH);
-        glEnable(GL_POLYGON_SMOOTH);
-        glEnable(GL_POINT_SMOOTH);
-        glEnable(GL_BLEND);
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-        glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
-        glHint(GL_POLYGON_SMOOTH_HINT, GL_NICEST);
-        glHint(GL_POINT_SMOOTH_HINT, GL_NICEST);
-        glDisable(GL_DEPTH_TEST);
-        glDepthMask(false);
-        glLineWidth(2.0f);
-        glBegin(GL_LINE_STRIP);
-
-
-        for (int i = 0; i <= 90; ++i) {
-            glColor3f(r1, g1, b1);
-            glVertex3d(x + (rad - 0.01) * Math.cos(i * pix2 / sides), y, z + (rad - 0.01) * Math.sin(i * pix2 / sides));
-        }
-
-        glEnd();
-        glDepthMask(true);
-        glEnable(GL_DEPTH_TEST);
-        glEnable(GL_TEXTURE_2D);
-        glPopMatrix();
-        glDisable(GL_LINE_SMOOTH);
-        glDisable(GL_POLYGON_SMOOTH);
-        glEnable(GL_POINT_SMOOTH);
-
-        GL11.glColor4f(1, 1, 1, 1);
-        GlStateManager.resetColor();
-    }
 
     public static void enable(final boolean disableDepth) {
         if (disableDepth) {
@@ -183,7 +82,7 @@ public class RenderUtils implements IUtil {
         return frustrum.isBoundingBoxInFrustum(bb);
     }
 
-    public static final void drawCircle(float x, float y, float radius, int inside, int outside) {
+    public static void drawCircle(float x, float y, float radius, int inside, int outside) {
         GlStateManager.pushMatrix();
         GlStateManager.enableBlend();
         GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
@@ -222,6 +121,39 @@ public class RenderUtils implements IUtil {
             return new Vector3d(vector.get(0) / (float)new ScaledResolution(mc).getScaleFactor(), ((float) Display.getHeight() - vector.get(1)) / (float)new ScaledResolution(mc).getScaleFactor(), vector.get(2));
         }
         return null;
+    }
+
+    public static void drawFace(int x, int y, int width, int height, AbstractClientPlayer target) {
+        try {
+            ResourceLocation skin = target.getLocationSkin();
+            Minecraft.getMinecraft().getTextureManager().bindTexture(skin);
+            GL11.glEnable(GL11.GL_BLEND);
+            GL11.glColor4f(1, 1, 1, 1);
+            Gui.drawScaledCustomSizeModalRect(x, y, 8.0f, 8.0f, 8, 8, width, height, 64.0f, 64.0f);
+            //355, 190, 8.0f, 8.0f, 8, 8, 28, 28, 64.0f, 64.0f
+            GL11.glDisable(GL11.GL_BLEND);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void drawHorizontalLine(float x, float y, float x1, float thickness, int color) {
+        Gui.drawRect(x, y, x1, y + thickness, color);
+    }
+
+    public static void drawVerticalLine(float x, float y, float y1, float thickness, int color) {
+        Gui.drawRect(x, y, x + thickness, y1, color);
+    }
+
+    public static void drawHollowBox(float x, float y, float x1, float y1, float thickness, int color) {
+        /* Top */
+        drawHorizontalLine(x, y, x1, thickness, color);
+        /* Bottom */
+        drawHorizontalLine(x, y1, x1, thickness, color);
+        /* Left */
+        drawVerticalLine(x, y, y1, thickness, color);
+        /* Right */
+        drawVerticalLine(x1 - thickness, y, y1, thickness, color);
     }
 
     public static void drawBox(double x, double y, double z, double yOffset, Color color, boolean depth, boolean fill) {

@@ -1,6 +1,8 @@
 package lime.features.module.impl.combat;
 
+import lime.core.Lime;
 import lime.core.events.EventTarget;
+import lime.core.events.impl.Event2D;
 import lime.core.events.impl.Event3D;
 import lime.core.events.impl.EventMotion;
 import lime.core.events.impl.EventPacket;
@@ -11,6 +13,7 @@ import lime.features.module.impl.render.HUD;
 import lime.features.setting.impl.BoolValue;
 import lime.features.setting.impl.EnumValue;
 import lime.features.setting.impl.SlideValue;
+import lime.ui.targethud.impl.LimeTargetHUD;
 import lime.utils.combat.CombatUtils;
 import lime.utils.combat.Rotation;
 import lime.utils.other.Timer;
@@ -70,7 +73,7 @@ public class KillAura extends Module {
     private final BoolValue deathCheck = new BoolValue("Death Check", this, true);
     //
 
-    private static Entity entity;
+    private static EntityLivingBase entity;
     private final Timer cpsTimer = new Timer();
 
     // AutoBlock
@@ -79,8 +82,13 @@ public class KillAura extends Module {
     // Smooth rotations
     private float currentYaw, currentPitch;
 
+    // TargetHUD
+    private final LimeTargetHUD limeTargetHUD = new LimeTargetHUD();
+
     @Override
     public void onEnable() {
+        limeTargetHUD.resetHealthAnimated();
+        limeTargetHUD.resetHealthAnimated();
         if(mc.thePlayer == null) {
             this.toggle();
             return;
@@ -106,7 +114,7 @@ public class KillAura extends Module {
         entity = null;
     }
 
-    public static Entity getEntity() {
+    public static EntityLivingBase getEntity() {
         return entity;
     }
 
@@ -119,7 +127,7 @@ public class KillAura extends Module {
             mc.thePlayer.sendQueue.addToSendQueue(new C07PacketPlayerDigging(C07PacketPlayerDigging.Action.RELEASE_USE_ITEM, BlockPos.ORIGIN, EnumFacing.DOWN));
             isBlocking = false;
         }
-        Entity entity = getEntityByPriority();
+        EntityLivingBase entity = getEntityByPriority();
 
         if(entity != null && isValid(entity)) {
             // Rotations
@@ -152,8 +160,9 @@ public class KillAura extends Module {
 
                 // Ray Cast
                 if(this.rayCast.isEnabled()) {
-                    entity = CombatUtils.raycastEntity(this.range.getCurrent(), rotations);
-                    if(entity == null) return;
+                    Entity entity1 = CombatUtils.raycastEntity(this.range.getCurrent(), rotations);
+                    if(entity1 == null) return;
+                    entity = (EntityLivingBase) entity1;
                 }
             }
 
@@ -177,10 +186,12 @@ public class KillAura extends Module {
                 cpsTimer.reset();
             }
         } else {
+            limeTargetHUD.resetArmorAnimated();
+            limeTargetHUD.resetHealthAnimated();
             currentYaw = mc.thePlayer.rotationYaw;
             currentPitch = mc.thePlayer.rotationPitch;
             KillAura.entity = null;
-            if(autoBlock.is("basic") && hasSword()) {
+            if(autoBlock.is("basic") && hasSword() && isBlocking) {
                 mc.playerController.syncCurrentPlayItem();
                 mc.thePlayer.sendQueue.addToSendQueue(new C07PacketPlayerDigging(C07PacketPlayerDigging.Action.RELEASE_USE_ITEM, BlockPos.ORIGIN, EnumFacing.DOWN));
                 isBlocking = false;
@@ -188,9 +199,24 @@ public class KillAura extends Module {
         }
     }
 
+    @EventTarget
+    public void on2D(Event2D e)
+    {
+        HUD hud = (HUD) Lime.getInstance().getModuleManager().getModule("HUD");
+        if(hud.targetHud.is("lime") && entity != null && entity.isEntityAlive() && this.isToggled() && mc.thePlayer.getDistanceToEntity(this.entity) <= range.getCurrent() && (entity.canEntityBeSeen(mc.thePlayer) || (!entity.canEntityBeSeen(mc.thePlayer) && throughWalls.isEnabled()))){
+            limeTargetHUD.draw(entity, (float) hud.targetHudX.getCurrent() / 100f * (e.getScaledResolution().getScaledWidth() - 174), (float) hud.targetHudY.getCurrent() / 100f * (e.getScaledResolution().getScaledHeight() - 70), getColor(Math.round(entity.getHealth())));
+        }
+    }
+
+    private int getColor(int count) {
+        float f1 = 20;
+        float f2 = Math.max(0.0F, Math.min((float) count, f1) / f1);
+        return Color.HSBtoRGB(f2 / 3.0F, 1.0F, 1.0F) | 0xFF000000;
+    }
+
+
     private double time;
     private boolean down;
-
 
     @EventTarget
     public void on3D(Event3D e) {
@@ -259,7 +285,7 @@ public class KillAura extends Module {
         return mc.thePlayer.getHeldItem() != null && mc.thePlayer.getHeldItem().getItem() instanceof ItemSword;
     }
 
-    private Entity getEntityByPriority() {
+    private EntityLivingBase getEntityByPriority() {
         ArrayList<Entity> entities = new ArrayList<>();
 
         for(Entity entity : mc.theWorld.getLoadedEntityList()) {
@@ -278,7 +304,7 @@ public class KillAura extends Module {
                 break;
         }
 
-        return entities.get(0);
+        return (EntityLivingBase) entities.get(0);
     }
 
     private boolean isValid(Entity entity) {

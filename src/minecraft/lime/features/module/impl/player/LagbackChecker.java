@@ -37,7 +37,7 @@ public class LagbackChecker extends Module {
             }
 
             if(diffX + diffZ < 100 && timer.hasReached(1500) && toggled) {
-                Lime.getInstance().getNotificationManager().addNotification(new Notification("Lagback", "Seems like you rollbacked, disabled all movements modules", Notification.Type.WARNING));
+                Lime.getInstance().getNotificationManager().addNotification(new Notification("Lagback", "Seems like you got rollback, disabled all movements modules", Notification.Type.WARNING));
                 for (Module module : modules) {
                     module.disableModule();
                 }

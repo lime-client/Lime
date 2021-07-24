@@ -6,6 +6,7 @@ import lime.features.module.Category;
 import lime.features.module.Module;
 import lime.features.module.ModuleData;
 import lime.features.setting.impl.EnumValue;
+import lime.utils.render.ColorUtils;
 import lime.utils.render.RenderUtils;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityChest;
@@ -30,7 +31,7 @@ public class ChestESP extends Module {
                 BlockPos pos = tileEntity.getPos();
                 GL11.glPushMatrix();
                 GL11.glLineWidth(2.5f);
-                RenderUtils.drawBox(pos.getX(), pos.getY(), pos.getZ(), 1, HUD.getColor(0), true, mode.is("fill"));
+                RenderUtils.drawBox(pos.getX(), pos.getY(), pos.getZ(), 1, ColorUtils.setAlpha(HUD.getColor(0), 200), true, mode.is("fill"));
                 GL11.glPopMatrix();
             }
         }

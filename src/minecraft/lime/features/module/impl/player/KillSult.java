@@ -34,19 +34,27 @@ public class KillSult extends Module {
 
 
                 if(!killedEntity.toLowerCase().contains(mc.getSession().getUsername().toLowerCase())) {
-                    mc.thePlayer.sendChatMessage("@" + getMessage(killedEntity));
+                    mc.thePlayer.sendChatMessage("@" + getMessage(killedEntity) + " https://discord.gg/88 R T S 7P R F T");
                 }
             }
         }
     }
 
     private String getMessage(String entityName) {
-        String[] messages = new String[] { entityName + ", désolé du viol, tu veux de la ventoline ?",
-        entityName + ", tu préfères le chocolat ou les noirs ?", entityName + ", fly pas trop tu vas te faire kick chacal", entityName + ", vise l'ennemi la prochaine fois",
-        "Imposteur éliminé: " + entityName + " !", "Désolé " + entityName + ", j'ai glissé sur ma touche pour te violer!", "Honnêtement, t'étais claqué cette game " + entityName,
-        "J'ai cru t'étais un bot " + entityName + "...", "J't'ai tapé autant vite que eminem rape " + entityName, "Dégustation en live de " + entityName + " !",
-        "Un billet vers le goulag a été offert à " + entityName + " !", "T'es un peu le seul mec à finir 3ème dans un 1vs1 " + entityName, "J'ai du mal à faire la différence entre " + entityName + " et un armor stand :/",
-        entityName + ", ton skill c'est comme une eclipse, il est bien qu'une fois par an", "Savoir jouer est un art qui t'es inconnu " + entityName};
+        String[] messages = new String[] { "T'es un peu le seul mec à finir 3ème dans un 1vs1 " + entityName,
+                "J'ai du mal à faire la différence entre " + entityName + " et un armor stand :/",
+        entityName + ", ton skill c'est comme une eclipse, il est bien qu'une fois par an",
+                "Savoir jouer est un art qui t'es inconnu " + entityName,
+                entityName + ", ALT+F4 devrait résoudre tes problèmes <3",
+        entityName + ", reviens ici j'ai pas fini de te demarrer",
+                entityName + ", la seule erreur dans cette partie c'est toi",
+        entityName + ", si les meilleurs partent en premier tu va finir par etre immortel",
+                entityName +", ta mère elle a tellement tourné qu'on l'appelle pegasuce",
+        "l'anticheat est ma seule crainte",
+                entityName + ", clique au sud la prochaine fois",
+                "se faire ban c'est pas cheater",
+        "T'as le pc, le clavier, la souris, il te manque plus que le niveau",
+                "Désolé mec j'ai oublié de désactivé le fast math d'optifine"};
 
         return messages[ThreadLocalRandom.current().nextInt(messages.length)];
     }

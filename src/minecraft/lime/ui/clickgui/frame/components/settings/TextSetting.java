@@ -31,6 +31,8 @@ public class TextSetting extends Component {
         else if(hovered && Mouse.isButtonDown(0))
             isFocused = true;
 
+        text = ((TextValue) setting).getText();
+
         Gui.drawRect(x, y + 16, x + width - 6, y + 17, -1);
         FontManager.ProductSans20.getFont().drawString(text + (System.currentTimeMillis() / 500 % 2 == 0 && isFocused ? "_" : ""), this.x + 1, this.y + 4f, -1);
 

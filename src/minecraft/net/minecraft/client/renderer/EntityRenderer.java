@@ -6,6 +6,7 @@ import com.google.gson.JsonSyntaxException;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.nio.FloatBuffer;
+import java.nio.IntBuffer;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -17,6 +18,7 @@ import lime.core.events.EventBus;
 import lime.core.events.impl.Event3D;
 import lime.features.module.impl.render.Camera;
 import lime.features.setting.impl.BoolValue;
+import lime.utils.render.GLUProjection;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockBed;
 import net.minecraft.block.material.Material;
@@ -1907,6 +1909,18 @@ public class EntityRenderer implements IResourceManagerReloadListener
             this.mc.mcProfiler.endStartSection("forge_render_last");
             Reflector.callVoid(Reflector.ForgeHooksClient_dispatchRenderLast, new Object[] {renderglobal, Float.valueOf(partialTicks)});
         }
+
+        GLUProjection projection = GLUProjection.getInstance();
+        final IntBuffer viewPort = GLAllocation.createDirectIntBuffer(16);
+        final FloatBuffer modelView = GLAllocation.createDirectFloatBuffer(16);
+        final FloatBuffer projectionPort = GLAllocation.createDirectFloatBuffer(16);
+
+        GL11.glGetFloat(GL11.GL_MODELVIEW_MATRIX, modelView);
+        GL11.glGetFloat(GL11.GL_PROJECTION_MATRIX, projectionPort);
+        GL11.glGetInteger(GL11.GL_VIEWPORT, viewPort);
+        ScaledResolution scaledResolution = new ScaledResolution(Minecraft.getMinecraft());
+        projection.updateMatrices(viewPort, modelView, projectionPort, scaledResolution.getScaledWidth() / (double) Minecraft.getMinecraft().displayWidth,
+                scaledResolution.getScaledHeight() / (double) Minecraft.getMinecraft().displayHeight);
 
         EventBus.INSTANCE.call(new Event3D(partialTicks));
         this.mc.mcProfiler.endStartSection("hand");

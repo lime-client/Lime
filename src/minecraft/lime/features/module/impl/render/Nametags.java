@@ -75,7 +75,7 @@ public class Nametags extends Module {
                     mc.entityRenderer.setupOverlayRendering();
                     if (position != null) {
                         GL11.glPushMatrix();
-                        drawArmor((EntityPlayer) ent, (int) (position.x + ((position.z - position.x) / 2)), (int) position.y - 4 - mc.fontRendererObj.FONT_HEIGHT * 2);
+                        drawArmor(ent, (int) (position.x + ((position.z - position.x) / 2)), (int) position.y - 4 - mc.fontRendererObj.FONT_HEIGHT * 2);
                         GlStateManager.scale(.5f, .5f, .5f);
                         float x = (float) position.x * 2;
                         float x2 = (float) position.z * 2;
@@ -83,7 +83,7 @@ public class Nametags extends Module {
                         final String nametext = entity.getName() + " (" + Math.round(mc.thePlayer.getDistance(ent.posX, ent.posY, ent.posZ)) + "m) " + getNameHealthColor(ent) + " : " + (int) (Math.min(ent.getHealth(), ent.getMaxHealth()));
                         Gui.drawRect((x + (x2 - x) / 2) - (mc.fontRendererObj.getStringWidth(nametext) >> 1) - 2, y - mc.fontRendererObj.FONT_HEIGHT - 4, (x + (x2 - x) / 2) + (mc.fontRendererObj.getStringWidth(nametext) >> 1) + 2, y - 2, new Color(0, 0, 0, 120).getRGB());
 
-                        mc.fontRendererObj.drawStringWithShadow(nametext, (x + ((x2 - x) / 2)) - (mc.fontRendererObj.getStringWidth(nametext) / 2), y - mc.fontRendererObj.FONT_HEIGHT - 2, getNameColor(ent));
+                        mc.fontRendererObj.drawStringWithShadow(nametext, (x + ((x2 - x) / 2)) - (mc.fontRendererObj.getStringWidth(nametext) / 2F), y - mc.fontRendererObj.FONT_HEIGHT - 2, getNameColor(ent));
                         GL11.glPopMatrix();
                     }
                 }
@@ -170,7 +170,6 @@ public class Nametags extends Module {
         boolean creatures = false;
         boolean villagers = false;
         boolean invisibles = false;
-        boolean teams = false;
 
         return entity != null && (!(entity instanceof EntityArmorStand) && entity != mc.thePlayer && (!entity.isInvisible() || invisibles) && !entity.isDead &&
                 (entity.getHealth() != 0 && (!(entity instanceof EntityAnimal || entity instanceof EntityMob || entity instanceof EntityIronGolem ||

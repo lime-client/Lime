@@ -75,6 +75,7 @@ public class Breaker extends Module {
     @EventTarget
     public void on3D(Event3D e) {
         if(attackingBed != null) {
+            RenderUtils.drawBox(attackingBed.getX(), attackingBed.getY(), attackingBed.getZ(), 0.57, new Color(255, 0, 0, 80), true, false);
             RenderUtils.drawBox(attackingBed.getX(), attackingBed.getY(), attackingBed.getZ(), 0.57, new Color(255, 0, 0, 80), true, true);
         }
     }

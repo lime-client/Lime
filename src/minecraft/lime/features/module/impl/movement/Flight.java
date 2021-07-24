@@ -20,7 +20,7 @@ import java.util.ArrayList;
 public class Flight extends Module {
 
     private enum Mode {
-        Vanilla, Funcraft, Funcraft_Gamer, Verus, Verus_Fast, Astral
+        Vanilla, Funcraft, Funcraft2, Funcraft_Gamer, Verus, Verus_Fast, Astral
     }
 
     private final Graph speedGraph = new Graph(10, 110, "Speed");
@@ -40,6 +40,7 @@ public class Flight extends Module {
     {
         this.flights.add(new FuncraftGamer());
         this.flights.add(new VerusFast());
+        this.flights.add(new Funcraft2());
         this.flights.add(new Funcraft());
         this.flights.add(new Vanilla());
         this.flights.add(new Astral());
@@ -94,7 +95,7 @@ public class Flight extends Module {
     }
 
     @EventTarget
-    public void onUpdate() {
+    public void onUpdate(EventUpdate e) {
         flights.stream().filter(flight -> flight.getName().equalsIgnoreCase(mode.getSelected().name())).findFirst().ifPresent(FlightValue::onUpdate);
     }
 
@@ -104,7 +105,7 @@ public class Flight extends Module {
         if(bobbing.isEnabled() && mc.thePlayer.isMoving()) {
             mc.thePlayer.cameraYaw = 0.116f;
         }
-        flights.stream().filter(flight -> flight.getName().equalsIgnoreCase(mode.getSelected().name())).findFirst().ifPresent(flightV -> flightV.onMotion(e));
+        flights.stream().filter(flight -> flight.getName().equalsIgnoreCase(mode.getSelected().name())).findFirst().ifPresent(flight -> flight.onMotion(e));
 
         if(e.isPre())
             ticks++;

@@ -9,43 +9,33 @@ import net.minecraft.client.gui.Gui;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
-@ModuleData(name = "ESP2D", category = Category.RENDER)
-public class ESP2D extends Module
-{
+@ModuleData(name = "DreamESP", category = Category.RENDER)
+public class DreamESP extends Module {
     @EventTarget
-    public void on3D(Event3D e)
-    {
-        for(Entity entity : mc.theWorld.getLoadedEntityList())
-        {
-            if(entity instanceof EntityPlayer && entity != mc.thePlayer)
-            {
+    public void on3D(Event3D e) {
+        for (Entity entity : mc.theWorld.getLoadedEntityList()) {
+            if(entity instanceof EntityPlayer && entity != mc.thePlayer) {
                 double x = entity.lastTickPosX + (entity.posX - entity.lastTickPosX) * mc.timer.renderPartialTicks - mc.getRenderManager().renderPosX;
                 double y = entity.lastTickPosY + (entity.posY - entity.lastTickPosY) * mc.timer.renderPartialTicks - mc.getRenderManager().renderPosY;
                 double z = entity.lastTickPosZ + (entity.posZ - entity.lastTickPosZ) * mc.timer.renderPartialTicks - mc.getRenderManager().renderPosZ;
 
-                float customScale = 0.2f / 8;
 
                 GL11.glPushMatrix();
-                GlStateManager.translate(x, y + entity.height + .3, z);
+                GlStateManager.translate(x, y + entity.height + .6, z);
                 GlStateManager.rotate(-mc.getRenderManager().playerViewY, 0, 1, 0);
                 GlStateManager.rotate(mc.getRenderManager().playerViewX, 1, 0, 0);
-
-                //GlStateManager.scale(-customScale, -customScale, customScale);
+                GlStateManager.scale(-.025, -.025, .025);
                 GlStateManager.enableTexture2D();
+
                 GlStateManager.disableDepth();
                 GL11.glColor4f(1, 1, 1, 1);
-                //fill Gui.drawRect((entity.width / 2) + 0.3, 0, -entity.width + 0, -entity.height - 0.4, -1);
-
-
-                //left
-                Gui.drawRect((entity.width / 2) + 0.3, 0, (entity.width / 2) + 0.2, -entity.height - 0.4, -1);
-                //right
-                Gui.drawRect(-entity.width, 0, -entity.width + 0.1, -entity.height - 0.4, -1);
-                //up
-                //Gui.drawRect(-entity);
+                mc.getTextureManager().bindTexture(new ResourceLocation("lime/dream.png"));
+                Gui.drawModalRectWithCustomSizedTexture(-25, 10, 0, 0, 48, 96, 48, 96);
                 GlStateManager.enableDepth();
+
                 GL11.glPopMatrix();
             }
         }

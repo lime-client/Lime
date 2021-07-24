@@ -153,5 +153,14 @@ public class GuiInventory extends InventoryEffectRenderer
         {
             this.mc.displayGuiScreen(new GuiStats(this, this.mc.thePlayer.getStatFileWriter()));
         }
+        if(button.id == 3) {
+            Lime.getInstance().getModuleManager().getModuleC(InventoryManager.class).disableModule();
+        }
+        if(button.id == 4) {
+            Lime.getInstance().getModuleManager().getModuleC(ChestStealer.class).disableModule();
+        }
+        if(button.id == 5) {
+            Lime.getInstance().getModuleManager().getModuleC(KillAura.class).disableModule();
+        }
     }
 }

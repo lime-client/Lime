@@ -1,6 +1,6 @@
 package net.minecraft.client.model;
 
-import lime.features.module.impl.render.SkeletonESP;
+import lime.features.module.impl.render.ESP;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -132,7 +132,7 @@ public class ModelPlayer extends ModelBiped
         copyModelAngles(this.bipedRightArm, this.bipedRightArmwear);
         copyModelAngles(this.bipedBody, this.bipedBodyWear);
         if(entityIn instanceof EntityPlayer) {
-            SkeletonESP.addEntity((EntityPlayer) entityIn, this);
+            ESP.addEntity((EntityPlayer) entityIn, this);
         }
     }
 

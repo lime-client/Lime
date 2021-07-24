@@ -23,7 +23,6 @@ public class VerusFast extends FlightValue {
 
     @Override
     public void onEnable() {
-        receivedVelocityPacket = false;
         if(!mc.thePlayer.onGround)
         {
             Lime.getInstance().getNotificationManager().addNotification(new Notification("Error", "Can damage only on the ground!", Notification.Type.ERROR));
@@ -32,6 +31,11 @@ public class VerusFast extends FlightValue {
         }
         PlayerUtils.verusDamage();
         mc.thePlayer.jump();
+    }
+
+    @Override
+    public void onDisable() {
+        receivedVelocityPacket = false;
     }
 
     @Override
@@ -50,7 +54,8 @@ public class VerusFast extends FlightValue {
     public void onPacket(EventPacket e) {
         if(e.getPacket() instanceof S12PacketEntityVelocity)
         {
-            receivedVelocityPacket = true;
+            if(((S12PacketEntityVelocity) e.getPacket()).getEntityID() == mc.thePlayer.getEntityId())
+                receivedVelocityPacket = true;
         }
     }
 

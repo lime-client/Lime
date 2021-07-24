@@ -73,7 +73,6 @@ public class ModuleManager {
         registerModule(new RenderTestModule());
         registerModule(new BlockOverlay());
         registerModule(new NoScoreboard());
-        registerModule(new SkeletonESP());
         registerModule(new Projectiles());
         registerModule(new Animations());
         registerModule(new FullBright());
@@ -83,9 +82,10 @@ public class ModuleManager {
         registerModule(new Tracers());
         registerModule(new Camera());
         registerModule(new Chams());
-        registerModule(new ESP2D());
         registerModule(new ESP());
         registerModule(new HUD());
+
+        registerModule(new DreamESP());
 
 
         // WORLD
@@ -95,8 +95,6 @@ public class ModuleManager {
         registerModule(new Breaker());
         registerModule(new Timer());
         registerModule(new Eagle());
-
-        registerModule(new Scaffold2());
 
         // GHOST
         registerModule(new AutoClicker());
@@ -122,7 +120,6 @@ public class ModuleManager {
         return getModules().stream().filter(module -> name.equalsIgnoreCase(module.getName())).findFirst().orElse(null);
     }
 
-    @SuppressWarnings("unused")
     public ArrayList<Module> getModulesFromCategory(Category category) {
         return getModules().stream().filter(module -> category == module.getCategory()).collect(Collectors.toCollection(ArrayList::new));
     }

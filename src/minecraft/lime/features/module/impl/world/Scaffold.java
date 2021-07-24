@@ -1,7 +1,7 @@
 package lime.features.module.impl.world;
 
+import lime.core.Lime;
 import lime.core.events.EventTarget;
-import lime.core.events.impl.Event2D;
 import lime.core.events.impl.EventEntityAction;
 import lime.core.events.impl.EventMotion;
 import lime.core.events.impl.EventSafeWalk;
@@ -11,78 +11,46 @@ import lime.features.module.ModuleData;
 import lime.features.setting.impl.BoolValue;
 import lime.features.setting.impl.EnumValue;
 import lime.features.setting.impl.SlideValue;
-import lime.utils.combat.CombatUtils;
+import lime.ui.notifications.Notification;
 import lime.utils.movement.MovementUtils;
+import lime.utils.other.BlockUtils;
 import lime.utils.other.InventoryUtils;
 import lime.utils.other.MathUtils;
-import lime.utils.render.animation.easings.Animate;
-import lime.utils.render.animation.easings.Easing;
-import net.minecraft.block.*;
-import net.minecraft.client.gui.ScaledResolution;
-import net.minecraft.client.multiplayer.WorldClient;
-import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockSnow;
 import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
-import net.minecraft.network.play.client.C03PacketPlayer;
-import net.minecraft.network.play.client.C09PacketHeldItemChange;
 import net.minecraft.network.play.client.C0APacketAnimation;
 import net.minecraft.util.*;
+import lime.utils.other.Timer;
 import org.lwjgl.input.Keyboard;
 
-import java.awt.*;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Random;
+
 
 @ModuleData(name = "Scaffold", category = Category.WORLD)
 public class Scaffold extends Module {
 
-    private class BlockData {
-        private final BlockPos blockPos;
-        private final EnumFacing enumFacing;
-        
-        public BlockData(BlockPos blockPos, EnumFacing enumFacing) {
-            this.blockPos = blockPos;
-            this.enumFacing = enumFacing;
-        }
-
-        public BlockPos getBlockPos() {
-            return blockPos;
-        }
-
-        public EnumFacing getEnumFacing() {
-            return enumFacing;
-        }
-    }
-
-    private enum Rotations {
-        NONE, BASIC, BASIC_2, HYPIXEL, LEGIT
-    }
-
-    private enum State {
+    private enum State
+    {
         PRE, POST
     }
 
-    private enum ItemSpoof {
-        PICK, SPOOF, KEEPSPOOF
+    private enum Rotation
+    {
+        NONE, BASIC, HYPIXEL, LEGIT, LEGIT2
     }
 
-    private final EnumValue state = new EnumValue("State", this, State.POST);
-    private final EnumValue itemSpoof = new EnumValue("Item Spoof", this, ItemSpoof.SPOOF);
-    private final EnumValue rotations = new EnumValue("Rotations", this, Rotations.BASIC_2);
-    private final SlideValue speedModifier = new SlideValue("Speed Modifier", this, 0.1, 5, 1, 0.1);
-    private final SlideValue expand = new SlideValue("Expand", this, 0, 5, 0.3, 0.05);
-    private final SlideValue eagle = new SlideValue("Eagle", this, 0, 5, 1, 1);
-    private final BoolValue keepRotations = new BoolValue("Keep Rotations", this, true);
-    private final BoolValue safeWalk = new BoolValue("SafeWalk", this, false);
-    private final BoolValue tower = new BoolValue("Tower", this, true);
-    private final BoolValue towerMove = new BoolValue("Tower Move", this, false);
-    private final BoolValue noSprint = new BoolValue("No Sprint", this, false);
-    private final BoolValue noSwing = new BoolValue("No Swing", this, false);
-    private final BoolValue sameY = new BoolValue("Same Y", this, false);
-    private final BoolValue swapper = new BoolValue("Swapper", this, true);
-    private final BoolValue down = new BoolValue("Down", this, true);
+    private enum ItemSpoof
+    {
+        SPOOF, KEEPSPOOF, PICK
+    }
+
+    private enum Tower
+    {
+        NONE, NCP
+    }
 
     private static final List<Block> blacklistedBlocks = Arrays.asList(
             Blocks.air, Blocks.water, Blocks.flowing_water, Blocks.lava, Blocks.flowing_lava,
@@ -93,97 +61,90 @@ public class Scaffold extends Module {
             Blocks.wooden_pressure_plate, Blocks.stone_pressure_plate, Blocks.light_weighted_pressure_plate, Blocks.heavy_weighted_pressure_plate,
             Blocks.stone_button, Blocks.wooden_button, Blocks.lever, Blocks.tallgrass, Blocks.tripwire, Blocks.tripwire_hook, Blocks.rail, Blocks.waterlily,
             Blocks.red_flower, Blocks.red_mushroom, Blocks.brown_mushroom, Blocks.vine, Blocks.trapdoor, Blocks.yellow_flower, Blocks.ladder, Blocks.furnace,
-            Blocks.sand, Blocks.cactus, Blocks.dispenser, Blocks.noteblock, Blocks.dropper, Blocks.crafting_table, Blocks.web, Blocks.pumpkin, Blocks.sapling, Blocks.cobblestone_wall, Blocks.oak_fence, Blocks.yellow_flower, Blocks.red_flower);
-    private ItemStack currentItemStack;
-    private final Animate animation = new Animate();
-    private BlockData blockData;
-    private double posY;
-    private int blocksWithoutEagle;
-    private int slot;
+            Blocks.sand, Blocks.cactus, Blocks.dispenser, Blocks.noteblock, Blocks.dropper, Blocks.crafting_table, Blocks.web, Blocks.pumpkin, Blocks.sapling, Blocks.cobblestone_wall, Blocks.oak_fence,
+            Blocks.yellow_flower, Blocks.red_flower);
 
-    private final lime.utils.other.Timer timer = new lime.utils.other.Timer();
+    private final EnumValue state = new EnumValue("State", this, State.POST);
+    private final EnumValue rotations = new EnumValue("Rotations", this, Rotation.BASIC);
+    private final EnumValue itemSpoof = new EnumValue("Item Spoof", this, ItemSpoof.SPOOF);
+    private final EnumValue tower = new EnumValue("Tower", this, Tower.NCP);
+    private final SlideValue speedModifier = new SlideValue("Speed Modifier", this, 0.1, 5, 1, 0.1);
+    private final SlideValue expand = new SlideValue("Expand", this, 0, 5, 0, 0.05);
+    private final SlideValue delay = new SlideValue("Delay", this, 0, 300, 0, 25);
+    private final BoolValue keepRotations = new BoolValue("Keep Rotations", this, true);
+    private final BoolValue towerMove = new BoolValue("Tower Move", this, true).onlyIf(tower.getSettingName(), "enum", "ncp");
+    private final BoolValue safeWalk = new BoolValue("Safewalk", this, false);
+    private final BoolValue noSprint = new BoolValue("No Sprint", this, false);
+    private final BoolValue spoofSprint = new BoolValue("Spoof Sprint", this, false).onlyIf(noSprint.getSettingName(), "bool", "false");
+    private final BoolValue sameY = new BoolValue("Same Y", this, false);
+    private final BoolValue noSwing = new BoolValue("No Swing", this, false);
+    private final BoolValue swapper = new BoolValue("Swapper", this, true);
+    private final BoolValue downwards = new BoolValue("Downwards", this, false);
+    private final BoolValue randomVec = new BoolValue("Random Vec", this, false);
 
-    // Keep rotations
-    private float yaw;
-    private float pitch;
+    //ToDo : downwards, keepspoof
 
     private final MouseFilter yawMouseFilter = new MouseFilter();
+    private final Timer timer = new Timer(), timerTower = new Timer();
+
+    private ItemStack itemStack;
+
+    private float yaw, pitch;
+    private int slot, y;
 
     @Override
     public void onEnable() {
-        if(mc.thePlayer == null) {
-            this.toggle();
-            return;
-        }
-        this.posY = mc.thePlayer.posY;
-        this.animation.reset();
-        this.animation.setEase(Easing.CUBIC_IN_OUT);
-        this.animation.setMin(5);
-        //this.animation.setMax(new ScaledResolution(mc).getScaledWidth() / 2 - (mc.fontRendererObj.getStringWidth(getBlocksCount() + " blocks") / 2));
-        this.animation.setMax(new ScaledResolution(mc).getScaledHeight() / 2F);
-        this.animation.setSpeed(250);
-        this.animation.setReversed(false);
-        if(noSprint.isEnabled())
-            mc.thePlayer.setSprinting(false);
+        y = (int) mc.thePlayer.posY;
+        slot = mc.thePlayer.inventory.currentItem;
+        timerTower.reset();
 
-        this.slot = mc.thePlayer.inventory.currentItem;
-        blocksWithoutEagle = 0;
+        yaw = -1;
+        pitch = -1;
     }
 
     @Override
     public void onDisable() {
-        this.yaw = 999;
-        this.pitch = 999;
-        this.currentItemStack = null;
-        this.blockData = null;
-
-        if(itemSpoof.is("pick") || itemSpoof.is("keepspoof")) {
+        mc.timer.timerSpeed = 1;
+        if(itemSpoof.is("pick"))
+        {
             mc.thePlayer.inventory.currentItem = slot;
             mc.playerController.updateController();
         }
     }
 
     @EventTarget
-    public void on2D(Event2D e) {
-        this.animation.update();
-        if(currentItemStack != null) {
-            this.animation.setMax(e.getScaledResolution().getScaledHeight() / 2F + 25);
-            RenderHelper.enableStandardItemLighting();
-            mc.getRenderItem().renderItemAndEffectIntoGUI(currentItemStack, new ScaledResolution(mc).getScaledWidth() / 2 - 8, (int) this.animation.getValue() - 24);
-        }
-        int blocks = getBlocksCount();
-        mc.fontRendererObj.drawStringWithShadow(blocks + " blocks", e.getScaledResolution().getScaledWidth() / 2F - (mc.fontRendererObj.getStringWidth(getBlocksCount() + " blocks") / 2F), this.animation.getValue(), blocks > 64 ? new Color(0, 255, 0).getRGB() : new Color(255, 0, 0).getRGB());
-    }
-
-    @EventTarget
-    public void onMotion(EventMotion e) {
-        if(InventoryUtils.hasBlock(blacklistedBlocks, true, true) == -1)
+    public void onMotion(EventMotion e)
+    {
+        if(InventoryUtils.hasBlock(blacklistedBlocks, true, true) == -1) {
+            Lime.getInstance().getNotificationManager().addNotification(new Notification("Scaffold", "Disabled scaffold because you have no blocks!", Notification.Type.ERROR));
+            this.toggle();
             return;
-
-        if(keepRotations.isEnabled() && !(rotations.is("none") || yaw == 999)) {
-            e.setYaw(yaw);
-            e.setPitch(pitch);
         }
-        mc.thePlayer.setRotationsTP(e);
-        if(eagle.getCurrent() != 0 && e.isPre()) {
-            if((int) eagle.getCurrent() <= blocksWithoutEagle) {
-                blocksWithoutEagle = 0;
-                mc.gameSettings.keyBindSneak.pressed = true;
-            } else {
-                mc.gameSettings.keyBindSneak.pressed = false;
+
+        if(keepRotations.isEnabled() && !rotations.is("none"))
+        {
+            if(yaw != -1 && pitch != -1)
+            {
+                e.setYaw(yaw);
+                e.setPitch(pitch);
+                mc.thePlayer.setRotationsTP(e);
             }
         }
 
-        if(noSprint.isEnabled()) {
+        if(!isAirBlock(new BlockPos(mc.thePlayer.posX, mc.thePlayer.posY - 1, mc.thePlayer.posZ).getBlock())) {
+            mc.thePlayer.motionX *= speedModifier.getCurrent();
+            mc.thePlayer.motionZ *= speedModifier.getCurrent();
+        }
+
+        if(!noSprint.isEnabled() && spoofSprint.isEnabled())
             e.setSprint(false);
-        }
 
-        if(mc.thePlayer.isMoving()) {
-            //MovementUtils.setSpeed(0.05);
-        }
+        if(noSprint.isEnabled())
+            mc.thePlayer.setSprinting(false);
 
+        if(!timer.hasReached((long)delay.getCurrent())) { return; }
 
-        boolean downFlag = down.isEnabled() && Keyboard.isKeyDown(mc.gameSettings.keyBindSneak.getKeyCode()) && isAirBlock(new BlockPos(mc.thePlayer.posX, mc.thePlayer.posY - 1, mc.thePlayer.posZ).getBlock());
+        boolean downFlag = downwards.isEnabled() && Keyboard.isKeyDown(mc.gameSettings.keyBindSneak.getKeyCode()) && isAirBlock(new BlockPos(mc.thePlayer.posX, mc.thePlayer.posY - 1, mc.thePlayer.posZ).getBlock());
 
         double x = mc.thePlayer.posX;
         double z = mc.thePlayer.posZ;
@@ -202,122 +163,75 @@ public class Scaffold extends Module {
 
         if(sameY.isEnabled() && !downFlag) {
             if(mc.thePlayer.fallDistance > 1.2 || (!mc.thePlayer.isMoving() && mc.gameSettings.keyBindJump.pressed)) {
-                this.posY = mc.thePlayer.posY;
+                this.y = (int) mc.thePlayer.posY;
             }
         } else {
-            this.posY = mc.thePlayer.posY;
+            this.y = (int) mc.thePlayer.posY;
         }
 
-        BlockPos underPos = new BlockPos(x, this.posY - 1 - (isAirUnderPos ? getBlockData(new BlockPos(x, this.posY - 2, z)) == null ? 0 : downFlag ? 1 : 0 : 0), z);
-        Block underBlock = mc.theWorld.getBlockState(underPos).getBlock();
+        tower(e);
 
-        BlockData blockData = getBlockData(underPos);
+        BlockPos underPosition = new BlockPos(x, this.y - 1 - (isAirBlock(new BlockPos(x, y - 1, z).getBlock()) ? BlockUtils.getBlockData(new BlockPos(x, this.y - 2, z)) == null ? 0 : downFlag ? 1 : 0 : 0), z);
+        BlockUtils.BlockData blockData = BlockUtils.getBlockData(underPosition);
 
-        if(getBlocksCount() > 0 && e.isPre() && mc.gameSettings.keyBindJump.isKeyDown()) {
-            if(tower.isEnabled() && (towerMove.isEnabled() || !mc.thePlayer.isMoving())) {
-                if(!sameY.isEnabled() || !mc.thePlayer.isMoving()) {
-                    underPos = new BlockPos(mc.thePlayer.posX, mc.thePlayer.posY - 1, mc.thePlayer.posZ);
-                    underBlock = mc.theWorld.getBlockState(underPos).getBlock();
-                    blockData = getBlockData(underPos);
-                    if(mc.thePlayer.isMoving()) {
-                        if (MovementUtils.isOnGround(0.76) && !MovementUtils.isOnGround(0.75) && mc.thePlayer.motionY > 0.23 && mc.thePlayer.motionY < 0.25) {
-                            mc.thePlayer.motionY = (Math.round(mc.thePlayer.posY) - mc.thePlayer.posY);
-                        }
-                        if (MovementUtils.isOnGround(0.0001)) {
-                            mc.thePlayer.motionY = 0.42;
-                            mc.thePlayer.motionX *= 0.9;
-                            mc.thePlayer.motionZ *= 0.9;
-                        } else if(mc.thePlayer.posY >= Math.round(mc.thePlayer.posY) - 0.0001 && mc.thePlayer.posY <= Math.round(mc.thePlayer.posY) + 0.0001){
-                            mc.thePlayer.motionY = 0;
-                        }
-                    } else {
-                        mc.thePlayer.motionX = 0;
-                        mc.thePlayer.motionZ = 0;
-                        mc.thePlayer.jumpMovementFactor = 0;
-                        if (isAirBlock(underBlock) && blockData != null) {
-                            mc.timer.timerSpeed = 5f;
-                            mc.thePlayer.motionY = 0.41982;
-                            mc.thePlayer.motionX = 0;
-                            mc.thePlayer.motionZ = 0;
-                            if(timer.hasReached(2500)) {
-                                mc.timer.timerSpeed = 1;
-                                mc.thePlayer.motionY -= 0.28;
-                                timer.reset();
-                            }
-                        }
-                    }
-                }
+        if((blockData != null && isAirBlock(underPosition.getBlock())) || downwards.isEnabled())
+        {
+            if(blockData != null && !rotations.is("none")) {
+                float[] rotations = getRotations(blockData.getBlockPos(), blockData.getEnumFacing());
+                e.setYaw(yaw = rotations[0]);
+                e.setPitch(pitch = rotations[1]);
+
+                mc.thePlayer.setRotationsTP(e);
             }
-        } else
-            mc.timer.timerSpeed = 1;
-
-        if((isAirBlock(underBlock) && blockData != null) || down.isEnabled()) {
-            if(e.isPre()) {
-                if(blockData != null && (isAirBlock(underBlock)) && !rotations.is("none")) {
-                    this.blockData = blockData;
-                    float[] rots = getRotations(blockData.getBlockPos(), blockData.getEnumFacing());
-                    e.setYaw(rots[0]);
-                    e.setPitch(rots[1]);
-                    this.yaw = rots[0];
-                    this.pitch = rots[1];
-                    mc.thePlayer.setRotationsTP(e);
-
-                }
-            }
-
-            if(e.getState().name().equalsIgnoreCase(state.getSelected().name())) {
+            // Item Spoof and place block
+            if((e.isPre() && state.is("pre")) || (!e.isPre() && state.is("post")))
+            {
                 int slot = mc.thePlayer.inventory.currentItem;
 
                 int blockSlot = InventoryUtils.hasBlock(blacklistedBlocks, false, true);
 
-                if(blockSlot == -1) {
+                if(blockSlot == -1)
+                {
                     if(!swapper.isEnabled())
                         return;
-                    int blockInvSlot = InventoryUtils.hasBlock(blacklistedBlocks, true, false);
+                    else {
+                        blockSlot = InventoryUtils.hasBlock(blacklistedBlocks, true, false);
 
-                    if(blockInvSlot != -1) {
-                        InventoryUtils.swap(blockInvSlot, 6);
-                    } else
-                        return;
-                }
+                        if(blockSlot != -1)
+                            InventoryUtils.swap(blockSlot, 6);
 
-                this.currentItemStack = InventoryUtils.getSlot(blockSlot).getStack();
-
-                blockSlot = blockSlot - 36;
-
-                if(slot != blockSlot) {
-                    if(itemSpoof.is("spoof") || itemSpoof.is("keepspoof")) {
-                        mc.thePlayer.inventory.currentItem = blockSlot;
-                        mc.playerController.updateController();
-                    } else if(itemSpoof.is("pick")) {
-                        mc.thePlayer.inventory.currentItem = blockSlot;
-                        mc.playerController.updateController();
+                        blockSlot = 42;
                     }
                 }
 
-                if(blockData != null && isAirBlock(underBlock) && mc.playerController.onPlayerRightClick(mc.thePlayer, mc.theWorld, mc.thePlayer.inventory.getCurrentItem(), blockData.blockPos, blockData.enumFacing, getVec3(blockData.getBlockPos(), blockData.getEnumFacing()))) {
-                    if (noSwing.isEnabled())
+                switch(itemSpoof.getSelected().name().toLowerCase())
+                {
+                    case "pick":
+                    case "spoof":
+                        mc.thePlayer.inventory.currentItem = blockSlot - 36;
+                        mc.playerController.updateController();
+                        break;
+                }
+
+                if(blockData != null && mc.playerController.onPlayerRightClick(mc.thePlayer, mc.theWorld, itemStack = mc.thePlayer.inventory.getCurrentItem(), blockData.getBlockPos(), blockData.getEnumFacing(), getVec3(blockData)))
+                {
+                    if(noSwing.isEnabled())
                         mc.getNetHandler().addToSendQueue(new C0APacketAnimation());
                     else
                         mc.thePlayer.swingItem();
 
-                    if(mc.thePlayer.onGround) {
-                        mc.thePlayer.motionX *= speedModifier.getCurrent();
-                        mc.thePlayer.motionZ *= speedModifier.getCurrent();
-                    }
-                    blocksWithoutEagle++;
+                    timer.reset();
                 }
 
-                // Downwards
-                if(down.isEnabled() && Keyboard.isKeyDown(mc.gameSettings.keyBindSneak.getKeyCode()) && !downFlag) {
-                    BlockPos underPosDown = new BlockPos(underPos.add(0, -1, 0));
+                if(downwards.isEnabled() && Keyboard.isKeyDown(mc.gameSettings.keyBindSneak.getKeyCode()) && !downFlag) {
+                    BlockPos underPosDown = new BlockPos(underPosition.add(0, -1, 0));
 
                     if(isAirBlock(underPosDown.getBlock())) {
-                        BlockData blockData1 = getBlockData(underPosDown);
+                        BlockUtils.BlockData blockData1 = BlockUtils.getBlockData(underPosDown);
 
                         if(blockData1 != null) {
                             mc.playerController.onPlayerRightClick(mc.thePlayer, mc.theWorld, mc.thePlayer.inventory.getCurrentItem(),
-                                    blockData1.getBlockPos(), blockData1.enumFacing, getVec3(blockData1.getBlockPos(), blockData1.enumFacing));
+                                    blockData1.getBlockPos(), blockData1.getEnumFacing(), getVec3(blockData1));
                             if (noSwing.isEnabled())
                                 mc.getNetHandler().addToSendQueue(new C0APacketAnimation());
                             else
@@ -326,62 +240,56 @@ public class Scaffold extends Module {
                     }
                 }
 
-                if(slot != blockSlot) {
-                    if(itemSpoof.is("spoof") || itemSpoof.is("keepSpoof")) {
-                        mc.thePlayer.inventory.currentItem = slot;
-                        if(itemSpoof.is("spoof"))
-                            mc.playerController.updateController();
-                    }
+                if(itemSpoof.is("spoof"))
+                {
+                    mc.thePlayer.inventory.currentItem = slot;
+                    mc.playerController.updateController();
                 }
             }
         }
     }
 
     @EventTarget
-    public void onSafeWalk(EventSafeWalk e) {
-        e.setCanceled(safeWalk.isEnabled());
+    public void onSafewalk(EventSafeWalk e)
+    {
+        if(safeWalk.isEnabled())
+            e.setCanceled(true);
     }
 
     @EventTarget
-    public void onEntityAction(EventEntityAction e) {
-        if(down.isEnabled()) {
-            e.setShouldSneak(false);
-        }
-        if(noSprint.isEnabled()) {
+    public void onEntityAction(EventEntityAction e)
+    {
+        if(noSprint.isEnabled())
             e.setShouldSprint(false);
-        }
+
+        if(downwards.isEnabled())
+            e.setShouldSneak(false);
     }
 
-    private int getBlocksCount() {
-        int size = 0;
-        for(int i = 9; i < 45; ++i) {
-            if(InventoryUtils.getSlot(i).getHasStack()) {
-                ItemStack itemStack = InventoryUtils.getSlot(i).getStack();
-                if(itemStack.getItem() instanceof ItemBlock) {
-                    ItemBlock itemBlock = (ItemBlock) itemStack.getItem();
-                    if(!blacklistedBlocks.contains(itemBlock) && !itemStack.getUnlocalizedName().equalsIgnoreCase("tile.cactus")) {
-                        size += itemStack.stackSize;
-                    }
-                }
+    private double[] getExpandCoords(double x, double z, double forward, double strafe, float YAW, double expand){
+        BlockPos underPos = new BlockPos(x, mc.thePlayer.posY - 1, z);
+        Block underBlock = mc.theWorld.getBlockState(underPos).getBlock();
+        double xCalc = -999, zCalc = -999;
+        double dist = 0;
+        double expandDist = expand * 2;
+        while(!isAirBlock(underBlock)){
+            xCalc = x;
+            zCalc = z;
+            dist ++;
+            if(dist > expandDist){
+                dist = expandDist;
             }
-        }
-
-        return size;
-    }
-
-    private boolean hotBarContainsBlock() {
-        for(int i = 36; i < 45; ++i) {
-            if(InventoryUtils.getSlot(i).getHasStack()) {
-                ItemStack itemStack = InventoryUtils.getSlot(i).getStack();
-                if(itemStack.getItem() instanceof ItemBlock) {
-                    ItemBlock itemBlock = (ItemBlock) itemStack.getItem();
-                    if(!blacklistedBlocks.contains(itemBlock.getBlock()) && !itemStack.getUnlocalizedName().equalsIgnoreCase("tile.cactus")) {
-                        return true;
-                    }
-                }
+            final double cos = Math.cos(Math.toRadians(YAW + 90.0f));
+            final double sin = Math.sin(Math.toRadians(YAW + 90.0f));
+            xCalc += (forward * 0.45 * cos + strafe * 0.45 * sin) * dist;
+            zCalc += (forward * 0.45 * sin - strafe * 0.45 * cos) * dist;
+            if(dist == expandDist){
+                break;
             }
+            underPos = new BlockPos(xCalc, mc.thePlayer.posY - 1, zCalc);
+            underBlock = mc.theWorld.getBlockState(underPos).getBlock();
         }
-        return false;
+        return new double[]{xCalc,zCalc};
     }
 
     private float[] getRotations(BlockPos block, EnumFacing face) {
@@ -390,7 +298,7 @@ public class Scaffold extends Module {
         double z = block.getZ() + 0.5 - mc.thePlayer.posZ +  (double) face.getFrontOffsetZ()/2;
         double y = (block.getY() + 0.5);
 
-        double diffXZ = MathHelper.sqrt_double(x * x + z * z);
+        //double diffXZ = MathHelper.sqrt_double(x * x + z * z);
         double d1 = mc.thePlayer.posY + mc.thePlayer.getEyeHeight() - y;
         double d3 = MathHelper.sqrt_double(x * x + z * z);
         float yaw = (float) (Math.atan2(z, x) * 360.0D / Math.PI) - 90.0F;
@@ -410,302 +318,91 @@ public class Scaffold extends Module {
                     yaw = 180;
                     break;
             }
-        } else if(rotations.is("basic_2")) {
+        } else if(rotations.is("basic")) {
             yaw = MathHelper.wrapAngleTo180_float((float) Math.toDegrees(Math.atan2(z,x)) - 90);
+        } else if(rotations.is("legit2"))
+        {
+            yaw = (float) MathHelper.wrapDegrees(Math.toDegrees(MovementUtils.getDirection(mc.thePlayer)) - (180 - mc.theWorld.rand.nextFloat() / 100));
         }
-        if (yaw < 0.0F) {
-            yaw += 360f;
-        }
-        //yaw += 90;
 
-        return new float[]{rotations.is("hypixel") ? this.yawMouseFilter.smooth(yaw, 0.4f) : yaw, pitch};
+        return new float[]{rotations.is("hypixel") ? this.yawMouseFilter.smooth(yaw, 0.4f) : yaw, 85};
     }
 
-    private double[] getExpandCoords(double x, double z, double forward, double strafe, float YAW, double expand){
-        BlockPos underPos = new BlockPos(x, mc.thePlayer.posY - 1, z);
-        Block underBlock = mc.theWorld.getBlockState(underPos).getBlock();
-        double xCalc = -999, zCalc = -999;
-        double dist = 0;
-        double expandDist = expand * 2;
-        while(!isAirBlock(underBlock)){
-            xCalc = x;
-            zCalc = z;
-            dist ++;
-            if(dist > expandDist){
-                dist = expandDist;
+    private Vec3 getVec3(BlockUtils.BlockData blockData)
+    {
+        double x = blockData.getBlockPos().getX() + 0.5;
+        double y = blockData.getBlockPos().getY() + 0.5;
+        double z = blockData.getBlockPos().getZ() + 0.5;
+
+        x += blockData.getEnumFacing().getFrontOffsetX() / 2F;
+        y += blockData.getEnumFacing().getFrontOffsetY() / 2F;
+        z += blockData.getEnumFacing().getFrontOffsetZ() / 2F;
+
+        if(randomVec.isEnabled())
+        {
+            if (blockData.getEnumFacing() == EnumFacing.UP || blockData.getEnumFacing() == EnumFacing.DOWN) {
+                x += MathUtils.random(0.3, -0.3);
+                z += MathUtils.random(0.3, -0.3);
+            } else {
+                y += MathUtils.random(0.3, -0.3);
             }
-            xCalc += (forward * 0.45 * Math.cos(Math.toRadians(YAW + 90.0f)) + strafe * 0.45 * Math.sin(Math.toRadians(YAW + 90.0f))) * dist;
-            zCalc += (forward * 0.45 * Math.sin(Math.toRadians(YAW + 90.0f)) - strafe * 0.45 * Math.cos(Math.toRadians(YAW + 90.0f))) * dist;
-            if(dist == expandDist){
-                break;
+            if (blockData.getEnumFacing() == EnumFacing.WEST || blockData.getEnumFacing() == EnumFacing.EAST) {
+                z += MathUtils.random(0.3, -0.3);
             }
-            underPos = new BlockPos(xCalc, mc.thePlayer.posY - 1, zCalc);
-            underBlock = mc.theWorld.getBlockState(underPos).getBlock();
+            if (blockData.getEnumFacing() == EnumFacing.SOUTH || blockData.getEnumFacing() == EnumFacing.NORTH) {
+                x += MathUtils.random(0.3, -0.3);
+            }
         }
-        return new double[]{xCalc,zCalc};
+
+        return new Vec3(x, y, z);
+    }
+
+    private void tower(EventMotion e)
+    {
+        if(e.isPre() && mc.gameSettings.keyBindJump.isKeyDown()) {
+            if(this.tower.is("ncp") && (towerMove.isEnabled() || !mc.thePlayer.isMoving())) {
+                if(!sameY.isEnabled() || !mc.thePlayer.isMoving()) {
+                    BlockPos underPos = new BlockPos(mc.thePlayer.posX, mc.thePlayer.posY - 1, mc.thePlayer.posZ);
+                    Block underBlock = mc.theWorld.getBlockState(underPos).getBlock();
+                    BlockUtils.BlockData blockData = BlockUtils.getBlockData(underPos);
+                    if(mc.thePlayer.isMoving()) {
+                        if (MovementUtils.isOnGround(0.76) && !MovementUtils.isOnGround(0.75) && mc.thePlayer.motionY > 0.23 && mc.thePlayer.motionY < 0.25) {
+                            mc.thePlayer.motionY = (Math.round(mc.thePlayer.posY) - mc.thePlayer.posY);
+                        }
+                        if (MovementUtils.isOnGround(0.0001)) {
+                            mc.thePlayer.motionY = 0.42;
+                            mc.thePlayer.motionX *= 0.9;
+                            mc.thePlayer.motionZ *= 0.9;
+                        } else if(mc.thePlayer.posY >= Math.round(mc.thePlayer.posY) - 0.0001 && mc.thePlayer.posY <= Math.round(mc.thePlayer.posY) + 0.0001){
+                            mc.thePlayer.motionY = 0;
+                        }
+                    } else {
+                        mc.thePlayer.motionX = 0;
+                        mc.thePlayer.motionZ = 0;
+                        mc.thePlayer.jumpMovementFactor = 0;
+                        if (isAirBlock(underBlock) && blockData != null) {
+                            mc.timer.timerSpeed = 10f;
+                            mc.thePlayer.motionY = 0.41982;
+                            mc.thePlayer.motionX = 0;
+                            mc.thePlayer.motionZ = 0;
+                            if(timerTower.hasReached(2500)) {
+                                mc.timer.timerSpeed = 1f;
+                                mc.thePlayer.motionY -= 0.28;
+                                timerTower.reset();
+                            }
+                        }
+                    }
+                }
+            }
+        } else
+            if(!Lime.getInstance().getModuleManager().getModuleC(lime.features.module.impl.world.Timer.class).isToggled())
+                mc.timer.timerSpeed = 1;
     }
 
     private boolean isAirBlock(Block block) {
         if (block.getMaterial().isReplaceable()) {
             return !(block instanceof BlockSnow) || !(block.getBlockBoundsMaxY() > 0.125);
         }
-
         return false;
     }
-
-    private Vec3 getVec3(BlockPos pos, EnumFacing face) {
-        double x = pos.getX() + 0.5;
-        double y = pos.getY() + 0.5;
-        double z = pos.getZ() + 0.5;
-        x += (double) face.getFrontOffsetX() / 2;
-        z += (double) face.getFrontOffsetZ() / 2;
-        y += (double) face.getFrontOffsetY() / 2;
-        if (face == EnumFacing.UP || face == EnumFacing.DOWN) {
-            x += MathUtils.random(0.3, -0.3);
-            z += MathUtils.random(0.3, -0.3);
-        } else {
-            y += MathUtils.random(0.3, -0.3);
-        }
-        if (face == EnumFacing.WEST || face == EnumFacing.EAST) {
-            z += MathUtils.random(0.3, -0.3);
-        }
-        if (face == EnumFacing.SOUTH || face == EnumFacing.NORTH) {
-            x += MathUtils.random(0.3, -0.3);
-        }
-        return new Vec3(x, y, z);
-    }
-
-    private boolean isPosSolid(BlockPos pos) {
-        Block block = mc.theWorld.getBlockState(pos).getBlock();
-        return (block.getMaterial().isSolid() || !block.isTranslucent() || block.isBlockSolid(mc.theWorld, pos, EnumFacing.DOWN) || block instanceof BlockLadder || block instanceof BlockCarpet
-                || block instanceof BlockSnow || block instanceof BlockSkull)
-                && !block.getMaterial().isLiquid() && !(block instanceof BlockContainer);
-    }
-
-    private BlockData getBlockData(BlockPos pos) {
-        if(isPosSolid(pos.add(0, 1, 0))) {
-            return new BlockData(pos.add(0, 1, 0), EnumFacing.DOWN);
-        }
-        if (isPosSolid(pos.add(0, -1, 0))) {
-            return new BlockData(pos.add(0, -1, 0), EnumFacing.UP);
-        }
-        if (isPosSolid(pos.add(-1, 0, 0))) {
-            return new BlockData(pos.add(-1, 0, 0), EnumFacing.EAST);
-        }
-        if (isPosSolid(pos.add(1, 0, 0))) {
-            return new BlockData(pos.add(1, 0, 0), EnumFacing.WEST);
-        }
-        if (isPosSolid(pos.add(0, 0, 1))) {
-            return new BlockData(pos.add(0, 0, 1), EnumFacing.NORTH);
-        }
-        if (isPosSolid(pos.add(0, 0, -1))) {
-            return new BlockData(pos.add(0, 0, -1), EnumFacing.SOUTH);
-        }
-        BlockPos pos1 = pos.add(-1, 0, 0);
-        if (isPosSolid(pos1.add(0, -1, 0))) {
-            return new BlockData(pos1.add(0, -1, 0), EnumFacing.UP);
-        }
-        if (isPosSolid(pos1.add(-1, 0, 0))) {
-            return new BlockData(pos1.add(-1, 0, 0), EnumFacing.EAST);
-        }
-        if (isPosSolid(pos1.add(1, 0, 0))) {
-            return new BlockData(pos1.add(1, 0, 0), EnumFacing.WEST);
-        }
-        if (isPosSolid(pos1.add(0, 0, 1))) {
-            return new BlockData(pos1.add(0, 0, 1), EnumFacing.NORTH);
-        }
-        if (isPosSolid(pos1.add(0, 0, -1))) {
-            return new BlockData(pos1.add(0, 0, -1), EnumFacing.SOUTH);
-        }
-        BlockPos pos2 = pos.add(1, 0, 0);
-        if (isPosSolid(pos2.add(0, -1, 0))) {
-            return new BlockData(pos2.add(0, -1, 0), EnumFacing.UP);
-        }
-        if (isPosSolid(pos2.add(-1, 0, 0))) {
-            return new BlockData(pos2.add(-1, 0, 0), EnumFacing.EAST);
-        }
-        if (isPosSolid(pos2.add(1, 0, 0))) {
-            return new BlockData(pos2.add(1, 0, 0), EnumFacing.WEST);
-        }
-        if (isPosSolid(pos2.add(0, 0, 1))) {
-            return new BlockData(pos2.add(0, 0, 1), EnumFacing.NORTH);
-        }
-        if (isPosSolid(pos2.add(0, 0, -1))) {
-            return new BlockData(pos2.add(0, 0, -1), EnumFacing.SOUTH);
-        }
-        BlockPos pos3 = pos.add(0, 0, 1);
-        if (isPosSolid(pos3.add(0, -1, 0))) {
-            return new BlockData(pos3.add(0, -1, 0), EnumFacing.UP);
-        }
-        if (isPosSolid(pos3.add(-1, 0, 0))) {
-            return new BlockData(pos3.add(-1, 0, 0), EnumFacing.EAST);
-        }
-        if (isPosSolid(pos3.add(1, 0, 0))) {
-            return new BlockData(pos3.add(1, 0, 0), EnumFacing.WEST);
-        }
-        if (isPosSolid(pos3.add(0, 0, 1))) {
-            return new BlockData(pos3.add(0, 0, 1), EnumFacing.NORTH);
-        }
-        if (isPosSolid(pos3.add(0, 0, -1))) {
-            return new BlockData(pos3.add(0, 0, -1), EnumFacing.SOUTH);
-        }
-        BlockPos pos4 = pos.add(0, 0, -1);
-        if (isPosSolid(pos4.add(0, -1, 0))) {
-            return new BlockData(pos4.add(0, -1, 0), EnumFacing.UP);
-        }
-        if (isPosSolid(pos4.add(-1, 0, 0))) {
-            return new BlockData(pos4.add(-1, 0, 0), EnumFacing.EAST);
-        }
-        if (isPosSolid(pos4.add(1, 0, 0))) {
-            return new BlockData(pos4.add(1, 0, 0), EnumFacing.WEST);
-        }
-        if (isPosSolid(pos4.add(0, 0, 1))) {
-            return new BlockData(pos4.add(0, 0, 1), EnumFacing.NORTH);
-        }
-        if (isPosSolid(pos4.add(0, 0, -1))) {
-            return new BlockData(pos4.add(0, 0, -1), EnumFacing.SOUTH);
-        }
-        if (isPosSolid(pos1.add(0, -1, 0))) {
-            return new BlockData(pos1.add(0, -1, 0), EnumFacing.UP);
-        }
-        if (isPosSolid(pos1.add(-1, 0, 0))) {
-            return new BlockData(pos1.add(-1, 0, 0), EnumFacing.EAST);
-        }
-        if (isPosSolid(pos1.add(1, 0, 0))) {
-            return new BlockData(pos1.add(1, 0, 0), EnumFacing.WEST);
-        }
-        if (isPosSolid(pos1.add(0, 0, 1))) {
-            return new BlockData(pos1.add(0, 0, 1), EnumFacing.NORTH);
-        }
-        if (isPosSolid(pos1.add(0, 0, -1))) {
-            return new BlockData(pos1.add(0, 0, -1), EnumFacing.SOUTH);
-        }
-        if (isPosSolid(pos2.add(0, -1, 0))) {
-            return new BlockData(pos2.add(0, -1, 0), EnumFacing.UP);
-        }
-        if (isPosSolid(pos2.add(-1, 0, 0))) {
-            return new BlockData(pos2.add(-1, 0, 0), EnumFacing.EAST);
-        }
-        if (isPosSolid(pos2.add(1, 0, 0))) {
-            return new BlockData(pos2.add(1, 0, 0), EnumFacing.WEST);
-        }
-        if (isPosSolid(pos2.add(0, 0, 1))) {
-            return new BlockData(pos2.add(0, 0, 1), EnumFacing.NORTH);
-        }
-        if (isPosSolid(pos2.add(0, 0, -1))) {
-            return new BlockData(pos2.add(0, 0, -1), EnumFacing.SOUTH);
-        }
-        if (isPosSolid(pos3.add(0, -1, 0))) {
-            return new BlockData(pos3.add(0, -1, 0), EnumFacing.UP);
-        }
-        if (isPosSolid(pos3.add(-1, 0, 0))) {
-            return new BlockData(pos3.add(-1, 0, 0), EnumFacing.EAST);
-        }
-        if (isPosSolid(pos3.add(1, 0, 0))) {
-            return new BlockData(pos3.add(1, 0, 0), EnumFacing.WEST);
-        }
-        if (isPosSolid(pos3.add(0, 0, 1))) {
-            return new BlockData(pos3.add(0, 0, 1), EnumFacing.NORTH);
-        }
-        if (isPosSolid(pos3.add(0, 0, -1))) {
-            return new BlockData(pos3.add(0, 0, -1), EnumFacing.SOUTH);
-        }
-        if (isPosSolid(pos4.add(0, -1, 0))) {
-            return new BlockData(pos4.add(0, -1, 0), EnumFacing.UP);
-        }
-        if (isPosSolid(pos4.add(-1, 0, 0))) {
-            return new BlockData(pos4.add(-1, 0, 0), EnumFacing.EAST);
-        }
-        if (isPosSolid(pos4.add(1, 0, 0))) {
-            return new BlockData(pos4.add(1, 0, 0), EnumFacing.WEST);
-        }
-        if (isPosSolid(pos4.add(0, 0, 1))) {
-            return new BlockData(pos4.add(0, 0, 1), EnumFacing.NORTH);
-        }
-        if (isPosSolid(pos4.add(0, 0, -1))) {
-            return new BlockData(pos4.add(0, 0, -1), EnumFacing.SOUTH);
-        }
-        BlockPos pos5 = pos.add(0, -1, 0);
-        if (isPosSolid(pos5.add(0, -1, 0))) {
-            return new BlockData(pos5.add(0, -1, 0), EnumFacing.UP);
-        }
-        if (isPosSolid(pos5.add(-1, 0, 0))) {
-            return new BlockData(pos5.add(-1, 0, 0), EnumFacing.EAST);
-        }
-        if (isPosSolid(pos5.add(1, 0, 0))) {
-            return new BlockData(pos5.add(1, 0, 0), EnumFacing.WEST);
-        }
-        if (isPosSolid(pos5.add(0, 0, 1))) {
-            return new BlockData(pos5.add(0, 0, 1), EnumFacing.NORTH);
-        }
-        if (isPosSolid(pos5.add(0, 0, -1))) {
-            return new BlockData(pos5.add(0, 0, -1), EnumFacing.SOUTH);
-        }
-        BlockPos pos6 = pos5.add(1, 0, 0);
-        if (isPosSolid(pos6.add(0, -1, 0))) {
-            return new BlockData(pos6.add(0, -1, 0), EnumFacing.UP);
-        }
-        if (isPosSolid(pos6.add(-1, 0, 0))) {
-            return new BlockData(pos6.add(-1, 0, 0), EnumFacing.EAST);
-        }
-        if (isPosSolid(pos6.add(1, 0, 0))) {
-            return new BlockData(pos6.add(1, 0, 0), EnumFacing.WEST);
-        }
-        if (isPosSolid(pos6.add(0, 0, 1))) {
-            return new BlockData(pos6.add(0, 0, 1), EnumFacing.NORTH);
-        }
-        if (isPosSolid(pos6.add(0, 0, -1))) {
-            return new BlockData(pos6.add(0, 0, -1), EnumFacing.SOUTH);
-        }
-        BlockPos pos7 = pos5.add(-1, 0, 0);
-        if (isPosSolid(pos7.add(0, -1, 0))) {
-            return new BlockData(pos7.add(0, -1, 0), EnumFacing.UP);
-        }
-        if (isPosSolid(pos7.add(-1, 0, 0))) {
-            return new BlockData(pos7.add(-1, 0, 0), EnumFacing.EAST);
-        }
-        if (isPosSolid(pos7.add(1, 0, 0))) {
-            return new BlockData(pos7.add(1, 0, 0), EnumFacing.WEST);
-        }
-        if (isPosSolid(pos7.add(0, 0, 1))) {
-            return new BlockData(pos7.add(0, 0, 1), EnumFacing.NORTH);
-        }
-        if (isPosSolid(pos7.add(0, 0, -1))) {
-            return new BlockData(pos7.add(0, 0, -1), EnumFacing.SOUTH);
-        }
-        BlockPos pos8 = pos5.add(0, 0, 1);
-        if (isPosSolid(pos8.add(0, -1, 0))) {
-            return new BlockData(pos8.add(0, -1, 0), EnumFacing.UP);
-        }
-        if (isPosSolid(pos8.add(-1, 0, 0))) {
-            return new BlockData(pos8.add(-1, 0, 0), EnumFacing.EAST);
-        }
-        if (isPosSolid(pos8.add(1, 0, 0))) {
-            return new BlockData(pos8.add(1, 0, 0), EnumFacing.WEST);
-        }
-        if (isPosSolid(pos8.add(0, 0, 1))) {
-            return new BlockData(pos8.add(0, 0, 1), EnumFacing.NORTH);
-        }
-        if (isPosSolid(pos8.add(0, 0, -1))) {
-            return new BlockData(pos8.add(0, 0, -1), EnumFacing.SOUTH);
-        }
-        BlockPos pos9 = pos5.add(0, 0, -1);
-        if (isPosSolid(pos9.add(0, -1, 0))) {
-            return new BlockData(pos9.add(0, -1, 0), EnumFacing.UP);
-        }
-        if (isPosSolid(pos9.add(-1, 0, 0))) {
-            return new BlockData(pos9.add(-1, 0, 0), EnumFacing.EAST);
-        }
-        if (isPosSolid(pos9.add(1, 0, 0))) {
-            return new BlockData(pos9.add(1, 0, 0), EnumFacing.WEST);
-        }
-        if (isPosSolid(pos9.add(0, 0, 1))) {
-            return new BlockData(pos9.add(0, 0, 1), EnumFacing.NORTH);
-        }
-        if (isPosSolid(pos9.add(0, 0, -1))) {
-            return new BlockData(pos9.add(0, 0, -1), EnumFacing.SOUTH);
-        }
-        return null;
-    }
-
 }

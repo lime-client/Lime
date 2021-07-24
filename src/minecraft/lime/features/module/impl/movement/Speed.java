@@ -10,7 +10,6 @@ import lime.features.module.Module;
 import lime.features.module.ModuleData;
 import lime.features.module.impl.combat.KillAura;
 import lime.features.module.impl.world.Scaffold;
-import lime.features.module.impl.world.Scaffold2;
 import lime.features.setting.impl.EnumValue;
 import lime.utils.movement.MovementUtils;
 import net.minecraft.entity.EntityLivingBase;
@@ -20,7 +19,7 @@ import net.minecraft.potion.Potion;
 @ModuleData(name = "Speed", category = Category.MOVEMENT)
 public class Speed extends Module {
     private enum Mode {
-        Vanilla, Vanilla_BHOP, Verus, Verus_LOWHOP, NCP, Funcraft, Funcraft2, Funcraft_YPORT, Hypixel, HypixelNew, Mineplex
+        Vanilla, Vanilla_BHOP, Verus, Verus_LOWHOP, NCP, Funcraft, Funcraft_YPORT, Mineplex
     }
 
     private final EnumValue mode = new EnumValue("Mode", this, Mode.Vanilla);
@@ -65,20 +64,6 @@ public class Speed extends Module {
                 }
             }
         }
-        if(mode.is("funcraft2"))
-        {
-            if(mc.thePlayer.isMoving())
-            {
-                if(mc.thePlayer.onGround)
-                {
-                    mc.thePlayer.motionY = 0.399399995803833;
-                    moveSpeed = 0.4;
-                }
-
-                MovementUtils.setSpeed(moveSpeed);
-
-            }
-        }
         if(mode.is("verus") || mode.is("verus_lowhop")) {
             if(!MovementUtils.isOnGround(0.4)) {
                 if(mode.is("verus")) {
@@ -111,17 +96,6 @@ public class Speed extends Module {
                 MovementUtils.setSpeed(0);
         }
 
-        if(mode.is("hypixel")) {
-            mc.timer.timerSpeed = 1.0866f;
-            if(e.isPre()) {
-                if(mc.thePlayer.onGround && mc.thePlayer.isMoving()) {
-                    mc.thePlayer.jump();
-                }
-                MovementUtils.strafe();
-                mc.thePlayer.motionY -= 0.0000099;
-            }
-        }
-
         if(mode.is("mineplex")) {
             if(!mc.thePlayer.isMoving()) return;
             MovementUtils.strafe();
@@ -152,25 +126,6 @@ public class Speed extends Module {
 
     @EventTarget
     public void onMove(EventMove e) {
-        if(mode.is("hypixelnew")) {
-            if(mc.thePlayer.onGround && mc.thePlayer.isMoving()) {
-                e.setY(mc.thePlayer.motionY = 0.42);
-                if(mc.thePlayer.onGround) {
-                    e.setY(e.getY() + 2.4E-6);
-                }
-                moveSpeed = MovementUtils.getBaseMoveSpeed() * 1.4491283290 * 0.8;
-                stage = 0;
-            } else {
-                mc.timer.timerSpeed = 1;
-                if(stage == 0) {
-                    moveSpeed -= 0.66 * (moveSpeed - MovementUtils.getBaseMoveSpeed());
-                    stage = 1;
-                } else {
-                    moveSpeed -= moveSpeed / 159;
-                }
-            }
-            MovementUtils.setSpeed(e, moveSpeed);
-        }
         if(mode.is("ncp") || mode.is("funcraft") || mode.is("funcraft_yport")) {
             if (mc.thePlayer.isMoving()) {
                 if(!Lime.getInstance().getModuleManager().getModuleC(Scaffold.class).isToggled()) {

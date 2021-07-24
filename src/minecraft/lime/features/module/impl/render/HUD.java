@@ -6,6 +6,7 @@ import lime.core.events.impl.Event2D;
 
 import lime.core.events.impl.EventScoreboard;
 import lime.core.events.impl.EventUpdate;
+import lime.features.setting.impl.SlideValue;
 import lime.managers.FontManager;
 import lime.features.module.Category;
 import lime.features.module.Module;
@@ -17,6 +18,7 @@ import lime.utils.movement.MovementUtils;
 import lime.utils.other.Timer;
 import lime.utils.render.ColorUtils;
 import lime.utils.render.Graph;
+import lime.utils.render.animation.easings.Easing;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
 
@@ -30,7 +32,14 @@ public class HUD extends Module {
         Lime, Astolfo, Rainbow
     }
 
+    private enum TargetHUD {
+        NONE, LIME
+    }
+
     private final TextValue clientName = new TextValue("Client Name", this, "Lime");
+    public final EnumValue targetHud = new EnumValue("Target HUD", this, TargetHUD.LIME);
+    public final SlideValue targetHudX = new SlideValue("TargetHUD X", this, 0, 100, 50, 1).onlyIf(targetHud.getSettingName(), "enum", "lime");
+    public final SlideValue targetHudY = new SlideValue("TargetHUD Y", this, 0, 100, 50, 1).onlyIf(targetHud.getSettingName(), "enum", "lime");
     private final EnumValue color = new EnumValue("Color", this, ColorMode.Lime);
     private final BoolValue customFont = new BoolValue("Custom Font", this, true);
     private final BoolValue suffix = new BoolValue("Suffix", this, true);
@@ -74,6 +83,7 @@ public class HUD extends Module {
             String moduleName = module.getName() + (suffix.isEnabled() && module.getSuffix() != null && !module.getSuffix().isEmpty() ? "§7 " + module.getSuffix() + (customFont.isEnabled() ? " " : "") : "");
 
             // HUD Animation
+            module.hudAnimation.setEase(Easing.SINE_OUT);
             module.hudAnimation.update();
             module.hudAnimation.setMax((customFont.isEnabled() ? FontManager.ProductSans20.getFont().getStringWidth(moduleName) : mc.fontRendererObj.getStringWidth(moduleName)) + 4);
             module.hudAnimation.setReversed(!module.isToggled());
@@ -89,7 +99,7 @@ public class HUD extends Module {
                 else
                     mc.fontRendererObj.drawString(moduleName, (e.getScaledResolution().getScaledWidth() - module.hudAnimation.getValue()), yCount * 12 + 2, color.getRGB(), true);
 
-                yCount += Math.min(increment / 7, module.hudAnimation.getValue());
+                yCount += Math.min(increment / 7F, module.hudAnimation.getValue());
             }
         }
     }

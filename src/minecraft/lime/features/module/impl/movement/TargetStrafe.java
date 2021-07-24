@@ -9,15 +9,18 @@ import lime.features.module.Category;
 import lime.features.module.Module;
 import lime.features.module.ModuleData;
 import lime.features.module.impl.combat.KillAura;
+import lime.features.module.impl.render.HUD;
 import lime.features.setting.impl.BoolValue;
 import lime.features.setting.impl.SlideValue;
 import lime.utils.combat.CombatUtils;
 import lime.utils.movement.MovementUtils;
 import lime.utils.render.RenderUtils;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.Vec3;
+import org.lwjgl.opengl.GL11;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -43,8 +46,34 @@ public class TargetStrafe extends Module {
 
     @EventTarget
     public void on3D(Event3D e) {
-        if(canMove()) {
-            RenderUtils.drawRadius(KillAura.getEntity(), distance.getCurrent());
+        if(canMove() && (!spaceOnly.isEnabled() || mc.gameSettings.keyBindJump.isKeyDown())) {
+
+            EntityLivingBase entity = KillAura.getEntity();
+
+            double x = entity.lastTickPosX + (entity.posX - entity.lastTickPosX) * mc.timer.renderPartialTicks - mc.getRenderManager().viewerPosX;
+            double y = entity.lastTickPosY + (entity.posY - entity.lastTickPosY) * mc.timer.renderPartialTicks - mc.getRenderManager().viewerPosY;
+            double z = entity.lastTickPosZ + (entity.posZ - entity.lastTickPosZ) * mc.timer.renderPartialTicks - mc.getRenderManager().viewerPosZ;
+
+            GL11.glPushMatrix();
+            GlStateManager.disableDepth();
+            GlStateManager.enableBlend();
+            GlStateManager.disableTexture2D();
+            RenderUtils.glColor(HUD.getColor(0));
+
+            GL11.glBegin(3);
+            for(int i = 0; i < 361; ++i)
+            {
+                GL11.glVertex3d(x - Math.sin(Math.toRadians(i)) * distance.getCurrent(), y, z + Math.cos(Math.toRadians(i)) * distance.getCurrent());
+            }
+            GL11.glEnd();
+
+            GL11.glColor4f(1, 1, 1, 1);
+            GlStateManager.resetColor();
+
+            GlStateManager.enableTexture2D();
+            GlStateManager.disableBlend();
+            GlStateManager.enableDepth();
+            GL11.glPopMatrix();
         }
     }
 
@@ -58,14 +87,14 @@ public class TargetStrafe extends Module {
         }
 
         if(mc.thePlayer.isCollidedHorizontally)
-            direction = -direction;
+            direction = direction == 1 ? -1 : 1;
 
-        if(mc.gameSettings.keyBindLeft.isKeyDown())
+        if(mc.gameSettings.keyBindLeft.isPressed())
             direction = 1;
-        else if(mc.gameSettings.keyBindRight.isKeyDown())
+        else if(mc.gameSettings.keyBindRight.isPressed())
             direction = -1;
 
-        EntityLivingBase target = (EntityLivingBase) KillAura.getEntity();
+        EntityLivingBase target = KillAura.getEntity();
         ArrayList<Vec3> posArrayList = new ArrayList<>();
         for (float rotation = 0; rotation < (3.141592f * 2.0); rotation += 3.141592f * 2.0f / 27f) {
             final Vec3 pos = new Vec3(distance.getCurrent() * Math.cos(rotation) + target.posX, target.posY, distance.getCurrent() * Math.sin(rotation) + target.posZ);
