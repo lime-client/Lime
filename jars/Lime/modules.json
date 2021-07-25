@@ -2,7 +2,7 @@
   "informations": [
     {
       "author": "Lime Auto Save",
-      "time": 1627175684
+      "time": 1627234764
     }
   ],
   "modules": [
@@ -108,7 +108,7 @@
         {
           "name": "Teams",
           "type": "bool",
-          "value": true
+          "value": false
         },
         {
           "name": "Ray Cast",
@@ -379,7 +379,7 @@
         {
           "name": "Speed",
           "type": "slider",
-          "value": 4.5
+          "value": 7.5
         },
         {
           "name": "Bobbing",
@@ -656,7 +656,7 @@
         {
           "name": "Mode",
           "type": "enum",
-          "value": "nuf"
+          "value": "lucky"
         },
         {
           "name": "Swing Slowdown",
@@ -813,7 +813,7 @@
         {
           "name": "Fade Color",
           "type": "color",
-          "value": -14560126
+          "value": -3670016
         },
         {
           "name": "Custom Font",
@@ -882,7 +882,7 @@
         {
           "name": "Expand",
           "type": "slider",
-          "value": 0.0
+          "value": 0.25
         },
         {
           "name": "Delay",

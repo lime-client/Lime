@@ -165,6 +165,9 @@ public class GlyphPageFontRenderer {
      * Draws the specified string.
      */
     public int drawString(String text, float x, float y, int color, boolean dropShadow) {
+        if(text != null)
+            text = text.replace("ı", "");
+
         GlStateManager.enableAlpha();
         this.resetStyles();
         int i;
@@ -393,6 +396,7 @@ public class GlyphPageFontRenderer {
         if (text == null) {
             return 0;
         }
+        text = text.replace("ı", "");
         int width = 0;
 
         GlyphPage currentPage;
@@ -446,6 +450,8 @@ public class GlyphPageFontRenderer {
      * Trims a string to a specified width, and will reverse it if par3 is set.
      */
     public String trimStringToWidth(String text, int maxWidth, boolean reverse) {
+        if(text != null)
+            text = text.replace("ı", "");
         StringBuilder stringbuilder = new StringBuilder();
 
         boolean on = false;

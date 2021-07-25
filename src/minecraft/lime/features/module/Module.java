@@ -77,12 +77,12 @@ public abstract class Module {
             disable();
     }
 
-    public final void enable() {
+    private void enable() {
         EventBus.INSTANCE.register(this);
         onEnable();
     }
 
-    public final void disable() {
+    private void disable() {
         EventBus.INSTANCE.unregister(this);
         onDisable();
     }

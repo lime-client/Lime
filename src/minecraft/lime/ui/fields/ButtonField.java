@@ -35,7 +35,7 @@ public class ButtonField {
         animation.setMin(0);
         animation.setEase(Easing.CUBIC_OUT);
         animation.setMax((float)y);
-        animation.setSpeed(225);
+        animation.setSpeed(275);
     }
 
     public void drawButton(int mouseX, int mouseY) {

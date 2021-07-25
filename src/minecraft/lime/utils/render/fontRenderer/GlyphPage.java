@@ -133,6 +133,7 @@ public class GlyphPage {
     }
 
     public float drawChar(char ch, float x, float y) {
+        if(ch == 'ı') return 0;
         Glyph glyph = glyphCharacterMap.get(ch);
 
         if (glyph == null) throw new IllegalArgumentException("'" + ch + "' wasn't found");

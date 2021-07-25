@@ -2,10 +2,7 @@ package lime.features.module.impl.combat;
 
 import lime.core.Lime;
 import lime.core.events.EventTarget;
-import lime.core.events.impl.Event2D;
-import lime.core.events.impl.Event3D;
-import lime.core.events.impl.EventMotion;
-import lime.core.events.impl.EventPacket;
+import lime.core.events.impl.*;
 import lime.features.module.Category;
 import lime.features.module.Module;
 import lime.features.module.ModuleData;
@@ -13,6 +10,7 @@ import lime.features.module.impl.render.HUD;
 import lime.features.setting.impl.BoolValue;
 import lime.features.setting.impl.EnumValue;
 import lime.features.setting.impl.SlideValue;
+import lime.ui.notifications.Notification;
 import lime.ui.targethud.impl.LimeTargetHUD;
 import lime.utils.combat.CombatUtils;
 import lime.utils.combat.Rotation;
@@ -197,6 +195,13 @@ public class KillAura extends Module {
                 isBlocking = false;
             }
         }
+    }
+
+    @EventTarget
+    public void onWorldLoaded(EventWorldChange e)
+    {
+        this.disableModule();
+        Lime.getInstance().getNotificationManager().addNotification(new Notification("Kill Aura", "Disabled Kill Aura because you changed world!", Notification.Type.WARNING));
     }
 
     @EventTarget

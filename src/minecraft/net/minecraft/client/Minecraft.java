@@ -34,6 +34,7 @@ import javax.imageio.ImageIO;
 import lime.core.Lime;
 import lime.core.events.EventBus;
 import lime.core.events.impl.EventKey;
+import lime.core.events.impl.EventWorldChange;
 import lime.features.module.impl.player.ChestStealer;
 import lime.ui.gui.LoginScreen;
 import lime.ui.gui.MainScreen;
@@ -2386,7 +2387,10 @@ public class Minecraft implements IThreadListener, IPlayerUsage
      */
     public void loadWorld(WorldClient worldClientIn, String loadingMessage)
     {
-        //TODO: EventWorldChange
+
+        Keyboard.enableRepeatEvents(false);
+        if(worldClientIn != null)
+            EventBus.INSTANCE.call(new EventWorldChange(worldClientIn));
         if (worldClientIn == null)
         {
             NetHandlerPlayClient nethandlerplayclient = this.getNetHandler();
