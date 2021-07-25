@@ -43,6 +43,13 @@ public class VerusFast extends FlightValue {
         if(getFlight().verusGlide.isEnabled() && receivedVelocityPacket && mc.thePlayer.motionY < 0) {
             mc.thePlayer.motionY = -0.0784000015258789;
         }
+
+        if(mc.thePlayer.isCollidedHorizontally && getFlight().getTicks() < 25)
+        {
+            Lime.getInstance().getNotificationManager().addNotification(new Notification("Flight", "Disabled boost for safety", Notification.Type.WARNING));
+            getFlight().setTicks(25);
+        }
+
         if(getFlight().getTicks() <= 24 && receivedVelocityPacket && e.isPre()) {
             MovementUtils.setSpeed(getFlight().speed.getCurrent());
         } else if(getFlight().getTicks() == 25) {
@@ -62,9 +69,11 @@ public class VerusFast extends FlightValue {
     @Override
     public void onMove(EventMove e) {
         if(getFlight().mode.is("verus_fast") && !receivedVelocityPacket) {
+            mc.timer.timerSpeed = 0.6f;
             e.setX(0);
             e.setZ(0);
-        }
+        } else
+            mc.timer.timerSpeed = 1;
     }
 
     @Override

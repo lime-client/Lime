@@ -2,7 +2,7 @@
   "informations": [
     {
       "author": "Lime Auto Save",
-      "time": 1627116770
+      "time": 1627175684
     }
   ],
   "modules": [
@@ -58,7 +58,7 @@
         {
           "name": "Rotations",
           "type": "enum",
-          "value": "none"
+          "value": "basic"
         },
         {
           "name": "Target ESP",
@@ -83,12 +83,12 @@
         {
           "name": "Range",
           "type": "slider",
-          "value": 6.0
+          "value": 3.8000000000000003
         },
         {
           "name": "CPS",
           "type": "slider",
-          "value": 10.0
+          "value": 8.0
         },
         {
           "name": "Players",
@@ -108,12 +108,12 @@
         {
           "name": "Teams",
           "type": "bool",
-          "value": false
+          "value": true
         },
         {
           "name": "Ray Cast",
           "type": "bool",
-          "value": false
+          "value": true
         },
         {
           "name": "Through Walls",
@@ -147,7 +147,7 @@
     {
       "moduleName": "Anti Bot",
       "key": -1,
-      "toggled": true,
+      "toggled": false,
       "settings": [
         {
           "name": "Mode",
@@ -159,7 +159,7 @@
     {
       "moduleName": "Auto Pot",
       "key": -1,
-      "toggled": true,
+      "toggled": false,
       "settings": [
         {
           "name": "Health",
@@ -281,7 +281,7 @@
         {
           "name": "Distance",
           "type": "slider",
-          "value": 2.0
+          "value": 1.5
         },
         {
           "name": "Space Only",
@@ -345,7 +345,7 @@
         {
           "name": "Mode",
           "type": "enum",
-          "value": "funcraft"
+          "value": "verus"
         },
         {
           "name": "Speed",
@@ -374,12 +374,12 @@
         {
           "name": "Mode",
           "type": "enum",
-          "value": "funcraft2"
+          "value": "verus_fast"
         },
         {
           "name": "Speed",
           "type": "slider",
-          "value": 9.0
+          "value": 4.5
         },
         {
           "name": "Bobbing",
@@ -406,7 +406,7 @@
         {
           "name": "Mode",
           "type": "enum",
-          "value": "funcraft"
+          "value": "verus"
         }
       ]
     },
@@ -442,7 +442,7 @@
     {
       "moduleName": "Inventory Manager",
       "key": 48,
-      "toggled": true,
+      "toggled": false,
       "settings": [
         {
           "name": "Mode",
@@ -452,7 +452,7 @@
         {
           "name": "Delay",
           "type": "slider",
-          "value": 25.0
+          "value": 80.0
         },
         {
           "name": "Drop Junk",
@@ -464,7 +464,7 @@
     {
       "moduleName": "Lagback Checker",
       "key": -1,
-      "toggled": false
+      "toggled": true
     },
     {
       "moduleName": "Inventory Move",
@@ -479,7 +479,7 @@
     {
       "moduleName": "Chest Stealer",
       "key": 23,
-      "toggled": true,
+      "toggled": false,
       "settings": [
         {
           "name": "Delay before close",
@@ -489,7 +489,7 @@
         {
           "name": "Delay",
           "type": "slider",
-          "value": 100.0
+          "value": 50.0
         },
         {
           "name": "Ignore Junk",
@@ -526,7 +526,7 @@
     {
       "moduleName": "Auto Armor",
       "key": 37,
-      "toggled": true,
+      "toggled": false,
       "settings": [
         {
           "name": "Mode",
@@ -536,7 +536,7 @@
         {
           "name": "Delay",
           "type": "slider",
-          "value": 65.0
+          "value": 50.0
         }
       ]
     },
@@ -565,12 +565,12 @@
     {
       "moduleName": "Auto Tool",
       "key": -1,
-      "toggled": true
+      "toggled": false
     },
     {
       "moduleName": "KillSult",
       "key": -1,
-      "toggled": true
+      "toggled": false
     },
     {
       "moduleName": "Anti Void",
@@ -661,7 +661,7 @@
         {
           "name": "Swing Slowdown",
           "type": "slider",
-          "value": 2.0
+          "value": 1.0
         }
       ]
     },
@@ -712,7 +712,7 @@
         {
           "name": "No Hurt Cam",
           "type": "bool",
-          "value": true
+          "value": false
         },
         {
           "name": "No Fire",
@@ -808,7 +808,12 @@
         {
           "name": "Color",
           "type": "enum",
-          "value": "astolfo"
+          "value": "fade"
+        },
+        {
+          "name": "Fade Color",
+          "type": "color",
+          "value": -14560126
         },
         {
           "name": "Custom Font",
@@ -852,22 +857,22 @@
         {
           "name": "State",
           "type": "enum",
-          "value": "post"
+          "value": "pre"
         },
         {
           "name": "Rotations",
           "type": "enum",
-          "value": "basic"
+          "value": "none"
         },
         {
           "name": "Item Spoof",
           "type": "enum",
-          "value": "spoof"
+          "value": "pick"
         },
         {
           "name": "Tower",
           "type": "enum",
-          "value": "ncp"
+          "value": "none"
         },
         {
           "name": "Speed Modifier",
@@ -887,7 +892,7 @@
         {
           "name": "Keep Rotations",
           "type": "bool",
-          "value": false
+          "value": true
         },
         {
           "name": "Tower Move",
@@ -917,7 +922,7 @@
         {
           "name": "No Swing",
           "type": "bool",
-          "value": true
+          "value": false
         },
         {
           "name": "Swapper",
@@ -927,7 +932,7 @@
         {
           "name": "Downwards",
           "type": "bool",
-          "value": false
+          "value": true
         },
         {
           "name": "Random Vec",
@@ -944,7 +949,7 @@
     {
       "moduleName": "Breaker",
       "key": 49,
-      "toggled": false,
+      "toggled": true,
       "settings": [
         {
           "name": "Range",
@@ -959,7 +964,7 @@
         {
           "name": "No Swing",
           "type": "bool",
-          "value": true
+          "value": false
         }
       ]
     },

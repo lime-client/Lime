@@ -8,7 +8,7 @@ guiScale:2
 particles:0
 bobView:true
 anaglyph3d:false
-maxFps:240
+maxFps:5
 fboEnable:true
 difficulty:2
 fancyGraphics:true
@@ -16,7 +16,7 @@ ao:2
 renderClouds:false
 resourcePacks:["sex.zip"]
 incompatibleResourcePacks:[]
-lastServer:eu.minemen.club
+lastServer:localhost
 lang:en_US
 chatVisibility:0
 chatColors:true

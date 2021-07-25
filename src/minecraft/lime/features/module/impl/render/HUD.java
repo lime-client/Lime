@@ -6,30 +6,25 @@ import lime.core.events.impl.Event2D;
 
 import lime.core.events.impl.EventScoreboard;
 import lime.core.events.impl.EventUpdate;
-import lime.features.setting.impl.SlideValue;
+import lime.features.setting.impl.*;
 import lime.managers.FontManager;
 import lime.features.module.Category;
 import lime.features.module.Module;
 import lime.features.module.ModuleData;
-import lime.features.setting.impl.BoolValue;
-import lime.features.setting.impl.EnumValue;
-import lime.features.setting.impl.TextValue;
-import lime.utils.movement.MovementUtils;
-import lime.utils.other.Timer;
 import lime.utils.render.ColorUtils;
-import lime.utils.render.Graph;
 import lime.utils.render.animation.easings.Easing;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @ModuleData(name = "HUD", category = Category.RENDER)
 public class HUD extends Module {
 
     private enum ColorMode {
-        Lime, Astolfo, Rainbow
+        Lime, Astolfo, Rainbow, Fade
     }
 
     private enum TargetHUD {
@@ -41,6 +36,7 @@ public class HUD extends Module {
     public final SlideValue targetHudX = new SlideValue("TargetHUD X", this, 0, 100, 50, 1).onlyIf(targetHud.getSettingName(), "enum", "lime");
     public final SlideValue targetHudY = new SlideValue("TargetHUD Y", this, 0, 100, 50, 1).onlyIf(targetHud.getSettingName(), "enum", "lime");
     private final EnumValue color = new EnumValue("Color", this, ColorMode.Lime);
+    private final ColorValue fadeColor = new ColorValue("Fade Color", this, new Color(200, 0, 0).getRGB()).onlyIf(color.getSettingName(), "enum", "fade");
     private final BoolValue customFont = new BoolValue("Custom Font", this, true);
     private final BoolValue suffix = new BoolValue("Suffix", this, true);
 
@@ -67,7 +63,7 @@ public class HUD extends Module {
             String o1Name = o1.getName() + (suffix.isEnabled() && o1.getSuffix() != null && !o1.getSuffix().isEmpty() ? "§7 " + o1.getSuffix() + (customFont.isEnabled() ? " " : "") : "");
             String o2Name = o2.getName() + (suffix.isEnabled() && o2.getSuffix() != null && !o2.getSuffix().isEmpty() ? "§7 " + o2.getSuffix() + (customFont.isEnabled() ? " " : "") : "");
             if(customFont.isEnabled()) {
-                if(FontManager.ProductSans20.getFont().getStringWidth(o1Name)  > FontManager.ProductSans20.getFont().getStringWidth(o2Name))
+                if(FontManager.ProductSans18.getFont().getStringWidth(o1Name)  > FontManager.ProductSans18.getFont().getStringWidth(o2Name))
                     return -1;
                 else
                     return 1;
@@ -78,6 +74,7 @@ public class HUD extends Module {
                     return 1;
             }
         });
+        int increment = customFont.isEnabled() ? FontManager.ProductSans18.getFont().getFontHeight() : mc.fontRendererObj.FONT_HEIGHT;
         int yCount = 0;
         for (Module module : modules) {
             String moduleName = module.getName() + (suffix.isEnabled() && module.getSuffix() != null && !module.getSuffix().isEmpty() ? "§7 " + module.getSuffix() + (customFont.isEnabled() ? " " : "") : "");
@@ -85,21 +82,19 @@ public class HUD extends Module {
             // HUD Animation
             module.hudAnimation.setEase(Easing.SINE_OUT);
             module.hudAnimation.update();
-            module.hudAnimation.setMax((customFont.isEnabled() ? FontManager.ProductSans20.getFont().getStringWidth(moduleName) : mc.fontRendererObj.getStringWidth(moduleName)) + 4);
+            module.hudAnimation.setMax((customFont.isEnabled() ? FontManager.ProductSans18.getFont().getStringWidth(moduleName) : mc.fontRendererObj.getStringWidth(moduleName)) + 4);
             module.hudAnimation.setReversed(!module.isToggled());
 
-            int increment = customFont.isEnabled() ? FontManager.ProductSans20.getFont().getFontHeight() : mc.fontRendererObj.FONT_HEIGHT;
-
             if(module.hudAnimation.getValue() > module.hudAnimation.getMin()) {
-                Color color = getColor(yCount);
+                Color color = getColor(yCount / increment);
 
-                Gui.drawRect(e.getScaledResolution().getScaledWidth() - 1, yCount * 12, e.getScaledResolution().getScaledWidth(), yCount * 12 + 12, color.getRGB());
+                Gui.drawRect(e.getScaledResolution().getScaledWidth() - 1, yCount, e.getScaledResolution().getScaledWidth(), yCount + increment, color.getRGB());
                 if(customFont.isEnabled())
-                    FontManager.ProductSans20.getFont().drawStringWithShadow(moduleName, (e.getScaledResolution().getScaledWidth() - module.hudAnimation.getValue()), yCount * 12, color.getRGB());
+                    FontManager.ProductSans18.getFont().drawStringWithShadow(moduleName, (e.getScaledResolution().getScaledWidth() - module.hudAnimation.getValue()), yCount, color.getRGB());
                 else
-                    mc.fontRendererObj.drawString(moduleName, (e.getScaledResolution().getScaledWidth() - module.hudAnimation.getValue()), yCount * 12 + 2, color.getRGB(), true);
+                    mc.fontRendererObj.drawString(moduleName, (e.getScaledResolution().getScaledWidth() - module.hudAnimation.getValue()), yCount + 2, color.getRGB(), true);
 
-                yCount += Math.min(increment / 7F, module.hudAnimation.getValue());
+                yCount += Math.min(increment, module.hudAnimation.getValue() + 1);
             }
         }
     }
@@ -121,6 +116,17 @@ public class HUD extends Module {
 
         if(hud.color.is("rainbow")) {
             return ColorUtils.rainbow(index + index * 70000000L, 0.7F, 1);
+        }
+
+        if(hud.color.is("fade"))
+        {
+            AtomicInteger count = new AtomicInteger();
+            Lime.getInstance().getModuleManager().getModules().forEach(module ->
+            {
+                if(module.hudAnimation.getValue() > 0)
+                    count.incrementAndGet();
+            });
+            return ColorUtils.fade(new Color(hud.fadeColor.getColor()), index, count.get());
         }
 
         // wtf ?

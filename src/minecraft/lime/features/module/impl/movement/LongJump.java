@@ -158,7 +158,7 @@ public class LongJump extends Module {
         }
 
         if(mode.is("verus")) {
-            if(mc.thePlayer.motionY < 0 && MovementUtils.isOnGround(5)) {
+            if(mc.thePlayer.motionY < 0) {
                 mc.thePlayer.motionY = -0.0784000015258789;
                 if(mc.thePlayer.onGround) this.toggle();
             }

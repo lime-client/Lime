@@ -58,6 +58,7 @@ public class TargetStrafe extends Module {
             GlStateManager.disableDepth();
             GlStateManager.enableBlend();
             GlStateManager.disableTexture2D();
+            GL11.glEnable(GL11.GL_LINE_SMOOTH);
             RenderUtils.glColor(HUD.getColor(0));
 
             GL11.glBegin(3);
@@ -69,7 +70,7 @@ public class TargetStrafe extends Module {
 
             GL11.glColor4f(1, 1, 1, 1);
             GlStateManager.resetColor();
-
+            GL11.glDisable(GL11.GL_LINE_SMOOTH);
             GlStateManager.enableTexture2D();
             GlStateManager.disableBlend();
             GlStateManager.enableDepth();

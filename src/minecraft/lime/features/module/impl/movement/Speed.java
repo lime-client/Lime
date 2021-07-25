@@ -82,15 +82,21 @@ public class Speed extends Module {
                 double amplifier = mc.thePlayer.isPotionActive(Potion.moveSpeed) ? mc.thePlayer.getActivePotionEffect(Potion.moveSpeed).getAmplifier() : 0;
                 double speedBoost = mc.thePlayer.isPotionActive(Potion.moveSpeed) ? amplifier == 1 ? 0.035 : amplifier > 1 ? 0.035 * (amplifier / 2) : 0.035 / 2 : 0;
                 double motionBoost = MovementUtils.isOnGround(0.15) && !mc.thePlayer.onGround ? 0.045 : 0;
-                if(MovementUtils.isOnGround(0.15)) {
+
+                double boost = 0;
+                if (mc.thePlayer.onGround) {
+                    mc.thePlayer.jump();
+                    boost += 0.125;
+                }
+
+                if(MovementUtils.isOnGround(0.15) && boost == 0) {
                     mc.thePlayer.motionY -= 0.0075;
                 }
-                if (mc.thePlayer.onGround)
-                    mc.thePlayer.jump();
+
                 if(mc.thePlayer.moveStrafing == 0)
-                    MovementUtils.setSpeed(0.3345 + speedBoost + tickBoost + motionBoost);
+                    MovementUtils.setSpeed(0.3345 + speedBoost + tickBoost + motionBoost + boost);
                 else
-                    MovementUtils.setSpeed(0.333 + speedBoost + tickBoost + motionBoost);
+                    MovementUtils.setSpeed(0.333 + speedBoost + tickBoost + motionBoost + boost);
 
             } else
                 MovementUtils.setSpeed(0);

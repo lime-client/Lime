@@ -133,7 +133,7 @@ public class LimeTargetHUD extends TargetHUD {
         }
 
         //target name
-        FontManager.ProductSans20.getFont().drawString(target.getName(), 46, 0, -1, true);
+        FontManager.ProductSans20.getFont().drawString(target.getName().replace("♥", ""), 46, 0, -1, true);
         FontManager.ProductSans20.getFont().drawString(MathUtils.roundToPlace(target.getHealth(), 2) + "", 46, 30, color, true);
 
         //armor

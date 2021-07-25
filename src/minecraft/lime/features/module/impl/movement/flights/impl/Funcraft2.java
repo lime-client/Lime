@@ -6,6 +6,7 @@ import lime.core.events.impl.EventMove;
 import lime.features.module.impl.combat.KillAura;
 import lime.features.module.impl.movement.TargetStrafe;
 import lime.features.module.impl.movement.flights.FlightValue;
+import lime.features.module.impl.world.Timer;
 import lime.utils.movement.MovementUtils;
 import net.minecraft.entity.EntityLivingBase;
 
@@ -27,10 +28,13 @@ public class Funcraft2 extends FlightValue {
     @Override
     public void onMotion(EventMotion e) {
 
-        mc.timer.timerSpeed = 1.0866f;
-        if(mc.thePlayer.ticksExisted % 3 == 0)
+        if(!Lime.getInstance().getModuleManager().getModuleC(Timer.class).isToggled())
         {
-            mc.timer.timerSpeed = 2.25f;
+            mc.timer.timerSpeed = 1.0866f;
+            if(mc.thePlayer.ticksExisted % 3 == 0)
+            {
+                mc.timer.timerSpeed = 2.25f;
+            }
         }
 
         if(stage == -1)
