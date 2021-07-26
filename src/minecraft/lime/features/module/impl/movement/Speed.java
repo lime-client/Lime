@@ -16,6 +16,9 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.network.play.server.S08PacketPlayerPosLook;
 import net.minecraft.potion.Potion;
 
+import java.util.Arrays;
+import java.util.Base64;
+
 @ModuleData(name = "Speed", category = Category.MOVEMENT)
 public class Speed extends Module {
     private enum Mode {

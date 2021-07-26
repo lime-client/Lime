@@ -89,6 +89,7 @@ public class MovementUtils implements IUtil {
     }
 
     public static void setSpeed(double speed) {
+
         mc.thePlayer.motionX = -MathHelper.sin(getDirection()) * speed;
         mc.thePlayer.motionZ = MathHelper.cos(getDirection()) * speed;
     }

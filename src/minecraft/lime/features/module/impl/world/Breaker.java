@@ -26,6 +26,7 @@ public class Breaker extends Module {
 
     private final SlideValue range = new SlideValue("Range", this, 1, 6, 4, 0.5);
     private final BoolValue throughWalls = new BoolValue("Through Walls", this, true);
+    private final BoolValue rotations = new BoolValue("Rotations", this, true);
     private final BoolValue noSwing = new BoolValue("No Swing", this, true);
 
     private final ArrayList<BlockPos> bedPos = new ArrayList<>();
@@ -59,6 +60,7 @@ public class Breaker extends Module {
             attackingBed = bedPos.get(0);
         } else {
             if(e.isPre()) {
+                if(!rotations.isEnabled()) return;
                 float[] rots = CombatUtils.getRotations(attackingBed.getX(), attackingBed.getY(), attackingBed.getZ());
                 e.setRotations(new Rotation(rots[0], rots[1] + 0.5f));
                 mc.thePlayer.setRotationsTP(e);

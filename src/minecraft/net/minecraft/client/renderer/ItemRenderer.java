@@ -451,6 +451,20 @@ public class ItemRenderer
                                 GL11.glRotatef(-var15 * 70.0F / 2.0F, -8.0F, 0.0F, 9.0F);
                                 GL11.glRotatef(-var15 * 70.0F, 1.0F, -0.4F, -0.0F);
                                 break;
+                            case "EXHIBITION":
+                                this.transformFirstPersonItem(f / 2.0F, 0.0F);
+                                GL11.glRotatef(-var15 * 40.0F / 2.0F, var15 / 2.0F, -0.0F, 9.0F);
+                                GL11.glRotatef(-var15 * 30.0F, 1.0F, var15 / 2.0F, -0.0F);
+                                this.func_178103_d();
+                                break;
+                            case "EXHIBITION2":
+                                float f6 = MathHelper.sin((float) (MathHelper.sqrt_float(f1) * 3.1));
+                                GL11.glTranslated(-0.1D, 0.1D, 0.0D);
+                                this.transformFirstPersonItem(f / 2, 0.0f);
+                                GlStateManager.rotate(-f6 * 40.0F / 2.0F, f6 / 2.0F, -0.0F, 9.0F);
+                                GlStateManager.rotate(-f6 * 30.0F, 1.0F, f6 / 2.0F, -0.0F);
+                                this.func_178103_d();
+                                break;
                         }
 
 

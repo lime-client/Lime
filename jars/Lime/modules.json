@@ -2,7 +2,7 @@
   "informations": [
     {
       "author": "Lime Auto Save",
-      "time": 1627234764
+      "time": 1627273633
     }
   ],
   "modules": [
@@ -43,7 +43,7 @@
     {
       "moduleName": "Kill Aura",
       "key": 19,
-      "toggled": false,
+      "toggled": true,
       "settings": [
         {
           "name": "State",
@@ -108,7 +108,7 @@
         {
           "name": "Teams",
           "type": "bool",
-          "value": false
+          "value": true
         },
         {
           "name": "Ray Cast",
@@ -379,7 +379,7 @@
         {
           "name": "Speed",
           "type": "slider",
-          "value": 7.5
+          "value": 9.5
         },
         {
           "name": "Bobbing",
@@ -656,12 +656,12 @@
         {
           "name": "Mode",
           "type": "enum",
-          "value": "lucky"
+          "value": "exhibition2"
         },
         {
           "name": "Swing Slowdown",
           "type": "slider",
-          "value": 1.0
+          "value": 2.0
         }
       ]
     },
@@ -712,7 +712,7 @@
         {
           "name": "No Hurt Cam",
           "type": "bool",
-          "value": false
+          "value": true
         },
         {
           "name": "No Fire",
@@ -803,7 +803,7 @@
         {
           "name": "TargetHUD Y",
           "type": "slider",
-          "value": 72.0
+          "value": 23.0
         },
         {
           "name": "Color",
@@ -882,7 +882,7 @@
         {
           "name": "Expand",
           "type": "slider",
-          "value": 0.25
+          "value": 0.0
         },
         {
           "name": "Delay",
@@ -964,7 +964,7 @@
         {
           "name": "No Swing",
           "type": "bool",
-          "value": false
+          "value": true
         }
       ]
     },

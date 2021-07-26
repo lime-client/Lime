@@ -30,6 +30,29 @@ public class CombatUtils implements IUtil {
         return (float) (Math.atan2(zDiff, xDiff) * 180.0D / Math.PI) - 90.0f;
     }
 
+    public static float getDifference(float a, float b) {
+        float r = (float) ((a - b) % 360.0);
+
+        if (r < -180.0) {
+            r += 360.0;
+        }
+
+        if (r >= 180.0) {
+            r -= 360.0;
+        }
+
+        return r;
+    }
+
+    public static double getRotationDifference(float[] clientRotations, float[] serverRotations) {
+        return Math.hypot(getDifference(clientRotations[0], serverRotations[0]), clientRotations[1] - serverRotations[1]);
+    }
+
+    public static double getRotationDifference(EntityLivingBase entity) {
+        final float[] rotations = getEntityRotations(entity, false);
+        return getRotationDifference(rotations, new float[] {mc.thePlayer.rotationYaw, mc.thePlayer.rotationPitch});
+    }
+
     public static float[] getEntityRotations(EntityLivingBase e, boolean random) {
         /*return random ? getRotations(e.posX,
                 e.posY + (double)e.getEyeHeight() - 0.4D,

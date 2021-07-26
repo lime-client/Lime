@@ -48,7 +48,7 @@ public class KillAura extends Module {
     // Settings
     private enum State { PRE, POST }
     private enum AutoBlock { NONE, FAKE, BASIC }
-    private enum Priority { DISTANCE, HEALTH }
+    private enum Priority { DISTANCE, HEALTH, FOV }
     private enum Rotations { NONE, BASIC, SMOOTH }
     private enum TargetESP { NONE, CIRCLE }
 
@@ -306,6 +306,9 @@ public class KillAura extends Module {
                 break;
             case "distance":
                 entities.sort(Comparator.comparingDouble(entity -> mc.thePlayer.getDistanceToEntity(entity)));
+                break;
+            case "fov":
+                entities.sort(Comparator.comparingDouble(entity -> CombatUtils.getRotationDifference((EntityLivingBase) entity)));
                 break;
         }
 

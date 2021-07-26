@@ -21,6 +21,8 @@ import org.apache.logging.log4j.Logger;
 
 public class GuiConnecting extends GuiScreen
 {
+    public static ServerAddress lastKnownServerAddress;
+
     private static final AtomicInteger CONNECTION_ID = new AtomicInteger(0);
     private static final Logger logger = LogManager.getLogger();
     private NetworkManager networkManager;
@@ -35,6 +37,8 @@ public class GuiConnecting extends GuiScreen
         mcIn.loadWorld((WorldClient)null);
         mcIn.setServerData(p_i1181_3_);
         this.connect(serveraddress.getIP(), serveraddress.getPort());
+
+        lastKnownServerAddress = serveraddress;
     }
 
     public GuiConnecting(GuiScreen p_i1182_1_, Minecraft mcIn, String hostName, int port)
