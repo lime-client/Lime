@@ -134,12 +134,12 @@ public class KillAura extends Module {
 
                 switch(this.rotations.getSelected().name().toLowerCase()) {
                     case "basic":
-                        rotations = CombatUtils.getEntityRotations((EntityLivingBase) entity, false);
+                        rotations = CombatUtils.getEntityRotations(entity, false);
                         break;
                     case "smooth":
-                        rotations = CombatUtils.getEntityRotations((EntityLivingBase) entity, false);
+                        rotations = CombatUtils.getEntityRotations(entity, false);
                         float[] crt = new float[] {currentYaw, currentPitch};
-                        Rotation rotation = CombatUtils.smoothAngle(new float[]{rotations[0], rotations[1]}, crt, 15, 20);
+                        Rotation rotation = CombatUtils.smoothAngle(new float[]{rotations[0], rotations[1]}, crt, (float) rotationsSpeedMin.getCurrent(), (float) rotationsSpeedMax.getCurrent());
                         rotations[0] = rotation.getYaw();
                         rotations[1] = rotation.getPitch();
                         currentYaw = rotations[0];

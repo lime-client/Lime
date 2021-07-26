@@ -10,6 +10,7 @@ import lime.features.module.impl.movement.*;
 import lime.features.module.impl.player.*;
 import lime.features.module.impl.render.*;
 import lime.features.module.impl.world.*;
+import lime.scripting.ScriptModule;
 
 import java.util.ArrayList;
 import java.util.stream.Collectors;

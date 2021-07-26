@@ -40,10 +40,8 @@ public class Funcraft2 extends FlightValue {
         if(stage == -1)
             moveSpeed = 0.25;
 
-        // Spoofing ground
         e.setGround(true);
 
-        // Setting Last Dist
         if(e.isPre())
         {
             double xDist = mc.thePlayer.posX - mc.thePlayer.prevPosX;
@@ -83,7 +81,7 @@ public class Funcraft2 extends FlightValue {
                     this.moveSpeed = this.lastDist - this.lastDist / 159;
                     break;
             }
-            if (KillAura.getEntity() != null && KillAura.getEntity() instanceof EntityLivingBase) {
+            if (KillAura.getEntity() != null) {
                 TargetStrafe targetStrafe2 = (TargetStrafe) Lime.getInstance().getModuleManager().getModuleC(TargetStrafe.class);
                 targetStrafe2.setMoveSpeed(e, moveSpeed);
             } else {

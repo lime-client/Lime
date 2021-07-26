@@ -80,7 +80,7 @@ public class TargetStrafe extends Module {
 
     @EventTarget
     public void onMotion(EventMotion e) {
-        if(!canMove()) {
+        if(!canMove() || KillAura.getEntity() == null) {
             set = false;
             index = 0;
             indexPos = null;

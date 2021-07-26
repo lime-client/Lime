@@ -16,6 +16,7 @@ public class CommandManager {
         registerCommand(new Bind());
         registerCommand(new HClip());
         registerCommand(new Name());
+        registerCommand(new Script());
     }
 
     private void registerCommand(Command command) {

@@ -2,7 +2,7 @@
   "informations": [
     {
       "author": "Lime Auto Save",
-      "time": 1627273633
+      "time": 1627339597
     }
   ],
   "modules": [
@@ -281,7 +281,7 @@
         {
           "name": "Distance",
           "type": "slider",
-          "value": 1.5
+          "value": 2.5
         },
         {
           "name": "Space Only",
@@ -379,7 +379,7 @@
         {
           "name": "Speed",
           "type": "slider",
-          "value": 9.5
+          "value": 9.0
         },
         {
           "name": "Bobbing",
@@ -656,7 +656,7 @@
         {
           "name": "Mode",
           "type": "enum",
-          "value": "exhibition2"
+          "value": "nuf"
         },
         {
           "name": "Swing Slowdown",
@@ -803,7 +803,7 @@
         {
           "name": "TargetHUD Y",
           "type": "slider",
-          "value": 23.0
+          "value": 72.0
         },
         {
           "name": "Color",
@@ -813,7 +813,7 @@
         {
           "name": "Fade Color",
           "type": "color",
-          "value": -3670016
+          "value": -4974825
         },
         {
           "name": "Custom Font",
@@ -852,7 +852,7 @@
     {
       "moduleName": "Scaffold",
       "key": 34,
-      "toggled": false,
+      "toggled": true,
       "settings": [
         {
           "name": "State",
@@ -962,6 +962,11 @@
           "value": true
         },
         {
+          "name": "Rotations",
+          "type": "bool",
+          "value": false
+        },
+        {
           "name": "No Swing",
           "type": "bool",
           "value": true
@@ -1032,6 +1037,11 @@
     {
       "moduleName": "Reach",
       "key": -1,
+      "toggled": false
+    },
+    {
+      "moduleName": "Funcraft Fast Fly",
+      "key": 36,
       "toggled": false
     }
   ]

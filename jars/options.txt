@@ -14,7 +14,7 @@ difficulty:2
 fancyGraphics:true
 ao:2
 renderClouds:false
-resourcePacks:["sex.zip"]
+resourcePacks:["!   Killua 128x [§9Revamp§f]§0.zip"]
 incompatibleResourcePacks:[]
 lastServer:localhost
 lang:en_US

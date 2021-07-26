@@ -1,5 +1,6 @@
 package lime.core;
 
+import lime.scripting.ScriptManager;
 import lime.ui.notifications.utils.NotificationManager;
 import lime.utils.other.file.FileSaver;
 import lime.managers.CommandManager;
@@ -25,6 +26,7 @@ public class Lime {
 
     private SettingsManager settingsManager;
     private ModuleManager moduleManager;
+    private ScriptManager scriptManager;
     private CommandManager commandManager;
     private NotificationManager notificationManager;
     private ClickGUI clickGUI;
@@ -54,12 +56,16 @@ public class Lime {
 
         File limeFile = new File("Lime");
         File limeConfigFile = new File("Lime" + File.separator + "configs");
+        File limeScriptsFile = new File("Lime" + File.separator + "scripts");
 
         if(!limeFile.exists())
             limeFile.mkdir();
 
         if(!limeConfigFile.exists())
             limeConfigFile.mkdir();
+
+        if(!limeScriptsFile.exists())
+            limeScriptsFile.mkdir();
 
 
         settingsManager = new SettingsManager();
@@ -80,6 +86,7 @@ public class Lime {
         clickGUI = new ClickGUI();
         clickGUI2 = new lime.ui.clickgui.frame2.ClickGUI();
 
+        this.scriptManager = new ScriptManager().loadScripts();
 
         new EventListener();
 
@@ -108,6 +115,10 @@ public class Lime {
 
     public ModuleManager getModuleManager() {
         return moduleManager;
+    }
+
+    public ScriptManager getScriptManager() {
+        return scriptManager;
     }
 
     public static Lime getInstance() {
@@ -160,5 +171,13 @@ public class Lime {
 
     public void setProxy(Proxy proxy) {
         this.proxy = proxy;
+    }
+
+    public void setClickGUI(ClickGUI clickGUI) {
+        this.clickGUI = clickGUI;
+    }
+
+    public void setClickGUI2(lime.ui.clickgui.frame2.ClickGUI clickGUI2) {
+        this.clickGUI2 = clickGUI2;
     }
 }

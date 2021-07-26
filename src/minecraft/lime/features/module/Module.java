@@ -30,6 +30,15 @@ public abstract class Module {
         hudAnimation.setSpeed(125);
     }
 
+    public Module(String name, int key, Category category)
+    {
+        this.name = name;
+        this.key = key;
+        this.category = category;
+        this.hudAnimation.setEase(Easing.CUBIC_OUT);
+        hudAnimation.setSpeed(125);
+    }
+
     public String getName() {
         return name;
     }

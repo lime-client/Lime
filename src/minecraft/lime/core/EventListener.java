@@ -7,6 +7,7 @@ import lime.core.events.impl.EventKey;
 import lime.core.events.impl.EventPacket;
 import lime.core.events.impl.EventUpdate;
 import lime.features.module.Module;
+import lime.scripting.ScriptModule;
 import lime.utils.other.Timer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.play.client.C01PacketChatMessage;

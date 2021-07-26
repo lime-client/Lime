@@ -87,7 +87,7 @@ public class CombatUtils implements IUtil {
 
         float yaw = (float) (Math.atan2(z, x) * 180.0D / Math.PI) - 90.0F;
         float pitch = (float) -((Math.atan2(y, distance) * 180.0D / Math.PI));
-        */return new float[] { yaw + MathUtils.random(0.4, -0.4), pitch };
+        */return new float[] { yaw + MathUtils.random(0.4, -0.4), pitch + MathUtils.random(0.2, -0.2) };
     }
 
     public static Rotation smoothAngle(float[] dst, float[] src, float randMin, float randMax) {
