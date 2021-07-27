@@ -145,6 +145,14 @@ public class PlayerWrapper extends AbstractJSObject implements IUtil {
                 }
             };
         }
+        if(name.equals("ticksExisted")) {
+            return new AbstractJSObject() {
+                @Override
+                public Object call(Object thiz, Object... args) {
+                    return mc.thePlayer.ticksExisted;
+                }
+            };
+        }
         if(name.equals("setTimer")) {
             return new AbstractJSObject() {
                 @Override
