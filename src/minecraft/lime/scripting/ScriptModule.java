@@ -38,6 +38,7 @@ public class ScriptModule extends Module {
                     stringAbstractJSObjectEntry.getValue().call(this, (Object) null);
                 } catch (Exception exception) {
                     ChatUtils.sendMessage("Error while executing onEnable on the Script " + getName() + ": " + exception.getMessage());
+                    this.toggle();
                 }
             }
         }
@@ -51,6 +52,7 @@ public class ScriptModule extends Module {
                     stringAbstractJSObjectEntry.getValue().call(this, (Object) null);
                 } catch (Exception exception) {
                     ChatUtils.sendMessage("Error while executing onDisable on the Script " + getName() + ": " + exception.getMessage());
+                    this.toggle();
                 }
             }
         }
@@ -66,6 +68,7 @@ public class ScriptModule extends Module {
                     stringAbstractJSObjectEntry.getValue().call(this, (Object) null);
                 } catch (Exception exception) {
                     ChatUtils.sendMessage("Error while executing EventUpdate on the Script " + getName() + ": " + exception.getMessage());
+                    this.toggle();
                 }
             }
         }
@@ -81,6 +84,7 @@ public class ScriptModule extends Module {
                     stringAbstractJSObjectEntry.getValue().call(this, new EventMotion(e));
                 } catch (Exception exception) {
                     ChatUtils.sendMessage("Error while executing EventMotion on the Script " + getName() + ": " + exception.getMessage());
+                    this.toggle();
                 }
             }
         }
@@ -96,6 +100,7 @@ public class ScriptModule extends Module {
                     stringAbstractJSObjectEntry.getValue().call(this, new lime.scripting.api.events.EventPacket(e));
                 } catch (Exception exception) {
                     ChatUtils.sendMessage("Error while executing EventPacket on the Script " + getName() + ": " + exception.getMessage());
+                    this.toggle();
                 }
             }
         }
