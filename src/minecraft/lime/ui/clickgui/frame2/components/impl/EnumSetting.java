@@ -3,12 +3,13 @@ package lime.ui.clickgui.frame2.components.impl;
 import lime.features.setting.SettingValue;
 import lime.features.setting.impl.EnumValue;
 import lime.managers.FontManager;
-import lime.ui.clickgui.frame2.Priority;
 import lime.ui.clickgui.frame2.components.Component;
 import lime.ui.clickgui.frame2.components.FrameModule;
 import net.minecraft.client.gui.GuiScreen;
 
-public class EnumSetting extends Component implements Priority {
+import static lime.ui.clickgui.frame2.Priority.*;
+
+public class EnumSetting extends Component {
     public EnumSetting(int x, int y, FrameModule owner, SettingValue setting) {
         super(x, y, owner, setting);
     }

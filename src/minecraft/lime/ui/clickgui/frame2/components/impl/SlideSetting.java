@@ -3,18 +3,18 @@ package lime.ui.clickgui.frame2.components.impl;
 import lime.features.setting.SettingValue;
 import lime.features.setting.impl.SlideValue;
 import lime.managers.FontManager;
-import lime.ui.clickgui.frame2.Priority;
 import lime.ui.clickgui.frame2.components.Component;
 import lime.ui.clickgui.frame2.components.FrameModule;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.util.MathHelper;
 import org.lwjgl.input.Mouse;
+import static lime.ui.clickgui.frame2.Priority.*;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
-public class SlideSetting extends Component implements Priority {
+public class SlideSetting extends Component {
     public SlideSetting(int x, int y, FrameModule owner, SettingValue setting) {
         super(x, y, owner, setting);
     }
@@ -36,7 +36,7 @@ public class SlideSetting extends Component implements Priority {
         double max = slide.getMax();
         double diff = Math.min(defaultWidth + 5, Math.max(0, mouseX - (this.x)));
         double renderWidth = defaultWidth * (slide.getCurrent() - min) / (max - min);
-        Gui.drawRect(x, y, x + (int) renderWidth, y + getOffset(), darkerMainColor);
+        Gui.drawRect(x, y, x + (int) renderWidth, y + getOffset(), getDarkerMainColor());
 
         if(drag)
         {

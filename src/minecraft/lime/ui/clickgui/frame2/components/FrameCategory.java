@@ -3,7 +3,6 @@ package lime.ui.clickgui.frame2.components;
 import lime.core.Lime;
 import lime.features.module.Category;
 import lime.managers.FontManager;
-import lime.ui.clickgui.frame2.Priority;
 import lime.utils.render.RenderUtils;
 import lime.utils.render.animation.easings.Animate;
 import lime.utils.render.animation.easings.Easing;
@@ -15,7 +14,9 @@ import org.lwjgl.opengl.GL11;
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class FrameCategory implements Priority {
+import static lime.ui.clickgui.frame2.Priority.*;
+
+public class FrameCategory {
 
     // Stuff
     private int x, y, xDrag, yDrag;
@@ -71,7 +72,7 @@ public class FrameCategory implements Priority {
             int wheel = Mouse.getDWheel();
             if(wheel > 0 && offset - (moduleHeight - 1) > 0) {
                 offset -= moduleHeight;
-            } else if(wheel < 0 && offset + (moduleHeight - 1) <= offCat.get() - height + categoryNameHeight) {
+            } else if(wheel < 0 && offset + (moduleHeight - 1) <= (offCat.get()) - height + categoryNameHeight) {
                 offset += moduleHeight;
             }
         }
@@ -79,16 +80,16 @@ public class FrameCategory implements Priority {
 
 
         // Drawing category base
-        Gui.drawRect(getX(), getY(), getX() + width, getY() + getHeight(), mainColor);
+        Gui.drawRect(getX(), getY(), getX() + width, getY() + getHeight(), getMainColor());
 
         // Drawing category name section
-        Gui.drawRect(getX(), getY(), getX() + width, getY() + categoryNameHeight, darkerMainColor);
+        Gui.drawRect(getX(), getY(), getX() + width, getY() + categoryNameHeight, getDarkerMainColor());
 
         // Outline category base
         {
-            Gui.drawRect(getX() - outlineWidth, getY(), getX(), getY() + getHeight(), darkerMainColor);
-            Gui.drawRect(getX() + width, getY(), getX() + width + outlineWidth, getY() + getHeight(), darkerMainColor);
-            Gui.drawRect(getX() - outlineWidth, y + getHeight(), getX() + width + outlineWidth, getY() + getHeight() + outlineWidth, darkerMainColor);
+            Gui.drawRect(getX() - outlineWidth, getY(), getX(), getY() + getHeight(), getDarkerMainColor());
+            Gui.drawRect(getX() + width, getY(), getX() + width + outlineWidth, getY() + getHeight(), getDarkerMainColor());
+            Gui.drawRect(getX() - outlineWidth, y + getHeight(), getX() + width + outlineWidth, getY() + getHeight() + outlineWidth, getDarkerMainColor());
         }
 
         // Drag ClickGUI

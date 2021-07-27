@@ -3,7 +3,6 @@ package lime.ui.clickgui.frame2.components.impl;
 import lime.features.setting.SettingValue;
 import lime.features.setting.impl.BoolValue;
 import lime.managers.FontManager;
-import lime.ui.clickgui.frame2.Priority;
 import lime.ui.clickgui.frame2.components.Component;
 import lime.ui.clickgui.frame2.components.FrameModule;
 import lime.utils.render.RenderUtils;
@@ -15,7 +14,9 @@ import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
 
-public class BoolSetting extends Component implements Priority {
+import static lime.ui.clickgui.frame2.Priority.*;
+
+public class BoolSetting extends Component {
     private final Animate animation;
 
     public BoolSetting(int x, int y, FrameModule owner, SettingValue setting)
@@ -36,11 +37,11 @@ public class BoolSetting extends Component implements Priority {
         animation.update();
         FontManager.ProductSans20.getFont().drawString(getSetting().getSettingName(), x + 5, y + (getOffset() / 2F - (FontManager.ProductSans20.getFont().getFontHeight() / 2F)), -1, true);
         //Gui.drawRect(x + defaultWidth - 15, y, x + defaultWidth - 5, y + 10, darkerMainColor);
-        RenderUtils.drawFilledCircle(x + defaultWidth - 10, y + (getOffset() / 2F - (FontManager.ProductSans20.getFont().getFontHeight() / 2F)) + 6.75f, 5, new Color(darkerMainColor));
+        RenderUtils.drawFilledCircle(x + defaultWidth - 10, y + (getOffset() / 2F - (FontManager.ProductSans20.getFont().getFontHeight() / 2F)) + 6.75f, 5, new Color(getDarkerMainColor()));
 
         if(((BoolValue) getSetting()).isEnabled() || animation.getValue() != 0)
         {
-            RenderUtils.drawFilledCircle(x + defaultWidth - 10, y + (getOffset() / 2F - (FontManager.ProductSans20.getFont().getFontHeight() / 2F)) + 6.75f, animation.getValue(), new Color(enabledColor));
+            RenderUtils.drawFilledCircle(x + defaultWidth - 10, y + (getOffset() / 2F - (FontManager.ProductSans20.getFont().getFontHeight() / 2F)) + 6.75f, animation.getValue(), new Color(getEnabledColor()));
             GlStateManager.resetColor();
             GL11.glColor4f(1, 1, 1, 1);
         }

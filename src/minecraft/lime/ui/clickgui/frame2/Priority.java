@@ -2,21 +2,27 @@ package lime.ui.clickgui.frame2;
 
 import java.awt.Color;
 
-public interface Priority {
-    int stringColor = -1;
+public class Priority {
+    public static int stringColor = -1;
 
-    int defaultWidth = 125;
-    int defaultHeight = 300;
+    public static int defaultWidth = 125;
+    public static int defaultHeight = 300;
 
-    int enabledColor = new Color(174, 28, 28).getRGB();
 
-    int mainColor = new Color(25, 25, 25).getRGB();
-    int darkerMainColor = new Color(mainColor).darker().getRGB();
+    public static int outlineWidth = 1;
+    public static int categoryNameHeight = 20;
 
-    int outlineWidth = 1;
-    int categoryNameHeight = 20;
+    public static int moduleHeight = 15;
 
-    int moduleHeight = 15;
+    public static boolean hoveredColor = true;
 
-    boolean hoveredColor = false;
+    public static int getMainColor() {
+        return new Color(41, 41, 41).getRGB();
+    }
+    public static int getDarkerMainColor() {
+        return new Color(25, 25, 25).getRGB();
+    }
+    public static int getEnabledColor() {
+        return new Color(30, 30, 30).getRGB();
+    }
 }

@@ -8,12 +8,18 @@ import lime.ui.clickgui.frame2.Priority;
 import lime.ui.clickgui.frame2.components.impl.*;
 import lime.utils.render.ColorUtils;
 import lime.utils.render.animation.easings.*;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.util.ResourceLocation;
+import org.lwjgl.opengl.GL11;
 
 import java.awt.Color;
 import java.util.ArrayList;
 
-public class FrameModule implements Priority {
+import static lime.ui.clickgui.frame2.Priority.*;
+
+public class FrameModule {
     private final Module module;
     private final ArrayList<Component> components;
 
@@ -63,12 +69,20 @@ public class FrameModule implements Priority {
         moduleAnimation.setReversed(!module.isToggled());
         moduleAnimation.setSpeed(1000).update();
 
-        if(GuiScreen.hover(x, y, mouseX, mouseY, defaultWidth, moduleHeight) && hoveredColor) {
-            GuiScreen.drawRect(x,y, x + defaultWidth, y + moduleHeight, darkerMainColor);
+        if(module.isToggled() || (moduleAnimation.isReversed() && moduleAnimation.getValue() != 0)) {
+            GuiScreen.drawRect(x,y, x + defaultWidth, y + moduleHeight, ColorUtils.setAlpha(new Color(getEnabledColor()), (int) moduleAnimation.getValue()).getRGB());
+        }
+        if(GuiScreen.hover(x, y, mouseX, mouseY, defaultWidth, moduleHeight) && Priority.hoveredColor) {
+            GuiScreen.drawRect(x,y, x + defaultWidth, y + moduleHeight, getDarkerMainColor());
         }
 
-        if(module.isToggled() || (moduleAnimation.isReversed() && moduleAnimation.getValue() != 0)) {
-            GuiScreen.drawRect(x,y, x + defaultWidth, y + moduleHeight, ColorUtils.setAlpha(new Color(enabledColor), (int) moduleAnimation.getValue()).getRGB());
+        if(module.hasSettings()) {
+            GL11.glPushMatrix();
+            GL11.glColor4f(1, 1, 1, 1);
+            Minecraft.getMinecraft().getTextureManager().bindTexture(opened ? new ResourceLocation("lime/clickgui/frame/expand.png") : new ResourceLocation("lime/clickgui/frame/collapse.png"));
+            GL11.glScalef(0.5f, 0.5f, 0.5f);
+            Gui.drawModalRectWithCustomSizedTexture((x + defaultWidth - 12) * 2, (y + 5) * 2, 0, 0, 16, 10, 16, 10);
+            GL11.glPopMatrix();
         }
 
         FontManager.ProductSans20.getFont().drawString(module.getName(), x+3, y + (moduleHeight / 2F - (FontManager.ProductSans20.getFont().getFontHeight() / 2F)), stringColor, true);
@@ -127,7 +141,6 @@ public class FrameModule implements Priority {
             for (Component component : this.components) { // using for loop because continue isn't supported on foreach
                 component.getSetting().constantCheck();
                 if(component.getSetting().isHide()) continue;
-
                 offset += component.getOffset();
             }
         }
