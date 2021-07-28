@@ -12,20 +12,13 @@ import lime.features.module.impl.combat.KillAura;
 import lime.features.module.impl.world.Scaffold;
 import lime.features.setting.impl.EnumValue;
 import lime.utils.movement.MovementUtils;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.network.play.server.S08PacketPlayerPosLook;
 import net.minecraft.potion.Potion;
 
-import java.util.Arrays;
-import java.util.Base64;
-
 @ModuleData(name = "Speed", category = Category.MOVEMENT)
 public class Speed extends Module {
-    private enum Mode {
-        Vanilla, Vanilla_BHOP, Verus, Verus_LOWHOP, NCP, Funcraft, Funcraft_YPORT, Mineplex
-    }
 
-    private final EnumValue mode = new EnumValue("Mode", this, Mode.Vanilla);
+    private final EnumValue mode = new EnumValue("Mode", this, "Vanilla", "Vanilla", "Vanilla_BHOP", "Verus", "Verus_LOWHOP", "NCP", "Funcraft", "Funcraft_YPORT", "Mineplex");
 
     private double moveSpeed;
     private double lastDist;
@@ -53,7 +46,7 @@ public class Speed extends Module {
 
     @EventTarget
     public void onMotion(EventMotion e) {
-        this.setSuffix(mode.getSelected().name());
+        this.setSuffix(mode.getSelected());
         if(mode.is("vanilla") || mode.is("vanilla_bhop")) {
             if(mc.thePlayer.isMoving()) {
                 MovementUtils.setSpeed(1);
@@ -71,8 +64,6 @@ public class Speed extends Module {
             if(!MovementUtils.isOnGround(0.4)) {
                 if(mode.is("verus")) {
                     mc.thePlayer.motionY -= 0.0000000075;
-                } else {
-                    mc.thePlayer.motionY = -0.0784000015258789;
                 }
                 mc.timer.timerSpeed = 1;
             } else {
@@ -80,8 +71,12 @@ public class Speed extends Module {
                     mc.timer.timerSpeed = 1.005f;
             }
 
+            if(mc.thePlayer.motionY > 0.2 && mode.is("verus_lowhop")) {
+                mc.thePlayer.motionY = -0.0784000015258789;
+            }
+
             if (mc.thePlayer.isMoving()) {
-                double tickBoost = mc.thePlayer.ticksExisted % 20 == 0 ? 0.1 : 0; // 0.25 max, mais le bhop est moins smooth
+                double tickBoost = mc.thePlayer.ticksExisted % 20 == 0 ? 0.1 : 0;
                 double amplifier = mc.thePlayer.isPotionActive(Potion.moveSpeed) ? mc.thePlayer.getActivePotionEffect(Potion.moveSpeed).getAmplifier() : 0;
                 double speedBoost = mc.thePlayer.isPotionActive(Potion.moveSpeed) ? amplifier == 1 ? 0.035 : amplifier > 1 ? 0.035 * (amplifier / 2) : 0.035 / 2 : 0;
                 double motionBoost = MovementUtils.isOnGround(0.15) && !mc.thePlayer.onGround ? 0.045 : 0;
@@ -175,7 +170,7 @@ public class Speed extends Module {
 
 
             this.moveSpeed = Math.max(this.moveSpeed, MovementUtils.getBaseMoveSpeed());
-            if (KillAura.getEntity() != null && KillAura.getEntity() instanceof EntityLivingBase) {
+            if (KillAura.getEntity() != null) {
                 TargetStrafe targetStrafe2 = (TargetStrafe) Lime.getInstance().getModuleManager().getModuleC(TargetStrafe.class);
                 targetStrafe2.setMoveSpeed(e, moveSpeed);
             } else {

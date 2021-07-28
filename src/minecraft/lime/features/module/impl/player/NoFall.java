@@ -13,15 +13,11 @@ import org.apache.commons.lang3.StringUtils;
 @ModuleData(name = "No Fall", category = Category.PLAYER)
 public class NoFall extends Module {
 
-    private enum Mode {
-        Vanilla, Verus
-    }
-
-    private EnumValue mode = new EnumValue("Mode", this, Mode.Vanilla);
+    private EnumValue mode = new EnumValue("Mode", this, "Vanilla", "Vanilla", "Verus");
 
     @EventTarget
     public void onUpdate(EventMotion e) {
-        this.setSuffix(mode.getSelected().name());
+        this.setSuffix(mode.getSelected());
         if(e.isPre()) {
             if(mc.thePlayer.fallDistance > 2.5) {
                 if(mode.is("vanilla")) {

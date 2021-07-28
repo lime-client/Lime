@@ -10,10 +10,7 @@ import lime.utils.movement.MovementUtils;
 
 @ModuleData(name = "Glide", category = Category.MOVEMENT)
 public class Glide extends Module {
-    private enum Mode {
-        VERUS
-    }
-    private EnumValue mode = new EnumValue("Mode", this, Mode.VERUS);
+    private final EnumValue mode = new EnumValue("Mode", this, "Verus", "Verus");
 
     @EventTarget
     public void onUpdate(EventUpdate e) {

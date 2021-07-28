@@ -33,13 +33,9 @@ import java.util.Map;
 @ModuleData(name = "ESP", category = Category.RENDER)
 public class ESP extends Module {
 
-    private enum Mode {
-        Box, Cylinder
-    }
-
     private final BoolValue esp3d = new BoolValue("3D ESP", this, false);
 
-    private final EnumValue mode = new EnumValue("Mode", this, Mode.Box).onlyIf(esp3d.getSettingName(), "bool", "true");
+    private final EnumValue mode = new EnumValue("Mode", this, "Box", "Box", "Cylinder").onlyIf(esp3d.getSettingName(), "bool", "true");
     private final BoolValue box = new BoolValue("Box", this, true);
     private final BoolValue health = new BoolValue("Health", this, true);
     private final BoolValue skeleton = new BoolValue("Skeleton", this, false);
@@ -158,7 +154,7 @@ public class ESP extends Module {
             startEnd(false);
         }
 
-        this.setSuffix(mode.getSelected().name());
+        this.setSuffix(mode.getSelected());
         if(!esp3d.isEnabled())
         {
             this.setSuffix("");

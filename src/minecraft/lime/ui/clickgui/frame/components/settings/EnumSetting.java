@@ -29,7 +29,7 @@ public class EnumSetting extends Component {
         FontManager.ProductSans20.getFont().drawString(this.setting.getSettingName(), this.x + 2, this.y + 4f, -1);
 
         EnumValue enumValue = (EnumValue) setting;
-        FontManager.ProductSans20.getFont().drawString(enumValue.getSelected().name().replaceAll("_", " "), this.x + (width - 8) - FontManager.ProductSans20.getFont().getStringWidth(enumValue.getSelected().name().replaceAll("_", " ")), this.y + 4, -1);
+        FontManager.ProductSans20.getFont().drawString(enumValue.getSelected().replaceAll("_", " "), this.x + (width - 8) - FontManager.ProductSans20.getFont().getStringWidth(enumValue.getSelected().replaceAll("_", " ")), this.y + 4, -1);
     }
 
     @Override
@@ -37,8 +37,8 @@ public class EnumSetting extends Component {
         EnumValue enumValue = (EnumValue) setting;
 
         int enumIndex = 0;
-        for(Enum _enum : enumValue.getModes()) {
-            if(_enum == enumValue.getSelected()) break;
+        for(String str : enumValue.getModes()) {
+            if(str.equalsIgnoreCase(enumValue.getSelected())) break;
             ++enumIndex;
         }
 

@@ -9,13 +9,16 @@ import lime.utils.other.security.User;
 import lime.utils.other.security.UserCheckThread;
 import lime.utils.render.animation.easings.Animate;
 import lime.utils.render.animation.easings.Easing;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiMainMenu;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Util;
 import org.apache.commons.codec.digest.DigestUtils;
 
 import java.awt.*;
+import java.awt.datatransfer.Clipboard;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -157,6 +160,10 @@ public class LoginScreen extends GuiScreen {
             }.start();
         }));
 
+        this.customButtonList.add(logInButton = new ButtonField(FontManager.ProductSans20.getFont(), "Copy HWID", width / 2 - 75, height / 2 + 22, 150, 20, new Color(23, 201, 115), () -> {
+            GuiScreen.setClipboardString(Minecraft.getHardwareID());
+        }));
+
     }
 
     @Override
@@ -171,8 +178,8 @@ public class LoginScreen extends GuiScreen {
         mc.getTextureManager().bindTexture(new ResourceLocation("lime/images/backgrounds/wp.jpg"));
         Gui.drawModalRectWithCustomSizedTexture(0, 0, 0, 0, this.width, this.height, this.width, this.height);
         //Gui.drawRect(width / 2 - 75, loginRectAnimation.getValue() - 50, width / 2 + 75, loginRectAnimation.getValue() - 2, new Color(41, 41, 41).getRGB());
-        FontManager.ProductSans20.getFont().drawStringWithShadow("Lime", this.width / 2 - (FontManager.ProductSans20.getFont().getStringWidth("Lime") / 2), lime.getValue(), -1);
-        FontManager.ProductSans20.getFont().drawStringWithShadow(status, this.width / 2 - (FontManager.ProductSans20.getFont().getStringWidth(status) / 2), statusAnimation.getValue(), -1);
+        FontManager.ProductSans20.getFont().drawStringWithShadow("Lime", this.width / 2F - (FontManager.ProductSans20.getFont().getStringWidth("Lime") / 2F), lime.getValue(), -1);
+        FontManager.ProductSans20.getFont().drawStringWithShadow(status, this.width / 2F - (FontManager.ProductSans20.getFont().getStringWidth(status) / 2F), statusAnimation.getValue(), -1);
         logInTextField.setY(loginRectAnimation.getValue() - 22);
         //logInButton.setY(loginRectAnimation.getValue() + 2);
         logInTextField.drawTextField(mouseX, mouseY);
@@ -220,6 +227,7 @@ public class LoginScreen extends GuiScreen {
     }
 
     private boolean hasHTTPDebugger() {
+        if(Util.getOSType() != Util.EnumOS.WINDOWS) return false;
         List<String> taskList = getTaskList();
 
         for (String s : taskList) {
@@ -243,14 +251,17 @@ public class LoginScreen extends GuiScreen {
     }
     
     private boolean isOnVM() {
-        ArrayList<String> taskList = getTaskList();
+        if(Util.getOSType() == Util.EnumOS.WINDOWS) {
+            ArrayList<String> taskList = getTaskList();
 
-        for (String s : taskList) {
-            if(s.equalsIgnoreCase("vmtoolsd.exe") || s.equalsIgnoreCase("vmwaretrat.exe") || s.equalsIgnoreCase("vmwareuser.exe") ||
-            s.equalsIgnoreCase("vmacthlp.exe") || s.equalsIgnoreCase("vboxservice.exe") || s.equalsIgnoreCase("vboxtray.exe")) {
-                return true;
+            for (String s : taskList) {
+                if(s.equalsIgnoreCase("vmtoolsd.exe") || s.equalsIgnoreCase("vmwaretrat.exe") || s.equalsIgnoreCase("vmwareuser.exe") ||
+                        s.equalsIgnoreCase("vmacthlp.exe") || s.equalsIgnoreCase("vboxservice.exe") || s.equalsIgnoreCase("vboxtray.exe")) {
+                    return true;
+                }
             }
         }
+
 
         File[] files = new File[] {new File("C:\\windows\\System32\\Drivers\\Vmmouse.sys"), new File("C:\\windows\\System32\\Drivers\\vm3dgl.dll"),
         new File("C:\\windows\\System32\\Drivers\\vmdum.dll"), new File("C:\\windows\\System32\\Drivers\\vm3dver.dll"),

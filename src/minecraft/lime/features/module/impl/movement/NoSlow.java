@@ -16,15 +16,11 @@ import org.apache.commons.lang3.StringUtils;
 @ModuleData(name = "No Slow", category = Category.MOVEMENT)
 public class NoSlow extends Module {
 
-    private enum Mode {
-        Vanilla, NCP
-    }
-
-    private final EnumValue mode = new EnumValue("Mode", this, Mode.Vanilla);
+    private final EnumValue mode = new EnumValue("Mode", this, "Vanilla", "Vanilla", "NCP");
 
     @EventTarget
     public void onMotion(EventMotion e) {
-        this.setSuffix(mode.getSelected().name());
+        this.setSuffix(mode.getSelected());
         if((mc.thePlayer.isBlocking() || (mc.thePlayer.isEating() && mc.thePlayer.ticksExisted % 10000 == 0)) && mode.is("ncp")) {
             if(e.isPre())
                 mc.thePlayer.sendQueue.addToSendQueue(new C07PacketPlayerDigging(C07PacketPlayerDigging.Action.RELEASE_USE_ITEM, BlockPos.ORIGIN, EnumFacing.DOWN));

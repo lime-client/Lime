@@ -22,11 +22,8 @@ import static lime.utils.other.InventoryUtils.*;
 
 @ModuleData(name = "Inventory Manager", category = Category.PLAYER)
 public class InventoryManager extends Module {
-    private enum Mode {
-        NORMAL, OPEN_INV
-    }
 
-    private final EnumValue mode = new EnumValue("Mode", this, Mode.NORMAL);
+    private final EnumValue mode = new EnumValue("Mode", this, "Normal", "Normal", "OpenInv");
     private final SlideValue delay = new SlideValue("Delay", this, 5, 100, 80, 5);
     private final BoolValue dropJunk = new BoolValue("Drop Junk", this, true);
 
@@ -39,7 +36,7 @@ public class InventoryManager extends Module {
     @EventTarget
     public void onMotion(EventMotion e) {
         if(mc.thePlayer.openContainer instanceof ContainerChest) return;
-        if((mode.is("open_inv") && mc.currentScreen instanceof GuiInventory) || (mode.is("normal"))  && timer.hasReached((long) delay.intValue())) {
+        if((mode.is("openinv") && mc.currentScreen instanceof GuiInventory) || (mode.is("normal"))  && timer.hasReached((long) delay.intValue())) {
             if(dropJunk.isEnabled()) {
                 dropJunks();
             }
@@ -121,7 +118,7 @@ public class InventoryManager extends Module {
             }
         }
 
-        if(pickaxes.isEmpty() || !timer.hasReached(delay.intValue())) return;
+        if(pickaxes.isEmpty()) return;
 
         pickaxes.sort(Comparator.comparingDouble(InventoryUtils::getToolEffect));
 
@@ -129,15 +126,18 @@ public class InventoryManager extends Module {
 
         ItemStack bestPickaxe = pickaxes.get(0);
 
-        if(getSlot(slot).getHasStack() && getSlot(slot).getStack().getItem() instanceof ItemPickaxe) {
-            if(getToolEffect(bestPickaxe) <= getToolEffect(getSlot(slot).getStack())) {
-                drop(findSlotByItem(bestPickaxe));
+        if(timer.hasReached(delay.intValue())) {
+            if(getSlot(slot).getHasStack() && getSlot(slot).getStack().getItem() instanceof ItemPickaxe) {
+                if(getToolEffect(bestPickaxe) <= getToolEffect(getSlot(slot).getStack())) {
+                    drop(findSlotByItem(bestPickaxe));
+                } else {
+                    swap(findSlotByItem(bestPickaxe), slot - 36);
+                }
             } else {
                 swap(findSlotByItem(bestPickaxe), slot - 36);
             }
-        } else {
-            swap(findSlotByItem(bestPickaxe), slot - 36);
-        }
+        } else
+            return;
 
         pickaxes.remove(bestPickaxe);
 
@@ -161,7 +161,7 @@ public class InventoryManager extends Module {
             }
         }
 
-        if(axes.isEmpty() || !timer.hasReached(delay.intValue())) return;
+        if(axes.isEmpty()) return;
 
         axes.sort(Comparator.comparingDouble(InventoryUtils::getToolEffect));
 
@@ -169,15 +169,18 @@ public class InventoryManager extends Module {
 
         ItemStack bestAxe = axes.get(0);
 
-        if(getSlot(slot).getHasStack() && getSlot(slot).getStack().getItem() instanceof ItemAxe) {
-            if(getToolEffect(bestAxe) <= getToolEffect(getSlot(slot).getStack())) {
-                drop(findSlotByItem(bestAxe));
+        if(timer.hasReached(delay.intValue())) {
+            if(getSlot(slot).getHasStack() && getSlot(slot).getStack().getItem() instanceof ItemAxe) {
+                if(getToolEffect(bestAxe) <= getToolEffect(getSlot(slot).getStack())) {
+                    drop(findSlotByItem(bestAxe));
+                } else {
+                    swap(findSlotByItem(bestAxe), slot - 36);
+                }
             } else {
                 swap(findSlotByItem(bestAxe), slot - 36);
             }
-        } else {
-            swap(findSlotByItem(bestAxe), slot - 36);
-        }
+        } else
+            return;
 
         axes.remove(bestAxe);
 

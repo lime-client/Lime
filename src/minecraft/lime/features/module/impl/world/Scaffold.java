@@ -32,26 +32,6 @@ import java.util.List;
 @ModuleData(name = "Scaffold", category = Category.WORLD)
 public class Scaffold extends Module {
 
-    private enum State
-    {
-        PRE, POST
-    }
-
-    private enum Rotation
-    {
-        NONE, BASIC, HYPIXEL, LEGIT, LEGIT2
-    }
-
-    private enum ItemSpoof
-    {
-        SPOOF, KEEPSPOOF, PICK
-    }
-
-    private enum Tower
-    {
-        NONE, NCP
-    }
-
     private static final List<Block> blacklistedBlocks = Arrays.asList(
             Blocks.air, Blocks.water, Blocks.flowing_water, Blocks.lava, Blocks.flowing_lava,
             Blocks.enchanting_table, Blocks.carpet, Blocks.glass_pane, Blocks.stained_glass_pane, Blocks.iron_bars,
@@ -64,10 +44,10 @@ public class Scaffold extends Module {
             Blocks.sand, Blocks.cactus, Blocks.dispenser, Blocks.noteblock, Blocks.dropper, Blocks.crafting_table, Blocks.web, Blocks.pumpkin, Blocks.sapling, Blocks.cobblestone_wall, Blocks.oak_fence,
             Blocks.yellow_flower, Blocks.red_flower);
 
-    private final EnumValue state = new EnumValue("State", this, State.POST);
-    private final EnumValue rotations = new EnumValue("Rotations", this, Rotation.BASIC);
-    private final EnumValue itemSpoof = new EnumValue("Item Spoof", this, ItemSpoof.SPOOF);
-    private final EnumValue tower = new EnumValue("Tower", this, Tower.NCP);
+    private final EnumValue state = new EnumValue("State", this, "POST", "PRE", "POST");
+    private final EnumValue rotations = new EnumValue("Rotations", this, "Basic", "None", "Basic", "Hypixel", "Legit", "Legit2");
+    private final EnumValue itemSpoof = new EnumValue("Item Spoof", this, "Spoof", "Spoof", "KeepSpoof", "Pick");
+    private final EnumValue tower = new EnumValue("Tower", this, "NCP", "None", "NCP");
     private final SlideValue speedModifier = new SlideValue("Speed Modifier", this, 0.1, 5, 1, 0.1);
     private final SlideValue expand = new SlideValue("Expand", this, 0, 5, 0, 0.05);
     private final SlideValue delay = new SlideValue("Delay", this, 0, 300, 0, 25);
@@ -94,6 +74,11 @@ public class Scaffold extends Module {
 
     @Override
     public void onEnable() {
+        if(mc.thePlayer == null)
+        {
+            this.toggle();
+            return;
+        }
         y = (int) mc.thePlayer.posY;
         slot = mc.thePlayer.inventory.currentItem;
         timerTower.reset();
@@ -204,7 +189,7 @@ public class Scaffold extends Module {
                     }
                 }
 
-                switch(itemSpoof.getSelected().name().toLowerCase())
+                switch(itemSpoof.getSelected().toLowerCase())
                 {
                     case "pick":
                     case "spoof":

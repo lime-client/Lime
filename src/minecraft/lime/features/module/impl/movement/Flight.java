@@ -19,15 +19,11 @@ import java.util.ArrayList;
 @ModuleData(name = "Flight", category = Category.MOVEMENT)
 public class Flight extends Module {
 
-    private enum Mode {
-        Vanilla, Funcraft, Funcraft2, Funcraft_Gamer, Verus, Verus_Fast, Astral
-    }
-
     private final Graph speedGraph = new Graph(10, 110, "Speed");
     private final Timer timer = new Timer();
 
     //Settings
-    public final EnumValue mode = new EnumValue("Mode", this, Mode.Vanilla);
+    public final EnumValue mode = new EnumValue("Mode", this, "Vanilla", "Vanilla", "Funcraft", "Funcraft2", "Funcraft_Gamer", "Verus", "Verus_No_Damage", "Verus_Fast", "Survival_Dub", "Astral");
     public final SlideValue speed = new SlideValue("Speed", this, 0.5, 10, 1.5, 0.5).onlyIf(mode.getSettingName(), "enum", "vanilla", "verus_fast");
     private final BoolValue bobbing = new BoolValue("Bobbing", this, true);
     public final BoolValue verusGlide = new BoolValue("Verus Glide", this, false).onlyIf(mode.getSettingName(), "enum", "verus_fast");
@@ -45,6 +41,8 @@ public class Flight extends Module {
         this.flights.add(new Vanilla());
         this.flights.add(new Astral());
         this.flights.add(new Verus());
+        this.flights.add(new VerusNoDamage());
+        this.flights.add(new SurvivalDub());
     }
 
     public int getTicks() {
@@ -66,7 +64,7 @@ public class Flight extends Module {
             this.toggle();
             return;
         }
-        flights.stream().filter(flight -> flight.getName().equalsIgnoreCase(mode.getSelected().name())).findFirst().ifPresent(FlightValue::onEnable);
+        flights.stream().filter(flight -> flight.getName().equalsIgnoreCase(mode.getSelected())).findFirst().ifPresent(FlightValue::onEnable);
         ticks = 0;
     }
 
@@ -77,7 +75,7 @@ public class Flight extends Module {
             mc.timer.timerSpeed = 1;
         }
 
-        flights.stream().filter(flight -> flight.getName().equalsIgnoreCase(mode.getSelected().name())).findFirst().ifPresent(FlightValue::onDisable);
+        flights.stream().filter(flight -> flight.getName().equalsIgnoreCase(mode.getSelected())).findFirst().ifPresent(FlightValue::onDisable);
     }
 
     @EventTarget
@@ -91,21 +89,21 @@ public class Flight extends Module {
 
     @EventTarget
     public void onMove(EventMove e) {
-        flights.stream().filter(flight -> flight.getName().equalsIgnoreCase(mode.getSelected().name())).findFirst().ifPresent(flightV -> flightV.onMove(e));
+        flights.stream().filter(flight -> flight.getName().equalsIgnoreCase(mode.getSelected())).findFirst().ifPresent(flightV -> flightV.onMove(e));
     }
 
     @EventTarget
     public void onUpdate(EventUpdate e) {
-        flights.stream().filter(flight -> flight.getName().equalsIgnoreCase(mode.getSelected().name())).findFirst().ifPresent(FlightValue::onUpdate);
+        flights.stream().filter(flight -> flight.getName().equalsIgnoreCase(mode.getSelected())).findFirst().ifPresent(FlightValue::onUpdate);
     }
 
     @EventTarget
     public void onMotion(EventMotion e) {
-        this.setSuffix(mode.getSelected().name());
+        this.setSuffix(mode.getSelected());
         if(bobbing.isEnabled() && mc.thePlayer.isMoving()) {
             mc.thePlayer.cameraYaw = 0.116f;
         }
-        flights.stream().filter(flight -> flight.getName().equalsIgnoreCase(mode.getSelected().name())).findFirst().ifPresent(flight -> flight.onMotion(e));
+        flights.stream().filter(flight -> flight.getName().equalsIgnoreCase(mode.getSelected())).findFirst().ifPresent(flight -> flight.onMotion(e));
 
         if(e.isPre())
             ticks++;
@@ -113,11 +111,11 @@ public class Flight extends Module {
 
     @EventTarget
     public void onPacket(EventPacket e) {
-        flights.stream().filter(flight -> flight.getName().equalsIgnoreCase(mode.getSelected().name())).findFirst().ifPresent(flightV -> flightV.onPacket(e));
+        flights.stream().filter(flight -> flight.getName().equalsIgnoreCase(mode.getSelected())).findFirst().ifPresent(flightV -> flightV.onPacket(e));
     }
 
     @EventTarget
     public void onBoundingBox(EventBoundingBox e) {
-        flights.stream().filter(flight -> flight.getName().equalsIgnoreCase(mode.getSelected().name())).findFirst().ifPresent(flightV -> flightV.onBoundingBox(e));
+        flights.stream().filter(flight -> flight.getName().equalsIgnoreCase(mode.getSelected())).findFirst().ifPresent(flightV -> flightV.onBoundingBox(e));
     }
 }

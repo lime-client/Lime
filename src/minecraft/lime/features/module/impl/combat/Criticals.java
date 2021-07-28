@@ -18,13 +18,13 @@ public class Criticals extends Module {
         Packet
     }
 
-    private final EnumValue mode = new EnumValue("Mode", this, Mode.Packet);
+    private final EnumValue mode = new EnumValue("Mode", this, "Packet", "Packet");
 
     private final Timer timer = new Timer();
 
     @EventTarget
     public void onPacket(EventPacket e) {
-        this.setSuffix(mode.getSelected().name());
+        this.setSuffix(mode.getSelected());
         if(e.getPacket() instanceof C02PacketUseEntity) {
             C02PacketUseEntity packet = (C02PacketUseEntity) e.getPacket();
             if(packet.getAction() == C02PacketUseEntity.Action.ATTACK && mc.thePlayer.onGround && timer.hasReached(450)) {

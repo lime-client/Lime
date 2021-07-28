@@ -18,21 +18,18 @@ import java.awt.*;
 
 @ModuleData(name = "Chams", category = Category.RENDER)
 public class Chams extends Module {
-    private enum Mode {
-        Colored
-    }
 
-    private final EnumValue mode = new EnumValue("Mode", this, Mode.Colored);
+    private final EnumValue mode = new EnumValue("Mode", this, "Colored", "Colored");
     private final BoolValue onlyTargets = new BoolValue("Only Targets", this, false);
 
     @EventTarget
     public void onRendererLivingEntity(EventRendererEntity e) {
-        this.setSuffix(mode.getSelected().name());
+        this.setSuffix(mode.getSelected());
         e.setCanceled(true);
         if(e.isPre()) {
             // Only colored
             // TODO: THROUGH
-            switch(mode.getSelected().name().toLowerCase()) {
+            switch(mode.getSelected().toLowerCase()) {
                 case "colored":
                     if(!(e.getEntity() instanceof EntityPlayer) || (onlyTargets.isEnabled() && KillAura.getEntity() != e.getEntity())) {
                         e.setCanceled(false);

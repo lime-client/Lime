@@ -17,14 +17,14 @@ public class AntiVoid extends Module {
         Motion
     }
 
-    private final EnumValue mode = new EnumValue("Mode", this, Mode.Motion);
+    private final EnumValue mode = new EnumValue("Mode", this, "Motion", "Motion");
     private final SlideValue pullBack = new SlideValue("Pullback", this, 500, 3000, 500, 500);
 
     private final Timer timer = new Timer();
 
     @EventTarget
     public void onMotion(EventMotion e) {
-        this.setSuffix(mode.getSelected().name());
+        this.setSuffix(mode.getSelected());
         if(!mc.thePlayer.onGround && mc.thePlayer.isEntityAlive() && MovementUtils.isVoidUnder()) {
             if(mode.is("motion")) {
                 if(timer.hasReached((int) pullBack.getCurrent())) {

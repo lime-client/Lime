@@ -16,9 +16,8 @@ import net.minecraft.network.play.server.S12PacketEntityVelocity;
 
 @ModuleData(name = "Custom Flight", category = Category.MOVEMENT)
 public class CustomFlight extends Module {
-    private enum Damage { NONE, BASIC }
 
-    private final EnumValue damage = new EnumValue("Damage", this, Damage.NONE);
+    private final EnumValue damage = new EnumValue("Damage", this, "None", "None", "Basic");
     private final SlideValue timer = new SlideValue("Timer", this, 0.1, 10, 1, 0.5);
     private final SlideValue speed = new SlideValue("Speed", this, 0.25, 10, 3, 0.25);
     private final SlideValue decreaseSpeed = new SlideValue("Decrease Speed", this, 0, 3, 0.2, 0.05);

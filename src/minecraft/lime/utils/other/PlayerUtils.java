@@ -19,6 +19,7 @@ public class PlayerUtils implements IUtil {
 
     public static void verusDamage() {
         double posY = mc.thePlayer.posY;
+        double prevPosY = mc.thePlayer.prevPosY;
 
         double[] values = {0.41999998688697815, 0.33319999363422426, 0.24813599859093927, 0.1647732818260721};
 
@@ -33,17 +34,22 @@ public class PlayerUtils implements IUtil {
 
 
         // Packet fall
+        prevPosY = posY - 0.07840000152587834;
         while(posY > mc.thePlayer.posY) {
-            posY -= 0.07840000152587834;
-            mc.getNetHandler().addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, posY, mc.thePlayer.posZ, false));
+            double lastDist = posY - prevPosY;
+            prevPosY = posY;
+
+            posY += (lastDist - 0.08) * 0.98;
+            if(posY > mc.thePlayer.posY) {
+                mc.getNetHandler().sendPacketNoEvent(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX , posY, mc.thePlayer.posZ, false));
+            }
         }
+
 
         // Saying that we reached the ground
         mc.getNetHandler().sendPacketNoEvent(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY, mc.thePlayer.posZ, true));
 
         // Simulating velocity so verus accept Velocity Packet
-        mc.getNetHandler().sendPacketNoEvent(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY + 0.41999998688697815, mc.thePlayer.posZ, false));
-
-        //TODO: Bypass Timer 11B Detection
+        mc.getNetHandler().addToSendQueue(new C03PacketPlayer(true));
     }
 }

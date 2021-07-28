@@ -46,7 +46,7 @@ public class ScriptManager {
         scriptEngine.put("registerModule", new AbstractJSObject() {
             @Override
             public Object call(Object thiz, Object... args) {
-                ScriptModule scriptModule = new ScriptModule((String) args[0], (int) args[1], Category.valueOf((String) args[2]));
+                ScriptModule scriptModule = new ScriptModule((String) args[0], (int) args[1], Category.SCRIPT);
                 scriptModules.add(scriptModule);
                 Lime.getInstance().getModuleManager().getModules().add(scriptModule);
                 return new ModuleWrapper(scriptModule);

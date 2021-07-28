@@ -4,28 +4,28 @@ import lime.features.module.Module;
 import lime.features.setting.SettingValue;
 
 public class EnumValue extends SettingValue {
-    private Enum selected;
-    private final Enum[] modes;
+    private String selected;
+    private final String[] modes;
 
-    public EnumValue(String settingName, Module parentModule, Enum _enum) {
+    public EnumValue(String settingName, Module parentModule, String _default, String... modes) {
         super(settingName, parentModule);
-        this.selected = _enum;
-        this.modes = (Enum[]) _enum.getDeclaringClass().getEnumConstants();
+        this.selected = _default;
+        this.modes = modes;
     }
 
-    public void setSelected(Enum selected) {
+    public void setSelected(String selected) {
         this.selected = selected;
     }
 
-    public Enum getSelected() {
+    public String getSelected() {
         return selected;
     }
 
-    public Enum[] getModes() {
+    public String[] getModes() {
         return modes;
     }
 
     public boolean is(String name) {
-        return name.equalsIgnoreCase(selected.name());
+        return name.equalsIgnoreCase(selected);
     }
 }

@@ -30,7 +30,7 @@ public class LongJump extends Module {
         Vanilla, Funcraft, NCP_Bow, Verus, Verus_Bow, Mineplex, Kokscraft
     }
 
-    private final EnumValue mode = new EnumValue("Mode", this, Mode.Vanilla);
+    private final EnumValue mode = new EnumValue("Mode", this, "Vanilla", "Vanilla", "Funcraft", "NCP_Bow", "Verus", "Verus_Bow", "Mineplex", "Kokscraft");
     private final SlideValue speed = new SlideValue("Speed", this, 1, 9, 5, 0.5).onlyIf(mode.getSettingName(), "enum", "verus_bow", "verus");
 
     private double moveSpeed = 0;
@@ -109,7 +109,7 @@ public class LongJump extends Module {
 
     @EventTarget
     public void onMotion(EventMotion e) {
-        this.setSuffix(mode.getSelected().name());
+        this.setSuffix(mode.getSelected());
 
         // Auto Bow
         if((mode.is("verus_bow") || mode.is("ncp_bow") || mode.is("survivaldub")) && !bowd) {

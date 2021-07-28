@@ -22,7 +22,7 @@ public class EnumSetting extends Component {
     @Override
     public void drawScreen(int mouseX, int mouseY) {
         FontManager.ProductSans20.getFont().drawString(getSetting().getSettingName(), x + 5, y + (getOffset() / 2F - (FontManager.ProductSans20.getFont().getFontHeight() / 2F)), -1, true);
-        FontManager.ProductSans20.getFont().drawString(((EnumValue) getSetting()).getSelected().name().toUpperCase(), x + defaultWidth - FontManager.ProductSans20.getFont().getStringWidth(((EnumValue) getSetting()).getSelected().name().toUpperCase()) - 5, y + (getOffset() / 2F - (FontManager.ProductSans20.getFont().getFontHeight() / 2F)), -1, true);
+        FontManager.ProductSans20.getFont().drawString(((EnumValue) getSetting()).getSelected().toUpperCase(), x + defaultWidth - FontManager.ProductSans20.getFont().getStringWidth(((EnumValue) getSetting()).getSelected().toUpperCase()) - 5, y + (getOffset() / 2F - (FontManager.ProductSans20.getFont().getFontHeight() / 2F)), -1, true);
     }
 
     @Override
@@ -32,8 +32,8 @@ public class EnumSetting extends Component {
             EnumValue enumValue = (EnumValue) getSetting();
 
             int enumIndex = 0;
-            for(Enum _enum : enumValue.getModes()) {
-                if(_enum == enumValue.getSelected()) break;
+            for(String str : enumValue.getModes()) {
+                if(str.equalsIgnoreCase(enumValue.getSelected())) break;
                 ++enumIndex;
             }
 

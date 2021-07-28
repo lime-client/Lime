@@ -46,17 +46,11 @@ import java.util.Comparator;
 public class KillAura extends Module {
 
     // Settings
-    private enum State { PRE, POST }
-    private enum AutoBlock { NONE, FAKE, BASIC }
-    private enum Priority { DISTANCE, HEALTH, FOV }
-    private enum Rotations { NONE, BASIC, SMOOTH }
-    private enum TargetESP { NONE, CIRCLE }
-
-    private final EnumValue state = new EnumValue("State", this, State.PRE);
-    private final EnumValue priority = new EnumValue("Priority", this, Priority.DISTANCE);
-    private final EnumValue rotations = new EnumValue("Rotations", this, Rotations.BASIC);
-    private final EnumValue targetEsp = new EnumValue("Target ESP", this, TargetESP.CIRCLE);
-    private final EnumValue autoBlock = new EnumValue("Auto Block", this, AutoBlock.FAKE);
+    private final EnumValue state = new EnumValue("State", this, "PRE", "PRE", "POST");
+    private final EnumValue priority = new EnumValue("Priority", this, "Distance", "Distance", "Health", "FOV");
+    private final EnumValue rotations = new EnumValue("Rotations", this, "Basic", "None", "Basic", "Smooth");
+    private final EnumValue targetEsp = new EnumValue("Target ESP", this, "Circle", "None", "Circle");
+    private final EnumValue autoBlock = new EnumValue("Auto Block", this, "Fake", "None", "Basic", "Fake");
     private final SlideValue rotationsSpeedMin = new SlideValue("Rotations Min", this, 5, 100, 50, 1).onlyIf(rotations.getSettingName(), "enum", "smooth");
     private final SlideValue rotationsSpeedMax = new SlideValue("Rotations Max", this, 5, 100, 90, 1).onlyIf(rotations.getSettingName(), "enum", "smooth");
     private final SlideValue range = new SlideValue("Range", this, 2.8, 6, 4.2, 0.05);
@@ -132,7 +126,7 @@ public class KillAura extends Module {
             if(!rotations.is("none")) {
                 float[] rotations = null;
 
-                switch(this.rotations.getSelected().name().toLowerCase()) {
+                switch(this.rotations.getSelected().toLowerCase()) {
                     case "basic":
                         rotations = CombatUtils.getEntityRotations(entity, false);
                         break;
@@ -300,7 +294,7 @@ public class KillAura extends Module {
 
         if(entities.isEmpty()) return null;
 
-        switch(priority.getSelected().name().toLowerCase()) {
+        switch(priority.getSelected().toLowerCase()) {
             case "health":
                 entities.sort(Comparator.comparingDouble(entity -> ((EntityLivingBase) entity).getHealth()));
                 break;
@@ -316,6 +310,8 @@ public class KillAura extends Module {
     }
 
     private boolean isValid(Entity entity) {
+        AntiBot antiBot = (AntiBot) Lime.getInstance().getModuleManager().getModuleC(AntiBot.class);
+        if(antiBot.checkBots()) return false;
         if(teams.isEnabled() && entity instanceof EntityLivingBase && mc.thePlayer.isOnSameTeam((EntityLivingBase) entity)) return false;
         if((deathCheck.isEnabled() && !entity.isEntityAlive()) || (!mc.thePlayer.canEntityBeSeen(entity) && !throughWalls.isEnabled())) return false;
         return (entity instanceof EntityPlayer && this.players.isEnabled()) || ((entity instanceof EntityVillager || entity instanceof EntityAnimal) && this.passives.isEnabled()) || (entity instanceof EntityMob && this.mobs.isEnabled()) && mc.thePlayer.getDistanceToEntity(entity) <= this.range.getCurrent();

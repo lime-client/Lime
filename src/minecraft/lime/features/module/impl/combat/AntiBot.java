@@ -6,6 +6,7 @@ import lime.core.events.impl.EventPacket;
 import lime.features.module.Category;
 import lime.features.module.Module;
 import lime.features.module.ModuleData;
+import lime.features.setting.impl.BoolValue;
 import lime.features.setting.impl.EnumValue;
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.entity.Entity;
@@ -20,21 +21,20 @@ import java.util.Map;
 @ModuleData(name = "Anti Bot", category = Category.COMBAT)
 public class AntiBot extends Module {
 
-    private enum Mode { Funcraft, Hypixel, Mineplex }
-
-    private final EnumValue mode = new EnumValue("Mode", this, Mode.Funcraft);
+    private final EnumValue mode = new EnumValue("Mode", this, "Funcraft", "Funcraft", "Hypixel", "Mineplex");
+    private final BoolValue remove = new BoolValue("Remove", this, false);
     private final Map<Integer, Double> distanceMap = new HashMap<>();
 
-    @EventTarget
-    public void onMotion(EventMotion e) {
-        this.setSuffix(mode.getSelected().name());
+    public boolean checkBots() {
         if(mode.is("funcraft")) {
             for (Entity ent : mc.theWorld.getLoadedEntityList()) {
                 if(ent instanceof AbstractClientPlayer && ent != mc.thePlayer && ent.ticksExisted < 30) {
                     if(!((AbstractClientPlayer) ent).hasSkin() && ent.ticksExisted < 25) {
                         AbstractClientPlayer player = (AbstractClientPlayer) ent;
                         if(mc.thePlayer.getDistanceToEntity(player) <= 5 && player.motionY == 0 && !player.onGround && player.rotationYaw != -180 && player.rotationPitch != 0) {
-                            mc.theWorld.removeEntity(player);
+                            if(remove.isEnabled())
+                                mc.theWorld.removeEntity(ent);
+                            return true;
                         }
                     }
                 }
@@ -46,12 +46,22 @@ public class AntiBot extends Module {
                 if(entity instanceof EntityPlayer) {
                     EntityPlayer ent = (EntityPlayer) entity;
                     if(ent.posY - mc.thePlayer.posY > 3 && ent != mc.thePlayer && mc.thePlayer.getDistanceSqToEntity(ent) < 40 && !ent.onGround && ent.motionY == 0) {
-                        mc.theWorld.removeEntity(ent);
-                        break;
+                        if(remove.isEnabled())
+                            mc.theWorld.removeEntity(ent);
+                        return true;
                     }
                 }
             }
         }
+        return false;
+    }
+
+    @EventTarget
+    public void onMotion(EventMotion e) {
+        this.setSuffix(mode.getSelected());
+
+        if(remove.isEnabled())
+            checkBots();
 
         if(mode.is("hypixel")) {
             for(Entity entity : mc.theWorld.getLoadedEntityList()) {

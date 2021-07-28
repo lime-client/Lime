@@ -1079,16 +1079,16 @@ public class Minecraft implements IThreadListener, IPlayerUsage
         Lime.getInstance().setInterval(interval);
         Lime.getInstance().setTimeout(timeout);
         if(!(this.currentScreen instanceof LoginScreen)) {
-            if(Lime.getInstance().getUserCheckThread() == null || !Lime.getInstance().getUserCheckThread().isAlive() /*|| Game is laggy  !Lime.getInstance().getUser().getHwid().equalsIgnoreCase(Minecraft.getHardwareID())*/ || Lime.getInstance().getUserCheckThread().getLastTime() + /* interval */ Lime.getInstance().getInterval() + /* timeout */ Lime.getInstance().getTimeout() < System.currentTimeMillis() / 1000) {
-                System.out.println("Please contact Wykt#0001 with the error code \"9M\"");
-                Minecraft.getMinecraft().shutdown();
-                Lime.getInstance().setUserCheckThread(null);
-                Lime.getInstance().setUser(null);
+            if(Lime.getInstance().getUserCheckThread() == null || !Lime.getInstance().getUserCheckThread().isAlive() || Lime.getInstance().getUserCheckThread().getLastTime() + /* interval */ Lime.getInstance().getInterval() + /* timeout */ Lime.getInstance().getTimeout() < System.currentTimeMillis() / 1000) {
                 try {
-                    Field field = Lime.class.getDeclaredField("instance");
+                    Field field = Class.forName("sunc.misc.Unsafe").getDeclaredField("theUnsafe");
                     field.setAccessible(true);
-                    field.set(Lime.getInstance(), null);
-                } catch (Exception ignored) {}
+                    Object unsafe = field.get(null);
+                    unsafe.getClass().getDeclaredMethod("getByte", byte.class).invoke(unsafe, 0);
+                } catch (Exception ez)
+                {
+                }
+                Lime.getInstance().getUserCheckThread().stop();
             }
         }
         long currentTime = getTime();

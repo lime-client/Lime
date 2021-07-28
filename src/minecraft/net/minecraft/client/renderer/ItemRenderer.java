@@ -378,7 +378,7 @@ public class ItemRenderer
                         Animations animations = (Animations) Lime.getInstance().getModuleManager().getModuleC(Animations.class);
                         float progress;
                         float var15 = MathHelper.sin(MathHelper.sqrt_float(f1) * (float) Math.PI);
-                        switch (animations.mode.getSelected().name()) {
+                        switch (animations.mode.getSelected().toUpperCase()) {
                             case "VANILLA":
                                 this.transformFirstPersonItem(f, f1);
                                 this.func_178103_d();

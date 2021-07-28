@@ -162,6 +162,15 @@ public class PlayerWrapper extends AbstractJSObject implements IUtil {
                 }
             };
         }
+        if(name.equals("sendMessage")) {
+            return new AbstractJSObject() {
+                @Override
+                public Object call(Object thiz, Object... args) {
+                    mc.thePlayer.sendChatMessage((String) args[0]);
+                    return null;
+                }
+            };
+        }
         return super.getMember(name);
     }
 }

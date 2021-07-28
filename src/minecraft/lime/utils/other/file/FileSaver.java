@@ -54,7 +54,7 @@ public class FileSaver {
                         jsonWriter.value(this.getSettingType(settingValue).name().toLowerCase());
                         jsonWriter.name("value");
                         if(this.getSettingType(settingValue) == SettingType.ENUM) {
-                            jsonWriter.value(((EnumValue) settingValue).getSelected().name().toLowerCase());
+                            jsonWriter.value(((EnumValue) settingValue).getSelected().toLowerCase());
                         } else if(this.getSettingType(settingValue) == SettingType.SLIDER) {
                             jsonWriter.value(((SlideValue) settingValue).getCurrent());
                         } else if(this.getSettingType(settingValue) == SettingType.BOOL) {
@@ -122,9 +122,9 @@ public class FileSaver {
                             // Enum Setting
                             if(type == SettingType.ENUM) {
                                 EnumValue enumSetting = (EnumValue) Lime.getInstance().getSettingsManager().getSetting(setting.getAsJsonObject().get("name").getAsString(), m);
-                                Enum selected = null;
-                                for(Enum _enum : enumSetting.getModes()) {
-                                    if(_enum.name().equalsIgnoreCase(setting.getAsJsonObject().get("value").getAsString())) selected = _enum;
+                                String selected = null;
+                                for(String str : enumSetting.getModes()) {
+                                    if(str.equalsIgnoreCase(setting.getAsJsonObject().get("value").getAsString())) selected = str;
                                 }
                                 if(selected == null) continue;
                                 enumSetting.setSelected(selected);

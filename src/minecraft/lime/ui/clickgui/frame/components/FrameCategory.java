@@ -77,6 +77,10 @@ public class FrameCategory {
         isOpened = false;
     }
 
+    public Category getCategory() {
+        return category;
+    }
+
     public void initGui() {
         animation.setMax(y);
         endedAnimation = false;

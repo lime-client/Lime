@@ -23,11 +23,7 @@ import java.lang.reflect.Field;
 @ModuleData(name = "Auto Armor", category = Category.PLAYER)
 public class AutoArmor extends Module {
 
-    private enum Mode {
-        NORMAL, OPEN_INV
-    }
-
-    private final EnumValue mode = new EnumValue("Mode", this, Mode.NORMAL);
+    private final EnumValue mode = new EnumValue("Mode", this, "Normal", "Normal", "OpenInv");
     private final SlideValue delay = new SlideValue("Delay", this, 0, 100, 50, 5);
 
     @EventTarget

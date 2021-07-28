@@ -32,10 +32,10 @@ public class HUD extends Module {
     }
 
     private final TextValue clientName = new TextValue("Client Name", this, "Lime");
-    public final EnumValue targetHud = new EnumValue("Target HUD", this, TargetHUD.LIME);
+    public final EnumValue targetHud = new EnumValue("Target HUD", this, "Lime", "None", "Lime");
     public final SlideValue targetHudX = new SlideValue("TargetHUD X", this, 0, 100, 50, 1).onlyIf(targetHud.getSettingName(), "enum", "lime");
     public final SlideValue targetHudY = new SlideValue("TargetHUD Y", this, 0, 100, 50, 1).onlyIf(targetHud.getSettingName(), "enum", "lime");
-    private final EnumValue color = new EnumValue("Color", this, ColorMode.Lime);
+    private final EnumValue color = new EnumValue("Color", this, "Lime", "Lime", "Astolfo", "Rainbow", "Fade");
     private final ColorValue fadeColor = new ColorValue("Fade Color", this, new Color(200, 0, 0).getRGB()).onlyIf(color.getSettingName(), "enum", "fade");
     private final BoolValue customFont = new BoolValue("Custom Font", this, true);
     private final BoolValue suffix = new BoolValue("Suffix", this, true);
@@ -108,7 +108,7 @@ public class HUD extends Module {
     public static Color getColor(int index) {
         HUD hud = (HUD) Lime.getInstance().getModuleManager().getModuleC(HUD.class);
         if(hud.color.is("lime")) {
-            return ColorUtils.blend2colors(new Color(0, 255, 0), new Color(0, 255, 0).darker(), (System.nanoTime() + (index + index * 100000000L * 2)) / 1.0E09F % 2.0F);
+            return ColorUtils.blend2colors(new Color(75, 75, 75), new Color(200, 200, 200).darker(), (System.nanoTime() + (index + index * 100000000L * 2)) / 1.0E09F % 2.0F);
         }
         if(hud.color.is("astolfo")) {
             return new Color(ColorUtils.getAstolfo(3000, index * (17 * 4)));

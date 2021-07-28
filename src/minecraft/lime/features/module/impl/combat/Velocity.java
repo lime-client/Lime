@@ -16,11 +16,7 @@ import net.minecraft.network.play.server.S27PacketExplosion;
 @ModuleData(name = "Velocity", category = Category.COMBAT)
 public class Velocity extends Module {
 
-    private enum Mode {
-        PACKET, AAC
-    }
-
-    private final EnumValue mode = new EnumValue("Mode", this, Mode.PACKET);
+    private final EnumValue mode = new EnumValue("Mode", this, "Packet", "Packet", "AAC");
 
     @EventTarget
     public void onUpdate(EventUpdate e) {

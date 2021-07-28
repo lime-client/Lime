@@ -18,11 +18,7 @@ import java.awt.*;
 @ModuleData(name = "Chest ESP", category = Category.RENDER)
 public class ChestESP extends Module {
 
-    private enum Mode {
-        OUTLINE, FILL
-    }
-
-    private final EnumValue mode = new EnumValue("Mode", this, Mode.OUTLINE);
+    private final EnumValue mode = new EnumValue("Mode", this, "Outline", "Outline", "Fill");
 
     @EventTarget
     public void on3D(Event3D e) {

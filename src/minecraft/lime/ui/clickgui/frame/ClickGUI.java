@@ -10,6 +10,7 @@ import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.util.ResourceLocation;
+import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
@@ -68,11 +69,10 @@ public class ClickGUI extends GuiScreen {
         if(configMenuOpened) {
             animate.update();
             this.drawConfigMenu(mouseX, mouseY);
-        } else {
-
         }
 
         for (FrameCategory frame : frames) {
+            if(frame.getCategory() == Category.SCRIPT && Lime.getInstance().getModuleManager().getModulesFromCategory(frame.getCategory()).isEmpty()) continue;
             frame.drawFrame(mouseX, mouseY);
         }
 
@@ -115,6 +115,7 @@ public class ClickGUI extends GuiScreen {
         for (FrameCategory frame : frames) {
             frame.onGuiClosed();
         }
+        mc.gameSettings.guiScale = lime.features.module.impl.render.ClickGUI.guiScale;
         super.onGuiClosed();
     }
 

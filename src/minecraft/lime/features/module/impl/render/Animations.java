@@ -12,6 +12,6 @@ public class Animations extends Module {
         VANILLA, SWANG, SWANK, SWING, SWONG, SWAING, SPIN, ASTOLFO, NUF, OHARE, LUCKY, EXHIBITION, EXHIBITION2
     }
 
-    public final EnumValue mode = new EnumValue("Mode", this, Mode.SWING);
+    public final EnumValue mode = new EnumValue("Mode", this, "Swing", "Vanilla", "Swang", "Swank", "Swing", "Swong", "Swaing", "Spin", "Astolfo", "Nuf", "oHare", "Lucky", "Exhibition", "Exhibition2");
     public final SlideValue swingSlowdown = new SlideValue("Swing Slowdown", this, 0.1, 3, 1, 0.1);
 }
