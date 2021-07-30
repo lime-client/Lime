@@ -107,6 +107,11 @@ public class FileSaver {
                                 textValue.setText(setting.getAsJsonObject().get("value").getAsString());
                             }
 
+                            if(type == SettingType.COLOR) {
+                                ColorValue colorValue = (ColorValue) Lime.getInstance().getSettingsManager().getSetting(setting.getAsJsonObject().get("name").getAsString(), m);
+                                colorValue.setColor(setting.getAsJsonObject().get("value").getAsInt());
+                            }
+
                             // Bool Setting
                             if(type == SettingType.BOOL) {
                                 BoolValue boolSetting = (BoolValue) Lime.getInstance().getSettingsManager().getSetting(setting.getAsJsonObject().get("name").getAsString(), m);

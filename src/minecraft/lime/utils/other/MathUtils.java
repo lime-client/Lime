@@ -13,6 +13,10 @@ public class MathUtils {
         return bd.doubleValue();
     }
 
+    public static double snapToStep(double value, double valueStep) {
+        return valueStep == 0 ? value : Math.round((valueStep * (double) Math.round(value / valueStep)) * 100000D) / 100000D;
+    }
+
     public static float random(double min, double max){
         return (float) (Math.random() * (max - min) + min);
     }

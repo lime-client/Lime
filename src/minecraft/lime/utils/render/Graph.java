@@ -1,100 +1,65 @@
 package lime.utils.render;
-
-import lime.managers.FontManager;
-import lime.utils.movement.MovementUtils;
-import net.minecraft.client.gui.Gui;
+import lime.utils.other.MathUtils;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.renderer.GlStateManager;
 import org.lwjgl.opengl.GL11;
-
+import java.awt.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Graph {
-    private final int x, y;
-
-    private final String graphName;
-
-    private final ArrayList<Float> values;
-
-
-    public Graph(int x, int y, String graphName) {
-        this.x = x;
-        this.y = y;
-        this.graphName = graphName;
-        this.values = new ArrayList<>();
+    private final String name;
+    private final ArrayList<Double> datas;
+    public Graph(String name) {
+        this.name = name;
+        datas = new ArrayList<>();
     }
-
-    public void renderGraphs(){
-        FontManager.ProductSans20.getFont().drawString(graphName + " | " + MovementUtils.getBPS() + " / Sec", x, y - FontManager.ProductSans20.getFont().getFontHeight(), -1);
-
-        GL11.glPushMatrix();
-        RenderUtils.prepareScissorBox(x, y, x + 125, y + 48);
-        GL11.glEnable(3089);
-
-        Gui.drawRect(x, y, x + 125, y + 48, 0x90000000);
-
-        GL11.glEnable(GL11.GL_BLEND);
-        GL11.glDisable(GL11.GL_TEXTURE_2D);
-
-        GL11.glLineWidth(1.5f);
-        int space = 8;
-
-        for (int i = 0; i < values.size(); i++) {
-            GL11.glBegin(3);
-            GL11.glColor4f(255, 255, 255, 255);
-            GL11.glVertex2f(x + i * space, (y + 43) - values.get(i) / 4);
-            if (i + 1 < values.size())
-                GL11.glVertex2f(x + (i + 1) * space, (y + 43) - values.get(i + 1) / 4);
-            GL11.glEnd();
+    public void drawGraph(float x, float y, float width, float height) {
+        FontRenderer fr = Minecraft.getMinecraft().fontRendererObj;
+        double max = 0;
+        double average = 0;
+        if (datas.size() > width) datas.remove(0);
+        for (double data : datas) {
+            if (data > max) max = MathUtils.snapToStep(data, 0.01);
+            average += Math.min(data, height);
         }
-
-        if (values.size() > 20) {
-            values.remove(0);
+        average = MathUtils.snapToStep(average/datas.size(), 0.01);
+        GL11.glLineWidth(2);
+        RenderUtils.drawLine(x, y, x + width, y, new Color(0xAAAAAA));
+        RenderUtils.drawLine(x, y, x, y + height, new Color(0xAAAAAA));
+        RenderUtils.drawLine(x + width, y, x + width, y + height, new Color(0xAAAAAA));
+        RenderUtils.drawLine(x, y + height, x + width, y + height, new Color(0xAAAAAA));
+        GlStateManager.pushMatrix();
+        GL11.glEnable(GL11.GL_SCISSOR_TEST);
+        RenderUtils.prepareScissorBox(x, y, x + width, y + height);
+        GlStateManager.disableTexture2D();
+        GlStateManager.disableAlpha();
+        GlStateManager.enableBlend();
+        GL11.glEnable(GL11.GL_LINE_SMOOTH);
+        GL11.glLineWidth(2);
+        RenderUtils.glColor(-1);
+        GL11.glBegin(GL11.GL_LINE_STRIP);
+        int i = 0;
+        for (double data : datas) {
+            GL11.glVertex2d(x + i, y + height - Math.min(data, height));
+            ++i;
         }
-        GL11.glLineWidth(1.5f);
-        if(values.size() > 1) {
-            GL11.glBegin(3);
-            GL11.glColor4f(0, 255, 0, 255);
-            GL11.glVertex2f(x + 105, (y + 43) - values.get(values.size() - 1) / 4);
-            GL11.glVertex2f(x + 125, (y + 43) - values.get(values.size() - 1) / 4);
-            GL11.glEnd();
-        }
-
-        //bottom
-        GL11.glBegin(3);
-        GL11.glColor4f(255, 255, 255, 255);
-        GL11.glVertex2f(x, y + 48);
-        GL11.glVertex2f(x + 125, y + 48);
         GL11.glEnd();
-
-        //top
-        GL11.glBegin(3);
-        GL11.glColor4f(255, 255, 255, 255);
-        GL11.glVertex2f(x, y);
-        GL11.glVertex2f(x + 125, y);
-        GL11.glEnd();
-
-
-        //left
-        GL11.glBegin(3);
-        GL11.glColor4f(255, 255, 255, 255);
-        GL11.glVertex2f(x, y);
-        GL11.glVertex2f(x, y + 48);
-        GL11.glEnd();
-
-        //right
-        GL11.glBegin(3);
-        GL11.glColor4f(255, 255, 255, 255);
-        GL11.glVertex2f(x + 125, y);
-        GL11.glVertex2f(x + 125, y + 48);
-        GL11.glEnd();
-
-        GL11.glDisable(GL11.GL_BLEND);
-        GL11.glEnable(GL11.GL_TEXTURE_2D);
-
-        GL11.glDisable(3089);
-        GL11.glPopMatrix();
+        RenderUtils.drawLine(x, y + height - (float) max, x + width, y + height - (float) max, Color.RED);
+        RenderUtils.drawLine(x, y + height - (float) average, x + width, y + height - (float) average, Color.GREEN);
+        GL11.glDisable(GL11.GL_SCISSOR_TEST);
+        GlStateManager.enableAlpha();
+        GlStateManager.disableBlend();
+        GlStateManager.color(1,1,1);
+        GlStateManager.enableTexture2D();
+        GlStateManager.popMatrix();
+        fr.drawStringWithShadow(name, x + 4, y + 4, -1);
+        fr.drawStringWithShadow(average + " avg", x + width - 4 - fr.getStringWidth(average + " avg"), y + 4, -1);
+        fr.drawStringWithShadow(max + " max", x + width - 4 - fr.getStringWidth(max + " max"), y + 14, -1);
     }
-
-    public void addValue(float i) {
-        this.values.add(i);
-    }
+    public void update(double data) { datas.add(data); }
+    public void clear() { datas.clear(); }
+    public ArrayList<Double> getDatas() { return datas; }
+    public String getName() { return name; }
 }

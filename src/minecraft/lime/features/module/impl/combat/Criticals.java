@@ -14,10 +14,6 @@ import org.apache.commons.lang3.StringUtils;
 @ModuleData(name = "Criticals", category = Category.COMBAT)
 public class Criticals extends Module {
 
-    private enum Mode {
-        Packet
-    }
-
     private final EnumValue mode = new EnumValue("Mode", this, "Packet", "Packet");
 
     private final Timer timer = new Timer();

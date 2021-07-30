@@ -1,6 +1,10 @@
 package lime.scripting.api.events;
 
 import jdk.nashorn.api.scripting.AbstractJSObject;
+import net.minecraft.network.Packet;
+import net.minecraft.network.play.client.*;
+import net.minecraft.network.play.server.S08PacketPlayerPosLook;
+import net.minecraft.network.play.server.S12PacketEntityVelocity;
 
 public class EventPacket extends AbstractJSObject {
 
@@ -35,7 +39,45 @@ public class EventPacket extends AbstractJSObject {
                 @Override
                 public Object call(Object thiz, Object... args) {
                     //retard but works
-                    return Integer.parseInt(eventPacket.getPacket().getClass().getSimpleName().toLowerCase().substring(1).split("packet")[0]);
+                    Packet<?> packet = eventPacket.getPacket();
+                    if(packet instanceof C00PacketKeepAlive) {
+                        return 0x00;
+                    }
+                    if(packet instanceof C01PacketChatMessage) {
+                        return 0x01;
+                    }
+                    if(packet instanceof C02PacketUseEntity) {
+                        return 0x02;
+                    }
+                    if(packet instanceof C03PacketPlayer) {
+                        if(packet instanceof C03PacketPlayer.C04PacketPlayerPosition) {
+                            return 0x04;
+                        }
+                        if(packet instanceof C03PacketPlayer.C05PacketPlayerLook) {
+                            return 0x05;
+                        }
+                        if(packet instanceof C03PacketPlayer.C06PacketPlayerPosLook) {
+                            return 0x06;
+                        }
+                        return 0x03;
+                    }
+                    if(packet instanceof C07PacketPlayerDigging) {
+                        return 0x07;
+                    }
+                    if(packet instanceof C08PacketPlayerBlockPlacement) {
+                        return 0x08;
+                    }
+                    if(packet instanceof C09PacketHeldItemChange) {
+                        return 0x09;
+                    }
+                    // client side packet ^^
+                    if(packet instanceof S08PacketPlayerPosLook) {
+                        return 0x08;
+                    }
+                    if(packet instanceof S12PacketEntityVelocity) {
+                        return 0x12;
+                    }
+                    return 0x69; // funni packet
                 }
             };
         }

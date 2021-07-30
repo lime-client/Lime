@@ -23,18 +23,10 @@ import java.util.concurrent.atomic.AtomicInteger;
 @ModuleData(name = "HUD", category = Category.RENDER)
 public class HUD extends Module {
 
-    private enum ColorMode {
-        Lime, Astolfo, Rainbow, Fade
-    }
-
-    private enum TargetHUD {
-        NONE, LIME
-    }
-
     private final TextValue clientName = new TextValue("Client Name", this, "Lime");
-    public final EnumValue targetHud = new EnumValue("Target HUD", this, "Lime", "None", "Lime");
-    public final SlideValue targetHudX = new SlideValue("TargetHUD X", this, 0, 100, 50, 1).onlyIf(targetHud.getSettingName(), "enum", "lime");
-    public final SlideValue targetHudY = new SlideValue("TargetHUD Y", this, 0, 100, 50, 1).onlyIf(targetHud.getSettingName(), "enum", "lime");
+    public final EnumValue targetHud = new EnumValue("Target HUD", this, "Lime", "None", "Lime", "Astolfo");
+    public final SlideValue targetHudX = new SlideValue("TargetHUD X", this, 0, 100, 50, 1).onlyIf(targetHud.getSettingName(), "enum", "lime", "astolfo");
+    public final SlideValue targetHudY = new SlideValue("TargetHUD Y", this, 0, 100, 50, 1).onlyIf(targetHud.getSettingName(), "enum", "lime", "astolfo");
     private final EnumValue color = new EnumValue("Color", this, "Lime", "Lime", "Astolfo", "Rainbow", "Fade");
     private final ColorValue fadeColor = new ColorValue("Fade Color", this, new Color(200, 0, 0).getRGB()).onlyIf(color.getSettingName(), "enum", "fade");
     private final BoolValue customFont = new BoolValue("Custom Font", this, true);

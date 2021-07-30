@@ -2,6 +2,7 @@ package lime.scripting;
 
 import jdk.nashorn.api.scripting.AbstractJSObject;
 import lime.core.Lime;
+import lime.core.events.EventBus;
 import lime.features.module.Category;
 import lime.scripting.api.ClientWrapper;
 import lime.scripting.api.ModuleWrapper;
@@ -38,6 +39,7 @@ public class ScriptManager {
     {
         scriptEngine = new ScriptEngineManager().getEngineByName("ecmascript");
         for (ScriptModule scriptModule : scriptModules) {
+            EventBus.INSTANCE.unregister(scriptModule);
             Lime.getInstance().getModuleManager().getModules().remove(scriptModule);
             Lime.getInstance().getSettingsManager().getHashMapSettings().remove(scriptModule);
         }

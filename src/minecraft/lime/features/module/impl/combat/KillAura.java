@@ -11,16 +11,14 @@ import lime.features.setting.impl.BoolValue;
 import lime.features.setting.impl.EnumValue;
 import lime.features.setting.impl.SlideValue;
 import lime.ui.notifications.Notification;
+import lime.ui.targethud.impl.AstolfoTargetHUD;
 import lime.ui.targethud.impl.LimeTargetHUD;
 import lime.utils.combat.CombatUtils;
 import lime.utils.combat.Rotation;
 import lime.utils.other.Timer;
 import lime.utils.render.ColorUtils;
 import lime.utils.render.RenderUtils;
-import lime.utils.render.animation.easings.Animate;
-import lime.utils.render.animation.easings.Easing;
 import lime.utils.time.DeltaTime;
-import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
@@ -31,7 +29,6 @@ import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemSword;
 import net.minecraft.network.play.client.C02PacketUseEntity;
-import net.minecraft.network.play.client.C03PacketPlayer;
 import net.minecraft.network.play.client.C07PacketPlayerDigging;
 import net.minecraft.network.play.client.C08PacketPlayerBlockPlacement;
 import net.minecraft.util.BlockPos;
@@ -51,6 +48,7 @@ public class KillAura extends Module {
     private final EnumValue rotations = new EnumValue("Rotations", this, "Basic", "None", "Basic", "Smooth");
     private final EnumValue targetEsp = new EnumValue("Target ESP", this, "Circle", "None", "Circle");
     private final EnumValue autoBlock = new EnumValue("Auto Block", this, "Fake", "None", "Basic", "Fake");
+    private final EnumValue autoBlockState = new EnumValue("Auto Block State", this, "POST", "PRE", "POST");
     private final SlideValue rotationsSpeedMin = new SlideValue("Rotations Min", this, 5, 100, 50, 1).onlyIf(rotations.getSettingName(), "enum", "smooth");
     private final SlideValue rotationsSpeedMax = new SlideValue("Rotations Max", this, 5, 100, 90, 1).onlyIf(rotations.getSettingName(), "enum", "smooth");
     private final SlideValue range = new SlideValue("Range", this, 2.8, 6, 4.2, 0.05);
@@ -69,18 +67,20 @@ public class KillAura extends Module {
     private final Timer cpsTimer = new Timer();
 
     // AutoBlock
-    private boolean isBlocking = false;
+    public static boolean isBlocking = false;
 
     // Smooth rotations
     private float currentYaw, currentPitch;
 
     // TargetHUD
     private final LimeTargetHUD limeTargetHUD = new LimeTargetHUD();
+    private final AstolfoTargetHUD astolfoTargetHUD = new AstolfoTargetHUD();
 
     @Override
     public void onEnable() {
         limeTargetHUD.resetHealthAnimated();
         limeTargetHUD.resetHealthAnimated();
+        astolfoTargetHUD.resetHealthAnimated();
         if(mc.thePlayer == null) {
             this.toggle();
             return;
@@ -114,11 +114,11 @@ public class KillAura extends Module {
     public void onMotion(EventMotion e) {
 
         if(isBlocking && hasSword() && !autoBlock.is("basic")) {
-            System.out.println("b");
             mc.playerController.syncCurrentPlayItem();
             mc.thePlayer.sendQueue.addToSendQueue(new C07PacketPlayerDigging(C07PacketPlayerDigging.Action.RELEASE_USE_ITEM, BlockPos.ORIGIN, EnumFacing.DOWN));
             isBlocking = false;
         }
+
         EntityLivingBase entity = getEntityByPriority();
 
         if(entity != null && isValid(entity)) {
@@ -145,8 +145,6 @@ public class KillAura extends Module {
 
                 e.setYaw(rotations[0]);
                 e.setPitch(rotations[1]);
-                //mc.thePlayer.rotationYaw = rotations[0];
-                //mc.thePlayer.rotationPitch = rotations[1];
 
                 mc.thePlayer.setRotationsTP(e);
 
@@ -160,13 +158,17 @@ public class KillAura extends Module {
 
             KillAura.entity = entity;
 
-            if(!e.isPre() && hasSword() && autoBlock.is("basic") && !isBlocking) {
+            if(autoBlockState.is(e.getState().name()) && hasSword() && autoBlock.is("basic") && !isBlocking) {
                 mc.getNetHandler().addToSendQueue(new C08PacketPlayerBlockPlacement(mc.thePlayer.getHeldItem()));
                 mc.thePlayer.setItemInUse(mc.thePlayer.getHeldItem(), 32767);
                 isBlocking = true;
             }
             if(isBlocking) {
                 mc.thePlayer.setItemInUse(mc.thePlayer.getHeldItem(), 32767);
+            }
+
+            if(!hasSword()) {
+                isBlocking = false;
             }
 
             if(!state.is(e.getState().name())) return;
@@ -195,6 +197,7 @@ public class KillAura extends Module {
     public void onWorldLoaded(EventWorldChange e)
     {
         this.disableModule();
+        KillAura.entity = null;
         Lime.getInstance().getNotificationManager().addNotification(new Notification("Kill Aura", "Disabled Kill Aura because you changed world!", Notification.Type.WARNING));
     }
 
@@ -202,8 +205,15 @@ public class KillAura extends Module {
     public void on2D(Event2D e)
     {
         HUD hud = (HUD) Lime.getInstance().getModuleManager().getModule("HUD");
-        if(hud.targetHud.is("lime") && entity != null && entity.isEntityAlive() && this.isToggled() && mc.thePlayer.getDistanceToEntity(this.entity) <= range.getCurrent() && (entity.canEntityBeSeen(mc.thePlayer) || (!entity.canEntityBeSeen(mc.thePlayer) && throughWalls.isEnabled()))){
-            limeTargetHUD.draw(entity, (float) hud.targetHudX.getCurrent() / 100f * (e.getScaledResolution().getScaledWidth() - 174), (float) hud.targetHudY.getCurrent() / 100f * (e.getScaledResolution().getScaledHeight() - 70), getColor(Math.round(entity.getHealth())));
+        if(entity != null && entity.isEntityAlive() && this.isToggled() && mc.thePlayer.getDistanceToEntity(KillAura.entity) <= range.getCurrent() && (entity.canEntityBeSeen(mc.thePlayer) || (!entity.canEntityBeSeen(mc.thePlayer) && throughWalls.isEnabled()))){
+            switch(hud.targetHud.getSelected().toLowerCase()) {
+                case "lime":
+                    limeTargetHUD.draw(entity, (float) hud.targetHudX.getCurrent() / 100f * (e.getScaledResolution().getScaledWidth() - 174), (float) hud.targetHudY.getCurrent() / 100f * (e.getScaledResolution().getScaledHeight() - 70), getColor(Math.round(entity.getHealth())));
+                    break;
+                case "astolfo":
+                    astolfoTargetHUD.draw(entity, (float) hud.targetHudX.getCurrent() / 100f * (e.getScaledResolution().getScaledWidth() - 174), (float) hud.targetHudY.getCurrent() / 100f * (e.getScaledResolution().getScaledHeight() - 70), getColor(Math.round(entity.getHealth())));
+                    break;
+            }
         }
     }
 
@@ -254,9 +264,11 @@ public class KillAura extends Module {
             {
                 for (int j = 0; j < 361; j++) {
                     RenderUtils.glColor(ColorUtils.setAlpha(clientColor, (int) (!down ? 255 * height : 255 * (1 - height))));
-                    GL11.glVertex3d(x + Math.cos(Math.toRadians(j)) * size, y + yOffset, z - Math.sin(Math.toRadians(j)) * size);
+                    final double x1 = x + Math.cos(Math.toRadians(j)) * size;
+                    final double z1 = z - Math.sin(Math.toRadians(j)) * size;
+                    GL11.glVertex3d(x1, y + yOffset, z1);
                     RenderUtils.glColor(ColorUtils.setAlpha(clientColor, 0));
-                    GL11.glVertex3d(x + Math.cos(Math.toRadians(j)) * size, y + yOffset + ((!down ? -1 * (1 - height) : .5 * height)), z - Math.sin(Math.toRadians(j)) * size);
+                    GL11.glVertex3d(x1, y + yOffset + ((!down ? -1 * (1 - height) : .5 * height)), z1);
                 }
             }
             GL11.glEnd();

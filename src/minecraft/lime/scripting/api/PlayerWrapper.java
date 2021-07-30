@@ -4,6 +4,8 @@ import jdk.nashorn.api.scripting.AbstractJSObject;
 import lime.scripting.api.events.EventMove;
 import lime.utils.IUtil;
 import lime.utils.movement.MovementUtils;
+import net.minecraft.network.play.client.C01PacketChatMessage;
+import net.minecraft.network.play.client.C03PacketPlayer;
 
 public class PlayerWrapper extends AbstractJSObject implements IUtil {
     @Override
@@ -167,6 +169,40 @@ public class PlayerWrapper extends AbstractJSObject implements IUtil {
                 @Override
                 public Object call(Object thiz, Object... args) {
                     mc.thePlayer.sendChatMessage((String) args[0]);
+                    return null;
+                }
+            };
+        }
+        if(name.equals("hurtTime")) {
+            return new AbstractJSObject() {
+                @Override
+                public Object call(Object thiz, Object... args) {
+                    return mc.thePlayer.hurtTime;
+                }
+            };
+        }
+        if(name.equals("sendPacket")) {
+            return new AbstractJSObject() {
+                @Override
+                public Object call(Object thiz, Object... args) {
+                    int packetId = (Integer) args[0];
+                    switch(packetId) {
+                        case 0x01:
+                            mc.getNetHandler().sendPacketNoEvent(new C01PacketChatMessage((String) args[1]));
+                            break;
+                        case 0x03:
+                            mc.getNetHandler().sendPacketNoEvent(new C03PacketPlayer((Boolean) args[1]));
+                            break;
+                        case 0x04:
+                            mc.getNetHandler().sendPacketNoEvent(new C03PacketPlayer.C04PacketPlayerPosition(Double.parseDouble(args[1] + ""), Double.parseDouble(args[2] + ""), Double.parseDouble(args[3] + ""), (Boolean) args[4]));
+                            break;
+                        case 0x05:
+                            mc.getNetHandler().sendPacketNoEvent(new C03PacketPlayer.C05PacketPlayerLook(Float.parseFloat(args[1] + ""), Float.parseFloat(args[2] + ""), (Boolean) args[3]));
+                            break;
+                        case 0x06:
+                            mc.getNetHandler().sendPacketNoEvent(new C03PacketPlayer.C06PacketPlayerPosLook(Double.parseDouble(args[1] + ""), Double.parseDouble(args[2] + ""), Double.parseDouble(args[3] + ""), Float.parseFloat(args[4] + ""), Float.parseFloat(args[5] + ""), (Boolean) args[6]));
+                            break;
+                    }
                     return null;
                 }
             };

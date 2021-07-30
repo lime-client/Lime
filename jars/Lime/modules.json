@@ -2,7 +2,7 @@
   "informations": [
     {
       "author": "Lime Auto Save",
-      "time": 1627443375
+      "time": 1627649900
     }
   ],
   "modules": [
@@ -31,7 +31,7 @@
     {
       "moduleName": "Criticals",
       "key": -1,
-      "toggled": false,
+      "toggled": true,
       "settings": [
         {
           "name": "Mode",
@@ -53,12 +53,12 @@
         {
           "name": "Priority",
           "type": "enum",
-          "value": "distance"
+          "value": "health"
         },
         {
           "name": "Rotations",
           "type": "enum",
-          "value": "basic"
+          "value": "none"
         },
         {
           "name": "Target ESP",
@@ -68,7 +68,12 @@
         {
           "name": "Auto Block",
           "type": "enum",
-          "value": "fake"
+          "value": "basic"
+        },
+        {
+          "name": "Auto Block State",
+          "type": "enum",
+          "value": "pre"
         },
         {
           "name": "Rotations Min",
@@ -83,12 +88,12 @@
         {
           "name": "Range",
           "type": "slider",
-          "value": 3.8000000000000003
+          "value": 3.0500000000000003
         },
         {
           "name": "CPS",
           "type": "slider",
-          "value": 5.0
+          "value": 8.0
         },
         {
           "name": "Players",
@@ -103,12 +108,12 @@
         {
           "name": "Mobs",
           "type": "bool",
-          "value": false
+          "value": true
         },
         {
           "name": "Teams",
           "type": "bool",
-          "value": false
+          "value": true
         },
         {
           "name": "Ray Cast",
@@ -128,7 +133,7 @@
         {
           "name": "Death Check",
           "type": "bool",
-          "value": false
+          "value": true
         }
       ]
     },
@@ -147,12 +152,12 @@
     {
       "moduleName": "Anti Bot",
       "key": -1,
-      "toggled": true,
+      "toggled": false,
       "settings": [
         {
           "name": "Mode",
           "type": "enum",
-          "value": "mineplex"
+          "value": "funcraft"
         },
         {
           "name": "Remove",
@@ -195,13 +200,13 @@
     },
     {
       "moduleName": "TP Aura",
-      "key": -1,
-      "toggled": false,
+      "key": 21,
+      "toggled": true,
       "settings": [
         {
           "name": "CPS",
           "type": "slider",
-          "value": 5.0
+          "value": 3.0
         },
         {
           "name": "Targets",
@@ -281,12 +286,12 @@
     {
       "moduleName": "Target Strafe",
       "key": 45,
-      "toggled": true,
+      "toggled": false,
       "settings": [
         {
           "name": "Distance",
           "type": "slider",
-          "value": 3.0
+          "value": 2.5
         },
         {
           "name": "Space Only",
@@ -350,12 +355,12 @@
         {
           "name": "Mode",
           "type": "enum",
-          "value": "funcraft"
+          "value": "verus"
         },
         {
           "name": "Speed",
           "type": "slider",
-          "value": 5.0
+          "value": 6.5
         }
       ]
     },
@@ -374,17 +379,17 @@
     {
       "moduleName": "Flight",
       "key": 33,
-      "toggled": false,
+      "toggled": true,
       "settings": [
         {
           "name": "Mode",
           "type": "enum",
-          "value": "funcraft2"
+          "value": "vanilla"
         },
         {
           "name": "Speed",
           "type": "slider",
-          "value": 9.0
+          "value": 4.0
         },
         {
           "name": "Bobbing",
@@ -394,7 +399,7 @@
         {
           "name": "Verus Glide",
           "type": "bool",
-          "value": true
+          "value": false
         }
       ]
     },
@@ -406,18 +411,18 @@
     {
       "moduleName": "Speed",
       "key": 47,
-      "toggled": true,
+      "toggled": false,
       "settings": [
         {
           "name": "Mode",
           "type": "enum",
-          "value": "mineplex"
+          "value": "vanilla_bhop"
         }
       ]
     },
     {
       "moduleName": "Glide",
-      "key": 22,
+      "key": -1,
       "toggled": false,
       "settings": [
         {
@@ -457,7 +462,7 @@
         {
           "name": "Delay",
           "type": "slider",
-          "value": 25.0
+          "value": 80.0
         },
         {
           "name": "Drop Junk",
@@ -484,7 +489,7 @@
     {
       "moduleName": "Chest Stealer",
       "key": 23,
-      "toggled": true,
+      "toggled": false,
       "settings": [
         {
           "name": "Delay before close",
@@ -494,7 +499,7 @@
         {
           "name": "Delay",
           "type": "slider",
-          "value": 115.0
+          "value": 50.0
         },
         {
           "name": "Ignore Junk",
@@ -531,7 +536,7 @@
     {
       "moduleName": "Auto Armor",
       "key": 37,
-      "toggled": true,
+      "toggled": false,
       "settings": [
         {
           "name": "Mode",
@@ -541,7 +546,7 @@
         {
           "name": "Delay",
           "type": "slider",
-          "value": 65.0
+          "value": 50.0
         }
       ]
     },
@@ -558,24 +563,24 @@
     {
       "moduleName": "Streamer",
       "key": -1,
-      "toggled": true,
+      "toggled": false,
       "settings": [
         {
           "name": "Name",
           "type": "text",
-          "value": "nigger"
+          "value": "slt"
         }
       ]
     },
     {
       "moduleName": "Auto Tool",
       "key": -1,
-      "toggled": true
+      "toggled": false
     },
     {
       "moduleName": "KillSult",
       "key": -1,
-      "toggled": true
+      "toggled": false
     },
     {
       "moduleName": "Anti Void",
@@ -803,12 +808,12 @@
         {
           "name": "TargetHUD X",
           "type": "slider",
-          "value": 50.0
+          "value": 51.0
         },
         {
           "name": "TargetHUD Y",
           "type": "slider",
-          "value": 72.0
+          "value": 92.0
         },
         {
           "name": "Color",
@@ -818,7 +823,7 @@
         {
           "name": "Fade Color",
           "type": "color",
-          "value": -5305075
+          "value": -4974311
         },
         {
           "name": "Custom Font",
@@ -857,22 +862,22 @@
     {
       "moduleName": "Scaffold",
       "key": 34,
-      "toggled": true,
+      "toggled": false,
       "settings": [
         {
           "name": "State",
           "type": "enum",
-          "value": "post"
+          "value": "pre"
         },
         {
           "name": "Rotations",
           "type": "enum",
-          "value": "basic"
+          "value": "none"
         },
         {
           "name": "Item Spoof",
           "type": "enum",
-          "value": "spoof"
+          "value": "pick"
         },
         {
           "name": "Tower",
@@ -882,7 +887,7 @@
         {
           "name": "Speed Modifier",
           "type": "slider",
-          "value": 0.9
+          "value": 1.0
         },
         {
           "name": "Expand",
@@ -897,7 +902,7 @@
         {
           "name": "Keep Rotations",
           "type": "bool",
-          "value": false
+          "value": true
         },
         {
           "name": "Tower Move",
@@ -912,12 +917,12 @@
         {
           "name": "No Sprint",
           "type": "bool",
-          "value": true
+          "value": false
         },
         {
           "name": "Spoof Sprint",
           "type": "bool",
-          "value": true
+          "value": false
         },
         {
           "name": "Same Y",
@@ -927,7 +932,7 @@
         {
           "name": "No Swing",
           "type": "bool",
-          "value": true
+          "value": false
         },
         {
           "name": "Swapper",
@@ -937,7 +942,7 @@
         {
           "name": "Downwards",
           "type": "bool",
-          "value": false
+          "value": true
         },
         {
           "name": "Random Vec",
@@ -949,12 +954,12 @@
     {
       "moduleName": "No Rotate",
       "key": -1,
-      "toggled": true
+      "toggled": false
     },
     {
       "moduleName": "Breaker",
       "key": 49,
-      "toggled": false,
+      "toggled": true,
       "settings": [
         {
           "name": "Range",
@@ -993,11 +998,6 @@
     {
       "moduleName": "Eagle",
       "key": -1,
-      "toggled": false
-    },
-    {
-      "moduleName": "Funcraft Fast Fly",
-      "key": 36,
       "toggled": false
     }
   ]

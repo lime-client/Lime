@@ -1,12 +1,17 @@
 package lime.features.module.impl.combat;
 
+import lime.core.Lime;
 import lime.core.events.EventTarget;
+import lime.core.events.impl.Event2D;
 import lime.core.events.impl.Event3D;
 import lime.core.events.impl.EventUpdate;
 import lime.features.module.Category;
 import lime.features.module.Module;
 import lime.features.module.ModuleData;
+import lime.features.module.impl.render.HUD;
 import lime.features.setting.impl.SlideValue;
+import lime.ui.targethud.impl.AstolfoTargetHUD;
+import lime.ui.targethud.impl.LimeTargetHUD;
 import lime.utils.movement.pathfinder.CustomVec;
 import lime.utils.movement.pathfinder.utils.PathComputer;
 import lime.utils.other.Timer;
@@ -18,6 +23,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.play.client.C03PacketPlayer;
 import org.lwjgl.opengl.GL11;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -33,6 +39,10 @@ public class TPAura extends Module {
     private ArrayList<CustomVec> lastPath = new ArrayList<>();
     private ArrayList<CustomVec>[] paths = new ArrayList[50];
     private ArrayList<Entity> targets = new ArrayList<>();
+
+    // TargetHUD
+    private final LimeTargetHUD limeTargetHUD = new LimeTargetHUD();
+    private final AstolfoTargetHUD astolfoTargetHUD = new AstolfoTargetHUD();
 
     @EventTarget
     public void on3D(Event3D e) {
@@ -54,6 +64,12 @@ public class TPAura extends Module {
 
             GL11.glBegin(GL11.GL_LINE_STRIP);
 
+            double x = mc.thePlayer.lastTickPosX + (mc.thePlayer.posX - mc.thePlayer.lastTickPosX) * mc.timer.renderPartialTicks - mc.getRenderManager().viewerPosX;
+            double y = mc.thePlayer.lastTickPosY + (mc.thePlayer.posY - mc.thePlayer.lastTickPosY) * mc.timer.renderPartialTicks - mc.getRenderManager().viewerPosY;
+            double z = mc.thePlayer.lastTickPosZ + (mc.thePlayer.posZ - mc.thePlayer.lastTickPosZ) * mc.timer.renderPartialTicks - mc.getRenderManager().viewerPosZ;
+
+            GL11.glVertex3d(x,y,z);
+
             for (CustomVec customVec : paths[i]) {
                 GL11.glVertex3d(customVec.getX() - mc.getRenderManager().viewerPosX, customVec.getY() - mc.getRenderManager().viewerPosY, customVec.getZ() - mc.getRenderManager().viewerPosZ);
             }
@@ -69,6 +85,34 @@ public class TPAura extends Module {
 
             GL11.glPopMatrix();
         }
+    }
+
+    @EventTarget
+    public void on2D(Event2D e) {
+        HUD hud = (HUD) Lime.getInstance().getModuleManager().getModule("HUD");
+        if(!targets.isEmpty()) {
+            int i = 0;
+            for (Entity entity1 : targets) {
+                EntityPlayer entity = (EntityPlayer) entity1;
+                if(entity != null && entity.isEntityAlive() && this.isToggled() && mc.thePlayer.getDistanceToEntity(entity1) <= range.getCurrent() && (entity.canEntityBeSeen(mc.thePlayer)) && i+1 <= _targets.intValue()){
+                    switch(hud.targetHud.getSelected().toLowerCase()) {
+                        case "lime":
+                            limeTargetHUD.draw(entity, (float) hud.targetHudX.getCurrent() / 100f * (e.getScaledResolution().getScaledWidth() - 174), (float) hud.targetHudY.getCurrent() / 100f * (e.getScaledResolution().getScaledHeight() - 70) + (i * 50), getColor(Math.round(entity.getHealth())));
+                            break;
+                        case "astolfo":
+                            astolfoTargetHUD.draw(entity, (float) hud.targetHudX.getCurrent() / 100f * (e.getScaledResolution().getScaledWidth() - 174), (float) hud.targetHudY.getCurrent() / 100f * (e.getScaledResolution().getScaledHeight() - 70) + (i * 75), getColor(Math.round(entity.getHealth())));
+                            break;
+                    }
+                }
+                ++i;
+            }
+        }
+    }
+
+    private int getColor(int count) {
+        float f1 = 20;
+        float f2 = Math.max(0.0F, Math.min((float) count, f1) / f1);
+        return Color.HSBtoRGB(f2 / 3.0F, 1.0F, 1.0F) | 0xFF000000;
     }
 
     @EventTarget

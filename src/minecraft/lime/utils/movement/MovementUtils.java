@@ -27,7 +27,7 @@ public class MovementUtils implements IUtil {
     public static double getBPS() {
         Vec3 lastPos = new Vec3(mc.thePlayer.lastTickPosX, 0, mc.thePlayer.lastTickPosZ);
         Vec3 pos = new Vec3(mc.thePlayer.posX, 0, mc.thePlayer.posZ);
-        return MathUtils.roundToPlace(Math.abs(lastPos.distanceTo(pos) * 20d), 2);
+        return MathUtils.roundToPlace(Math.abs(lastPos.distanceTo(pos) * 20d), 2) * mc.timer.timerSpeed;
     }
 
     public static void vClip(double number) {

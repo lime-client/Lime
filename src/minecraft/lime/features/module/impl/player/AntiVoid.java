@@ -13,10 +13,6 @@ import lime.utils.other.Timer;
 @ModuleData(name = "Anti Void", category = Category.PLAYER)
 public class AntiVoid extends Module {
 
-    private enum Mode {
-        Motion
-    }
-
     private final EnumValue mode = new EnumValue("Mode", this, "Motion", "Motion");
     private final SlideValue pullBack = new SlideValue("Pullback", this, 500, 3000, 500, 500);
 

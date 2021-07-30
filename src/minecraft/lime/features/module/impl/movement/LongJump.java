@@ -25,11 +25,6 @@ import net.minecraft.util.EnumFacing;
 
 @ModuleData(name = "Long Jump", category = Category.MOVEMENT)
 public class LongJump extends Module {
-
-    private enum Mode {
-        Vanilla, Funcraft, NCP_Bow, Verus, Verus_Bow, Mineplex, Kokscraft
-    }
-
     private final EnumValue mode = new EnumValue("Mode", this, "Vanilla", "Vanilla", "Funcraft", "NCP_Bow", "Verus", "Verus_Bow", "Mineplex", "Kokscraft");
     private final SlideValue speed = new SlideValue("Speed", this, 1, 9, 5, 0.5).onlyIf(mode.getSettingName(), "enum", "verus_bow", "verus");
 
@@ -222,9 +217,7 @@ public class LongJump extends Module {
                     moveSpeed -= moveSpeed / 159;
                 }
 
-                if(mc.thePlayer.motionY < -0.12 && moveSpeed > 1.42) {
-                    e.setY(mc.thePlayer.motionY = -0.12);
-                } else if(moveSpeed < 1.42) {
+                if(mc.thePlayer.motionY < -0.12) {
                     e.setY(e.getY() * 0.7);
                 }
             }
@@ -253,7 +246,7 @@ public class LongJump extends Module {
             if(mode.is("kokscraft")) {
                 e.setCanceled(true);
                 mc.thePlayer.motionY = 0.8;
-                MovementUtils.setSpeed(1);
+                MovementUtils.setSpeed(4);
                 this.toggle();
             }
         }

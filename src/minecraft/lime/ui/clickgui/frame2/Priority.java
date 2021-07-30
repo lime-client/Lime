@@ -5,12 +5,12 @@ import java.awt.Color;
 public class Priority {
     public static int stringColor = -1;
 
-    public static int defaultWidth = 125;
+    public static int defaultWidth = 120;
     public static int defaultHeight = 300;
 
 
     public static int outlineWidth = 1;
-    public static int categoryNameHeight = 20;
+    public static int categoryNameHeight = 15;
 
     public static int moduleHeight = 15;
 

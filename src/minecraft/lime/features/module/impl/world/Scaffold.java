@@ -8,6 +8,7 @@ import lime.core.events.impl.EventSafeWalk;
 import lime.features.module.Category;
 import lime.features.module.Module;
 import lime.features.module.ModuleData;
+import lime.features.module.impl.combat.KillAura;
 import lime.features.setting.impl.BoolValue;
 import lime.features.setting.impl.EnumValue;
 import lime.features.setting.impl.SlideValue;
@@ -195,6 +196,7 @@ public class Scaffold extends Module {
                     case "spoof":
                         mc.thePlayer.inventory.currentItem = blockSlot - 36;
                         mc.playerController.updateController();
+                        KillAura.isBlocking = false;
                         break;
                 }
 

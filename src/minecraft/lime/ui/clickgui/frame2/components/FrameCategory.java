@@ -6,8 +6,11 @@ import lime.managers.FontManager;
 import lime.utils.render.RenderUtils;
 import lime.utils.render.animation.easings.Animate;
 import lime.utils.render.animation.easings.Easing;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.util.ResourceLocation;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
@@ -77,8 +80,6 @@ public class FrameCategory {
             }
         }
 
-
-
         // Drawing category base
         Gui.drawRect(getX(), getY(), getX() + width, getY() + getHeight(), getMainColor());
 
@@ -98,8 +99,13 @@ public class FrameCategory {
             setY(this.yDrag + mouseY);
         }
 
+        GL11.glColor4f(1, 1, 1, 1);
+        GlStateManager.resetColor();
+        Minecraft.getMinecraft().getTextureManager().bindTexture(new ResourceLocation("lime/clickgui/frame/" + category.name().toLowerCase() + ".png"));
+        Gui.drawModalRectWithCustomSizedTexture(getX() + width - 12, y + 3, 0, 0, 8, 8, 8, 8);
+
         // Drawing category name
-        FontManager.ProductSans24.getFont().drawString(category.name(), x + 3, y + ((categoryNameHeight / 2F) - FontManager.ProductSans24.getFont().getFontHeight() / 2F), stringColor, true);
+        FontManager.ProductSans18.getFont().drawString(category.name(), x + 3, y + ((categoryNameHeight / 2F) - FontManager.ProductSans18.getFont().getFontHeight() / 2F), stringColor, true);
 
         GL11.glPushMatrix();
         GL11.glEnable(3089);

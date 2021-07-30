@@ -23,7 +23,7 @@ public class Lang
     {
         Map map = I18n.getLocaleProperties();
         List<String> list = new ArrayList();
-        String s = "net/optifine/lang/";
+        String s = "optifine/lang/";
         String s1 = "en_US";
         String s2 = ".lang";
         list.add(s + s1 + s2);

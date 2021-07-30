@@ -19,8 +19,7 @@ import java.util.ArrayList;
 @ModuleData(name = "Flight", category = Category.MOVEMENT)
 public class Flight extends Module {
 
-    private final Graph speedGraph = new Graph(10, 110, "Speed");
-    private final Timer timer = new Timer();
+    private final Graph speedGraph = new Graph("Speed");
 
     //Settings
     public final EnumValue mode = new EnumValue("Mode", this, "Vanilla", "Vanilla", "Funcraft", "Funcraft2", "Funcraft_Gamer", "Verus", "Verus_No_Damage", "Verus_Fast", "Survival_Dub", "Astral");
@@ -80,11 +79,8 @@ public class Flight extends Module {
 
     @EventTarget
     public void on2D(Event2D e) {
-        speedGraph.renderGraphs();
-        if(timer.hasReached(50)) {
-            speedGraph.addValue((float) MovementUtils.getBPS());
-            timer.reset();
-        }
+        speedGraph.drawGraph(3, 30, 200, 100);
+        speedGraph.update((float) MovementUtils.getBPS());
     }
 
     @EventTarget

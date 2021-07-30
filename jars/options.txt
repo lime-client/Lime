@@ -10,13 +10,13 @@ bobView:true
 anaglyph3d:false
 maxFps:220
 fboEnable:true
-difficulty:1
+difficulty:2
 fancyGraphics:true
 ao:2
 renderClouds:false
-resourcePacks:["!   Killua 128x [§9Revamp§f]§0.zip"]
+resourcePacks:["!  §4Amaranth §8Revamp §8[§732x§8].zip"]
 incompatibleResourcePacks:[]
-lastServer:mc.survivaldub.com
+lastServer:localhost
 lang:en_US
 chatVisibility:0
 chatColors:true

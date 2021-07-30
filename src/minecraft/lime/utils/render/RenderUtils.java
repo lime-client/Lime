@@ -108,6 +108,19 @@ public class RenderUtils implements IUtil {
         GlStateManager.popMatrix();
     }
 
+    public static void drawLine(float x, float y, float x2, float y2, Color color) {
+        GlStateManager.enableBlend();
+        GlStateManager.disableTexture2D();
+        glEnable(GL_LINE_SMOOTH);
+        glBegin(GL_LINES);
+        glColor(color);
+        glVertex2f(x, y);
+        glVertex2f(x2, y2);
+        glEnd();
+        GlStateManager.enableTexture2D();
+        GlStateManager.disableBlend();
+    }
+
     public static double interpolate(double current, double old, double scale) {
         return old + (current - old) * scale;
     }

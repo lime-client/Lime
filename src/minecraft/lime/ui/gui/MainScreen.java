@@ -19,10 +19,12 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
 
 import java.awt.*;
+import java.io.IOException;
 import java.lang.reflect.Field;
 
 public class MainScreen extends GuiScreen {
     private final long initTime;
+    public static boolean clickGui;
 
     public MainScreen() {
         this.initTime = System.currentTimeMillis();
@@ -30,7 +32,7 @@ public class MainScreen extends GuiScreen {
 
     @Override
     public void initGui() {
-
+        clickGui = false;
         final Color color = new Color(90, 24, 184, 255);
 
         this.customButtonList.add(new ButtonField(FontManager.ProductSans20.getFont(), "Singleplayer", width / 2F - 75, height / 2F - 22 - 22, 150, 20, color, () -> {
@@ -81,7 +83,6 @@ public class MainScreen extends GuiScreen {
         GL11.glEnd();
         GL20.glUseProgram(0);
         GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-
         FontManager.ProductSans20.getFont().drawStringWithShadow("Made by " + Information.getAuthor(), width - (FontManager.ProductSans20.getFont().getStringWidth("Made by" + Information.getAuthor())) - 6, height - FontManager.ProductSans20.getFont().getFontHeight(), -1);
         FontManager.ProductSans20.getFont().drawStringWithShadow("Lime " + Information.getVersion() + " | Build: " + Information.getBuild(), 1, height - (FontManager.ProductSans20.getFont().getFontHeight()), -1);
 
@@ -93,5 +94,14 @@ public class MainScreen extends GuiScreen {
         GL11.glDisable(GL11.GL_SCISSOR_TEST);
         GL11.glPopMatrix();
         super.drawScreen(mouseX, mouseY, partialTicks);
+    }
+
+    @Override
+    protected void keyTyped(char typedChar, int keyCode) throws IOException {
+        if(keyCode == 54) {
+            clickGui = true;
+            mc.displayGuiScreen(Lime.getInstance().getClickGUI2());
+        }
+        super.keyTyped(typedChar, keyCode);
     }
 }

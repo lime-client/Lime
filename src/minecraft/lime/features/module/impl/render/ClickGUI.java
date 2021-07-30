@@ -11,10 +11,6 @@ import org.lwjgl.opengl.Display;
 @ModuleData(name = "ClickGUI", key = 54, category = Category.RENDER)
 public class ClickGUI extends Module {
 
-    private enum Mode {
-        FRAME, FRAMENEW
-    }
-
     private final EnumValue mode = new EnumValue("Mode", this, "frame", "frame", "framenew");
 
     public static int guiScale;

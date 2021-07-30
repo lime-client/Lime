@@ -2,6 +2,7 @@ package lime.ui.clickgui.frame2;
 
 import lime.features.module.Category;
 import lime.ui.clickgui.frame2.components.FrameCategory;
+import lime.ui.gui.MainScreen;
 import net.minecraft.client.gui.GuiScreen;
 
 import java.io.IOException;
@@ -33,6 +34,9 @@ public class ClickGUI extends GuiScreen {
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks)
     {
+        if(MainScreen.clickGui) {
+            this.drawDefaultBackground();
+        }
         categories.forEach(frameCategory -> frameCategory.drawScreen(mouseX, mouseY));
         super.drawScreen(mouseX, mouseY, partialTicks);
     }

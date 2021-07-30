@@ -3,6 +3,7 @@ package lime.scripting;
 import jdk.nashorn.api.scripting.AbstractJSObject;
 import lime.core.events.EventTarget;
 import lime.core.events.impl.Event2D;
+import lime.core.events.impl.EventMove;
 import lime.core.events.impl.EventPacket;
 import lime.core.events.impl.EventUpdate;
 import lime.features.module.Category;
@@ -117,6 +118,21 @@ public class ScriptModule extends Module {
                     stringAbstractJSObjectEntry.getValue().call(this, new lime.scripting.api.events.EventPacket(e));
                 } catch (Exception exception) {
                     ChatUtils.sendMessage("Error while executing EventPacket on the Script " + getName() + ": " + exception.getMessage());
+                    this.toggle();
+                }
+            }
+        }
+    }
+
+    @EventTarget
+    public void onMove(EventMove e) {
+        if(!isToggled()) return;
+        for (Map.Entry<String, AbstractJSObject> stringAbstractJSObjectEntry : events.entrySet()) {
+            if(stringAbstractJSObjectEntry.getKey().equals("onMove")) {
+                try {
+                    stringAbstractJSObjectEntry.getValue().call(this, new lime.scripting.api.events.EventMove(e));
+                } catch (Exception exception) {
+                    ChatUtils.sendMessage("Error while executing EventMove on the Script " + getName() + ": " + exception.getMessage());
                     this.toggle();
                 }
             }

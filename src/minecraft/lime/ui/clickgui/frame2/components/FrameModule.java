@@ -11,6 +11,7 @@ import lime.utils.render.animation.easings.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
@@ -70,22 +71,24 @@ public class FrameModule {
         moduleAnimation.setSpeed(1000).update();
 
         if(module.isToggled() || (moduleAnimation.isReversed() && moduleAnimation.getValue() != 0)) {
-            GuiScreen.drawRect(x,y, x + defaultWidth, y + moduleHeight, ColorUtils.setAlpha(new Color(getEnabledColor()), (int) moduleAnimation.getValue()).getRGB());
+            Gui.drawRect(x,y, x + defaultWidth, y + moduleHeight, ColorUtils.setAlpha(new Color(getEnabledColor()), (int) moduleAnimation.getValue()).getRGB());
         }
         if(GuiScreen.hover(x, y, mouseX, mouseY, defaultWidth, moduleHeight) && Priority.hoveredColor) {
-            GuiScreen.drawRect(x,y, x + defaultWidth, y + moduleHeight, getDarkerMainColor());
+            Gui.drawRect(x,y, x + defaultWidth, y + moduleHeight, getDarkerMainColor());
         }
 
         if(module.hasSettings()) {
             GL11.glPushMatrix();
+            GlStateManager.enableBlend();
             GL11.glColor4f(1, 1, 1, 1);
             Minecraft.getMinecraft().getTextureManager().bindTexture(opened ? new ResourceLocation("lime/clickgui/frame/expand.png") : new ResourceLocation("lime/clickgui/frame/collapse.png"));
             GL11.glScalef(0.5f, 0.5f, 0.5f);
             Gui.drawModalRectWithCustomSizedTexture((x + defaultWidth - 12) * 2, (y + 5) * 2, 0, 0, 16, 10, 16, 10);
+            GlStateManager.disableBlend();
             GL11.glPopMatrix();
         }
 
-        FontManager.ProductSans20.getFont().drawString(module.getName(), x+3, y + (moduleHeight / 2F - (FontManager.ProductSans20.getFont().getFontHeight() / 2F)), stringColor, true);
+        FontManager.ProductSans20.getFont().drawString(module.getName(), x+3, y + (moduleHeight / 2F - (FontManager.ProductSans20.getFont().getFontHeight() / 2F)), module.isToggled() ? new Color(stringColor).darker().darker().getRGB() : stringColor, true);
 
         int offset = 0;
 
@@ -104,6 +107,8 @@ public class FrameModule {
         }
 
         this.setOffset(moduleHeight + offset);
+
+        Gui.drawRect(0, 0, 0, 0, 0);
     }
 
     public boolean mouseClicked(int mouseX, int mouseY, int mouseButton)

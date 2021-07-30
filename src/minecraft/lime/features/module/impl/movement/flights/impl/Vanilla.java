@@ -11,7 +11,7 @@ public class Vanilla extends FlightValue {
 
     @Override
     public void onUpdate() {
-        mc.thePlayer.motionY = mc.gameSettings.keyBindJump.isKeyDown() ? 0.80 : mc.gameSettings.keyBindSneak.isKeyDown() ? -0.80 : 0;
+        mc.thePlayer.motionY = mc.gameSettings.keyBindJump.isKeyDown() ? 1.80 : mc.gameSettings.keyBindSneak.isKeyDown() ? -1.80 : 0;
         if(mc.thePlayer.isMoving()) {
             MovementUtils.setSpeed(getFlight().speed.getCurrent());
         } else {
