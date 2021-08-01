@@ -8,6 +8,7 @@ import java.util.concurrent.Callable;
 import lime.core.Lime;
 import lime.core.events.EventBus;
 import lime.core.events.impl.EventSafeWalk;
+import lime.core.events.impl.EventStep;
 import lime.features.module.impl.exploit.SigmaJello;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFence;
@@ -17,6 +18,7 @@ import net.minecraft.block.BlockWall;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.block.state.pattern.BlockPattern;
+import net.minecraft.client.Minecraft;
 import net.minecraft.command.CommandResultStats;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.crash.CrashReport;
@@ -715,15 +717,19 @@ public abstract class Entity implements ICommandSender
             }
 
             this.setEntityBoundingBox(this.getEntityBoundingBox().offset(0.0D, 0.0D, z));
+            EventStep e = new EventStep(true, stepHeight);
+            if(this == Minecraft.getMinecraft().thePlayer) {
+                EventBus.INSTANCE.call(e);
+            }
 
-            if (this.stepHeight > 0.0F && flag1 && (d3 != x || d5 != z))
+            if (this.stepHeight > 0.0F && flag1 && (d3 != x || d5 != z) && !e.isCanceled() && e.getStepHeight() > 0)
             {
                 double d11 = x;
                 double d7 = y;
                 double d8 = z;
                 AxisAlignedBB axisalignedbb3 = this.getEntityBoundingBox();
                 this.setEntityBoundingBox(axisalignedbb);
-                y = (double)this.stepHeight;
+                y = e.getStepHeight();
                 List<AxisAlignedBB> list = this.worldObj.getCollidingBoundingBoxes(this, this.getEntityBoundingBox().addCoord(d3, y, d5));
                 AxisAlignedBB axisalignedbb4 = this.getEntityBoundingBox();
                 AxisAlignedBB axisalignedbb5 = axisalignedbb4.addCoord(d3, 0.0D, d5);
@@ -794,6 +800,8 @@ public abstract class Entity implements ICommandSender
                     this.setEntityBoundingBox(axisalignedbb14);
                 }
 
+                y = (-e.getStepHeight());
+
                 for (AxisAlignedBB axisalignedbb12 : list)
                 {
                     y = axisalignedbb12.calculateYOffset(this.getEntityBoundingBox(), y);
@@ -807,6 +815,8 @@ public abstract class Entity implements ICommandSender
                     y = d7;
                     z = d8;
                     this.setEntityBoundingBox(axisalignedbb3);
+                } else if(this == Minecraft.getMinecraft().thePlayer) {
+                    EventBus.INSTANCE.call(new EventStep(false, stepHeight));
                 }
             }
 

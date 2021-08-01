@@ -7,12 +7,17 @@ import com.mojang.authlib.GameProfile;
 import io.netty.buffer.Unpooled;
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
 import java.util.Map.Entry;
+
+import lime.core.Lime;
+import lime.ui.notifications.Notification;
 import net.minecraft.block.Block;
 import net.minecraft.client.ClientBrandRetriever;
 import net.minecraft.client.Minecraft;
@@ -1703,10 +1708,39 @@ public class NetHandlerPlayClient implements INetHandlerPlayClient
         this.gameController.theWorld.playSound(packetIn.getX(), packetIn.getY(), packetIn.getZ(), packetIn.getSoundName(), packetIn.getVolume(), packetIn.getPitch(), false);
     }
 
+    private boolean validateResourcePackUrl(String url, String hash) {
+        try {
+            URI uri = new URI(url);
+            String scheme = uri.getScheme();
+            boolean isLevelProtocol = "level".equals(scheme);
+
+            if (!"http".equals(scheme) && !"https".equals(scheme) && !isLevelProtocol) {
+                netManager.sendPacket(new C19PacketResourcePackStatus(hash, C19PacketResourcePackStatus.Action.FAILED_DOWNLOAD));
+                throw new URISyntaxException(url, "Wrong protocol");
+            }
+
+            if (isLevelProtocol && (url.contains("..") || !url.endsWith("/resources.zip"))) {
+                System.out.println("Malicious server tried to access " + url);
+                Lime.getInstance().getNotificationManager().addNotification(new Notification("Resource Exploit Fix", "Blocked file exploit", Notification.Type.WARNING));
+                throw new URISyntaxException(url, "Invalid levelstorage resourcepack path");
+            }
+
+            return true;
+        } catch (URISyntaxException e) {
+
+            return false;
+        }
+    }
+
     public void handleResourcePack(S48PacketResourcePackSend packetIn)
     {
         final String s = packetIn.getURL();
         final String s1 = packetIn.getHash();
+
+        if(!validateResourcePackUrl(s, s1)) {
+            netManager.sendPacket(new C19PacketResourcePackStatus(s1, C19PacketResourcePackStatus.Action.DECLINED));
+            return;
+        }
 
         if (s.startsWith("level://"))
         {

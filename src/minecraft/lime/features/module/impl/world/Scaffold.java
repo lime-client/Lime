@@ -2,6 +2,7 @@ package lime.features.module.impl.world;
 
 import lime.core.Lime;
 import lime.core.events.EventTarget;
+import lime.core.events.impl.Event3D;
 import lime.core.events.impl.EventEntityAction;
 import lime.core.events.impl.EventMotion;
 import lime.core.events.impl.EventSafeWalk;
@@ -17,6 +18,7 @@ import lime.utils.movement.MovementUtils;
 import lime.utils.other.BlockUtils;
 import lime.utils.other.InventoryUtils;
 import lime.utils.other.MathUtils;
+import lime.utils.render.RenderUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockSnow;
 import net.minecraft.init.Blocks;
@@ -25,7 +27,9 @@ import net.minecraft.network.play.client.C0APacketAnimation;
 import net.minecraft.util.*;
 import lime.utils.other.Timer;
 import org.lwjgl.input.Keyboard;
+import org.lwjgl.opengl.GL11;
 
+import java.awt.*;
 import java.util.Arrays;
 import java.util.List;
 
@@ -73,6 +77,8 @@ public class Scaffold extends Module {
     private float yaw, pitch;
     private int slot, y;
 
+    private BlockUtils.BlockData blockData;
+
     @Override
     public void onEnable() {
         if(mc.thePlayer == null)
@@ -83,6 +89,7 @@ public class Scaffold extends Module {
         y = (int) mc.thePlayer.posY;
         slot = mc.thePlayer.inventory.currentItem;
         timerTower.reset();
+        blockData = null;
 
         yaw = -1;
         pitch = -1;
@@ -95,6 +102,16 @@ public class Scaffold extends Module {
         {
             mc.thePlayer.inventory.currentItem = slot;
             mc.playerController.updateController();
+        }
+    }
+
+    @EventTarget
+    public void on3D(Event3D e) {
+        if(isAirBlock(new BlockPos(mc.thePlayer.posX, mc.thePlayer.posY - 1, mc.thePlayer.posZ).getBlock())) {
+        }
+        if(blockData != null) {
+            RenderUtils.drawBox(blockData.getBlockPos().getX(), blockData.getBlockPos().getY(), blockData.getBlockPos().getZ(), 1, new Color(255, 0, 0, 100), true, true);
+            RenderUtils.drawBox(blockData.getBlockPos().getX(), blockData.getBlockPos().getY(), blockData.getBlockPos().getZ(), 1, new Color(255, 0, 0), true, false);
         }
     }
 
@@ -159,6 +176,10 @@ public class Scaffold extends Module {
 
         BlockPos underPosition = new BlockPos(x, this.y - 1 - (isAirBlock(new BlockPos(x, y - 1, z).getBlock()) ? BlockUtils.getBlockData(new BlockPos(x, this.y - 2, z)) == null ? 0 : downFlag ? 1 : 0 : 0), z);
         BlockUtils.BlockData blockData = BlockUtils.getBlockData(underPosition);
+
+        if(blockData != null) {
+            this.blockData = new BlockUtils.BlockData(new BlockPos(x, this.y-1, z), null);
+        }
 
         if((blockData != null && isAirBlock(underPosition.getBlock())) || downwards.isEnabled())
         {

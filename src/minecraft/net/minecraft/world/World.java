@@ -19,6 +19,7 @@ import net.minecraft.block.BlockSnow;
 import net.minecraft.block.BlockStairs;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.crash.CrashReport;
 import net.minecraft.crash.CrashReportCategory;
 import net.minecraft.entity.Entity;
@@ -52,6 +53,7 @@ import net.minecraft.world.gen.structure.StructureBoundingBox;
 import net.minecraft.world.storage.ISaveHandler;
 import net.minecraft.world.storage.MapStorage;
 import net.minecraft.world.storage.WorldInfo;
+import viamcp.ViaMCP;
 
 public abstract class World implements IBlockAccess
 {
@@ -1095,6 +1097,9 @@ public abstract class World implements IBlockAccess
      */
     public void playSoundEffect(double x, double y, double z, String soundName, float volume, float pitch)
     {
+        if (ViaMCP.getInstance().getVersion() >= 110 && this instanceof WorldClient && !soundName.toLowerCase().contains("random.chest")) {
+            ((WorldClient) this).playSoundAtPos(new BlockPos(x,y,z),soundName, volume,pitch,false);
+        }
         for (int i = 0; i < this.worldAccesses.size(); ++i)
         {
             ((IWorldAccess)this.worldAccesses.get(i)).playSound(soundName, x, y, z, volume, pitch);

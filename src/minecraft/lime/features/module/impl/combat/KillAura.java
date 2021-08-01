@@ -15,6 +15,7 @@ import lime.ui.targethud.impl.AstolfoTargetHUD;
 import lime.ui.targethud.impl.LimeTargetHUD;
 import lime.utils.combat.CombatUtils;
 import lime.utils.combat.Rotation;
+import lime.utils.other.MathUtils;
 import lime.utils.other.Timer;
 import lime.utils.render.ColorUtils;
 import lime.utils.render.RenderUtils;
@@ -53,6 +54,7 @@ public class KillAura extends Module {
     private final SlideValue rotationsSpeedMax = new SlideValue("Rotations Max", this, 5, 100, 90, 1).onlyIf(rotations.getSettingName(), "enum", "smooth");
     private final SlideValue range = new SlideValue("Range", this, 2.8, 6, 4.2, 0.05);
     private final SlideValue cps = new SlideValue("CPS", this, 1, 20, 8, 1);
+    private final SlideValue randomizeCps = new SlideValue("Randomize CPS", this, 0, 5, 3, 1);
     private final BoolValue players = new BoolValue("Players", this, true);
     private final BoolValue passives = new BoolValue("Passives", this, false);
     private final BoolValue mobs = new BoolValue("Mobs", this, true);
@@ -114,8 +116,8 @@ public class KillAura extends Module {
     public void onMotion(EventMotion e) {
 
         if(isBlocking && hasSword() && !autoBlock.is("basic")) {
-            mc.playerController.syncCurrentPlayItem();
             mc.thePlayer.sendQueue.addToSendQueue(new C07PacketPlayerDigging(C07PacketPlayerDigging.Action.RELEASE_USE_ITEM, BlockPos.ORIGIN, EnumFacing.DOWN));
+            mc.playerController.syncCurrentPlayItem();
             isBlocking = false;
         }
 
@@ -172,8 +174,8 @@ public class KillAura extends Module {
             }
 
             if(!state.is(e.getState().name())) return;
-
-            if(cpsTimer.hasReached(20 / (int) this.cps.getCurrent() * 50L)) {
+            int cps = Math.max(this.cps.intValue() + (int) MathUtils.random(-randomizeCps.intValue(), randomizeCps.intValue()), 1);
+            if(cpsTimer.hasReached(20 / cps * 50L)) {
                 mc.thePlayer.swingItem();
                 mc.getNetHandler().addToSendQueue(new C02PacketUseEntity(entity, C02PacketUseEntity.Action.ATTACK));
                 if(!this.keepSprint.isEnabled()) mc.thePlayer.setSprinting(false);
@@ -186,8 +188,8 @@ public class KillAura extends Module {
             currentPitch = mc.thePlayer.rotationPitch;
             KillAura.entity = null;
             if(autoBlock.is("basic") && hasSword() && isBlocking) {
-                mc.playerController.syncCurrentPlayItem();
                 mc.thePlayer.sendQueue.addToSendQueue(new C07PacketPlayerDigging(C07PacketPlayerDigging.Action.RELEASE_USE_ITEM, BlockPos.ORIGIN, EnumFacing.DOWN));
+                mc.playerController.syncCurrentPlayItem();
                 isBlocking = false;
             }
         }

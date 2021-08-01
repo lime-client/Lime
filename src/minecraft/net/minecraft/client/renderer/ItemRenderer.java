@@ -466,8 +466,6 @@ public class ItemRenderer
                                 this.func_178103_d();
                                 break;
                         }
-
-
                         break;
 
                     case BOW:

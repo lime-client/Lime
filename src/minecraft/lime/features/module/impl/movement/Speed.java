@@ -152,7 +152,7 @@ public class Speed extends Module {
                     this.moveSpeed *= 2.149;
                 } else if (stage == 2) {
                     this.stage = 3;
-                    double difference = (mode.is("funcraft") ? 0.66 : 0.84) * (this.lastDist - MovementUtils.getBaseMoveSpeed());
+                    double difference = (mode.is("funcraft") || mode.is("funcraft_yport") ? Lime.getInstance().getModuleManager().getModuleC(Scaffold.class).isToggled() ? 0.80 : .66 : 0.84) * (this.lastDist - MovementUtils.getBaseMoveSpeed());
                     this.moveSpeed = this.lastDist - difference;
                 } else {
                     if (mc.theWorld.getCollidingBoundingBoxes(mc.thePlayer, mc.thePlayer.getEntityBoundingBox().offset(0.0, mc.thePlayer.motionY, 0.0)).size() > 0 || mc.thePlayer.isCollidedVertically) {

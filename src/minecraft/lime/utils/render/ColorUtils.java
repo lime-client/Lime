@@ -32,9 +32,7 @@ public class ColorUtils {
     }
 
     public static int getAstolfo(int delay, float offset) {
-        int yStart = 20;
         float speed = 3000f;
-        float index = 0.3f;
         float hue = (float) (System.currentTimeMillis() % delay) + (offset);
         while (hue > speed) {
             hue -= speed;

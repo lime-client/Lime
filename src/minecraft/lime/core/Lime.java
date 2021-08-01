@@ -1,20 +1,19 @@
 package lime.core;
 
 import lime.scripting.ScriptManager;
+import lime.ui.gui.MainScreen;
 import lime.ui.notifications.utils.NotificationManager;
 import lime.utils.other.file.FileSaver;
 import lime.managers.CommandManager;
 import lime.managers.ModuleManager;
 import lime.features.setting.SettingsManager;
 import lime.ui.clickgui.frame.ClickGUI;
-import lime.ui.gui.LoginScreen;
-import lime.utils.other.security.User;
-import lime.utils.other.security.UserCheckThread;
 import lime.utils.render.GLSLSandboxShader;
 import net.minecraft.client.Minecraft;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.lwjgl.opengl.Display;
+import viamcp.ViaMCP;
 
 import java.io.File;
 import java.io.IOException;
@@ -32,9 +31,7 @@ public class Lime {
     private ClickGUI clickGUI;
     private lime.ui.clickgui.frame2.ClickGUI clickGUI2;
 
-    private UserCheckThread userCheckThread;
     private FileSaver fileSaver;
-    private User user;
 
     private Proxy proxy = Proxy.NO_PROXY;
 
@@ -50,10 +47,10 @@ public class Lime {
 
         logger.info("[LIME] Starting client");
 
-        Minecraft.getMinecraft().displayGuiScreen(new LoginScreen());
+        Minecraft.getMinecraft().displayGuiScreen(new MainScreen());
+        ViaMCP.getInstance().start();
 
         Display.setTitle("Lime");
-
         File limeFile = new File("Lime");
         File limeConfigFile = new File("Lime" + File.separator + "configs");
         File limeScriptsFile = new File("Lime" + File.separator + "scripts");
@@ -131,22 +128,6 @@ public class Lime {
 
     public FileSaver getFileSaver() {
         return fileSaver;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public UserCheckThread getUserCheckThread() {
-        return userCheckThread;
-    }
-
-    public void setUserCheckThread(UserCheckThread userCheckThread) {
-        this.userCheckThread = userCheckThread;
     }
 
     public int getTimeout() {

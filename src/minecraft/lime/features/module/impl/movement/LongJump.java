@@ -246,7 +246,7 @@ public class LongJump extends Module {
             if(mode.is("kokscraft")) {
                 e.setCanceled(true);
                 mc.thePlayer.motionY = 0.8;
-                MovementUtils.setSpeed(4);
+                MovementUtils.setSpeed(1.2);
                 this.toggle();
             }
         }

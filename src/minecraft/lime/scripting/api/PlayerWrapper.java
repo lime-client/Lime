@@ -27,6 +27,23 @@ public class PlayerWrapper extends AbstractJSObject implements IUtil {
                 }
             };
         }
+        if(name.equals("fallDistance")) {
+            return new AbstractJSObject() {
+                @Override
+                public Object call(Object thiz, Object... args) {
+                    return mc.thePlayer.fallDistance;
+                }
+            };
+        }
+        if(name.equals("setFallDistance")) {
+            return new AbstractJSObject() {
+                @Override
+                public Object call(Object thiz, Object... args) {
+                    mc.thePlayer.fallDistance = Float.parseFloat(args[0] + "");
+                    return null;
+                }
+            };
+        }
         if(name.equals("setPosition")) {
             return new AbstractJSObject() {
                 @Override

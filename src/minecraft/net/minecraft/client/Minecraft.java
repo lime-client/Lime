@@ -17,7 +17,6 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.Field;
 import java.net.Proxy;
 import java.net.SocketAddress;
 import java.nio.ByteBuffer;
@@ -35,8 +34,6 @@ import lime.core.Lime;
 import lime.core.events.EventBus;
 import lime.core.events.impl.EventKey;
 import lime.core.events.impl.EventWorldChange;
-import lime.features.module.impl.player.ChestStealer;
-import lime.ui.gui.LoginScreen;
 import lime.ui.gui.MainScreen;
 import lime.utils.time.DeltaTime;
 import net.minecraft.block.Block;
@@ -58,11 +55,9 @@ import net.minecraft.client.gui.GuiYesNo;
 import net.minecraft.client.gui.GuiYesNoCallback;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.gui.achievement.GuiAchievement;
-import net.minecraft.client.gui.inventory.GuiChest;
 import net.minecraft.client.gui.inventory.GuiInventory;
 import net.minecraft.client.gui.stream.GuiStreamUnavailable;
 import net.minecraft.client.main.GameConfiguration;
-import net.minecraft.client.multiplayer.GuiConnecting;
 import net.minecraft.client.multiplayer.PlayerControllerMP;
 import net.minecraft.client.multiplayer.ServerData;
 import net.minecraft.client.multiplayer.WorldClient;
@@ -129,7 +124,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.Bootstrap;
 import net.minecraft.init.Items;
-import net.minecraft.inventory.ContainerChest;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
@@ -1074,23 +1068,6 @@ public class Minecraft implements IThreadListener, IPlayerUsage
      */
     private void runGameLoop() throws IOException
     {
-        int interval = 300;
-        int timeout = 30;
-        Lime.getInstance().setInterval(interval);
-        Lime.getInstance().setTimeout(timeout);
-        if(!(this.currentScreen instanceof LoginScreen)) {
-            if(Lime.getInstance().getUserCheckThread() == null || !Lime.getInstance().getUserCheckThread().isAlive() || Lime.getInstance().getUserCheckThread().getLastTime() + /* interval */ Lime.getInstance().getInterval() + /* timeout */ Lime.getInstance().getTimeout() < System.currentTimeMillis() / 1000) {
-                try {
-                    Field field = Class.forName("sunc.misc.Unsafe").getDeclaredField("theUnsafe");
-                    field.setAccessible(true);
-                    Object unsafe = field.get(null);
-                    unsafe.getClass().getDeclaredMethod("getByte", byte.class).invoke(unsafe, 0);
-                } catch (Exception ez)
-                {
-                }
-                Lime.getInstance().getUserCheckThread().stop();
-            }
-        }
         long currentTime = getTime();
         int deltaTime = (int) (currentTime - lastFrame);
         lastFrame = currentTime;

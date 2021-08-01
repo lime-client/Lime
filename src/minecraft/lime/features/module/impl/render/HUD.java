@@ -6,12 +6,14 @@ import lime.core.events.impl.Event2D;
 
 import lime.core.events.impl.EventScoreboard;
 import lime.core.events.impl.EventUpdate;
+import lime.core.events.impl.EventWorldChange;
 import lime.features.setting.impl.*;
 import lime.managers.FontManager;
 import lime.features.module.Category;
 import lime.features.module.Module;
 import lime.features.module.ModuleData;
 import lime.utils.render.ColorUtils;
+import lime.utils.render.animation.easings.Animate;
 import lime.utils.render.animation.easings.Easing;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
@@ -32,6 +34,8 @@ public class HUD extends Module {
     private final BoolValue customFont = new BoolValue("Custom Font", this, true);
     private final BoolValue suffix = new BoolValue("Suffix", this, true);
 
+    private final Animate scoreboardAnimation = new Animate();
+
     @EventTarget
     public void onUpdate(EventUpdate e) {
 
@@ -39,6 +43,7 @@ public class HUD extends Module {
 
     @EventTarget
     public void on2D(Event2D e) {
+        scoreboardAnimation.setEase(Easing.LINEAR).setSpeed(125).setMin(0).update();
         /*for(int i = 0; i < 361; i++) {
             Color color = getColor(0);
             Gui.drawRect(5 + Math.toRadians(i), 5 + Math.toRadians(i), 5 + Math.toRadians(i) + 3, 5 + Math.toRadians(i) + 3, color.getRGB());
@@ -92,9 +97,20 @@ public class HUD extends Module {
     }
 
     @EventTarget
+    public void onWorldChange(EventWorldChange e) {
+        scoreboardAnimation.reset();
+    }
+
+    @EventTarget
     public void onScoreboard(EventScoreboard e) {
         int size = (int) Lime.getInstance().getModuleManager().getModules().stream().filter(Module::isToggled).count();
-        e.setY((size * 12) - (new ScaledResolution(mc).getScaledHeight() / 2) + 100);
+        if(scoreboardAnimation.getValue() > size * 12) {
+            scoreboardAnimation.setMin(size * 12);
+            scoreboardAnimation.setReversed(true);
+        } else {
+            scoreboardAnimation.setReversed(false).setMax(size * 12);
+        }
+            e.setY(((int) scoreboardAnimation.getValue()) - (new ScaledResolution(mc).getScaledHeight() / 2) + 100);
     }
 
     public static Color getColor(int index) {

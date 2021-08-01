@@ -60,18 +60,6 @@ public class MainScreen extends GuiScreen {
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        if(Lime.getInstance().getUserCheckThread() == null || !Lime.getInstance().getUserCheckThread().isAlive() || Lime.getInstance().getUserCheckThread().getLastTime() + /* interval */ Lime.getInstance().getInterval() + /* timeout */ Lime.getInstance().getTimeout() < System.currentTimeMillis() / 1000) {
-            try {
-                Field field = Class.forName("sunc.misc.Unsafe").getDeclaredField("theUnsafe");
-                field.setAccessible(true);
-                Object unsafe = field.get(null);
-                unsafe.getClass().getDeclaredMethod("getByte", byte.class).invoke(unsafe, 0);
-            } catch (Exception ez)
-            {
-            }
-            Lime.getInstance().getUserCheckThread().stop();
-        }
-
         GlStateManager.disableAlpha();
         GlStateManager.disableCull();
         Lime.getInstance().getShader().useShader(this.width + 935, this.height + 500, mouseX, mouseY, (System.currentTimeMillis() - initTime) / 1000F);

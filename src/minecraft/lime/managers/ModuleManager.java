@@ -85,6 +85,7 @@ public class ModuleManager {
         registerModule(new HUD());
 
         registerModule(new DreamESP());
+        registerModule(new ClickGUITest());
 
 
         // WORLD

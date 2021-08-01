@@ -14,9 +14,9 @@ difficulty:2
 fancyGraphics:true
 ao:2
 renderClouds:false
-resourcePacks:["!  §4Amaranth §8Revamp §8[§732x§8].zip"]
+resourcePacks:["5A7stolfo_8V52.zip"]
 incompatibleResourcePacks:[]
-lastServer:localhost
+lastServer:mc.mineland.me
 lang:en_US
 chatVisibility:0
 chatColors:true
