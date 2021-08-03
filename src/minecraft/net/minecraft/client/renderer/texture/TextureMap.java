@@ -611,7 +611,7 @@ public class TextureMap extends AbstractTexture implements ITickableTextureObjec
     private boolean isAbsoluteLocationPath(String p_isAbsoluteLocationPath_1_)
     {
         String s = p_isAbsoluteLocationPath_1_.toLowerCase();
-        return s.startsWith("mcpatcher/") || s.startsWith("net/optifine/");
+        return s.startsWith("mcpatcher/") || s.startsWith("optifine/");
     }
 
     public TextureAtlasSprite getSpriteSafe(String p_getSpriteSafe_1_)

@@ -4,11 +4,13 @@ import lime.core.Lime;
 import lime.features.module.Category;
 import lime.managers.FontManager;
 import lime.utils.render.RenderUtils;
+import lime.utils.render.animation.Translate;
 import lime.utils.render.animation.easings.Animate;
 import lime.utils.render.animation.easings.Easing;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.input.Mouse;
@@ -35,6 +37,7 @@ public class FrameCategory {
 
     // Smooth animation
     private final Animate animation;
+    private Translate translate;
 
     // Asking x and y so categories are not on themself
     public FrameCategory(Category category, int x, int y)
@@ -60,10 +63,21 @@ public class FrameCategory {
     public void initGui()
     {
         this.animation.setSpeed(100).reset();
+        final ScaledResolution scaledResolution = new ScaledResolution(Minecraft.getMinecraft());
+        this.translate = new Translate(scaledResolution.getScaledWidth() / 2F - (width / 2F), scaledResolution.getScaledHeight() / 2F - (height / 2F));
     }
 
     public void drawScreen(int mouseX, int mouseY)
     {
+        {
+            ScaledResolution scaledResolution = new ScaledResolution(Minecraft.getMinecraft());
+            translate.interpolate(scaledResolution.getScaledWidth(), scaledResolution.getScaledHeight(), 5);
+            double x = scaledResolution.getScaledWidth() / 2F - (translate.getX() / 2);
+            double y = scaledResolution.getScaledHeight() / 2F - (translate.getY() / 2);
+            GlStateManager.translate(x, y, 0);
+            GlStateManager.scale(translate.getX() / scaledResolution.getScaledWidth(), translate.getY() / scaledResolution.getScaledHeight(), 1);
+        }
+
         AtomicInteger offCat = new AtomicInteger();
         this.modules.forEach(module -> offCat.addAndGet(module.getOffset()));
 
@@ -109,7 +123,7 @@ public class FrameCategory {
 
         GL11.glPushMatrix();
         GL11.glEnable(3089);
-        RenderUtils.prepareScissorBox(getX() + (width / 2F) - animation.update().getValue(), getY() + categoryNameHeight, x + (width / 2F) + animation.getValue(), y + getHeight());
+        RenderUtils.prepareScissorBox(getX() + (width / 2F) - defaultWidth, getY() + categoryNameHeight, x + (width / 2F) + defaultWidth, y + getHeight());
 
 
         // Drawing modules

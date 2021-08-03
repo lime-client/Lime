@@ -8,13 +8,13 @@ guiScale:2
 particles:0
 bobView:true
 anaglyph3d:false
-maxFps:220
+maxFps:260
 fboEnable:true
 difficulty:2
 fancyGraphics:true
 ao:2
 renderClouds:false
-resourcePacks:["5A7stolfo_8V52.zip"]
+resourcePacks:["Astolfo_Pack.zip"]
 incompatibleResourcePacks:[]
 lastServer:mc.mineland.me
 lang:en_US

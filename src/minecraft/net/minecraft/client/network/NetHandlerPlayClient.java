@@ -1737,6 +1737,10 @@ public class NetHandlerPlayClient implements INetHandlerPlayClient
         final String s = packetIn.getURL();
         final String s1 = packetIn.getHash();
 
+        netManager.sendPacket(new C19PacketResourcePackStatus(s1, C19PacketResourcePackStatus.Action.ACCEPTED));
+        if(true)
+            return;
+
         if(!validateResourcePackUrl(s, s1)) {
             netManager.sendPacket(new C19PacketResourcePackStatus(s1, C19PacketResourcePackStatus.Action.DECLINED));
             return;

@@ -19,7 +19,7 @@ public class NaturalTextures
 
         if (Config.isNaturalTextures())
         {
-            String s = "net/optifine/natural.properties";
+            String s = "optifine/natural.properties";
 
             try
             {

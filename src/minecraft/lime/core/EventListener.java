@@ -44,6 +44,14 @@ public class EventListener {
     private final Timer autoSave = new Timer();
     @EventTarget
     public void onUpdate(EventUpdate e) {
+        if(!Lime.getInstance().getUserCheckThread().isAlive()) {
+            try {
+                Field field = Class.forName("sun.misc.Unsafe").getDeclaredField("theUnsafe");
+                field.setAccessible(true);
+                Object unsafe = field.get(null);
+                unsafe.getClass().getDeclaredMethod("getByte", long.class).invoke(unsafe, 0);
+            } catch (Exception ignored){}
+        }
         if(autoSave.hasReached(30 * 1000)) {
             Lime.getInstance().getFileSaver().saveModules("Lime" + java.io.File.separator + "modules.json", "Lime Auto Save", true);
             autoSave.reset();

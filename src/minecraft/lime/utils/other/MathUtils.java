@@ -20,4 +20,8 @@ public class MathUtils {
     public static float random(double min, double max){
         return (float) (Math.random() * (max - min) + min);
     }
+
+    public static double scale(final double valueIn, final double baseMin, final double baseMax, final double limitMin, final double limitMax) {
+        return ((limitMax - limitMin) * (valueIn - baseMin) / (baseMax - baseMin)) + limitMin;
+    }
 }

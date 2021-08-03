@@ -298,7 +298,7 @@ public class TextureUtils
                 return null;
             }
         };
-        ResourceLocation resourcelocation = new ResourceLocation("net/optifine/TickableTextures");
+        ResourceLocation resourcelocation = new ResourceLocation("optifine/TickableTextures");
         Config.getTextureManager().loadTickableTexture(resourcelocation, itickabletextureobject);
     }
 

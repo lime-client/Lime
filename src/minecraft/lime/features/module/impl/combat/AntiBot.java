@@ -10,6 +10,7 @@ import lime.features.setting.impl.BoolValue;
 import lime.features.setting.impl.EnumValue;
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.play.server.S0CPacketSpawnPlayer;
 import org.apache.commons.lang3.StringUtils;
@@ -24,6 +25,30 @@ public class AntiBot extends Module {
     private final EnumValue mode = new EnumValue("Mode", this, "Funcraft", "Funcraft", "Hypixel", "Mineplex");
     private final BoolValue remove = new BoolValue("Remove", this, false);
     private final Map<Integer, Double> distanceMap = new HashMap<>();
+
+    public boolean checkBot(EntityPlayer ent) {
+        if(mode.is("funcraft")) {
+            if(ent instanceof AbstractClientPlayer && ent != mc.thePlayer && ent.ticksExisted < 30) {
+                if(!((AbstractClientPlayer) ent).hasSkin() && ent.ticksExisted < 25) {
+                    AbstractClientPlayer player = (AbstractClientPlayer) ent;
+                    if(mc.thePlayer.getDistanceToEntity(player) <= 5 && player.motionY == 0 && !player.onGround && player.rotationYaw != -180 && player.rotationPitch != 0) {
+                        if(remove.isEnabled())
+                            mc.theWorld.removeEntity(ent);
+                        return true;
+                    }
+                }
+            }
+        }
+
+        if(mode.is("mineplex")) {
+            if(ent.posY - mc.thePlayer.posY > 3 && ent != mc.thePlayer && mc.thePlayer.getDistanceSqToEntity(ent) < 40 && !ent.onGround && ent.motionY == 0) {
+                if(remove.isEnabled())
+                    mc.theWorld.removeEntity(ent);
+                return true;
+            }
+        }
+        return false;
+    }
 
     public boolean checkBots() {
         if(mode.is("funcraft")) {

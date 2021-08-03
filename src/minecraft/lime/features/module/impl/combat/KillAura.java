@@ -325,7 +325,7 @@ public class KillAura extends Module {
 
     private boolean isValid(Entity entity) {
         AntiBot antiBot = (AntiBot) Lime.getInstance().getModuleManager().getModuleC(AntiBot.class);
-        if(antiBot.checkBots()) return false;
+        if(entity instanceof EntityPlayer && antiBot.checkBot((EntityPlayer) entity)) return false;
         if(teams.isEnabled() && entity instanceof EntityLivingBase && mc.thePlayer.isOnSameTeam((EntityLivingBase) entity)) return false;
         if((deathCheck.isEnabled() && !entity.isEntityAlive()) || (!mc.thePlayer.canEntityBeSeen(entity) && !throughWalls.isEnabled())) return false;
         return (entity instanceof EntityPlayer && this.players.isEnabled()) || ((entity instanceof EntityVillager || entity instanceof EntityAnimal) && this.passives.isEnabled()) || (entity instanceof EntityMob && this.mobs.isEnabled()) && mc.thePlayer.getDistanceToEntity(entity) <= this.range.getCurrent();

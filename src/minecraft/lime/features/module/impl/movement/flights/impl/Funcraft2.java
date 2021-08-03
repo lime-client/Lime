@@ -38,11 +38,7 @@ public class Funcraft2 extends FlightValue {
 
         if(!Lime.getInstance().getModuleManager().getModuleC(Timer.class).isToggled())
         {
-            mc.timer.timerSpeed = 1.0866f;
-            if(mc.thePlayer.ticksExisted % 3 == 0)
-            {
-                mc.timer.timerSpeed = 1.75f;
-            }
+            mc.timer.timerSpeed = 1.6f;
         }
 
         e.setGround(true);

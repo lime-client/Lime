@@ -2,10 +2,7 @@ package lime.features.module.impl.world;
 
 import lime.core.Lime;
 import lime.core.events.EventTarget;
-import lime.core.events.impl.Event3D;
-import lime.core.events.impl.EventEntityAction;
-import lime.core.events.impl.EventMotion;
-import lime.core.events.impl.EventSafeWalk;
+import lime.core.events.impl.*;
 import lime.features.module.Category;
 import lime.features.module.Module;
 import lime.features.module.ModuleData;
@@ -14,6 +11,7 @@ import lime.features.setting.impl.BoolValue;
 import lime.features.setting.impl.EnumValue;
 import lime.features.setting.impl.SlideValue;
 import lime.ui.notifications.Notification;
+import lime.utils.combat.CombatUtils;
 import lime.utils.movement.MovementUtils;
 import lime.utils.other.BlockUtils;
 import lime.utils.other.InventoryUtils;
@@ -21,7 +19,10 @@ import lime.utils.other.MathUtils;
 import lime.utils.render.RenderUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockSnow;
+import net.minecraft.client.gui.Gui;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.play.client.C0APacketAnimation;
 import net.minecraft.util.*;
@@ -66,6 +67,7 @@ public class Scaffold extends Module {
     private final BoolValue swapper = new BoolValue("Swapper", this, true);
     private final BoolValue downwards = new BoolValue("Downwards", this, false);
     private final BoolValue randomVec = new BoolValue("Random Vec", this, false);
+    private final BoolValue rayCast = new BoolValue("RayCast", this, false);
 
     //ToDo : downwards, keepspoof
 
@@ -103,6 +105,33 @@ public class Scaffold extends Module {
             mc.thePlayer.inventory.currentItem = slot;
             mc.playerController.updateController();
         }
+    }
+
+    @EventTarget
+    public void on2D(Event2D e) {
+        GL11.glEnable(3089);
+        Gui.drawRect(e.getScaledResolution().getScaledWidth() / 2F - 45, e.getScaledResolution().getScaledHeight() / 2F + 15, e.getScaledResolution().getScaledWidth() / 2F + 45,e.getScaledResolution().getScaledHeight() / 2F + 25, 2013265920);
+        RenderUtils.prepareScissorBox(e.getScaledResolution().getScaledWidth() / 2F - 45, e.getScaledResolution().getScaledHeight() / 2F + 15, e.getScaledResolution().getScaledWidth() / 2F + 45,e.getScaledResolution().getScaledHeight() / 2F + 25);
+        double percentage = MathUtils.scale(getBlocksCount(), 0, 128, -45, 45);
+        Gui.drawRect(e.getScaledResolution().getScaledWidth() / 2F - 45, e.getScaledResolution().getScaledHeight() / 2F + 15, e.getScaledResolution().getScaledWidth() / 2F + percentage, e.getScaledResolution().getScaledHeight() / 2F + 25, new Color(255, 0, 0).getRGB());
+        GL11.glDisable(3089);
+    }
+
+    public int getBlocksCount() {
+        int blocks = 0;
+        for(int i = 9; i < 45; ++i) {
+            if(InventoryUtils.getSlot(i).getHasStack()) {
+                ItemStack is = InventoryUtils.getSlot(i).getStack();
+                if(is.getItem() instanceof ItemBlock) {
+                    ItemBlock itemBlock = (ItemBlock) is.getItem();
+                    if(!blacklistedBlocks.contains(itemBlock.getBlock())) {
+                        blocks += is.stackSize;
+                    }
+                }
+            }
+        }
+
+        return blocks;
     }
 
     @EventTarget
@@ -187,7 +216,9 @@ public class Scaffold extends Module {
                 float[] rotations = getRotations(blockData.getBlockPos(), blockData.getEnumFacing());
                 e.setYaw(yaw = rotations[0]);
                 e.setPitch(pitch = rotations[1]);
-
+                if(rayTrace(yaw, pitch, blockData) && rayCast.isEnabled()) {
+                    return;
+                }
                 mc.thePlayer.setRotationsTP(e);
             }
             // Item Spoof and place block
@@ -255,6 +286,16 @@ public class Scaffold extends Module {
                 }
             }
         }
+    }
+
+    private boolean rayTrace(float yaw, float pitch, BlockUtils.BlockData blockData) {
+        Vec3 vec3 = mc.thePlayer.getPositionEyes(1.0f);
+        Vec3 vec31 = CombatUtils.getVectorForRotation(yaw, pitch);
+        Vec3 vec32 = vec3.addVector(vec31.xCoord * 5, vec31.yCoord * 5, vec31.zCoord * 5);
+
+        MovingObjectPosition result = mc.theWorld.rayTraceBlocks(vec3, vec32, false);
+
+        return result != null && result.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK && (blockData.getBlockPos()).equals(result.getBlockPos()) && blockData.getEnumFacing() == result.sideHit;
     }
 
     @EventTarget

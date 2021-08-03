@@ -168,7 +168,7 @@ public class TextureManager implements ITickable, IResourceManagerReloadListener
             ResourceLocation resourcelocation = (ResourceLocation)iterator.next();
             String s = resourcelocation.getResourcePath();
 
-            if (s.startsWith("mcpatcher/") || s.startsWith("net/optifine/"))
+            if (s.startsWith("mcpatcher/") || s.startsWith("optifine/"))
             {
                 ITextureObject itextureobject = (ITextureObject)this.mapTextureObjects.get(resourcelocation);
 

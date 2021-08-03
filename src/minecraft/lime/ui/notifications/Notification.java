@@ -1,21 +1,17 @@
 package lime.ui.notifications;
 
-import lime.core.Lime;
 import lime.core.events.impl.Event2D;
 import lime.managers.FontManager;
 import lime.utils.other.ChatUtils;
+import lime.utils.other.MathUtils;
 import lime.utils.other.Timer;
-import lime.utils.render.RenderUtils;
 import lime.utils.render.animation.easings.Animate;
 import lime.utils.render.animation.easings.Easing;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
-import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
-
-import java.awt.*;
 
 public class Notification {
     public enum Type {
@@ -26,7 +22,7 @@ public class Notification {
     private int lastKnownY;
 
     private final String name, information;
-    private final Enum _enum;
+    private final Type _enum;
     private final int seconds;
 
     private final Timer timer;
@@ -60,24 +56,36 @@ public class Notification {
     }
 
     public void render(Event2D e, int yOffset) {
-        if(lastKnownY == -1)
+        if(lastKnownY == -1) {
             lastKnownY = yOffset;
-
+            animationY.setMin(0);
+            animationY.setMax(1);
+            animationY.reset();
+        }
         if(lastKnownY != yOffset) {
+            animationY.setMax(yOffset - lastKnownY);
+            animationY.update();
+        }
 
+        if(animationY.getValue() == yOffset) {
+            lastKnownY = yOffset;
         }
         animate.update();
-        animationY.update();
-        RenderUtils.drawBluredRect(e.getScaledResolution().getScaledWidth() - animate.getValue(), lastKnownY != yOffset ? animationY.getValue() : yOffset, e.getScaledResolution().getScaledWidth() - animate.getValue() + FontManager.ProductSans20.getFont().getStringWidth(ChatUtils.removeColors(information)) + 44, (lastKnownY != yOffset ? animationY.getValue() : yOffset) + 36, new Color(25, 25, 25, 200).getRGB(), 10);
+
+        float animPercentage = lastKnownY == yOffset ? yOffset : lastKnownY + animationY.getValue();
+        float width = FontManager.ProductSans20.getFont().getStringWidth(ChatUtils.removeColors(information)) + 44;
+        double percentage = MathUtils.scale(Math.min(timer.getTimeElapsed(), getSeconds() * 1000L), 0, getSeconds() * 1000, 0, width);
+        Gui.drawRect(e.getScaledResolution().getScaledWidth() - animate.getValue(), animPercentage, e.getScaledResolution().getScaledWidth() - animate.getValue() + width, animPercentage + 36, 0xCC << 24);
+        Gui.drawRect(e.getScaledResolution().getScaledWidth() - animate.getValue(), animPercentage + 34, e.getScaledResolution().getScaledWidth() - animate.getValue() + percentage, animPercentage + 36, -1);
         Minecraft.getMinecraft().getTextureManager().bindTexture(new ResourceLocation("lime/images/" + getType().name().toLowerCase() + ".png"));
         GL11.glPushMatrix();
         GL11.glScaled(0.5, 0.5, 1);
         GL11.glColor4f(1, 1, 1, 1);
         GlStateManager.resetColor();
-        Gui.drawModalRectWithCustomSizedTexture((e.getScaledResolution().getScaledWidth() - animate.getValue() + 2) * 2, (yOffset + 2)  * 2, 0, 0, 64, 64, 64, 64);
+        Gui.drawModalRectWithCustomSizedTexture((e.getScaledResolution().getScaledWidth() - animate.getValue() + 2) * 2, (animPercentage + 2) * 2, 0, 0, 64, 64, 64, 64);
         GL11.glPopMatrix();
-        FontManager.ProductSans24.getFont().drawStringWithShadow(name, e.getScaledResolution().getScaledWidth() - animate.getValue() + 36, yOffset, -1);
-        FontManager.ProductSans20.getFont().drawStringWithShadow(information, e.getScaledResolution().getScaledWidth() - animate.getValue() + 36, yOffset + FontManager.ProductSans24.getFont().getFontHeight(), -1);
+        FontManager.ProductSans24.getFont().drawStringWithShadow(name, e.getScaledResolution().getScaledWidth() - animate.getValue() + 36, animPercentage, -1);
+        FontManager.ProductSans20.getFont().drawStringWithShadow(information, e.getScaledResolution().getScaledWidth() - animate.getValue() + 36, animPercentage + FontManager.ProductSans24.getFont().getFontHeight(), -1);
 
         if(timer.hasReached(getSeconds() * 1000L)) {
             animate.setReversed(true);
@@ -85,10 +93,6 @@ public class Notification {
             if(animate.getValue() == animate.getMin()) {
                 finished = true;
             }
-        }
-
-        if(animationY.getValue() == animationY.getMax()) {
-            lastKnownY = yOffset;
         }
     }
 
@@ -101,7 +105,7 @@ public class Notification {
         return information;
     }
 
-    public Enum getType() {
+    public Type getType() {
         return _enum;
     }
 

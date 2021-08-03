@@ -15,6 +15,7 @@ import lime.features.module.ModuleData;
 import lime.utils.render.ColorUtils;
 import lime.utils.render.animation.easings.Animate;
 import lime.utils.render.animation.easings.Easing;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
 
@@ -33,6 +34,7 @@ public class HUD extends Module {
     private final ColorValue fadeColor = new ColorValue("Fade Color", this, new Color(200, 0, 0).getRGB()).onlyIf(color.getSettingName(), "enum", "fade");
     private final BoolValue customFont = new BoolValue("Custom Font", this, true);
     private final BoolValue suffix = new BoolValue("Suffix", this, true);
+    private final BoolValue fps = new BoolValue("FPS", this, true);
 
     private final Animate scoreboardAnimation = new Animate();
 
@@ -43,6 +45,7 @@ public class HUD extends Module {
 
     @EventTarget
     public void on2D(Event2D e) {
+        ScaledResolution sr = new ScaledResolution(mc);
         scoreboardAnimation.setEase(Easing.LINEAR).setSpeed(125).setMin(0).update();
         /*for(int i = 0; i < 361; i++) {
             Color color = getColor(0);
@@ -50,9 +53,15 @@ public class HUD extends Module {
         }*/
 
         if(customFont.isEnabled())
-            FontManager.ProductSans20.getFont().drawStringWithShadow(clientName.getText(), 3, 3, -1);
+            FontManager.ProductSans20.getFont().drawStringWithShadow(clientName.getText(), 1, 1, -1);
         else
             mc.fontRendererObj.drawStringWithShadow(clientName.getText(), 3, 3, -1);
+
+        if(fps.isEnabled()) {
+            if(customFont.isEnabled()) {
+                FontManager.ProductSans20.getFont().drawStringWithShadow("FPS: §f" + Minecraft.debugFPS, 1, sr.getScaledHeight() - (FontManager.ProductSans20.getFont().getFontHeight() * 2), HUD.getColor(0).getRGB());
+            }
+        }
 
         ArrayList<Module> modules = new ArrayList<>(Lime.getInstance().getModuleManager().getModules());
 
@@ -86,6 +95,7 @@ public class HUD extends Module {
                 Color color = getColor(yCount / increment);
 
                 Gui.drawRect(e.getScaledResolution().getScaledWidth() - 1, yCount, e.getScaledResolution().getScaledWidth(), yCount + increment, color.getRGB());
+                //Gui.drawRect(e.getScaledResolution().getScaledWidth() - 1 - module.hudAnimation.getValue(), yCount, e.getScaledResolution().getScaledWidth() - 1, yCount + increment, (0xCC * 200) << 24);
                 if(customFont.isEnabled())
                     FontManager.ProductSans18.getFont().drawStringWithShadow(moduleName, (e.getScaledResolution().getScaledWidth() - module.hudAnimation.getValue()), yCount, color.getRGB());
                 else

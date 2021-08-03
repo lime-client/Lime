@@ -62,7 +62,7 @@ public class MainScreen extends GuiScreen {
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         GlStateManager.disableAlpha();
         GlStateManager.disableCull();
-        Lime.getInstance().getShader().useShader(this.width + 935, this.height + 500, mouseX, mouseY, (System.currentTimeMillis() - initTime) / 1000F);
+        Minecraft.getMinecraft().getShader().useShader(this.width + 935, this.height + 500, mouseX, mouseY, (System.currentTimeMillis() - initTime) / 1000F);
         GL11.glBegin(GL11.GL_QUADS);
         GL11.glVertex2f(-1f, -1f);
         GL11.glVertex2f(-1f, 1f);

@@ -1,6 +1,7 @@
 package lime.core;
 
 import lime.scripting.ScriptManager;
+import lime.ui.gui.LoginScreen;
 import lime.ui.gui.MainScreen;
 import lime.ui.notifications.utils.NotificationManager;
 import lime.utils.other.file.FileSaver;
@@ -8,15 +9,18 @@ import lime.managers.CommandManager;
 import lime.managers.ModuleManager;
 import lime.features.setting.SettingsManager;
 import lime.ui.clickgui.frame.ClickGUI;
+import lime.utils.other.security.UserCheckThread;
 import lime.utils.render.GLSLSandboxShader;
 import net.minecraft.client.Minecraft;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.lwjgl.opengl.Display;
+import sun.misc.Unsafe;
 import viamcp.ViaMCP;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.net.Proxy;
 import java.util.logging.Level;
 
@@ -31,26 +35,22 @@ public class Lime {
     private ClickGUI clickGUI;
     private lime.ui.clickgui.frame2.ClickGUI clickGUI2;
 
+    private UserCheckThread userCheckThread;
+
     private FileSaver fileSaver;
 
     private Proxy proxy = Proxy.NO_PROXY;
 
-    private GLSLSandboxShader shader;
-
     public boolean theAltening;
 
-    private int interval = 300;
-    private int timeout = 30;
-
     public void initClient() {
+        if(this.userCheckThread == null) return;
         Logger logger = LogManager.getLogger("Lime");
 
         logger.info("[LIME] Starting client");
 
-        Minecraft.getMinecraft().displayGuiScreen(new MainScreen());
         ViaMCP.getInstance().start();
 
-        Display.setTitle("Lime");
         File limeFile = new File("Lime");
         File limeConfigFile = new File("Lime" + File.separator + "configs");
         File limeScriptsFile = new File("Lime" + File.separator + "scripts");
@@ -70,12 +70,6 @@ public class Lime {
         commandManager = new CommandManager();
         notificationManager = new NotificationManager();
         fileSaver = new FileSaver();
-
-        try {
-            shader = new GLSLSandboxShader("/assets/minecraft/lime/shaders/shader.vsh");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
 
         if((new File("Lime" + java.io.File.separator + "modules.json").exists()))
             fileSaver.applyJson("Lime" + java.io.File.separator + "modules.json", true);
@@ -122,28 +116,16 @@ public class Lime {
         return instance;
     }
 
-    public GLSLSandboxShader getShader() {
-        return shader;
-    }
-
     public FileSaver getFileSaver() {
         return fileSaver;
     }
 
-    public int getTimeout() {
-        return timeout;
+    public UserCheckThread getUserCheckThread() {
+        return userCheckThread;
     }
 
-    public int getInterval() {
-        return interval;
-    }
-
-    public void setInterval(int interval) {
-        this.interval = interval;
-    }
-
-    public void setTimeout(int timeout) {
-        this.timeout = timeout;
+    public void setUserCheckThread(UserCheckThread userCheckThread) {
+        this.userCheckThread = userCheckThread;
     }
 
     public Proxy getProxy() {

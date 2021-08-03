@@ -2,7 +2,7 @@
   "informations": [
     {
       "author": "Lime Auto Save",
-      "time": 1627819451
+      "time": 1628009816
     }
   ],
   "modules": [
@@ -26,7 +26,7 @@
     {
       "moduleName": "Auto Sword",
       "key": -1,
-      "toggled": true
+      "toggled": false
     },
     {
       "moduleName": "Criticals",
@@ -43,7 +43,7 @@
     {
       "moduleName": "Kill Aura",
       "key": 19,
-      "toggled": true,
+      "toggled": false,
       "settings": [
         {
           "name": "State",
@@ -53,7 +53,7 @@
         {
           "name": "Priority",
           "type": "enum",
-          "value": "fov"
+          "value": "distance"
         },
         {
           "name": "Rotations",
@@ -98,7 +98,7 @@
         {
           "name": "Randomize CPS",
           "type": "slider",
-          "value": 1.0
+          "value": 0.0
         },
         {
           "name": "Players",
@@ -167,7 +167,7 @@
         {
           "name": "Remove",
           "type": "bool",
-          "value": true
+          "value": false
         }
       ]
     },
@@ -250,7 +250,7 @@
         {
           "name": "Mode",
           "type": "enum",
-          "value": "erisium"
+          "value": "ghostly_movement"
         }
       ]
     },
@@ -266,13 +266,13 @@
     },
     {
       "moduleName": "Blink",
-      "key": -1,
+      "key": 0,
       "toggled": false,
       "settings": [
         {
           "name": "Blink Delay",
           "type": "slider",
-          "value": 500.0
+          "value": 400.0
         }
       ]
     },
@@ -291,12 +291,12 @@
     {
       "moduleName": "Target Strafe",
       "key": 45,
-      "toggled": false,
+      "toggled": true,
       "settings": [
         {
           "name": "Distance",
           "type": "slider",
-          "value": 2.0
+          "value": 1.1
         },
         {
           "name": "Space Only",
@@ -360,7 +360,7 @@
         {
           "name": "Mode",
           "type": "enum",
-          "value": "funcraft"
+          "value": "vanilla"
         },
         {
           "name": "Speed",
@@ -372,12 +372,12 @@
     {
       "moduleName": "No Slow",
       "key": -1,
-      "toggled": true,
+      "toggled": false,
       "settings": [
         {
           "name": "Mode",
           "type": "enum",
-          "value": "vanilla"
+          "value": "ncp"
         }
       ]
     },
@@ -389,7 +389,7 @@
         {
           "name": "Mode",
           "type": "enum",
-          "value": "funcraft2"
+          "value": "vanilla"
         },
         {
           "name": "Speed",
@@ -399,7 +399,7 @@
         {
           "name": "Bobbing",
           "type": "bool",
-          "value": true
+          "value": false
         },
         {
           "name": "Verus Glide",
@@ -445,7 +445,7 @@
         {
           "name": "Mode",
           "type": "enum",
-          "value": "vanilla"
+          "value": "ncp"
         },
         {
           "name": "Height",
@@ -467,7 +467,7 @@
     {
       "moduleName": "Inventory Manager",
       "key": 48,
-      "toggled": true,
+      "toggled": false,
       "settings": [
         {
           "name": "Mode",
@@ -499,12 +499,12 @@
     {
       "moduleName": "Click Teleport",
       "key": -1,
-      "toggled": false
+      "toggled": true
     },
     {
       "moduleName": "Chest Stealer",
       "key": 23,
-      "toggled": true,
+      "toggled": false,
       "settings": [
         {
           "name": "Delay before close",
@@ -529,7 +529,7 @@
         {
           "name": "Silent",
           "type": "bool",
-          "value": false
+          "value": true
         },
         {
           "name": "Show Chest",
@@ -551,7 +551,7 @@
     {
       "moduleName": "Auto Armor",
       "key": 37,
-      "toggled": true,
+      "toggled": false,
       "settings": [
         {
           "name": "Mode",
@@ -708,7 +708,7 @@
         {
           "name": "Mode",
           "type": "enum",
-          "value": "frame"
+          "value": "framenew"
         }
       ]
     },
@@ -833,7 +833,7 @@
         {
           "name": "Color",
           "type": "enum",
-          "value": "astolfo"
+          "value": "fade"
         },
         {
           "name": "Fade Color",
@@ -847,6 +847,11 @@
         },
         {
           "name": "Suffix",
+          "type": "bool",
+          "value": true
+        },
+        {
+          "name": "FPS",
           "type": "bool",
           "value": true
         }
@@ -892,17 +897,17 @@
         {
           "name": "Rotations",
           "type": "enum",
-          "value": "basic"
+          "value": "legit2"
         },
         {
           "name": "Item Spoof",
           "type": "enum",
-          "value": "spoof"
+          "value": "pick"
         },
         {
           "name": "Tower",
           "type": "enum",
-          "value": "ncp"
+          "value": "none"
         },
         {
           "name": "Speed Modifier",
@@ -922,7 +927,7 @@
         {
           "name": "Keep Rotations",
           "type": "bool",
-          "value": false
+          "value": true
         },
         {
           "name": "Tower Move",
@@ -932,17 +937,17 @@
         {
           "name": "Safewalk",
           "type": "bool",
-          "value": false
+          "value": true
         },
         {
           "name": "No Sprint",
           "type": "bool",
-          "value": false
+          "value": true
         },
         {
           "name": "Spoof Sprint",
           "type": "bool",
-          "value": false
+          "value": true
         },
         {
           "name": "Same Y",
@@ -967,6 +972,11 @@
         {
           "name": "Random Vec",
           "type": "bool",
+          "value": true
+        },
+        {
+          "name": "RayCast",
+          "type": "bool",
           "value": false
         }
       ]
@@ -974,12 +984,12 @@
     {
       "moduleName": "No Rotate",
       "key": -1,
-      "toggled": false
+      "toggled": true
     },
     {
       "moduleName": "Breaker",
       "key": 49,
-      "toggled": false,
+      "toggled": true,
       "settings": [
         {
           "name": "Range",

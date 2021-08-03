@@ -34,7 +34,9 @@ import lime.core.Lime;
 import lime.core.events.EventBus;
 import lime.core.events.impl.EventKey;
 import lime.core.events.impl.EventWorldChange;
+import lime.ui.gui.LoginScreen;
 import lime.ui.gui.MainScreen;
+import lime.utils.render.GLSLSandboxShader;
 import lime.utils.time.DeltaTime;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -232,6 +234,8 @@ public class Minecraft implements IThreadListener, IPlayerUsage
     public Session session;
     private boolean isGamePaused;
 
+    private GLSLSandboxShader shader;
+
     /** The font renderer used for displaying and measuring text */
     public FontRenderer fontRendererObj;
     public FontRenderer standardGalacticFontRenderer;
@@ -278,7 +282,7 @@ public class Minecraft implements IThreadListener, IPlayerUsage
      * This is set to fpsCounter every debug screen update, and is shown on the debug screen. It's also sent as part of
      * the usage snooping.
      */
-    private static int debugFPS;
+    public static int debugFPS;
 
     /**
      * When you place a block, it's set to 6, decremented once per tick, when it's 0, you can place another block.
@@ -560,14 +564,13 @@ public class Minecraft implements IThreadListener, IPlayerUsage
         this.checkGLError("Post startup");
         this.ingameGUI = new GuiIngame(this);
 
-        /*if (this.serverName != null)
-        {
-            this.displayGuiScreen(new GuiConnecting(new GuiMainMenu(), this, this.serverName, this.serverPort));
+        try {
+            shader = new GLSLSandboxShader("/assets/minecraft/lime/shaders/shader.vsh");
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        else
-        {
-            this.displayGuiScreen(new GuiMainMenu());
-        }*/
+
+        this.displayGuiScreen(new LoginScreen());
 
         this.renderEngine.deleteTexture(this.mojangLogo);
         this.mojangLogo = null;
@@ -587,8 +590,6 @@ public class Minecraft implements IThreadListener, IPlayerUsage
             this.gameSettings.enableVsync = false;
             this.gameSettings.saveOptions();
         }
-
-        Lime.getInstance().initClient();
 
         this.renderGlobal.makeEntityOutlineShader();
     }
@@ -613,6 +614,10 @@ public class Minecraft implements IThreadListener, IPlayerUsage
             this.stream = new NullStream(throwable);
             logger.error("Couldn\'t initialize twitch stream");
         }
+    }
+
+    public GLSLSandboxShader getShader() {
+        return shader;
     }
 
     private void createDisplay() throws LWJGLException
