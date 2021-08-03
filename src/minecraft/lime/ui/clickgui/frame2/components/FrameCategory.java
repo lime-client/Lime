@@ -115,9 +115,9 @@ public class FrameCategory {
 
         GL11.glColor4f(1, 1, 1, 1);
         GlStateManager.resetColor();
-        Minecraft.getMinecraft().getTextureManager().bindTexture(new ResourceLocation("lime/clickgui/frame/" + category.name().toLowerCase() + ".png"));
-        Gui.drawModalRectWithCustomSizedTexture(getX() + width - 12, y + 3, 0, 0, 8, 8, 8, 8);
-
+        RenderUtils.drawImage(new ResourceLocation("lime/clickgui/frame/" + category.name().toLowerCase() + ".png"),getX() + width - 12, y + 3, 8, 8, true);
+        GlStateManager.resetColor();
+        GL11.glColor4f(1, 1, 1, 1);
         // Drawing category name
         FontManager.ProductSans18.getFont().drawString(category.name(), x + 3, y + ((categoryNameHeight / 2F) - FontManager.ProductSans18.getFont().getFontHeight() / 2F), stringColor, true);
 

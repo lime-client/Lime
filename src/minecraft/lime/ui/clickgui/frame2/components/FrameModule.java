@@ -7,6 +7,7 @@ import lime.managers.FontManager;
 import lime.ui.clickgui.frame2.Priority;
 import lime.ui.clickgui.frame2.components.impl.*;
 import lime.utils.render.ColorUtils;
+import lime.utils.render.RenderUtils;
 import lime.utils.render.animation.easings.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
@@ -81,9 +82,10 @@ public class FrameModule {
             GL11.glPushMatrix();
             GlStateManager.enableBlend();
             GL11.glColor4f(1, 1, 1, 1);
-            Minecraft.getMinecraft().getTextureManager().bindTexture(opened ? new ResourceLocation("lime/clickgui/frame/expand.png") : new ResourceLocation("lime/clickgui/frame/collapse.png"));
             GL11.glScalef(0.5f, 0.5f, 0.5f);
-            Gui.drawModalRectWithCustomSizedTexture((x + defaultWidth - 12) * 2, (y + 5) * 2, 0, 0, 16, 10, 16, 10);
+            RenderUtils.drawImage(opened ? new ResourceLocation("lime/clickgui/frame/expand.png") : new ResourceLocation("lime/clickgui/frame/collapse.png"), (x + defaultWidth - 12) * 2, (y + 5) * 2, 16, 10, true);
+            GL11.glColor4f(1, 1, 1, 1);
+            GlStateManager.resetColor();
             GlStateManager.disableBlend();
             GL11.glPopMatrix();
         }

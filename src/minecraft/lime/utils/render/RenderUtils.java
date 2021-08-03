@@ -33,6 +33,22 @@ public class RenderUtils implements IUtil {
     private static final FloatBuffer modelview = GLAllocation.createDirectFloatBuffer(16);
     private static final FloatBuffer projection = GLAllocation.createDirectFloatBuffer(16);
 
+        public static void drawImage(ResourceLocation resourceLocation, double x, double y, int width, int height, boolean antialiasing) {
+        mc.getTextureManager().bindTexture(resourceLocation);
+        if(antialiasing) {
+            GlStateManager.enableBlend();
+            GL11.glEnable(GL_BLEND);
+            //GL11.glEnable(GL_POLYGON_SMOOTH);
+            GL14.glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ZERO);
+        }
+        Gui.drawModalRectWithCustomSizedTexture(x, y, 0, 0, width, height, width, height);
+        if(antialiasing) {
+            GlStateManager.disableBlend();
+            GL11.glDisable(GL_BLEND);
+            //GL11.glDisable(GL_POLYGON_SMOOTH);
+        }
+    }
+
     public static void enable(final boolean disableDepth) {
         if (disableDepth) {
             GL11.glDepthMask(false);

@@ -108,7 +108,7 @@ public abstract class GuiScreen extends Gui implements GuiYesNoCallback
             ((GuiLabel)this.labelList.get(j)).drawLabel(this.mc, mouseX, mouseY);
         }
 
-        if(Lime.getInstance().getModuleManager() != null) {
+        if(Lime.getInstance().getNotificationManager() != null && Minecraft.getMinecraft().thePlayer == null) {
             Lime.getInstance().getNotificationManager().renderNotifications(new Event2D(new ScaledResolution(mc), partialTicks));
         }
     }

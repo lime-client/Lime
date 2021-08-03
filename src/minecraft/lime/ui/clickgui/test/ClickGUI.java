@@ -8,6 +8,7 @@ import lime.utils.render.animation.easings.Easing;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
@@ -61,12 +62,11 @@ public class ClickGUI extends GuiScreen {
         int i = 0;
         for (FrameCategory category : categories) {
             //RenderUtils.glColor(getColor(category.getCategory()));
-            mc.getTextureManager().bindTexture(new ResourceLocation("lime/clickgui/test/" + category.getCategory().name().toLowerCase() +".png"));
-            Gui.drawModalRectWithCustomSizedTexture(x + (i * 32), y,  0, 0, 32, 32, 32, 32);
+            RenderUtils.drawImage(new ResourceLocation("lime/clickgui/test/" + category.getCategory().name().toLowerCase() +".png"),x + (i * 32), y, 32, 32, true);
             ++i;
         }
 
-        System.out.println(index);
+        //System.out.println(index);
 
         if(index != -1) {
             Gui.drawRect(x+selectedCategoryAnimation.getValue(), y + 32, x+selectedCategoryAnimation.getValue() + 32,  y + 33, getColor(categories.get(index).getCategory()));

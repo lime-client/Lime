@@ -2,7 +2,7 @@
   "informations": [
     {
       "author": "Lime Auto Save",
-      "time": 1628009816
+      "time": 1628015562
     }
   ],
   "modules": [
@@ -467,7 +467,7 @@
     {
       "moduleName": "Inventory Manager",
       "key": 48,
-      "toggled": false,
+      "toggled": true,
       "settings": [
         {
           "name": "Mode",
@@ -573,7 +573,7 @@
     {
       "moduleName": "Fast Place",
       "key": -1,
-      "toggled": true
+      "toggled": false
     },
     {
       "moduleName": "Streamer",
@@ -937,7 +937,7 @@
         {
           "name": "Safewalk",
           "type": "bool",
-          "value": true
+          "value": false
         },
         {
           "name": "No Sprint",
