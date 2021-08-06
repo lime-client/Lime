@@ -1,2 +1,2 @@
-## Lime Repository
+## Lime Repositor
 Lime Repo
