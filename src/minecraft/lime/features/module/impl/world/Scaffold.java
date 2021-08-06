@@ -163,7 +163,7 @@ public class Scaffold extends Module {
             }
         }
 
-        if(!isAirBlock(new BlockPos(mc.thePlayer.posX, mc.thePlayer.posY - 1, mc.thePlayer.posZ).getBlock())) {
+        if(!isAirBlock(new BlockPos(mc.thePlayer.posX, mc.thePlayer.posY - 1, mc.thePlayer.posZ).getBlock()) && e.isPre()) {
             mc.thePlayer.motionX *= speedModifier.getCurrent();
             mc.thePlayer.motionZ *= speedModifier.getCurrent();
         }

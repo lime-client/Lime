@@ -9,7 +9,6 @@ import lime.ui.clickgui.frame2.components.impl.*;
 import lime.utils.render.ColorUtils;
 import lime.utils.render.RenderUtils;
 import lime.utils.render.animation.easings.*;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.GlStateManager;
@@ -61,6 +60,10 @@ public class FrameModule {
                 if(setting instanceof SlideValue)
                 {
                     this.components.add(new SlideSetting(0, 0, this, setting));
+                }
+                if(setting instanceof TextValue)
+                {
+                    this.components.add(new TextSetting(0, 0, this, setting));
                 }
             });
         }
@@ -140,6 +143,12 @@ public class FrameModule {
         }
 
         return false;
+    }
+
+    public void keyTyped(char typedChar, int keyCode) {
+        if(opened) {
+            this.components.forEach(component -> component.keyTyped(typedChar, keyCode));
+        }
     }
 
     public int getOffset() {

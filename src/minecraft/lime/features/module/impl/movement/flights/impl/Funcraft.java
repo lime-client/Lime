@@ -1,56 +1,104 @@
 package lime.features.module.impl.movement.flights.impl;
 
+import lime.core.Lime;
 import lime.core.events.impl.EventMotion;
+import lime.core.events.impl.EventMove;
+import lime.core.events.impl.EventPacket;
+import lime.features.module.impl.combat.KillAura;
+import lime.features.module.impl.movement.TargetStrafe;
 import lime.features.module.impl.movement.flights.FlightValue;
+import lime.features.module.impl.world.Timer;
 import lime.utils.movement.MovementUtils;
+import net.minecraft.network.play.server.S08PacketPlayerPosLook;
 
 public class Funcraft extends FlightValue {
-    public Funcraft() {
-        super("Funcraft");
+    public Funcraft()
+    {
+        super("Funcraft2");
     }
 
     private double moveSpeed;
+    private double lastDist;
+    private int stage;
 
     @Override
     public void onEnable() {
-        if(mc.thePlayer.onGround) {
-            mc.thePlayer.jump();
-            moveSpeed = 1.7;
-        } else
+        stage = 0;
+    }
+
+    @Override
+    public void onPacket(EventPacket e) {
+        if(e.getPacket() instanceof S08PacketPlayerPosLook) {
             moveSpeed = 0.25;
+        }
     }
 
     @Override
     public void onMotion(EventMotion e) {
-        e.setGround(true);
-        mc.thePlayer.jumpMovementFactor = 0;
-        if(e.isPre()) {
-            mc.thePlayer.motionY = 0;
-            if(getFlight().getTicks() > 175 && moveSpeed < 0.26) {
-                getFlight().setTicks(0);
-                mc.thePlayer.setPosition(mc.thePlayer.posX, mc.thePlayer.posY - 0.03, mc.thePlayer.posZ);
-            }
+
+        if(!Lime.getInstance().getModuleManager().getModuleC(Timer.class).isToggled())
+        {
+            mc.timer.timerSpeed = mc.thePlayer.isMoving() ? 1.6f : 1;
         }
 
-        if(mc.thePlayer.isCollidedHorizontally)
-            moveSpeed = 0.25;
-        if(mc.thePlayer.isMoving()) {
-            mc.timer.timerSpeed = 1.0866f;
-            if(mc.thePlayer.ticksExisted % 5 == 0) {
-                mc.timer.timerSpeed = 1.75f;
-            }
-            MovementUtils.setSpeed(moveSpeed);
-            if(moveSpeed > 0.25)
-                moveSpeed -= moveSpeed / 159;
-            else
-                moveSpeed = 0.25;
-        } else {
+        if(!mc.thePlayer.isMoving()) {
             MovementUtils.setSpeed(0);
-            moveSpeed = 0.25;
         }
-        if(e.isPre() && !MovementUtils.isOnGround(0.1)) {
-            // 3.33315597345063e-11
-            mc.thePlayer.setPosition(mc.thePlayer.posX, mc.thePlayer.posY - 0.0000000000333315597345063, mc.thePlayer.posZ);
+
+        e.setGround(true);
+
+        if(e.isPre())
+        {
+            double xDist = mc.thePlayer.posX - mc.thePlayer.prevPosX;
+            double zDist = mc.thePlayer.posZ - mc.thePlayer.prevPosZ;
+            lastDist = Math.sqrt(xDist * xDist + zDist * zDist);
+        }
+
+        if((stage > 2 || stage == -1) && !MovementUtils.isOnGround(3.33315597345063e-11))
+        {
+            mc.thePlayer.motionY = 0;
+            if(e.isPre())
+            {
+                MovementUtils.vClip(-(3.33315597345063e-11));
+            }
+        }
+    }
+
+    @Override
+    public void onMove(EventMove e) {
+        if((stage == 0 && !mc.thePlayer.onGround) || mc.thePlayer.isCollidedHorizontally) stage = -1;
+        if(mc.thePlayer.isMoving())
+        {
+            if(stage != -1) {
+                switch(stage)
+                {
+                    case 0:
+                        if(mc.thePlayer.onGround && mc.thePlayer.isCollidedVertically)
+                            this.moveSpeed = 0.5;
+                        break;
+                    case 1:
+                        if(mc.thePlayer.onGround && mc.thePlayer.isCollidedVertically)
+                            e.setY(mc.thePlayer.motionY = 0.42);
+                        this.moveSpeed *= 2.149;
+                        break;
+                    case 2:
+                        this.moveSpeed = 1.6;
+                        break;
+                    default:
+                        this.moveSpeed = this.lastDist - this.lastDist / 159;
+                        break;
+                }
+
+                moveSpeed = Math.max(moveSpeed, MovementUtils.getBaseMoveSpeed());
+
+                if (KillAura.getEntity() != null) {
+                    TargetStrafe targetStrafe2 = (TargetStrafe) Lime.getInstance().getModuleManager().getModuleC(TargetStrafe.class);
+                    targetStrafe2.setMoveSpeed(e, moveSpeed);
+                } else {
+                    MovementUtils.setSpeed(e, moveSpeed);
+                }
+                ++stage;
+            }
         }
     }
 }

@@ -11,7 +11,6 @@ import lime.features.setting.impl.BoolValue;
 import lime.features.setting.impl.EnumValue;
 import lime.features.setting.impl.SlideValue;
 import lime.utils.movement.MovementUtils;
-import lime.utils.other.Timer;
 import lime.utils.render.Graph;
 
 import java.util.ArrayList;
@@ -22,7 +21,7 @@ public class Flight extends Module {
     private final Graph speedGraph = new Graph("Speed");
 
     //Settings
-    public final EnumValue mode = new EnumValue("Mode", this, "Vanilla", "Vanilla", "Funcraft", "Funcraft2", "Funcraft_Gamer", "Mineplex", "Verus", "Verus_No_Damage", "Verus_Fast", "Survival_Dub", "Astral");
+    public final EnumValue mode = new EnumValue("Mode", this, "Vanilla", "Vanilla", "Funcraft", "Funcraft_Gamer", "Verus", "Verus_No_Damage", "Verus_Fast", "Survival_Dub", "Astral");
     public final SlideValue speed = new SlideValue("Speed", this, 0.5, 10, 1.5, 0.5).onlyIf(mode.getSettingName(), "enum", "vanilla", "verus_fast");
     private final BoolValue bobbing = new BoolValue("Bobbing", this, true);
     public final BoolValue verusGlide = new BoolValue("Verus Glide", this, false).onlyIf(mode.getSettingName(), "enum", "verus_fast");
@@ -35,7 +34,6 @@ public class Flight extends Module {
     {
         this.flights.add(new FuncraftGamer());
         this.flights.add(new VerusFast());
-        this.flights.add(new Funcraft2());
         this.flights.add(new Funcraft());
         this.flights.add(new Vanilla());
         this.flights.add(new Astral());

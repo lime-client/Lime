@@ -10,13 +10,13 @@ bobView:true
 anaglyph3d:false
 maxFps:260
 fboEnable:true
-difficulty:0
+difficulty:2
 fancyGraphics:true
 ao:2
 renderClouds:false
-resourcePacks:["Astolfo_Pack.zip"]
+resourcePacks:["!     §dd§58§dm §8[§532§fx§8].zip"]
 incompatibleResourcePacks:[]
-lastServer:mc.mineland.me
+lastServer:45.140.164.76
 lang:en_US
 chatVisibility:0
 chatColors:true
@@ -28,7 +28,7 @@ fullscreen:false
 enableVsync:false
 useVbo:false
 hideServerAddress:false
-advancedItemTooltips:false
+advancedItemTooltips:true
 pauseOnLostFocus:true
 touchscreen:false
 overrideWidth:0
@@ -92,7 +92,7 @@ key_key.hotbar.9:10
 key_of.key.zoom:46
 soundCategory_master:0.5596027
 soundCategory_music:0.0
-soundCategory_record:0.42957747
+soundCategory_record:0.0
 soundCategory_weather:0.0
 soundCategory_block:0.45774648
 soundCategory_hostile:0.44366196

@@ -45,9 +45,6 @@ public class Mineplex extends FlightValue {
                 MovementUtils.setSpeed(-0.1);
                 mc.thePlayer.motionY = 0.14;
             } else {
-                mc.getNetHandler().addToSendQueue(new C09PacketHeldItemChange(mc.thePlayer.inventory.currentItem));
-                mc.getNetHandler().addToSendQueue(new C08PacketPlayerBlockPlacement(new BlockPos(MathUtils.random(Float.MIN_VALUE, Float.MAX_VALUE), MathUtils.random(Float.MIN_VALUE, Float.MAX_VALUE), MathUtils.random(Float.MIN_VALUE, Float.MAX_VALUE)), 255, mc.thePlayer.getHeldItem(), 0, 0, 0));
-                mc.thePlayer.sendQueue.addToSendQueue(new C07PacketPlayerDigging(C07PacketPlayerDigging.Action.RELEASE_USE_ITEM, new BlockPos(-5, -5, -5), EnumFacing.DOWN));
                 MovementUtils.setSpeed(moveSpeed);
             }
         }

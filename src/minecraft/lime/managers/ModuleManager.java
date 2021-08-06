@@ -48,6 +48,7 @@ public class ModuleManager {
         registerModule(new Speed());
         registerModule(new Glide());
         registerModule(new Step());
+        registerModule(new Cock());
 
         // PLAYER
         registerModule(new InventoryManager());
@@ -86,6 +87,7 @@ public class ModuleManager {
 
         registerModule(new DreamESP());
         registerModule(new ClickGUITest());
+        registerModule(new ChinaHat());
 
 
         // WORLD

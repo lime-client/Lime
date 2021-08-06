@@ -86,12 +86,17 @@ public class FrameCategory {
 
         if(Mouse.hasWheel() && GuiScreen.hover(x, y, mouseX, mouseY, defaultWidth, height))
         {
+            int offsetMultiplier = 5;
             int wheel = Mouse.getDWheel();
-            if(wheel > 0 && offset - (moduleHeight - 1) > 0) {
-                offset -= moduleHeight;
-            } else if(wheel < 0 && offset + (moduleHeight - 1) <= (offCat.get()) - height + categoryNameHeight) {
-                offset += moduleHeight;
+            if(wheel > 0 && offset - (offsetMultiplier - 1) > 0) {
+                offset -= offsetMultiplier;
+            } else if(wheel < 0 && offset + (offsetMultiplier - 1) <= (offCat.get()) - height + categoryNameHeight) {
+                offset += offsetMultiplier;
             }
+        }
+
+        if((offCat.get()) - height + categoryNameHeight < offset) {
+            offset = (offCat.get()) - height + categoryNameHeight;
         }
 
         // Drawing category base

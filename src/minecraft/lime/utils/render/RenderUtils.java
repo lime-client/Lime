@@ -34,19 +34,18 @@ public class RenderUtils implements IUtil {
     private static final FloatBuffer projection = GLAllocation.createDirectFloatBuffer(16);
 
         public static void drawImage(ResourceLocation resourceLocation, double x, double y, int width, int height, boolean antialiasing) {
-        mc.getTextureManager().bindTexture(resourceLocation);
-        if(antialiasing) {
-            GlStateManager.enableBlend();
-            GL11.glEnable(GL_BLEND);
-            //GL11.glEnable(GL_POLYGON_SMOOTH);
+            GL11.glPushMatrix();
+            glEnable(GL_BLEND);
+            glDepthMask(false);
             GL14.glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ZERO);
-        }
-        Gui.drawModalRectWithCustomSizedTexture(x, y, 0, 0, width, height, width, height);
-        if(antialiasing) {
-            GlStateManager.disableBlend();
+            glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+            mc.getTextureManager().bindTexture(resourceLocation);
+            Gui.drawModalRectWithCustomSizedTexture(x, y, 0, 0, width, height, width, height);
+            GL11.glDepthMask(true);
             GL11.glDisable(GL_BLEND);
-            //GL11.glDisable(GL_POLYGON_SMOOTH);
-        }
+            GL11.glEnable(GL_DEPTH_TEST);
+            GL11.glPopMatrix();
+            GlStateManager.color(1, 1, 1);
     }
 
     public static void enable(final boolean disableDepth) {
@@ -202,9 +201,9 @@ public class RenderUtils implements IUtil {
         double min_x = x;
         double min_y = y;
         double min_z = z;
-        double max_x = x + 1;
+        double max_x = x + radius;
         double max_y = y + yOffset;
-        double max_z = z + 1;
+        double max_z = z + radius;
 
         glColor(color);
 

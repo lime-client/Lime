@@ -2,7 +2,7 @@
   "informations": [
     {
       "author": "Lime Auto Save",
-      "time": 1628015562
+      "time": 1628269361
     }
   ],
   "modules": [
@@ -53,12 +53,12 @@
         {
           "name": "Priority",
           "type": "enum",
-          "value": "distance"
+          "value": "fov"
         },
         {
           "name": "Rotations",
           "type": "enum",
-          "value": "none"
+          "value": "smooth"
         },
         {
           "name": "Target ESP",
@@ -78,7 +78,7 @@
         {
           "name": "Rotations Min",
           "type": "slider",
-          "value": 50.0
+          "value": 60.0
         },
         {
           "name": "Rotations Max",
@@ -88,7 +88,7 @@
         {
           "name": "Range",
           "type": "slider",
-          "value": 6.0
+          "value": 3.6500000000000004
         },
         {
           "name": "CPS",
@@ -98,7 +98,7 @@
         {
           "name": "Randomize CPS",
           "type": "slider",
-          "value": 0.0
+          "value": 4.0
         },
         {
           "name": "Players",
@@ -123,7 +123,7 @@
         {
           "name": "Ray Cast",
           "type": "bool",
-          "value": false
+          "value": true
         },
         {
           "name": "Through Walls",
@@ -138,7 +138,7 @@
         {
           "name": "Death Check",
           "type": "bool",
-          "value": true
+          "value": false
         }
       ]
     },
@@ -157,17 +157,17 @@
     {
       "moduleName": "Anti Bot",
       "key": -1,
-      "toggled": true,
+      "toggled": false,
       "settings": [
         {
           "name": "Mode",
           "type": "enum",
-          "value": "funcraft"
+          "value": "mineplex"
         },
         {
           "name": "Remove",
           "type": "bool",
-          "value": false
+          "value": true
         }
       ]
     },
@@ -250,7 +250,7 @@
         {
           "name": "Mode",
           "type": "enum",
-          "value": "ghostly_movement"
+          "value": "erisium"
         }
       ]
     },
@@ -266,13 +266,13 @@
     },
     {
       "moduleName": "Blink",
-      "key": 0,
+      "key": 33,
       "toggled": false,
       "settings": [
         {
           "name": "Blink Delay",
           "type": "slider",
-          "value": 400.0
+          "value": 200.0
         }
       ]
     },
@@ -296,7 +296,7 @@
         {
           "name": "Distance",
           "type": "slider",
-          "value": 1.1
+          "value": 2.4000000000000004
         },
         {
           "name": "Space Only",
@@ -354,13 +354,13 @@
     },
     {
       "moduleName": "Long Jump",
-      "key": 40,
+      "key": -1,
       "toggled": false,
       "settings": [
         {
           "name": "Mode",
           "type": "enum",
-          "value": "vanilla"
+          "value": "funcraft"
         },
         {
           "name": "Speed",
@@ -372,12 +372,12 @@
     {
       "moduleName": "No Slow",
       "key": -1,
-      "toggled": false,
+      "toggled": true,
       "settings": [
         {
           "name": "Mode",
           "type": "enum",
-          "value": "ncp"
+          "value": "vanilla"
         }
       ]
     },
@@ -394,12 +394,12 @@
         {
           "name": "Speed",
           "type": "slider",
-          "value": 9.0
+          "value": 0.5
         },
         {
           "name": "Bobbing",
           "type": "bool",
-          "value": false
+          "value": true
         },
         {
           "name": "Verus Glide",
@@ -421,7 +421,7 @@
         {
           "name": "Mode",
           "type": "enum",
-          "value": "funcraft"
+          "value": "mineplex"
         }
       ]
     },
@@ -445,7 +445,7 @@
         {
           "name": "Mode",
           "type": "enum",
-          "value": "ncp"
+          "value": "vanilla"
         },
         {
           "name": "Height",
@@ -463,6 +463,11 @@
           "value": 0.1
         }
       ]
+    },
+    {
+      "moduleName": "Cock",
+      "key": 40,
+      "toggled": false
     },
     {
       "moduleName": "Inventory Manager",
@@ -499,12 +504,12 @@
     {
       "moduleName": "Click Teleport",
       "key": -1,
-      "toggled": true
+      "toggled": false
     },
     {
       "moduleName": "Chest Stealer",
       "key": 23,
-      "toggled": false,
+      "toggled": true,
       "settings": [
         {
           "name": "Delay before close",
@@ -529,7 +534,7 @@
         {
           "name": "Silent",
           "type": "bool",
-          "value": true
+          "value": false
         },
         {
           "name": "Show Chest",
@@ -551,7 +556,7 @@
     {
       "moduleName": "Auto Armor",
       "key": 37,
-      "toggled": false,
+      "toggled": true,
       "settings": [
         {
           "name": "Mode",
@@ -568,17 +573,17 @@
     {
       "moduleName": "Speed Mine",
       "key": -1,
-      "toggled": false
+      "toggled": true
     },
     {
       "moduleName": "Fast Place",
       "key": -1,
-      "toggled": false
+      "toggled": true
     },
     {
       "moduleName": "Streamer",
       "key": -1,
-      "toggled": true,
+      "toggled": false,
       "settings": [
         {
           "name": "Name",
@@ -590,12 +595,12 @@
     {
       "moduleName": "Auto Tool",
       "key": -1,
-      "toggled": true
+      "toggled": false
     },
     {
       "moduleName": "KillSult",
       "key": -1,
-      "toggled": true
+      "toggled": false
     },
     {
       "moduleName": "Anti Void",
@@ -708,7 +713,7 @@
         {
           "name": "Mode",
           "type": "enum",
-          "value": "framenew"
+          "value": "frame"
         }
       ]
     },
@@ -828,17 +833,17 @@
         {
           "name": "TargetHUD Y",
           "type": "slider",
-          "value": 72.0
+          "value": 68.0
         },
         {
           "name": "Color",
           "type": "enum",
-          "value": "fade"
+          "value": "astolfo"
         },
         {
           "name": "Fade Color",
           "type": "color",
-          "value": -6287380
+          "value": -6677838
         },
         {
           "name": "Custom Font",
@@ -868,6 +873,11 @@
       "toggled": false
     },
     {
+      "moduleName": "China Hat",
+      "key": -1,
+      "toggled": false
+    },
+    {
       "moduleName": "Time Changer",
       "key": -1,
       "toggled": true,
@@ -892,7 +902,7 @@
         {
           "name": "State",
           "type": "enum",
-          "value": "post"
+          "value": "pre"
         },
         {
           "name": "Rotations",
@@ -927,7 +937,7 @@
         {
           "name": "Keep Rotations",
           "type": "bool",
-          "value": true
+          "value": false
         },
         {
           "name": "Tower Move",
@@ -977,7 +987,7 @@
         {
           "name": "RayCast",
           "type": "bool",
-          "value": false
+          "value": true
         }
       ]
     },
@@ -989,7 +999,7 @@
     {
       "moduleName": "Breaker",
       "key": 49,
-      "toggled": true,
+      "toggled": false,
       "settings": [
         {
           "name": "Range",
@@ -1015,13 +1025,13 @@
     },
     {
       "moduleName": "Timer",
-      "key": -1,
+      "key": 33,
       "toggled": false,
       "settings": [
         {
           "name": "Timer Speed",
           "type": "slider",
-          "value": 1.5
+          "value": 4.1000000000000005
         }
       ]
     },
