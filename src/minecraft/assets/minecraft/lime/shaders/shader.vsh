@@ -1,57 +1,95 @@
-
-
 #ifdef GL_ES
 precision mediump float;
 #endif
 
 #extension GL_OES_standard_derivatives : enable
 
-uniform vec2      resolution;
-uniform float     time;
-uniform float     alpha;
-uniform vec2      speed;
-uniform float     shift;
+#define NUM_OCTAVES 16
 
+uniform float time;
+uniform vec2 resolution;
 
-float rand(vec2 n) {
-  //This is just a compounded expression to simulate a random number based on a seed given as n
-  	return fract(cos(dot(n, vec2(12.9898, 4.1414))) * 43758.5453);
+mat3 rotX(float a) {
+	float c = cos(a);
+	float s = sin(a);
+	return mat3(
+		1, 0, 0,
+		0, c, -s,
+		0, s, c
+	);
+}
+mat3 rotY(float a) {
+	float c = cos(a);
+	float s = sin(a);
+	return mat3(
+		c, 0, -s,
+		0, 1, 0,
+		s, 0, c
+	);
 }
 
-float noise(vec2 n) {
-  //Uses the rand function to generate noise
-	  const vec2 d = vec2(0.0, 1.0);
-	  vec2 b = floor(n), f = smoothstep(vec2(0.0), vec2(1.0), fract(n));
-	  return mix(mix(rand(b), rand(b + d.yx), f.x), mix(rand(b + d.xy), rand(b + d.yy), f.x), f.y);
+float random(vec2 pos) {
+	return fract(sin(dot(pos.xy, vec2(12.9898, 78.233))) * 43758.5453123);
 }
 
-float fbm(vec2 n) {
-  //fbm stands for "Fractal Brownian Motion" https://en.wikipedia.org/wiki/Fractional_Brownian_motion
-	  float total = 0.0, amplitude = 1.0;
-	  for (int i = 0; i < 4; i++) {
- 	   total += noise(n) * amplitude;
-	    n += n;
-	    amplitude *= 0.5;
-	  }
-	  return total;
+float noise(vec2 pos) {
+	vec2 i = floor(pos);
+	vec2 f = fract(pos);
+	float a = random(i + vec2(0.0, 0.0));
+	float b = random(i + vec2(1.0, 0.0));
+	float c = random(i + vec2(0.0, 1.0));
+	float d = random(i + vec2(1.0, 1.0));
+	vec2 u = f * f * (3.0 - 2.0 * f);
+	return mix(a, b, u.x) + (c - a) * u.y * (1.0 - u.x) + (d - b) * u.x * u.y;
 }
 
-void main() {
-    //This is where our shader comes together
-    const vec3 c1 = vec3(126.0/255.0, 0.0/255.0, 97.0/255.0);
-    const vec3 c2 = vec3(173.0/255.0, 0.0/255.0, 161.4/255.0);
-    const vec3 c3 = vec3(0.2, 0.0, 0.0);
-    const vec3 c4 = vec3(164.0/255.0, 1.0/255.0, 214.4/255.0);
-    const vec3 c5 = vec3(0.1);
-    const vec3 c6 = vec3(0.9);
-	
-    //This is how "packed" the smoke is in our area. Try changing 8.0 to 1.0, or something else
-    vec2 p = gl_FragCoord.xy * 8.0 / resolution.xx;
-    //The fbm function takes p as its seed (so each pixel looks different) and time (so it shifts over time)
-    float q = fbm(p - time * 0.1);
-    vec2 r = vec2(fbm(p + q + time * speed.x - p.x - p.y), fbm(p + q - time * speed.y));
-    vec3 c = mix(c1, c2, fbm(p + r)) + mix(c3, c4, r.x) - mix(c5, c6, r.y);
-    float grad = gl_FragCoord.y / resolution.y;
-    gl_FragColor = vec4(c * cos(shift * gl_FragCoord.y / resolution.y), 1.0);
-    gl_FragColor.xyz *= 1.0-grad;
+float fbm(vec2 pos) {
+	float v = 0.0;
+	float a = 0.5;
+	vec2 shift = vec2(100.0);
+	mat2 rot = mat2(cos(0.5), sin(0.5), -sin(0.5), cos(0.5));
+	for (int i=0; i<NUM_OCTAVES; i++) {
+		v += a * noise(pos);
+		pos = rot * pos * 2.0 + shift;
+		a *= 0.5;
+	}
+	return v;
+}
+
+void main(void) {
+	vec2 p = (gl_FragCoord.xy * 2.0 - resolution.xy) / min(resolution.x, resolution.y);
+
+	float t = 0.0, d;
+
+	float time2 = 3.0 * time / 2.0;
+
+	vec2 q = vec2(0.0);
+	q.x = fbm(p + 0.00 * time2);
+	q.y = fbm(p + vec2(1.0));
+	vec2 r = vec2(0.0);
+	r.x = fbm(p + 1.0 * q + vec2(1.7, 9.2) + 0.15 * time2);
+	r.y = fbm(p + 1.0 * q + vec2(8.3, 2.8) + 0.126 * time2);
+	float f = fbm(p + r);
+	vec3 color = mix(
+		vec3(0.101961, 0.03, 0.319608),
+		vec3(.666667, 0.03, 0.366667),
+		clamp((f * f) * 4.0, 0.0, 1.0)
+	);
+
+	color = mix(
+		color,
+		vec3(0.34509803921, 0.06666666666, 0.83137254902),
+		clamp(length(q), 0.0, 1.0)
+	);
+
+
+	color = mix(
+		color,
+		vec3(0.1, -0.5, 0.1),
+		clamp(length(r.x), 0.0, 1.0)
+	);
+
+	color = (f *f * f + 0.6 * f * f + 0.5 * f) * color;
+
+	gl_FragColor = vec4(color, 1.0);
 }

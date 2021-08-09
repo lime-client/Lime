@@ -10,6 +10,7 @@ import lime.features.module.impl.combat.KillAura;
 import lime.features.setting.impl.BoolValue;
 import lime.features.setting.impl.EnumValue;
 import lime.features.setting.impl.SlideValue;
+import lime.managers.FontManager;
 import lime.ui.notifications.Notification;
 import lime.utils.combat.CombatUtils;
 import lime.utils.movement.MovementUtils;
@@ -20,7 +21,6 @@ import lime.utils.render.RenderUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockSnow;
 import net.minecraft.client.gui.Gui;
-import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
@@ -69,12 +69,10 @@ public class Scaffold extends Module {
     private final BoolValue randomVec = new BoolValue("Random Vec", this, false);
     private final BoolValue rayCast = new BoolValue("RayCast", this, false);
 
-    //ToDo : downwards, keepspoof
+    //ToDo : KeepSpoof
 
     private final MouseFilter yawMouseFilter = new MouseFilter();
     private final Timer timer = new Timer(), timerTower = new Timer();
-
-    private ItemStack itemStack;
 
     private float yaw, pitch;
     private int slot, y;
@@ -115,6 +113,7 @@ public class Scaffold extends Module {
         double percentage = MathUtils.scale(getBlocksCount(), 0, 128, -45, 45);
         Gui.drawRect(e.getScaledResolution().getScaledWidth() / 2F - 45, e.getScaledResolution().getScaledHeight() / 2F + 15, e.getScaledResolution().getScaledWidth() / 2F + percentage, e.getScaledResolution().getScaledHeight() / 2F + 25, new Color(255, 0, 0).getRGB());
         GL11.glDisable(3089);
+        FontManager.ProductSans20.getFont().drawStringWithShadow(getBlocksCount() + " blocks left", (e.getScaledResolution().getScaledWidth() / 2F) - (FontManager.ProductSans20.getFont().getStringWidth(getBlocksCount() + " blocks left") / 2F), e.getScaledResolution().getScaledHeight() / 2F + 18 + (FontManager.ProductSans20.getFont().getFontHeight() / 2F), -1);
     }
 
     public int getBlocksCount() {
@@ -136,8 +135,6 @@ public class Scaffold extends Module {
 
     @EventTarget
     public void on3D(Event3D e) {
-        if(isAirBlock(new BlockPos(mc.thePlayer.posX, mc.thePlayer.posY - 1, mc.thePlayer.posZ).getBlock())) {
-        }
         if(blockData != null) {
             RenderUtils.drawBox(blockData.getBlockPos().getX(), blockData.getBlockPos().getY(), blockData.getBlockPos().getZ(), 1, new Color(255, 0, 0, 100), true, true);
             RenderUtils.drawBox(blockData.getBlockPos().getX(), blockData.getBlockPos().getY(), blockData.getBlockPos().getZ(), 1, new Color(255, 0, 0), true, false);
@@ -214,6 +211,7 @@ public class Scaffold extends Module {
         {
             if(blockData != null && !rotations.is("none")) {
                 float[] rotations = getRotations(blockData.getBlockPos(), blockData.getEnumFacing());
+                assert rotations != null;
                 e.setYaw(yaw = rotations[0]);
                 e.setPitch(pitch = rotations[1]);
                 if(rayTrace(yaw, pitch, blockData) && rayCast.isEnabled()) {
@@ -252,7 +250,7 @@ public class Scaffold extends Module {
                         break;
                 }
 
-                if(blockData != null && mc.playerController.onPlayerRightClick(mc.thePlayer, mc.theWorld, itemStack = mc.thePlayer.inventory.getCurrentItem(), blockData.getBlockPos(), blockData.getEnumFacing(), getVec3(blockData)))
+                if(blockData != null && mc.playerController.onPlayerRightClick(mc.thePlayer, mc.theWorld, mc.thePlayer.inventory.getCurrentItem(), blockData.getBlockPos(), blockData.getEnumFacing(), getVec3(blockData)))
                 {
                     if(noSwing.isEnabled())
                         mc.getNetHandler().addToSendQueue(new C0APacketAnimation());
@@ -345,13 +343,8 @@ public class Scaffold extends Module {
         if(mc.theWorld == null) return null;
         double x = block.getX() + 0.5 - mc.thePlayer.posX +  (double) face.getFrontOffsetX()/2;
         double z = block.getZ() + 0.5 - mc.thePlayer.posZ +  (double) face.getFrontOffsetZ()/2;
-        double y = (block.getY() + 0.5);
-
-        //double diffXZ = MathHelper.sqrt_double(x * x + z * z);
-        double d1 = mc.thePlayer.posY + mc.thePlayer.getEyeHeight() - y;
-        double d3 = MathHelper.sqrt_double(x * x + z * z);
         float yaw = (float) (Math.atan2(z, x) * 360.0D / Math.PI) - 90.0F;
-        float pitch = (float) (Math.atan2(d1, d3) * 180.0D / Math.PI);
+
         if(rotations.is("legit") || rotations.is("hypixel")) {
             switch(face){
                 case NORTH:

@@ -77,7 +77,7 @@ public class Notification {
         float width = FontManager.ProductSans20.getFont().getStringWidth(ChatUtils.removeColors(information)) + 44;
         double percentage = MathUtils.scale(Math.min(timer.getTimeElapsed(), getSeconds() * 1000L), 0, getSeconds() * 1000, 0, width);
         Gui.drawRect(e.getScaledResolution().getScaledWidth() - animate.getValue(), animPercentage, e.getScaledResolution().getScaledWidth() - animate.getValue() + width, animPercentage + 36, 0xCC << 24);
-        Gui.drawRect(e.getScaledResolution().getScaledWidth() - animate.getValue(), animPercentage + 34, e.getScaledResolution().getScaledWidth() - animate.getValue() + percentage, animPercentage + 36, -1);
+        Gui.drawRect(e.getScaledResolution().getScaledWidth() - animate.getValue(), animPercentage + 35, e.getScaledResolution().getScaledWidth() - animate.getValue() + width - percentage, animPercentage + 36, -1);
         GL11.glPushMatrix();
         GL11.glScaled(0.5, 0.5, 1);
         GL11.glColor4f(1, 1, 1, 1);

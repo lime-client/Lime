@@ -20,6 +20,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.Vec3;
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
 import java.util.ArrayList;
@@ -30,6 +31,7 @@ public class TargetStrafe extends Module {
 
     private final SlideValue distance = new SlideValue("Distance", this, 0.5, 6, 2.5, 0.1);
     private final BoolValue spaceOnly = new BoolValue("Space Only", this, false);
+    private final BoolValue thirdPerson = new BoolValue("Third Person", this, false);
 
     private static int direction;
     public static Vec3 indexPos;
@@ -38,16 +40,25 @@ public class TargetStrafe extends Module {
 
     private int voidTicks;
 
+    private int thirdPersonView;
+    private boolean flag;
+
     @Override
     public void onEnable() {
         direction = 1;
+        thirdPersonView = 0;
         set = false;
+        flag = false;
     }
 
     @EventTarget
     public void on3D(Event3D e) {
-        if(canMove() && (!spaceOnly.isEnabled() || mc.gameSettings.keyBindJump.isKeyDown())) {
-
+        if(canMove() && (!spaceOnly.isEnabled() || Keyboard.isKeyDown(Keyboard.KEY_SPACE))) {
+            if(!flag && thirdPerson.isEnabled()) {
+                flag = true;
+                thirdPersonView = mc.gameSettings.thirdPersonView;
+                mc.gameSettings.thirdPersonView = 1;
+            }
             EntityLivingBase entity = KillAura.getEntity();
 
             double x = entity.lastTickPosX + (entity.posX - entity.lastTickPosX) * mc.timer.renderPartialTicks - mc.getRenderManager().viewerPosX;
@@ -75,6 +86,11 @@ public class TargetStrafe extends Module {
             GlStateManager.disableBlend();
             GlStateManager.enableDepth();
             GL11.glPopMatrix();
+        } else {
+            if(flag) {
+                flag = false;
+                mc.gameSettings.thirdPersonView = thirdPersonView;
+            }
         }
     }
 
@@ -97,7 +113,7 @@ public class TargetStrafe extends Module {
 
         EntityLivingBase target = KillAura.getEntity();
         ArrayList<Vec3> posArrayList = new ArrayList<>();
-        for (float rotation = 0; rotation < (3.141592f * 2.0); rotation += 3.141592f * 2.0f / 27f) {
+        for (float rotation = 0; rotation < (Math.PI * 2); rotation += Math.PI * 2 / 28) {
             final Vec3 pos = new Vec3(distance.getCurrent() * Math.cos(rotation) + target.posX, target.posY, distance.getCurrent() * Math.sin(rotation) + target.posZ);
             posArrayList.add(pos);
         }
@@ -162,7 +178,7 @@ public class TargetStrafe extends Module {
     }
 
     public boolean inVoid() {
-        for (int i = (int) Math.ceil(mc.thePlayer.posY); i >= 0; i--) {
+        for (int i = (int) Math.ceil(mc.thePlayer.posY); i >= 0; --i) {
             if (mc.theWorld.getBlockState(new BlockPos(mc.thePlayer.posX, i, mc.thePlayer.posZ)).getBlock() != Blocks.air) {
                 return false;
             }

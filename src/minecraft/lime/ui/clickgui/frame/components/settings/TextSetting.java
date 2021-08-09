@@ -61,7 +61,7 @@ public class TextSetting extends Component {
             if(key == 14) {
                 this.text = StringUtils.chop(text);
             } else {
-                if(String.valueOf(typedChar).matches("^[a-zA-Z0-9]*$") || typedChar == ' ' || typedChar == '§')
+                if((typedChar < 128 || typedChar == '§') && typedChar != '\u001B')
                     this.text += typedChar;
             }
             ((TextValue) setting).setText(text);

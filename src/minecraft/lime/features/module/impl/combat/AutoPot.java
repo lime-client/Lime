@@ -72,7 +72,7 @@ public class AutoPot extends Module {
             e.setPitch(90);
         }
         if(!e.isPre() && !mc.thePlayer.capabilities.allowFlying) {
-            if(healthPotion == null || !timer.hasReached(delay.intValue()))
+            if(healthPotion == null || !timer.hasReached(1500))
                 return;
 
             if(healthPotion.getSlot() < 36) {

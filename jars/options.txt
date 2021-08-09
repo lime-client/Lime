@@ -8,13 +8,13 @@ guiScale:2
 particles:0
 bobView:true
 anaglyph3d:false
-maxFps:260
+maxFps:120
 fboEnable:true
 difficulty:2
 fancyGraphics:true
 ao:2
 renderClouds:false
-resourcePacks:["!     §dd§58§dm §8[§532§fx§8].zip"]
+resourcePacks:["!  §4Amaranth §8Revamp §8[§732x§8].zip"]
 incompatibleResourcePacks:[]
 lastServer:45.140.164.76
 lang:en_US

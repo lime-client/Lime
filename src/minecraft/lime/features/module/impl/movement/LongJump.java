@@ -8,7 +8,6 @@ import lime.core.events.impl.EventPacket;
 import lime.features.module.Category;
 import lime.features.module.Module;
 import lime.features.module.ModuleData;
-import lime.features.module.impl.exploit.Blink;
 import lime.features.setting.impl.EnumValue;
 import lime.features.setting.impl.SlideValue;
 import lime.ui.notifications.Notification;
@@ -25,7 +24,7 @@ import net.minecraft.util.EnumFacing;
 
 @ModuleData(name = "Long Jump", category = Category.MOVEMENT)
 public class LongJump extends Module {
-    private final EnumValue mode = new EnumValue("Mode", this, "Vanilla", "Vanilla", "Funcraft", "NCP_Bow", "Verus", "Verus_Bow", "Mineplex", "Kokscraft");
+    private final EnumValue mode = new EnumValue("Mode", this, "Vanilla", "Vanilla", "Funcraft", "NCP_Bow", "Verus", "Verus_Bow", "Kokscraft");
     private final SlideValue speed = new SlideValue("Speed", this, 1, 9, 5, 0.5).onlyIf(mode.getSettingName(), "enum", "verus_bow", "verus");
 
     private double moveSpeed = 0;
@@ -48,7 +47,7 @@ public class LongJump extends Module {
             this.toggle();
             return;
         }
-        if(mode.is("ncp_bow") || mode.is("verus_bow") || mode.is("survivaldub")) {
+        if(mode.is("ncp_bow") || mode.is("verus_bow")) {
             ItemStack bow = null;
             int slot = -1;
             for(int i = 36; i < 45; ++i) {
@@ -107,7 +106,7 @@ public class LongJump extends Module {
         this.setSuffix(mode.getSelected());
 
         // Auto Bow
-        if((mode.is("verus_bow") || mode.is("ncp_bow") || mode.is("survivaldub")) && !bowd) {
+        if((mode.is("verus_bow") || mode.is("ncp_bow")) && !bowd) {
             MovementUtils.setSpeed(0);
             e.setPitch(-90);
             if(ticks >= 3 && !bowd) {
@@ -160,25 +159,6 @@ public class LongJump extends Module {
             if(moveSpeed - 0.21 > 0.25) {
                 moveSpeed -= 0.21;
                 MovementUtils.setSpeed(moveSpeed);
-            }
-        }
-
-        if(mode.is("mineplex")) {
-            if(!mc.thePlayer.isMoving()) return;
-            MovementUtils.strafe();
-            e.setGround(true);
-            if(mc.thePlayer.fallDistance > 0.58) {
-                System.out.println(mc.thePlayer.fallDistance);
-                boosted = false;
-                moveSpeed = MovementUtils.getSpeed();
-                mc.thePlayer.motionY = 0.3;
-                mc.thePlayer.fallDistance = 0;
-                MovementUtils.setSpeed(-0.07);
-            } else {
-                if(!boosted && !mc.thePlayer.onGround) {
-                    MovementUtils.setSpeed(moveSpeed + 0.2);
-                    boosted = true;
-                }
             }
         }
 

@@ -3,6 +3,7 @@ package lime.utils.combat;
 import com.google.common.base.Predicates;
 import lime.utils.IUtil;
 import lime.utils.other.MathUtils;
+import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.*;
@@ -22,6 +23,16 @@ public class CombatUtils implements IUtil {
         float yaw = (float)(Math.atan2(z, x) * 180.0D / Math.PI) - 90.0F;
         float pitch = (float)-(Math.atan2(y, dist) * 180.0D / Math.PI);
         return new float[] { yaw, pitch };
+    }
+
+    public static Rotation getEntityRotations(double d, double d2, double d3) {
+        double d4 = d - mc.thePlayer.posX;
+        double d5 = d2 - (mc.thePlayer.posY + (double)mc.thePlayer.getEyeHeight() - 0.2);
+        double d6 = d3 - mc.thePlayer.posZ;
+        double d7 = MathHelper.sqrt_double(d4 * d4 + d6 * d6);
+        float f = (float)(Math.atan2(d6, d4) * 180.0 / Math.PI) - 90.0f;
+        float f2 = (float)(-(Math.atan2(d5, d7) * 180.0 / Math.PI));
+        return new Rotation(f,f2);
     }
 
     public static float getRotationFromPosition(final double x, final double z) {
@@ -59,7 +70,7 @@ public class CombatUtils implements IUtil {
                 e.posZ) :
                 getRotations(e.posX, e.posY + (double)e.getEyeHeight() - 0.4D, e.posZ);*/
 
-        double lastTickPosX = e.ticksExisted > 5 ? e.lastTickPosX : 0;
+        /*double lastTickPosX = e.ticksExisted > 5 ? e.lastTickPosX : 0;
         double lastTickPosZ = e.ticksExisted > 5 ? e.lastTickPosZ : 0;
 
 
@@ -87,7 +98,10 @@ public class CombatUtils implements IUtil {
 
         float yaw = (float) (Math.atan2(z, x) * 180.0D / Math.PI) - 90.0F;
         float pitch = (float) -((Math.atan2(y, distance) * 180.0D / Math.PI));
-        */return new float[] { yaw + MathUtils.random(0.4, -0.4), pitch + MathUtils.random(0.2, -0.2) };
+        */
+        Rotation rotation = getEntityRotations(e.posX, e.posY, e.posZ);
+
+        return new float[] { rotation.getYaw() + MathUtils.random(0.4, -0.4), rotation.getPitch() + MathUtils.random(0.2, -0.2) };
     }
 
     public static Rotation smoothAngle(float[] dst, float[] src, float randMin, float randMax) {

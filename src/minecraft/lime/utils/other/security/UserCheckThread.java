@@ -33,6 +33,8 @@ public class UserCheckThread extends Thread {
 
     @Override
     public void run() {
+        int maxRetries = 3;
+        int retries = 0;
         Lime.getInstance().setUserCheckThread(this);
         Lime.getInstance().initClient();
         lastMS = getMS() / 1000;
@@ -111,8 +113,11 @@ public class UserCheckThread extends Thread {
                     }
                     lastMS = getMS();
                 } catch (Exception ignored) {
-                    Lime.getInstance().setUserCheckThread(null);
-                    return;
+                    ++retries;
+                    if(retries >= maxRetries) {
+                        Lime.getInstance().setUserCheckThread(null);
+                        return;
+                    }
                 }
             }
         }

@@ -12,6 +12,7 @@ import lime.managers.FontManager;
 import lime.features.module.Category;
 import lime.features.module.Module;
 import lime.features.module.ModuleData;
+import lime.utils.movement.MovementUtils;
 import lime.utils.render.ColorUtils;
 import lime.utils.render.animation.easings.Animate;
 import lime.utils.render.animation.easings.Easing;
@@ -47,10 +48,8 @@ public class HUD extends Module {
     public void on2D(Event2D e) {
         ScaledResolution sr = new ScaledResolution(mc);
         scoreboardAnimation.setEase(Easing.LINEAR).setSpeed(125).setMin(0).update();
-        /*for(int i = 0; i < 361; i++) {
-            Color color = getColor(0);
-            Gui.drawRect(5 + Math.toRadians(i), 5 + Math.toRadians(i), 5 + Math.toRadians(i) + 3, 5 + Math.toRadians(i) + 3, color.getRGB());
-        }*/
+
+        FontManager.ProductSans20.getFont().drawStringWithShadow("BP/S: " + MovementUtils.getBPS(), 1, 15, -1);
 
         if(customFont.isEnabled())
             FontManager.ProductSans20.getFont().drawStringWithShadow(clientName.getText(), 1, 1, -1);
@@ -66,8 +65,8 @@ public class HUD extends Module {
         ArrayList<Module> modules = new ArrayList<>(Lime.getInstance().getModuleManager().getModules());
 
         modules.sort((o1, o2) -> {
-            String o1Name = o1.getName() + (suffix.isEnabled() && o1.getSuffix() != null && !o1.getSuffix().isEmpty() ? "§7 " + o1.getSuffix() + (customFont.isEnabled() ? " " : "") : "");
-            String o2Name = o2.getName() + (suffix.isEnabled() && o2.getSuffix() != null && !o2.getSuffix().isEmpty() ? "§7 " + o2.getSuffix() + (customFont.isEnabled() ? " " : "") : "");
+            String o1Name = o1.getName() + (suffix.isEnabled() && o1.getSuffix() != null && !o1.getSuffix().isEmpty() ? "§7 " + o1.getSuffix().replace("_", " ") + (customFont.isEnabled() ? " " : "") : "");
+            String o2Name = o2.getName() + (suffix.isEnabled() && o2.getSuffix() != null && !o2.getSuffix().isEmpty() ? "§7 " + o2.getSuffix().replace("_", " ") + (customFont.isEnabled() ? " " : "") : "");
             if(customFont.isEnabled()) {
                 if(FontManager.ProductSans18.getFont().getStringWidth(o1Name)  > FontManager.ProductSans18.getFont().getStringWidth(o2Name))
                     return -1;
@@ -83,7 +82,7 @@ public class HUD extends Module {
         int increment = customFont.isEnabled() ? FontManager.ProductSans18.getFont().getFontHeight() : mc.fontRendererObj.FONT_HEIGHT;
         int yCount = 0;
         for (Module module : modules) {
-            String moduleName = module.getName() + (suffix.isEnabled() && module.getSuffix() != null && !module.getSuffix().isEmpty() ? "§7 " + module.getSuffix() + (customFont.isEnabled() ? " " : "") : "");
+            String moduleName = module.getName() + (suffix.isEnabled() && module.getSuffix() != null && !module.getSuffix().isEmpty() ? "§7 " + module.getSuffix().replace("_", " ") + (customFont.isEnabled() ? " " : "") : "");
 
             // HUD Animation
             module.hudAnimation.setEase(Easing.SINE_OUT);

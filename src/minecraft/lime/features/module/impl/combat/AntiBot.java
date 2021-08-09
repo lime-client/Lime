@@ -28,6 +28,13 @@ public class AntiBot extends Module {
     private final BoolValue remove = new BoolValue("Remove", this, false);
     private final Map<Integer, Double> distanceMap = new HashMap<>();
 
+    private final ArrayList<Entity> bots = new ArrayList<>();
+
+    @Override
+    public void onEnable() {
+        bots.clear();
+    }
+
     public boolean checkBot(EntityPlayer ent) {
         if(mode.is("funcraft")) {
             if(ent instanceof AbstractClientPlayer && ent != mc.thePlayer && ent.ticksExisted < 30) {
@@ -48,6 +55,10 @@ public class AntiBot extends Module {
                     mc.theWorld.removeEntity(ent);
                 return true;
             }
+        }
+
+        if(mode.is("mineplex2")) {
+            return bots.contains(ent);
         }
         return false;
     }
@@ -82,11 +93,11 @@ public class AntiBot extends Module {
         }
 
         if(mode.is("mineplex2")) {
-            for(EntityPlayer entityPlayer : mc.theWorld.playerEntities) {
-                if(entityPlayer.posY - mc.thePlayer.posY > 3 && entityPlayer != mc.thePlayer && mc.thePlayer.getDistanceSqToEntity(entityPlayer) < 40 && !entityPlayer.onGround && entityPlayer.motionY == 0) {
-                    double yDist = entityPlayer.posY - entityPlayer.prevPosY;
-                    double lastDistY = MathUtils.roundToPlace(Math.sqrt(yDist * yDist), 2);
-                    Lime.getInstance().getNotificationManager().addNotification(new Notification("Anti Bot", lastDistY+"", Notification.Type.WARNING));
+            for (Entity entity : mc.theWorld.loadedEntityList) {
+                if (entity instanceof EntityPlayer) {
+                    if(entity.isInvisible()) {
+                        bots.add(entity);
+                    }
                 }
             }
         }
@@ -96,7 +107,6 @@ public class AntiBot extends Module {
     @EventTarget
     public void onMotion(EventMotion e) {
         this.setSuffix(mode.getSelected());
-
         if(remove.isEnabled())
             checkBots();
 

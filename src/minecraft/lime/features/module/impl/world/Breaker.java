@@ -49,7 +49,7 @@ public class Breaker extends Module {
                 for(int x = -range.intValue(); x <= range.intValue(); ++x) {
                     for(int z = -range.intValue(); z <= range.intValue(); ++z) {
                         BlockPos blockPos = new BlockPos(mc.thePlayer.posX + x, mc.thePlayer.posY + y, mc.thePlayer.posZ + z);
-                        if(blockPos.getBlock() == Blocks.bed && mc.thePlayer.getDistance(blockPos.getX(), blockPos.getY(), blockPos.getZ()) <= range.intValue() && !bedPos.contains(blockPos)) {
+                        if((blockPos.getBlock() == Blocks.bed || blockPos.getBlock() == Blocks.cake) && mc.thePlayer.getDistance(blockPos.getX(), blockPos.getY(), blockPos.getZ()) <= range.getCurrent() && !bedPos.contains(blockPos)) {
                             bedPos.add(blockPos);
                         }
                     }

@@ -48,7 +48,6 @@ public class ModuleManager {
         registerModule(new Speed());
         registerModule(new Glide());
         registerModule(new Step());
-        registerModule(new Cock());
 
         // PLAYER
         registerModule(new InventoryManager());
@@ -76,7 +75,9 @@ public class ModuleManager {
         registerModule(new Projectiles());
         registerModule(new Animations());
         registerModule(new FullBright());
+        registerModule(new DreamESP());
         registerModule(new Nametags());
+        registerModule(new ChinaHat());
         registerModule(new ClickGUI());
         registerModule(new ChestESP());
         registerModule(new Tracers());
@@ -85,16 +86,14 @@ public class ModuleManager {
         registerModule(new ESP());
         registerModule(new HUD());
 
-        registerModule(new DreamESP());
         registerModule(new ClickGUITest());
-        registerModule(new ChinaHat());
-
 
         // WORLD
         registerModule(new TimeChanger());
         registerModule(new Scaffold());
         registerModule(new NoRotate());
         registerModule(new Breaker());
+        registerModule(new Eater());
         registerModule(new Timer());
         registerModule(new Eagle());
     }

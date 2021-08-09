@@ -2,7 +2,7 @@
   "informations": [
     {
       "author": "Lime Auto Save",
-      "time": 1628269361
+      "time": 1628533571
     }
   ],
   "modules": [
@@ -26,7 +26,7 @@
     {
       "moduleName": "Auto Sword",
       "key": -1,
-      "toggled": false
+      "toggled": true
     },
     {
       "moduleName": "Criticals",
@@ -53,12 +53,12 @@
         {
           "name": "Priority",
           "type": "enum",
-          "value": "fov"
+          "value": "distance"
         },
         {
           "name": "Rotations",
           "type": "enum",
-          "value": "smooth"
+          "value": "basic"
         },
         {
           "name": "Target ESP",
@@ -78,7 +78,7 @@
         {
           "name": "Rotations Min",
           "type": "slider",
-          "value": 60.0
+          "value": 50.0
         },
         {
           "name": "Rotations Max",
@@ -88,17 +88,17 @@
         {
           "name": "Range",
           "type": "slider",
-          "value": 3.6500000000000004
+          "value": 4.25
         },
         {
           "name": "CPS",
           "type": "slider",
-          "value": 10.0
+          "value": 5.0
         },
         {
           "name": "Randomize CPS",
           "type": "slider",
-          "value": 4.0
+          "value": 1.0
         },
         {
           "name": "Players",
@@ -123,7 +123,7 @@
         {
           "name": "Ray Cast",
           "type": "bool",
-          "value": true
+          "value": false
         },
         {
           "name": "Through Walls",
@@ -157,12 +157,12 @@
     {
       "moduleName": "Anti Bot",
       "key": -1,
-      "toggled": false,
+      "toggled": true,
       "settings": [
         {
           "name": "Mode",
           "type": "enum",
-          "value": "mineplex"
+          "value": "mineplex2"
         },
         {
           "name": "Remove",
@@ -266,13 +266,13 @@
     },
     {
       "moduleName": "Blink",
-      "key": 33,
+      "key": -1,
       "toggled": false,
       "settings": [
         {
           "name": "Blink Delay",
           "type": "slider",
-          "value": 200.0
+          "value": 500.0
         }
       ]
     },
@@ -296,12 +296,17 @@
         {
           "name": "Distance",
           "type": "slider",
-          "value": 2.4000000000000004
+          "value": 2.0
         },
         {
           "name": "Space Only",
           "type": "bool",
           "value": true
+        },
+        {
+          "name": "Third Person",
+          "type": "bool",
+          "value": false
         }
       ]
     },
@@ -354,7 +359,7 @@
     },
     {
       "moduleName": "Long Jump",
-      "key": -1,
+      "key": 40,
       "toggled": false,
       "settings": [
         {
@@ -389,17 +394,17 @@
         {
           "name": "Mode",
           "type": "enum",
-          "value": "vanilla"
+          "value": "mineplex"
         },
         {
           "name": "Speed",
           "type": "slider",
-          "value": 0.5
+          "value": 9.0
         },
         {
           "name": "Bobbing",
           "type": "bool",
-          "value": true
+          "value": false
         },
         {
           "name": "Verus Glide",
@@ -445,7 +450,7 @@
         {
           "name": "Mode",
           "type": "enum",
-          "value": "vanilla"
+          "value": "ncp"
         },
         {
           "name": "Height",
@@ -465,14 +470,9 @@
       ]
     },
     {
-      "moduleName": "Cock",
-      "key": 40,
-      "toggled": false
-    },
-    {
       "moduleName": "Inventory Manager",
       "key": 48,
-      "toggled": true,
+      "toggled": false,
       "settings": [
         {
           "name": "Mode",
@@ -573,7 +573,7 @@
     {
       "moduleName": "Speed Mine",
       "key": -1,
-      "toggled": true
+      "toggled": false
     },
     {
       "moduleName": "Fast Place",
@@ -595,12 +595,19 @@
     {
       "moduleName": "Auto Tool",
       "key": -1,
-      "toggled": false
+      "toggled": true
     },
     {
       "moduleName": "KillSult",
       "key": -1,
-      "toggled": false
+      "toggled": true,
+      "settings": [
+        {
+          "name": "Prefix",
+          "type": "text",
+          "value": "@"
+        }
+      ]
     },
     {
       "moduleName": "Anti Void",
@@ -701,9 +708,19 @@
       "toggled": false
     },
     {
+      "moduleName": "DreamESP",
+      "key": -1,
+      "toggled": false
+    },
+    {
       "moduleName": "Nametags",
       "key": -1,
       "toggled": true
+    },
+    {
+      "moduleName": "China Hat",
+      "key": -1,
+      "toggled": false
     },
     {
       "moduleName": "ClickGUI",
@@ -713,7 +730,7 @@
         {
           "name": "Mode",
           "type": "enum",
-          "value": "frame"
+          "value": "framenew"
         }
       ]
     },
@@ -794,6 +811,11 @@
           "value": true
         },
         {
+          "name": "Items",
+          "type": "bool",
+          "value": false
+        },
+        {
           "name": "Health",
           "type": "bool",
           "value": true
@@ -833,12 +855,12 @@
         {
           "name": "TargetHUD Y",
           "type": "slider",
-          "value": 68.0
+          "value": 72.0
         },
         {
           "name": "Color",
           "type": "enum",
-          "value": "astolfo"
+          "value": "fade"
         },
         {
           "name": "Fade Color",
@@ -863,17 +885,7 @@
       ]
     },
     {
-      "moduleName": "DreamESP",
-      "key": -1,
-      "toggled": false
-    },
-    {
       "moduleName": "ClickGUI Test",
-      "key": -1,
-      "toggled": false
-    },
-    {
-      "moduleName": "China Hat",
       "key": -1,
       "toggled": false
     },
@@ -902,22 +914,22 @@
         {
           "name": "State",
           "type": "enum",
-          "value": "pre"
+          "value": "post"
         },
         {
           "name": "Rotations",
           "type": "enum",
-          "value": "legit2"
+          "value": "basic"
         },
         {
           "name": "Item Spoof",
           "type": "enum",
-          "value": "pick"
+          "value": "spoof"
         },
         {
           "name": "Tower",
           "type": "enum",
-          "value": "none"
+          "value": "ncp"
         },
         {
           "name": "Speed Modifier",
@@ -952,12 +964,12 @@
         {
           "name": "No Sprint",
           "type": "bool",
-          "value": true
+          "value": false
         },
         {
           "name": "Spoof Sprint",
           "type": "bool",
-          "value": true
+          "value": false
         },
         {
           "name": "Same Y",
@@ -982,19 +994,19 @@
         {
           "name": "Random Vec",
           "type": "bool",
-          "value": true
+          "value": false
         },
         {
           "name": "RayCast",
           "type": "bool",
-          "value": true
+          "value": false
         }
       ]
     },
     {
       "moduleName": "No Rotate",
       "key": -1,
-      "toggled": true
+      "toggled": false
     },
     {
       "moduleName": "Breaker",
@@ -1024,14 +1036,19 @@
       ]
     },
     {
+      "moduleName": "Eater",
+      "key": -1,
+      "toggled": true
+    },
+    {
       "moduleName": "Timer",
-      "key": 33,
+      "key": -1,
       "toggled": false,
       "settings": [
         {
           "name": "Timer Speed",
           "type": "slider",
-          "value": 4.1000000000000005
+          "value": 1.5
         }
       ]
     },

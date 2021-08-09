@@ -1,61 +1,71 @@
 package lime.features.module.impl.movement.flights.impl;
 
-import lime.core.events.impl.EventBoundingBox;
-import lime.core.events.impl.EventMotion;
+import lime.core.events.EventTarget;
+import lime.core.events.impl.EventMove;
+import lime.core.events.impl.EventPacket;
 import lime.features.module.impl.movement.flights.FlightValue;
 import lime.utils.movement.MovementUtils;
-import lime.utils.movement.pathfinder.CustomVec;
-import lime.utils.other.InventoryUtils;
+import lime.utils.other.ChatUtils;
 import lime.utils.other.MathUtils;
-import net.minecraft.block.BlockAir;
-import net.minecraft.network.play.client.C07PacketPlayerDigging;
-import net.minecraft.network.play.client.C08PacketPlayerBlockPlacement;
-import net.minecraft.network.play.client.C09PacketHeldItemChange;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.Vec3;
+import net.minecraft.network.play.server.S08PacketPlayerPosLook;
 
 public class Mineplex extends FlightValue {
     public Mineplex() {
         super("Mineplex");
     }
 
+    private boolean back;
     private int stage;
-    private int y;
     private double moveSpeed;
-    private boolean isBoosted;
 
     @Override
     public void onEnable() {
-        y = (int) mc.thePlayer.posY;
-        super.onEnable();
+        back = false;
+        stage = 0;
+        moveSpeed = 0.25;
     }
 
     @Override
-    public void onMotion(EventMotion e) {
-        int airSlot = 3;
-        if(e.isPre()) {
+    public void onMove(EventMove e) {
+        if(stage == 0 && mc.thePlayer.isMoving()) {
             if(mc.thePlayer.onGround) {
-                mc.getNetHandler().addToSendQueue(new C09PacketHeldItemChange(airSlot));
-                BlockPos blockPos = new BlockPos(mc.thePlayer.posX, mc.thePlayer.getEntityBoundingBox().minY - 1.0, mc.thePlayer.posZ);
-                CustomVec vec = new CustomVec(blockPos.getX(), blockPos.getY(), blockPos.getZ()).addVector(0.4f, 0.4f, 0.4f);
-                mc.playerController.onPlayerRightClick(mc.thePlayer, mc.theWorld, null, blockPos, EnumFacing.UP, new Vec3(vec.getX() * 0.4, vec.getY() * 0.4, vec.getZ() * 0.4));
-                moveSpeed = MovementUtils.getBaseMoveSpeed();
-                MovementUtils.setSpeed(-0.1);
-                mc.thePlayer.motionY = 0.14;
+                e.setY(mc.thePlayer.motionY = 0.42);
+                MovementUtils.setSpeed(e, -0.07);
+                moveSpeed += 0.35;
+                return;
+            }
+
+            moveSpeed -= moveSpeed / 80;
+            MovementUtils.setSpeed(e, back ? -moveSpeed : moveSpeed);
+            back = !back;
+
+            if(moveSpeed > 1.3073164910200747) {
+                stage = 1;
+                moveSpeed = 1.61;
+                back = false;
+                return;
+            }
+        }
+        if(stage == 1) {
+            if(mc.thePlayer.onGround) {
+                MovementUtils.setSpeed(e, -0.07);
+                e.setY(mc.thePlayer.motionY = 0.48);
+                back = true;
             } else {
-                MovementUtils.setSpeed(moveSpeed);
+                if(moveSpeed > 1) {
+                    e.setY(mc.thePlayer.motionY += 0.028 + MathUtils.random(0.00005, 0.00105));
+                }
+                MovementUtils.setSpeed(e, moveSpeed *= 0.98);
+                if(back && mc.thePlayer.onGround)
+                    getFlight().toggle();
             }
         }
     }
 
-
-    @Override
-    public void onBoundingBox(EventBoundingBox e) {
-        if(e.getBlock() instanceof BlockAir && e.getBlockPos().getY() < y && !mc.theWorld.checkBlockCollision(mc.thePlayer.getEntityBoundingBox())) {
-            e.setBoundingBox(new AxisAlignedBB(e.getBlockPos().getX(), e.getBlockPos().getY(), e.getBlockPos().getZ(), e.getBlockPos().getX() + 1, y, e.getBlockPos().getZ() + 1));
+    @EventTarget
+    public void onPacket(EventPacket e) {
+        if(e.getPacket() instanceof S08PacketPlayerPosLook) {
+            ChatUtils.sendMessage(moveSpeed+"");
         }
-        super.onBoundingBox(e);
     }
 }

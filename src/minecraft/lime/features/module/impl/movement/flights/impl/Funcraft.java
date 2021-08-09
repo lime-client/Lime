@@ -14,7 +14,7 @@ import net.minecraft.network.play.server.S08PacketPlayerPosLook;
 public class Funcraft extends FlightValue {
     public Funcraft()
     {
-        super("Funcraft2");
+        super("Funcraft");
     }
 
     private double moveSpeed;

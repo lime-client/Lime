@@ -37,6 +37,7 @@ public class ESP extends Module {
 
     private final EnumValue mode = new EnumValue("Mode", this, "Box", "Box", "Cylinder").onlyIf(esp3d.getSettingName(), "bool", "true");
     private final BoolValue box = new BoolValue("Box", this, true);
+    private final BoolValue items = new BoolValue("Items", this, false);
     private final BoolValue health = new BoolValue("Health", this, true);
     private final BoolValue skeleton = new BoolValue("Skeleton", this, false);
 
@@ -48,7 +49,7 @@ public class ESP extends Module {
     {
         final ScaledResolution scaledRes = new ScaledResolution(mc);
         mc.theWorld.getLoadedEntityList().forEach(entity -> {
-            if (entity instanceof EntityItem) {
+            if (entity instanceof EntityItem && items.isEnabled()) {
                 EntityItem ent = (EntityItem) entity;
                 double posX = ent.lastTickPosX + (ent.posX - ent.lastTickPosX) * e.getPartialTicks();
                 double posY = ent.lastTickPosY + (ent.posY - ent.lastTickPosY) * e.getPartialTicks();

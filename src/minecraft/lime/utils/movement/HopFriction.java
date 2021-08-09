@@ -29,9 +29,9 @@ public class HopFriction implements IUtil {
         }
         if (KillAura.getEntity() != null) {
             TargetStrafe targetStrafe2 = (TargetStrafe) Lime.getInstance().getModuleManager().getModuleC(TargetStrafe.class);
-            targetStrafe2.setMoveSpeed(e, speed);
+            targetStrafe2.setMoveSpeed(e, mc.thePlayer.isMoving() ? Math.max(speed, MovementUtils.getBaseMoveSpeed()) : 0);
         } else {
-            MovementUtils.setSpeed(e, speed);
+            MovementUtils.setSpeed(e, mc.thePlayer.isMoving() ? Math.max(speed, MovementUtils.getBaseMoveSpeed()) : 0);
         }
     }
 

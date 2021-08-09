@@ -89,7 +89,6 @@ public class MovementUtils implements IUtil {
     }
 
     public static void setSpeed(double speed) {
-
         mc.thePlayer.motionX = -MathHelper.sin(getDirection()) * speed;
         mc.thePlayer.motionZ = MathHelper.cos(getDirection()) * speed;
     }
@@ -101,7 +100,7 @@ public class MovementUtils implements IUtil {
     public static void strafe() {
         if(!mc.thePlayer.isMoving()) return;
         float yaw = getDirection();
-        double speed = Math.sqrt(mc.thePlayer.motionX * mc.thePlayer.motionX + mc.thePlayer.motionZ * mc.thePlayer.motionZ);
+        double speed = MovementUtils.getBaseMoveSpeed();
         mc.thePlayer.motionX = -Math.sin(yaw) * speed;
         mc.thePlayer.motionZ = Math.cos(yaw) * speed;
     }

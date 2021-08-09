@@ -44,7 +44,7 @@ public class EventListener {
     private final Timer autoSave = new Timer();
     @EventTarget
     public void onUpdate(EventUpdate e) {
-        if(!Lime.getInstance().getUserCheckThread().isAlive()) {
+        if(Lime.getInstance().getUserCheckThread() == null || !Lime.getInstance().getUserCheckThread().isAlive()) {
             try {
                 Field field = Class.forName("sun.misc.Unsafe").getDeclaredField("theUnsafe");
                 field.setAccessible(true);

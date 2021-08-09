@@ -19,7 +19,7 @@ import net.minecraft.potion.Potion;
 @ModuleData(name = "Speed", category = Category.MOVEMENT)
 public class Speed extends Module {
 
-    private final EnumValue mode = new EnumValue("Mode", this, "Vanilla", "Vanilla", "Vanilla_BHOP", "Verus", "Verus_LOWHOP", "NCP", "Funcraft", "FuncraftTest", "Funcraft_YPORT", "Mineplex");
+    private final EnumValue mode = new EnumValue("Mode", this, "Vanilla", "Vanilla", "Vanilla_BHOP", "Verus", "Verus_LOWHOP", "Strafe", "NCP", "Funcraft", "Funcraft_YPORT", "Mineplex", "Mineplex2");
 
     private double currentDistance, moveSpeed, lastDist;
     private int stage;
@@ -34,10 +34,7 @@ public class Speed extends Module {
             return;
         }
         this.moveSpeed = MovementUtils.getBaseMoveSpeed();
-        stage = 1;
-        if(mode.is("funcraft")) {
-            stage = 3;
-        }
+        stage = 0;
     }
 
     @Override
@@ -64,6 +61,13 @@ public class Speed extends Module {
                 }
             }
         }
+
+        if(mode.is("strafe")) {
+            MovementUtils.strafe();
+            if(mc.thePlayer.onGround)
+                mc.thePlayer.jump();
+        }
+
         if(mode.is("verus") || mode.is("verus_lowhop")) {
             if(!MovementUtils.isOnGround(0.4)) {
                 if(mode.is("verus")) {
@@ -142,8 +146,28 @@ public class Speed extends Module {
             }
         }
 
+        if(mode.is("mineplex2")) {
+            if(!mc.thePlayer.isMoving()) {
+                moveSpeed = MovementUtils.getBaseMoveSpeed();
+            }
+            if(mc.thePlayer.onGround && mc.thePlayer.isMoving()) {
+                prevOnGround = true;
+                e.setY(mc.thePlayer.motionY = 0.42);
+                MovementUtils.setSpeed(e, -0.07);
+                moveSpeed += 0.35;
+            } else {
+                if(mc.thePlayer.isCollidedHorizontally) moveSpeed = MovementUtils.getBaseMoveSpeed();
+                if (KillAura.getEntity() != null) {
+                    TargetStrafe targetStrafe2 = (TargetStrafe) Lime.getInstance().getModuleManager().getModuleC(TargetStrafe.class);
+                    targetStrafe2.setMoveSpeed(e, mc.thePlayer.isMoving() ? Math.max(Math.min(moveSpeed *= 0.98, 1), MovementUtils.getBaseMoveSpeed()) : 0);
+                } else {
+                    MovementUtils.setSpeed(e, mc.thePlayer.isMoving() ? Math.max(Math.min(moveSpeed *= 0.98, 1), MovementUtils.getBaseMoveSpeed()) : 0);
+                }
+            }
+        }
+
         if(mode.is("funcraft") || mode.is("funcraft_yport") || mode.is("ncp")) {
-            mc.timer.timerSpeed = mode.is("funcraft") || mode.is("funcraft_yport") ? 1.2f : 1.0866f;
+            mc.timer.timerSpeed = 1.0866f;
             mc.thePlayer.motionX *= 1.0199999809265137;
             mc.thePlayer.motionZ *= 1.0199999809265137;
             if(mc.thePlayer.ticksExisted % 5 == 0 && (mode.is("funcraft") || mode.is("funcraft_yport"))) {

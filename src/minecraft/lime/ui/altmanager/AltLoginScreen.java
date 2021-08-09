@@ -59,6 +59,11 @@ public class AltLoginScreen extends GuiScreen {
             }
         }
 
+        if(Lime.getInstance().theAltening) {
+            TheAlteningAuthentication.theAltening();
+        } else {
+            TheAlteningAuthentication.mojang();
+        }
 
         Keyboard.enableRepeatEvents(true);
         super.initGui();

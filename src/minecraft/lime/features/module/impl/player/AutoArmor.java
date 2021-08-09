@@ -36,7 +36,6 @@ public class AutoArmor extends Module {
                     break;
                 }
             }
-
         }
     }
 
