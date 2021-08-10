@@ -159,9 +159,9 @@ public class Speed extends Module {
                 if(mc.thePlayer.isCollidedHorizontally) moveSpeed = MovementUtils.getBaseMoveSpeed();
                 if (KillAura.getEntity() != null) {
                     TargetStrafe targetStrafe2 = (TargetStrafe) Lime.getInstance().getModuleManager().getModuleC(TargetStrafe.class);
-                    targetStrafe2.setMoveSpeed(e, mc.thePlayer.isMoving() ? Math.max(Math.min(moveSpeed *= 0.98, 1), MovementUtils.getBaseMoveSpeed()) : 0);
+                    targetStrafe2.setMoveSpeed(e, mc.thePlayer.isMoving() ? Math.max(moveSpeed *= 0.98, MovementUtils.getBaseMoveSpeed()) : 0);
                 } else {
-                    MovementUtils.setSpeed(e, mc.thePlayer.isMoving() ? Math.max(Math.min(moveSpeed *= 0.98, 1), MovementUtils.getBaseMoveSpeed()) : 0);
+                    MovementUtils.setSpeed(e, mc.thePlayer.isMoving() ? Math.max(moveSpeed *= 0.98, MovementUtils.getBaseMoveSpeed()) : 0);
                 }
             }
         }

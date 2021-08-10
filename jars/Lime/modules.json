@@ -2,7 +2,7 @@
   "informations": [
     {
       "author": "Lime Auto Save",
-      "time": 1628533571
+      "time": 1628564304
     }
   ],
   "modules": [
@@ -26,12 +26,12 @@
     {
       "moduleName": "Auto Sword",
       "key": -1,
-      "toggled": true
+      "toggled": false
     },
     {
       "moduleName": "Criticals",
       "key": -1,
-      "toggled": false,
+      "toggled": true,
       "settings": [
         {
           "name": "Mode",
@@ -118,7 +118,7 @@
         {
           "name": "Teams",
           "type": "bool",
-          "value": false
+          "value": true
         },
         {
           "name": "Ray Cast",
@@ -162,7 +162,7 @@
         {
           "name": "Mode",
           "type": "enum",
-          "value": "mineplex2"
+          "value": "mineplex"
         },
         {
           "name": "Remove",
@@ -250,7 +250,7 @@
         {
           "name": "Mode",
           "type": "enum",
-          "value": "erisium"
+          "value": "mineplex_combat"
         }
       ]
     },
@@ -306,7 +306,7 @@
         {
           "name": "Third Person",
           "type": "bool",
-          "value": false
+          "value": true
         }
       ]
     },
@@ -382,7 +382,7 @@
         {
           "name": "Mode",
           "type": "enum",
-          "value": "vanilla"
+          "value": "ncp"
         }
       ]
     },
@@ -426,7 +426,7 @@
         {
           "name": "Mode",
           "type": "enum",
-          "value": "mineplex"
+          "value": "mineplex2"
         }
       ]
     },
@@ -509,7 +509,7 @@
     {
       "moduleName": "Chest Stealer",
       "key": 23,
-      "toggled": true,
+      "toggled": false,
       "settings": [
         {
           "name": "Delay before close",
@@ -551,12 +551,12 @@
     {
       "moduleName": "Chat Bypass",
       "key": -1,
-      "toggled": false
+      "toggled": true
     },
     {
       "moduleName": "Auto Armor",
       "key": 37,
-      "toggled": true,
+      "toggled": false,
       "settings": [
         {
           "name": "Mode",
@@ -573,7 +573,7 @@
     {
       "moduleName": "Speed Mine",
       "key": -1,
-      "toggled": false
+      "toggled": true
     },
     {
       "moduleName": "Fast Place",
@@ -600,7 +600,7 @@
     {
       "moduleName": "KillSult",
       "key": -1,
-      "toggled": true,
+      "toggled": false,
       "settings": [
         {
           "name": "Prefix",
@@ -639,7 +639,7 @@
     {
       "moduleName": "No Fall",
       "key": -1,
-      "toggled": false,
+      "toggled": true,
       "settings": [
         {
           "name": "Mode",
@@ -730,7 +730,7 @@
         {
           "name": "Mode",
           "type": "enum",
-          "value": "framenew"
+          "value": "frame"
         }
       ]
     },
@@ -840,7 +840,7 @@
         {
           "name": "Client Name",
           "type": "text",
-          "value": "Lime"
+          "value": "Lime\u0000"
         },
         {
           "name": "Target HUD",
@@ -1006,7 +1006,7 @@
     {
       "moduleName": "No Rotate",
       "key": -1,
-      "toggled": false
+      "toggled": true
     },
     {
       "moduleName": "Breaker",

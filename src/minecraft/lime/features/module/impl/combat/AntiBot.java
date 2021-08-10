@@ -17,6 +17,8 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.play.server.S0CPacketSpawnPlayer;
+import net.minecraft.network.play.server.S18PacketEntityTeleport;
+import net.minecraft.util.BlockPos;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.*;
@@ -24,7 +26,7 @@ import java.util.*;
 @ModuleData(name = "Anti Bot", category = Category.COMBAT)
 public class AntiBot extends Module {
 
-    private final EnumValue mode = new EnumValue("Mode", this, "Funcraft", "Funcraft", "Hypixel", "Mineplex", "Mineplex2");
+    private final EnumValue mode = new EnumValue("Mode", this, "Funcraft", "Funcraft", "Hypixel", "Mineplex");
     private final BoolValue remove = new BoolValue("Remove", this, false);
     private final Map<Integer, Double> distanceMap = new HashMap<>();
 
@@ -50,15 +52,7 @@ public class AntiBot extends Module {
         }
 
         if(mode.is("mineplex")) {
-            if(ent.posY - mc.thePlayer.posY > 3 && ent != mc.thePlayer && mc.thePlayer.getDistanceSqToEntity(ent) < 40 && !ent.onGround && ent.motionY == 0) {
-                if(remove.isEnabled())
-                    mc.theWorld.removeEntity(ent);
-                return true;
-            }
-        }
-
-        if(mode.is("mineplex2")) {
-            return bots.contains(ent);
+            return bots.contains(ent) || ent.ticksExisted < 50;
         }
         return false;
     }
@@ -80,23 +74,16 @@ public class AntiBot extends Module {
         }
 
         if(mode.is("mineplex")) {
-            for (Entity entity : mc.theWorld.loadedEntityList) {
-                if(entity instanceof EntityPlayer) {
-                    EntityPlayer ent = (EntityPlayer) entity;
-                    if(ent.posY - mc.thePlayer.posY > 3 && ent != mc.thePlayer && mc.thePlayer.getDistanceSqToEntity(ent) < 40 && !ent.onGround && ent.motionY == 0) {
-                        if(remove.isEnabled())
-                            mc.theWorld.removeEntity(ent);
-                        return true;
+            for (Entity e : mc.theWorld.loadedEntityList) {
+                if (e instanceof EntityPlayer && mc.thePlayer != e) {
+                    if (e.isInvisible()) {
+                        bots.add(e);
                     }
-                }
-            }
-        }
-
-        if(mode.is("mineplex2")) {
-            for (Entity entity : mc.theWorld.loadedEntityList) {
-                if (entity instanceof EntityPlayer) {
-                    if(entity.isInvisible()) {
-                        bots.add(entity);
+                    if (e.ticksExisted < 2 && ((EntityPlayer) e).getHealth() < 20 && ((EntityPlayer) e).getHealth() > 0 && e != mc.thePlayer) {
+                        bots.add(e);
+                    }
+                    if((MathUtils.roundToPlace(e.prevPosY - e.posY, 12) == 1.333333333333 || MathUtils.roundToPlace(e.prevPosY - e.posY, 12) == -1.333333333333) && mc.thePlayer.getDistanceSqToEntity(e) < 40) {
+                        bots.add(e);
                     }
                 }
             }
@@ -107,7 +94,7 @@ public class AntiBot extends Module {
     @EventTarget
     public void onMotion(EventMotion e) {
         this.setSuffix(mode.getSelected());
-        if(remove.isEnabled())
+        if(remove.isEnabled() && e.isPre())
             checkBots();
 
         if(mode.is("hypixel")) {
@@ -138,6 +125,22 @@ public class AntiBot extends Module {
         if(e.getPacket() instanceof S0CPacketSpawnPlayer) {
             S0CPacketSpawnPlayer p = (S0CPacketSpawnPlayer) e.getPacket();
             distanceMap.put(p.getEntityID(), mc.thePlayer.getDistance(p.getX(), p.getY(), p.getZ()));
+        }
+        if(mode.is("mineplex") && e.getPacket() instanceof S0CPacketSpawnPlayer) {
+            S0CPacketSpawnPlayer packet = (S0CPacketSpawnPlayer)e.getPacket();
+            Entity en = mc.theWorld.getEntityByID(packet.getEntityID());
+            if(en instanceof EntityPlayer || en.isInvisible()) {
+                this.bots.add(en);
+            }
+        }
+        if(mode.is("mineplex") && e.getPacket() instanceof S18PacketEntityTeleport) {
+            S18PacketEntityTeleport packet = (S18PacketEntityTeleport) e.getPacket();
+            Entity en = mc.theWorld.getEntityByID(packet.getEntityId());
+            if (en instanceof EntityPlayer) {
+                if(en.isInvisible()) {
+                    this.bots.add(en);
+                }
+            }
         }
     }
 

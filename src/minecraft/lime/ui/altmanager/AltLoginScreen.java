@@ -2,8 +2,11 @@ package lime.ui.altmanager;
 
 import com.thealtening.auth.TheAlteningAuthentication;
 import lime.core.Lime;
+import lime.managers.FontManager;
+import lime.ui.fields.ButtonField;
 import lime.ui.fields.PasswordField;
 import lime.ui.notifications.Notification;
+import lime.ui.realaltmanager.AltManager;
 import lime.utils.other.WebUtils;
 import lime.utils.render.GLSLSandboxShader;
 import net.minecraft.client.Minecraft;
@@ -46,6 +49,10 @@ public class AltLoginScreen extends GuiScreen {
         this.buttonList.add(new GuiButton(3, this.width / 2 - 100, this.height / 2 + 40 + 24 + 24, 200, 20, "Back"));
         this.buttonList.add(new GuiButton(20, this.width - 105, 3, 100, 20, "The Altening"));
         this.buttonList.add(new GuiButton(69, 3, 3, 100, 20, "FunCraft Ban"));
+
+        this.customButtonList.add(new ButtonField(FontManager.ProductSans20.getFont(), "h", 3, 40, 100, 20, new Color(25, 25, 25), () -> {
+            mc.displayGuiScreen(new AltManager().getAltManagerScreen());
+        }));
 
         for (GuiButton guiButton : buttonList) {
             if(guiButton.id == 20) {

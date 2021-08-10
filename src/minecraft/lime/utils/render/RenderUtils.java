@@ -165,6 +165,19 @@ public class RenderUtils implements IUtil {
         }
     }
 
+    public static void drawFace(int x, int y, int width, int height, ResourceLocation resourceLocation) {
+        try {
+            Minecraft.getMinecraft().getTextureManager().bindTexture(resourceLocation);
+            GL11.glEnable(GL11.GL_BLEND);
+            GL11.glColor4f(1, 1, 1, 1);
+            Gui.drawScaledCustomSizeModalRect(x, y, 8.0f, 8.0f, 8, 8, width, height, 64.0f, 64.0f);
+            //355, 190, 8.0f, 8.0f, 8, 8, 28, 28, 64.0f, 64.0f
+            GL11.glDisable(GL11.GL_BLEND);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public static void drawHorizontalLine(float x, float y, float x1, float thickness, int color) {
         Gui.drawRect(x, y, x1, y + thickness, color);
     }
