@@ -30,7 +30,6 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.FutureTask;
 import javax.imageio.ImageIO;
 
-import lime.core.Lime;
 import lime.core.events.EventBus;
 import lime.core.events.impl.EventKey;
 import lime.core.events.impl.EventWorldChange;

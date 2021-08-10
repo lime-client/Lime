@@ -75,29 +75,7 @@ public class LongJump extends Module {
         }
 
         if(mode.is("kokscraft")) {
-            double[] jumpValues = new double[] {
-                    0,
-                    0.41999998688698,
-                    0.7531999805212,
-                    1.00133597911215,
-                    1.166109260938214,
-                    1.24918707874468,
-                    1.25220334025373,
-                    1.17675927506424,
-                    1.024424088213685,
-                    0.7967356006687,
-                    0.495200877005914,
-                    0.121296840539195,
-                    0
-            };
-            double startPosY = mc.thePlayer.posY;
-            for (int i = 0;i < 3;i++) {
-                for (double jumpValue : jumpValues) {
-                    mc.getNetHandler().sendPacketNoEvent(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, startPosY + jumpValue, mc.thePlayer.posZ, false));
-                }
-            }
-            mc.getNetHandler().sendPacketNoEvent(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, startPosY, mc.thePlayer.posZ, true));
-            mc.getNetHandler().sendPacketNoEvent(new C03PacketPlayer(true));
+            PlayerUtils.koksCraftDamage();
         }
     }
 
@@ -225,8 +203,9 @@ public class LongJump extends Module {
 
             if(mode.is("kokscraft")) {
                 e.setCanceled(true);
-                mc.thePlayer.motionY = 0.8;
-                MovementUtils.setSpeed(1.2);
+                //mc.timer.timerSpeed = 0.8f;
+                mc.thePlayer.motionY = 0.2;
+                MovementUtils.setSpeed(1.4);
                 this.toggle();
             }
         }

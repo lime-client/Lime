@@ -1,8 +1,6 @@
 package lime.core;
 
 import lime.scripting.ScriptManager;
-import lime.ui.gui.LoginScreen;
-import lime.ui.gui.MainScreen;
 import lime.ui.notifications.utils.NotificationManager;
 import lime.utils.other.file.FileSaver;
 import lime.managers.CommandManager;
@@ -10,19 +8,12 @@ import lime.managers.ModuleManager;
 import lime.features.setting.SettingsManager;
 import lime.ui.clickgui.frame.ClickGUI;
 import lime.utils.other.security.UserCheckThread;
-import lime.utils.render.GLSLSandboxShader;
-import net.minecraft.client.Minecraft;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.lwjgl.opengl.Display;
-import sun.misc.Unsafe;
 import viamcp.ViaMCP;
 
 import java.io.File;
-import java.io.IOException;
-import java.lang.reflect.Field;
 import java.net.Proxy;
-import java.util.logging.Level;
 
 public class Lime {
     private final static Lime instance = new Lime();
