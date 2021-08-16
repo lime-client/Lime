@@ -31,6 +31,7 @@ public class ModuleManager {
 
         // EXPLOIT
         registerModule(new SigmaJello());
+        registerModule(new AntiStuck());
         registerModule(new Disabler());
         registerModule(new FastBow());
         registerModule(new NoClip());
@@ -86,7 +87,7 @@ public class ModuleManager {
         registerModule(new ESP());
         registerModule(new HUD());
 
-        registerModule(new ClickGUITest());
+        //registerModule(new ClickGUITest());
 
         // WORLD
         registerModule(new TimeChanger());

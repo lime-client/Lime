@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="packetlib-1.2">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/Desktop/packetlib-1.2.jar!/" />
+      <root url="jar://$USER_HOME$/Desktop/opennbt-1.0.jar!/" />
+      <root url="jar://$USER_HOME$/Desktop/mcprotocollib-1.12.2-2.jar!/" />
+      <root url="jar://$USER_HOME$/Desktop/mcauthlib-1.0.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

@@ -5,8 +5,8 @@ import net.minecraft.util.IChatComponent;
 public class ChatLine
 {
     /** GUI Update Counter value this Line was created at */
-    private final int updateCounterCreated;
-    private final IChatComponent lineString;
+    private int updateCounterCreated;
+    private IChatComponent lineString;
 
     /**
      * int value to refer to existing Chat Lines, can be 0 which means unreferrable
@@ -25,9 +25,17 @@ public class ChatLine
         return this.lineString;
     }
 
+    public void setLineString(IChatComponent lineString) {
+        this.lineString = lineString;
+    }
+
     public int getUpdatedCounter()
     {
         return this.updateCounterCreated;
+    }
+
+    public void setUpdateCounterCreated(int updateCounterCreated) {
+        this.updateCounterCreated = updateCounterCreated;
     }
 
     public int getChatLineID()

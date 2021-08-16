@@ -69,12 +69,12 @@ public class NetworkPlayerInfo
         return this.responseTime;
     }
 
-    protected void setGameType(WorldSettings.GameType p_178839_1_)
+    public void setGameType(WorldSettings.GameType p_178839_1_)
     {
         this.gameType = p_178839_1_;
     }
 
-    protected void setResponseTime(int p_178838_1_)
+    public void setResponseTime(int p_178838_1_)
     {
         this.responseTime = p_178838_1_;
     }

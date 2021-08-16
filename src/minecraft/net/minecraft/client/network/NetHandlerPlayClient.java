@@ -219,45 +219,45 @@ import org.apache.logging.log4j.Logger;
 
 public class NetHandlerPlayClient implements INetHandlerPlayClient
 {
-    private static final Logger logger = LogManager.getLogger();
+    protected static final Logger logger = LogManager.getLogger();
 
     /**
      * The NetworkManager instance used to communicate with the server (used only by handlePlayerPosLook to update
      * positioning and handleJoinGame to inform the server of the client distribution/mods)
      */
-    private final NetworkManager netManager;
-    private final GameProfile profile;
+    protected final NetworkManager netManager;
+    protected final GameProfile profile;
 
     /**
      * Seems to be either null (integrated server) or an instance of either GuiMultiplayer (when connecting to a server)
      * or GuiScreenReamlsTOS (when connecting to MCO server)
      */
-    private final GuiScreen guiScreenServer;
+    protected final GuiScreen guiScreenServer;
 
     /**
      * Reference to the Minecraft instance, which many handler methods operate on
      */
-    private Minecraft gameController;
+    protected Minecraft gameController;
 
     /**
      * Reference to the current ClientWorld instance, which many handler methods operate on
      */
-    private WorldClient clientWorldController;
+    protected WorldClient clientWorldController;
 
     /**
      * True if the client has finished downloading terrain and may spawn. Set upon receipt of S08PacketPlayerPosLook,
      * reset upon respawning
      */
-    private boolean doneLoadingTerrain;
-    private final Map<UUID, NetworkPlayerInfo> playerInfoMap = Maps.<UUID, NetworkPlayerInfo>newHashMap();
+    protected boolean doneLoadingTerrain;
+    protected final Map<UUID, NetworkPlayerInfo> playerInfoMap = Maps.<UUID, NetworkPlayerInfo>newHashMap();
     public int currentServerMaxPlayers = 20;
-    private boolean field_147308_k = false;
+    protected boolean field_147308_k = false;
 
     /**
      * Just an ordinary random number generator, used to randomize audio pitch of item/orb pickup and randomize both
      * particlespawn offset and velocity
      */
-    private final Random avRandomizer = new Random();
+    protected final Random avRandomizer = new Random();
 
     public NetHandlerPlayClient(Minecraft mcIn, GuiScreen p_i46300_2_, NetworkManager p_i46300_3_, GameProfile p_i46300_4_)
     {

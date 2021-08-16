@@ -101,7 +101,7 @@ public class CombatUtils implements IUtil {
         */
         Rotation rotation = getEntityRotations(e.posX, e.posY, e.posZ);
 
-        return new float[] { rotation.getYaw() + MathUtils.random(0.4, -0.4), rotation.getPitch() + MathUtils.random(0.2, -0.2) };
+        return new float[] { rotation.getYaw(), rotation.getPitch() };
     }
 
     public static Rotation smoothAngle(float[] dst, float[] src, float randMin, float randMax) {

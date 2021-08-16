@@ -11,8 +11,11 @@ import lime.features.module.ModuleData;
 import lime.features.module.impl.combat.KillAura;
 import lime.features.module.impl.world.Scaffold;
 import lime.features.setting.impl.EnumValue;
+import lime.features.setting.impl.SlideValue;
 import lime.utils.movement.HopFriction;
 import lime.utils.movement.MovementUtils;
+import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.network.play.client.C03PacketPlayer;
 import net.minecraft.network.play.server.S08PacketPlayerPosLook;
 import net.minecraft.potion.Potion;
 
@@ -20,7 +23,7 @@ import net.minecraft.potion.Potion;
 public class Speed extends Module {
 
     private final EnumValue mode = new EnumValue("Mode", this, "Vanilla", "Vanilla", "Vanilla_BHOP", "Verus", "Verus_LOWHOP", "Strafe", "NCP", "Funcraft", "Funcraft_YPORT", "Mineplex", "Mineplex2");
-
+    private final SlideValue speed = new SlideValue("Speed", this, 0.2, 5, 0.6, 0.1).onlyIf(mode.getSettingName(), "enum", "vanilla_bhop", "vanilla");
     private double currentDistance, moveSpeed, lastDist;
     private int stage;
     private boolean prevOnGround;
@@ -50,16 +53,17 @@ public class Speed extends Module {
         this.setSuffix(mode.getSelected());
         if(mode.is("vanilla") || mode.is("vanilla_bhop")) {
             if(mc.thePlayer.isMoving()) {
-                MovementUtils.setSpeed(1);
+                MovementUtils.setSpeed(speed.getCurrent());
                 if(mode.is("vanilla_bhop")) {
                     if(mc.thePlayer.isMoving() && mc.thePlayer.onGround)
                         mc.thePlayer.motionY = 0.42;
                     if(mc.thePlayer.isMoving()) {
-                        MovementUtils.setSpeed(0.6);
+                        MovementUtils.setSpeed(speed.getCurrent());
                     }
                     if(mc.thePlayer.ticksExisted % 3 == 0) mc.thePlayer.motionY -= 0.04;
                 }
             }
+
         }
 
         if(mode.is("strafe")) {
@@ -124,7 +128,7 @@ public class Speed extends Module {
     public void onMove(EventMove e) {
         if(mode.is("mineplex")) {
             if(mc.thePlayer.onGround) {
-                e.setY(mc.thePlayer.motionY = 0.4);
+                e.setY(mc.thePlayer.motionY = 0.42);
                 currentDistance = moveSpeed;
                 prevOnGround = true;
                 moveSpeed = 0;
@@ -133,7 +137,7 @@ public class Speed extends Module {
                     moveSpeed = currentDistance + 0.56;
                     prevOnGround = false;
                 } else {
-                    moveSpeed = lastDist * (0.985);
+                    moveSpeed = lastDist * 0.985;
                 }
             }
 
@@ -147,22 +151,19 @@ public class Speed extends Module {
         }
 
         if(mode.is("mineplex2")) {
-            if(!mc.thePlayer.isMoving()) {
-                moveSpeed = MovementUtils.getBaseMoveSpeed();
-            }
-            if(mc.thePlayer.onGround && mc.thePlayer.isMoving()) {
-                prevOnGround = true;
+            if (mc.thePlayer.isMoving() && mc.thePlayer.onGround) {
+                moveSpeed = moveSpeed < 0.5 ? 0.8 : moveSpeed + .4;
                 e.setY(mc.thePlayer.motionY = 0.42);
-                MovementUtils.setSpeed(e, -0.07);
-                moveSpeed += 0.35;
+                mc.getNetHandler().addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY + 0.42, mc.thePlayer.posZ, true));
+            }
+            if(mc.thePlayer.isCollidedHorizontally || !mc.thePlayer.isMoving()) {
+                moveSpeed = 0.32;
+            }
+            if(KillAura.getEntity() != null && Lime.getInstance().getModuleManager().getModuleC(TargetStrafe.class).isToggled()) {
+                TargetStrafe targetStrafe = (TargetStrafe) Lime.getInstance().getModuleManager().getModuleC(TargetStrafe.class);
+                targetStrafe.setMoveSpeed(e, Math.max(Math.min(2, moveSpeed -= moveSpeed / 44), 0.4));
             } else {
-                if(mc.thePlayer.isCollidedHorizontally) moveSpeed = MovementUtils.getBaseMoveSpeed();
-                if (KillAura.getEntity() != null) {
-                    TargetStrafe targetStrafe2 = (TargetStrafe) Lime.getInstance().getModuleManager().getModuleC(TargetStrafe.class);
-                    targetStrafe2.setMoveSpeed(e, mc.thePlayer.isMoving() ? Math.max(moveSpeed *= 0.98, MovementUtils.getBaseMoveSpeed()) : 0);
-                } else {
-                    MovementUtils.setSpeed(e, mc.thePlayer.isMoving() ? Math.max(moveSpeed *= 0.98, MovementUtils.getBaseMoveSpeed()) : 0);
-                }
+                MovementUtils.setSpeed(e, Math.max(Math.min(2, moveSpeed -= moveSpeed / 44), 0.4));
             }
         }
 

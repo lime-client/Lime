@@ -2,7 +2,7 @@
   "informations": [
     {
       "author": "Lime Auto Save",
-      "time": 1628564304
+      "time": 1629093971
     }
   ],
   "modules": [
@@ -31,7 +31,7 @@
     {
       "moduleName": "Criticals",
       "key": -1,
-      "toggled": true,
+      "toggled": false,
       "settings": [
         {
           "name": "Mode",
@@ -51,6 +51,11 @@
           "value": "pre"
         },
         {
+          "name": "Mode",
+          "type": "enum",
+          "value": "single"
+        },
+        {
           "name": "Priority",
           "type": "enum",
           "value": "distance"
@@ -68,7 +73,7 @@
         {
           "name": "Auto Block",
           "type": "enum",
-          "value": "fake"
+          "value": "basic"
         },
         {
           "name": "Auto Block State",
@@ -86,14 +91,19 @@
           "value": 90.0
         },
         {
+          "name": "Auto Block Range",
+          "type": "slider",
+          "value": 11.55
+        },
+        {
           "name": "Range",
           "type": "slider",
-          "value": 4.25
+          "value": 5.75
         },
         {
           "name": "CPS",
           "type": "slider",
-          "value": 5.0
+          "value": 14.0
         },
         {
           "name": "Randomize CPS",
@@ -118,7 +128,7 @@
         {
           "name": "Teams",
           "type": "bool",
-          "value": true
+          "value": false
         },
         {
           "name": "Ray Cast",
@@ -243,14 +253,29 @@
       ]
     },
     {
+      "moduleName": "Anti Stuck",
+      "key": -1,
+      "toggled": false
+    },
+    {
       "moduleName": "Disabler",
       "key": -1,
-      "toggled": false,
+      "toggled": true,
       "settings": [
         {
           "name": "Mode",
           "type": "enum",
-          "value": "mineplex_combat"
+          "value": "mineplex"
+        },
+        {
+          "name": "Mail",
+          "type": "text",
+          "value": ""
+        },
+        {
+          "name": "Password",
+          "type": "text",
+          "value": ""
         }
       ]
     },
@@ -296,7 +321,7 @@
         {
           "name": "Distance",
           "type": "slider",
-          "value": 2.0
+          "value": 1.1
         },
         {
           "name": "Space Only",
@@ -306,7 +331,7 @@
         {
           "name": "Third Person",
           "type": "bool",
-          "value": true
+          "value": false
         }
       ]
     },
@@ -365,7 +390,7 @@
         {
           "name": "Mode",
           "type": "enum",
-          "value": "funcraft"
+          "value": "kokscraft"
         },
         {
           "name": "Speed",
@@ -382,7 +407,7 @@
         {
           "name": "Mode",
           "type": "enum",
-          "value": "ncp"
+          "value": "vanilla"
         }
       ]
     },
@@ -394,12 +419,12 @@
         {
           "name": "Mode",
           "type": "enum",
-          "value": "mineplex"
+          "value": "mineplex fast"
         },
         {
           "name": "Speed",
           "type": "slider",
-          "value": 9.0
+          "value": 2.0
         },
         {
           "name": "Bobbing",
@@ -427,6 +452,11 @@
           "name": "Mode",
           "type": "enum",
           "value": "mineplex2"
+        },
+        {
+          "name": "Speed",
+          "type": "slider",
+          "value": 0.6
         }
       ]
     },
@@ -551,7 +581,7 @@
     {
       "moduleName": "Chat Bypass",
       "key": -1,
-      "toggled": true
+      "toggled": false
     },
     {
       "moduleName": "Auto Armor",
@@ -698,7 +728,7 @@
         {
           "name": "Swing Slowdown",
           "type": "slider",
-          "value": 2.0
+          "value": 1.0
         }
       ]
     },
@@ -715,7 +745,7 @@
     {
       "moduleName": "Nametags",
       "key": -1,
-      "toggled": true
+      "toggled": false
     },
     {
       "moduleName": "China Hat",
@@ -840,7 +870,7 @@
         {
           "name": "Client Name",
           "type": "text",
-          "value": "Lime\u0000"
+          "value": "Lime"
         },
         {
           "name": "Target HUD",
@@ -858,6 +888,11 @@
           "value": 72.0
         },
         {
+          "name": "Sidebar",
+          "type": "enum",
+          "value": "none"
+        },
+        {
           "name": "Color",
           "type": "enum",
           "value": "fade"
@@ -865,12 +900,12 @@
         {
           "name": "Fade Color",
           "type": "color",
-          "value": -6677838
+          "value": -1432026
         },
         {
           "name": "Custom Font",
           "type": "bool",
-          "value": true
+          "value": false
         },
         {
           "name": "Suffix",
@@ -883,11 +918,6 @@
           "value": true
         }
       ]
-    },
-    {
-      "moduleName": "ClickGUI Test",
-      "key": -1,
-      "toggled": false
     },
     {
       "moduleName": "Time Changer",
@@ -1048,7 +1078,7 @@
         {
           "name": "Timer Speed",
           "type": "slider",
-          "value": 1.5
+          "value": 1.1
         }
       ]
     },

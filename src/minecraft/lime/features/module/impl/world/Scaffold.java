@@ -175,10 +175,10 @@ public class Scaffold extends Module {
 
         boolean downFlag = downwards.isEnabled() && Keyboard.isKeyDown(mc.gameSettings.keyBindSneak.getKeyCode()) && isAirBlock(new BlockPos(mc.thePlayer.posX, mc.thePlayer.posY - 1, mc.thePlayer.posZ).getBlock());
 
-        double x = mc.thePlayer.posX;
-        double z = mc.thePlayer.posZ;
+        double x = Double.MAX_VALUE;
+        double z = Double.MAX_VALUE;
         if(!mc.thePlayer.isCollidedHorizontally && (int) expand.getCurrent() != 0) {
-            double[] coords = getExpandCoords(x, z, mc.thePlayer.moveForward, mc.thePlayer.moveStrafing, mc.thePlayer.rotationYaw, downFlag ? 1 : expand.getCurrent());
+            double[] coords = getExpandCoords(mc.thePlayer.posX, mc.thePlayer.posZ, mc.thePlayer.moveForward, mc.thePlayer.moveStrafing, mc.thePlayer.rotationYaw, downFlag ? 1 : expand.getCurrent());
             x = coords[0];
             z = coords[1];
         }
@@ -188,6 +188,10 @@ public class Scaffold extends Module {
         if(isAirUnderPos) {
             x = mc.thePlayer.posX;
             z = mc.thePlayer.posZ;
+        }
+
+        if(x == Double.MAX_VALUE && z == Double.MAX_VALUE) {
+            return;
         }
 
         if(sameY.isEnabled() && !downFlag) {

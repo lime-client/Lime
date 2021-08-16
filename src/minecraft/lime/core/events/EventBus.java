@@ -18,7 +18,7 @@ public class EventBus {
 				EventMotion.class, EventBoundingBox.class, EventScoreboard.class,
 				Event3D.class, EventMove.class, EventSlow.class, EventRendererEntity.class,
 				EventEntityAction.class, EventLivingLabel.class, EventSafeWalk.class,
-				EventWorldChange.class, EventStep.class);
+				EventWorldChange.class, EventStep.class, EventGameLoop.class);
 	}
 
 	@SafeVarargs

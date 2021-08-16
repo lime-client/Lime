@@ -3,12 +3,15 @@ package net.minecraft.client.gui;
 import com.google.common.collect.Lists;
 import java.util.Iterator;
 import java.util.List;
+
+import lime.utils.other.ChatUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.IChatComponent;
 import net.minecraft.util.MathHelper;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -133,6 +136,20 @@ public class GuiNewChat extends Gui
      */
     public void printChatMessageWithOptionalDeletion(IChatComponent p_146234_1_, int p_146234_2_)
     {
+        if(field_146253_i.size() > 0) {
+            String lastMessage = field_146253_i.get(0).getChatComponent().getUnformattedText();
+            String lastMessage1 = lastMessage;
+            boolean flag = lastMessage.contains(" §7(x") && lastMessage.contains(")§f");
+            if(flag) {
+                lastMessage1 = lastMessage1.split(" §7\\(x")[0];
+            }
+            if(ChatUtils.removeColors(lastMessage1).equals(ChatUtils.removeColors(p_146234_1_.getUnformattedText()))) {
+                String count = flag ? " §7(x" + (Integer.parseInt(lastMessage.split("\\(x")[1].split("\\)§f")[0]) + 1) + ")§f" : " §7(x2)§f";
+                field_146253_i.get(0).setLineString(new ChatComponentText(lastMessage1 + count));
+                field_146253_i.get(0).setUpdateCounterCreated(mc.ingameGUI.getUpdateCounter());
+                return;
+            }
+        }
         this.setChatLine(p_146234_1_, p_146234_2_, this.mc.ingameGUI.getUpdateCounter(), false);
         logger.info("[CHAT] " + p_146234_1_.getUnformattedText());
     }
@@ -159,7 +176,7 @@ public class GuiNewChat extends Gui
             this.field_146253_i.add(0, new ChatLine(p_146237_3_, ichatcomponent, p_146237_2_));
         }
 
-        while (this.field_146253_i.size() > 100)
+        while (this.field_146253_i.size() > 500)
         {
             this.field_146253_i.remove(this.field_146253_i.size() - 1);
         }
@@ -168,7 +185,7 @@ public class GuiNewChat extends Gui
         {
             this.chatLines.add(0, new ChatLine(p_146237_3_, p_146237_1_, p_146237_2_));
 
-            while (this.chatLines.size() > 100)
+            while (this.chatLines.size() > 500)
             {
                 this.chatLines.remove(this.chatLines.size() - 1);
             }

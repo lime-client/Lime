@@ -7,6 +7,7 @@ import lime.ui.clickgui.frame.components.Component;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiScreen;
 import org.apache.commons.lang3.StringUtils;
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
 import java.awt.*;
@@ -57,6 +58,9 @@ public class TextSetting extends Component {
     public void onKeyTyped(char typedChar, int key) {
         if(text == null)
             text = "";
+        if(Keyboard.isKeyDown(Keyboard.KEY_LCONTROL) && Keyboard.isKeyDown(Keyboard.KEY_V)) {
+            text += GuiScreen.getClipboardString();
+        }
         if(isFocused) {
             if(key == 14) {
                 this.text = StringUtils.chop(text);

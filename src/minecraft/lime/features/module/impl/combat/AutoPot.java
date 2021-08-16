@@ -72,7 +72,7 @@ public class AutoPot extends Module {
             e.setPitch(90);
         }
         if(!e.isPre() && !mc.thePlayer.capabilities.allowFlying) {
-            if(healthPotion == null || !timer.hasReached(1500))
+            if(healthPotion == null || !timer.hasReached(delay.intValue()))
                 return;
 
             if(healthPotion.getSlot() < 36) {
@@ -85,6 +85,7 @@ public class AutoPot extends Module {
             if(healthPotion.isSoup())
                 mc.getNetHandler().addToSendQueue(new C07PacketPlayerDigging(C07PacketPlayerDigging.Action.DROP_ITEM, BlockPos.ORIGIN, EnumFacing.DOWN));
             mc.getNetHandler().addToSendQueue(new C09PacketHeldItemChange(mc.thePlayer.inventory.currentItem));
+            timer.reset();
         }
     }
 

@@ -31,6 +31,7 @@ public class HUD extends Module {
     public final EnumValue targetHud = new EnumValue("Target HUD", this, "Lime", "None", "Lime", "Astolfo");
     public final SlideValue targetHudX = new SlideValue("TargetHUD X", this, 0, 100, 50, 1).onlyIf(targetHud.getSettingName(), "enum", "lime", "astolfo");
     public final SlideValue targetHudY = new SlideValue("TargetHUD Y", this, 0, 100, 50, 1).onlyIf(targetHud.getSettingName(), "enum", "lime", "astolfo");
+    private final EnumValue sidebar = new EnumValue("Sidebar", this, "Right", "Left", "Right", "None");
     private final EnumValue color = new EnumValue("Color", this, "Lime", "Lime", "Astolfo", "Rainbow", "Fade");
     private final ColorValue fadeColor = new ColorValue("Fade Color", this, new Color(200, 0, 0).getRGB()).onlyIf(color.getSettingName(), "enum", "fade");
     private final BoolValue customFont = new BoolValue("Custom Font", this, true);
@@ -59,6 +60,8 @@ public class HUD extends Module {
         if(fps.isEnabled()) {
             if(customFont.isEnabled()) {
                 FontManager.ProductSans20.getFont().drawStringWithShadow("FPS: §f" + Minecraft.debugFPS, 1, sr.getScaledHeight() - (FontManager.ProductSans20.getFont().getFontHeight() * 2), HUD.getColor(0).getRGB());
+            } else {
+                mc.fontRendererObj.drawStringWithShadow("FPS: §f" + Minecraft.debugFPS, 3, sr.getScaledHeight() - (FontManager.ProductSans20.getFont().getFontHeight() * 2)+1, HUD.getColor(0).getRGB());
             }
         }
 
@@ -93,12 +96,16 @@ public class HUD extends Module {
             if(module.hudAnimation.getValue() > module.hudAnimation.getMin()) {
                 Color color = getColor(yCount / increment);
 
-                Gui.drawRect(e.getScaledResolution().getScaledWidth() - 1, yCount, e.getScaledResolution().getScaledWidth(), yCount + increment, color.getRGB());
+                if(sidebar.is("right")) {
+                    Gui.drawRect(e.getScaledResolution().getScaledWidth() - 1, yCount, e.getScaledResolution().getScaledWidth(), yCount + increment, color.getRGB());
+                } else if(sidebar.is("left")) {
+                    Gui.drawRect(e.getScaledResolution().getScaledWidth() - module.hudAnimation.getValue() - 1, yCount, e.getScaledResolution().getScaledWidth()  - module.hudAnimation.getValue(), yCount + increment, color.getRGB());
+                }
                 //Gui.drawRect(e.getScaledResolution().getScaledWidth() - 1 - module.hudAnimation.getValue(), yCount, e.getScaledResolution().getScaledWidth() - 1, yCount + increment, (0xCC * 200) << 24);
                 if(customFont.isEnabled())
                     FontManager.ProductSans18.getFont().drawStringWithShadow(moduleName, (e.getScaledResolution().getScaledWidth() - module.hudAnimation.getValue()), yCount, color.getRGB());
                 else
-                    mc.fontRendererObj.drawString(moduleName, (e.getScaledResolution().getScaledWidth() - module.hudAnimation.getValue()), yCount + 2, color.getRGB(), true);
+                    mc.fontRendererObj.drawString(moduleName, (e.getScaledResolution().getScaledWidth() - module.hudAnimation.getValue() + (sidebar.is("right") ? 0 : 3)), yCount + 1, color.getRGB(), true);
 
                 yCount += Math.min(increment, module.hudAnimation.getValue() + 1);
             }

@@ -181,6 +181,8 @@ public class LoginScreen extends GuiScreen {
     protected void keyTyped(char typedChar, int keyCode) throws IOException {
         if(keyCode == 13) {
             this.customButtonList.get(0).mouseClicked();
+        } else if(keyCode == 1) {
+            return;
         }
         textField.keyTyped(typedChar, keyCode);
         super.keyTyped(typedChar, keyCode);

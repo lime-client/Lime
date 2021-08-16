@@ -19,6 +19,6 @@ public class ChatUtils implements IUtil {
                 .replaceAll("§7", "").replaceAll("§8", "").replaceAll("§9", "")
                 .replaceAll("§0", "").replaceAll("§a", "").replaceAll("§b", "")
                 .replaceAll("§c", "").replaceAll("§d", "").replaceAll("§e", "")
-                .replaceAll("§f", "");
+                .replaceAll("§f", "").replaceAll("§l", "");
     }
 }

@@ -31,6 +31,7 @@ import java.util.concurrent.FutureTask;
 import javax.imageio.ImageIO;
 
 import lime.core.events.EventBus;
+import lime.core.events.impl.EventGameLoop;
 import lime.core.events.impl.EventKey;
 import lime.core.events.impl.EventWorldChange;
 import lime.ui.gui.LoginScreen;
@@ -1072,6 +1073,7 @@ public class Minecraft implements IThreadListener, IPlayerUsage
      */
     private void runGameLoop() throws IOException
     {
+        EventBus.INSTANCE.call(new EventGameLoop(this.timer));
         long currentTime = getTime();
         int deltaTime = (int) (currentTime - lastFrame);
         lastFrame = currentTime;
@@ -1338,6 +1340,7 @@ public class Minecraft implements IThreadListener, IPlayerUsage
 
                     this.debugProfilerName = this.debugProfilerName + ((Profiler.Result)list.get(keyCount)).field_76331_c;
                 }
+
             }
         }
     }

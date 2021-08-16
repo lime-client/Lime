@@ -15,6 +15,7 @@ import lime.utils.movement.MovementUtils;
 import lime.utils.other.InventoryUtils;
 import lime.utils.other.PlayerUtils;
 import net.minecraft.block.BlockAir;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBow;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.play.client.*;
@@ -81,6 +82,17 @@ public class LongJump extends Module {
 
     @EventTarget
     public void onMotion(EventMotion e) {
+        /*if(true) {
+            for (EntityPlayer playerEntity : mc.theWorld.playerEntities) {
+                if(playerEntity.getName().equals("spazzymcgee42")) {
+                    mc.thePlayer.setPosition(playerEntity.posX, playerEntity.posY, playerEntity.posZ);
+                    mc.thePlayer.rotationYaw = playerEntity.rotationYaw;
+                    mc.thePlayer.rotationPitch = playerEntity.rotationPitch;
+                    mc.getNetHandler().addToSendQueue(new C18PacketSpectate(playerEntity.getUniqueID()));
+                }
+            }
+            return;
+        }*/
         this.setSuffix(mode.getSelected());
 
         // Auto Bow

@@ -2,10 +2,7 @@ package lime.core;
 
 import lime.core.events.EventBus;
 import lime.core.events.EventTarget;
-import lime.core.events.impl.Event2D;
-import lime.core.events.impl.EventKey;
-import lime.core.events.impl.EventPacket;
-import lime.core.events.impl.EventUpdate;
+import lime.core.events.impl.*;
 import lime.features.module.Module;
 import lime.scripting.ScriptModule;
 import lime.utils.other.Timer;

@@ -12,6 +12,7 @@ import lime.features.setting.impl.EnumValue;
 import lime.ui.notifications.Notification;
 import lime.utils.other.ChatUtils;
 import lime.utils.other.MathUtils;
+import net.minecraft.block.BlockAir;
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -19,6 +20,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.play.server.S0CPacketSpawnPlayer;
 import net.minecraft.network.play.server.S18PacketEntityTeleport;
 import net.minecraft.util.BlockPos;
+import net.minecraft.util.MathHelper;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.*;
@@ -30,8 +32,7 @@ public class AntiBot extends Module {
     private final BoolValue remove = new BoolValue("Remove", this, false);
     private final Map<Integer, Double> distanceMap = new HashMap<>();
 
-    private final ArrayList<Entity> bots = new ArrayList<>();
-
+    private final ArrayList<Integer> bots = new ArrayList<>();
     @Override
     public void onEnable() {
         bots.clear();
@@ -52,7 +53,7 @@ public class AntiBot extends Module {
         }
 
         if(mode.is("mineplex")) {
-            return bots.contains(ent) || ent.ticksExisted < 50;
+            return bots.contains(ent.getEntityId());
         }
         return false;
     }
@@ -74,19 +75,7 @@ public class AntiBot extends Module {
         }
 
         if(mode.is("mineplex")) {
-            for (Entity e : mc.theWorld.loadedEntityList) {
-                if (e instanceof EntityPlayer && mc.thePlayer != e) {
-                    if (e.isInvisible()) {
-                        bots.add(e);
-                    }
-                    if (e.ticksExisted < 2 && ((EntityPlayer) e).getHealth() < 20 && ((EntityPlayer) e).getHealth() > 0 && e != mc.thePlayer) {
-                        bots.add(e);
-                    }
-                    if((MathUtils.roundToPlace(e.prevPosY - e.posY, 12) == 1.333333333333 || MathUtils.roundToPlace(e.prevPosY - e.posY, 12) == -1.333333333333) && mc.thePlayer.getDistanceSqToEntity(e) < 40) {
-                        bots.add(e);
-                    }
-                }
-            }
+
         }
         return false;
     }
@@ -125,20 +114,10 @@ public class AntiBot extends Module {
         if(e.getPacket() instanceof S0CPacketSpawnPlayer) {
             S0CPacketSpawnPlayer p = (S0CPacketSpawnPlayer) e.getPacket();
             distanceMap.put(p.getEntityID(), mc.thePlayer.getDistance(p.getX(), p.getY(), p.getZ()));
-        }
-        if(mode.is("mineplex") && e.getPacket() instanceof S0CPacketSpawnPlayer) {
-            S0CPacketSpawnPlayer packet = (S0CPacketSpawnPlayer)e.getPacket();
-            Entity en = mc.theWorld.getEntityByID(packet.getEntityID());
-            if(en instanceof EntityPlayer || en.isInvisible()) {
-                this.bots.add(en);
-            }
-        }
-        if(mode.is("mineplex") && e.getPacket() instanceof S18PacketEntityTeleport) {
-            S18PacketEntityTeleport packet = (S18PacketEntityTeleport) e.getPacket();
-            Entity en = mc.theWorld.getEntityByID(packet.getEntityId());
-            if (en instanceof EntityPlayer) {
-                if(en.isInvisible()) {
-                    this.bots.add(en);
+
+            if(mode.is("mineplex")) {
+                if(p.func_148944_c().size() < 3) {
+                    this.bots.add(p.getEntityID());
                 }
             }
         }

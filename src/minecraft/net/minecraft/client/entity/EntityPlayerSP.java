@@ -58,51 +58,51 @@ import net.minecraft.world.World;
 public class EntityPlayerSP extends AbstractClientPlayer
 {
     public final NetHandlerPlayClient sendQueue;
-    private final StatFileWriter statWriter;
+    protected final StatFileWriter statWriter;
 
     /**
      * The last X position which was transmitted to the server, used to determine when the X position changes and needs
      * to be re-trasmitted
      */
-    private double lastReportedPosX;
+    protected double lastReportedPosX;
 
     /**
      * The last Y position which was transmitted to the server, used to determine when the Y position changes and needs
      * to be re-transmitted
      */
-    private double lastReportedPosY;
+    protected double lastReportedPosY;
 
     /**
      * The last Z position which was transmitted to the server, used to determine when the Z position changes and needs
      * to be re-transmitted
      */
-    private double lastReportedPosZ;
+    protected double lastReportedPosZ;
 
     /**
      * The last yaw value which was transmitted to the server, used to determine when the yaw changes and needs to be
      * re-transmitted
      */
-    private float lastReportedYaw;
+    protected float lastReportedYaw;
 
     /**
      * The last pitch value which was transmitted to the server, used to determine when the pitch changes and needs to
      * be re-transmitted
      */
-    private float lastReportedPitch;
+    protected float lastReportedPitch;
 
     /** the last sneaking state sent to the server */
-    private boolean serverSneakState;
+    protected boolean serverSneakState;
 
     /** the last sprinting state sent to the server */
-    private boolean serverSprintState;
+    protected boolean serverSprintState;
 
     /**
      * Reset to 0 every time position is sent to the server, used to send periodic updates every 20 ticks even when the
      * player is not moving.
      */
-    private int positionUpdateTicks;
-    private boolean hasValidHealth;
-    private String clientBrand;
+    protected int positionUpdateTicks;
+    protected boolean hasValidHealth;
+    protected String clientBrand;
     public MovementInput movementInput;
     protected Minecraft mc;
 
@@ -119,8 +119,8 @@ public class EntityPlayerSP extends AbstractClientPlayer
     public float renderArmPitch;
     public float prevRenderArmYaw;
     public float prevRenderArmPitch;
-    private int horseJumpPowerCounter;
-    private float horseJumpPower;
+    protected int horseJumpPowerCounter;
+    protected float horseJumpPower;
 
     /** The amount of time an entity has been in a Portal */
     public float timeInPortal;
@@ -163,6 +163,10 @@ public class EntityPlayerSP extends AbstractClientPlayer
         {
             this.mc.getSoundHandler().playSound(new MovingSoundMinecartRiding(this, (EntityMinecart)entityIn));
         }
+    }
+
+    public void callCastedOnUpdate() {
+        super.onUpdate();
     }
 
     /**

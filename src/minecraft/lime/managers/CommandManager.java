@@ -18,6 +18,7 @@ public class CommandManager {
         registerCommand(new Name());
         registerCommand(new Script());
         registerCommand(new KillSult());
+        registerCommand(new Account());
     }
 
     private void registerCommand(Command command) {

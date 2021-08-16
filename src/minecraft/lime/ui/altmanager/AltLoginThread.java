@@ -26,7 +26,7 @@ public class AltLoginThread extends Thread {
         return status;
     }
 
-    public Session createSession(String username, String password) {
+    public static Session createSession(String username, String password) {
         YggdrasilAuthenticationService service = new YggdrasilAuthenticationService(Proxy.NO_PROXY, "");
         YggdrasilUserAuthentication auth = (YggdrasilUserAuthentication) service.createUserAuthentication(Agent.MINECRAFT);
         auth.setUsername(username);

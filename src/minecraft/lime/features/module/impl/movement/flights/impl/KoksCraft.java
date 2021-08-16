@@ -71,7 +71,7 @@ public class KoksCraft extends FlightValue {
         if(e.isPre()) {
             if(stage == 1) {
                 if(timer.hasReached(500)) {
-                    mc.timer.timerSpeed = 1f;
+                    mc.timer.timerSpeed = 2.5f;
                     for (Packet<?> packet : packets) {
                         mc.getNetHandler().sendPacketNoEvent(packet);
                     }
@@ -79,7 +79,7 @@ public class KoksCraft extends FlightValue {
                     timer.reset();
                 } else {
                     e.setCanceled(true);
-                    mc.timer.timerSpeed = 2.5f;
+                    mc.timer.timerSpeed = 5f;
                     packets.add(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY, mc.thePlayer.posZ, mc.thePlayer.onGround));
                 }
                 mc.thePlayer.motionY = 0;

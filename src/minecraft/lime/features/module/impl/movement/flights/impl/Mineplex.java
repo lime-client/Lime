@@ -14,7 +14,7 @@ public class Mineplex extends FlightValue {
         super("Mineplex");
     }
 
-    private boolean back;
+    private boolean back, prevOnGround;
     private int stage;
     private double moveSpeed;
 
@@ -31,7 +31,7 @@ public class Mineplex extends FlightValue {
             if(mc.thePlayer.onGround) {
                 e.setY(mc.thePlayer.motionY = 0.42);
                 MovementUtils.setSpeed(e, -0.07);
-                moveSpeed += 0.35;
+                moveSpeed += 0.45;
                 return;
             }
 
@@ -39,23 +39,22 @@ public class Mineplex extends FlightValue {
             MovementUtils.setSpeed(e, back ? -moveSpeed : moveSpeed);
             back = !back;
 
-            if(moveSpeed > 1.3073164910200747) {
+            if(moveSpeed > 1.25) {
                 stage = 1;
-                moveSpeed = 1.61;
+                moveSpeed = 1.45;
                 back = false;
-                return;
             }
         }
         if(stage == 1) {
             if(mc.thePlayer.onGround) {
                 MovementUtils.setSpeed(e, -0.07);
-                e.setY(mc.thePlayer.motionY = 0.48);
+                e.setY(mc.thePlayer.motionY = 0.42);
                 back = true;
             } else {
-                if(moveSpeed > 1) {
-                    e.setY(mc.thePlayer.motionY += 0.028 + MathUtils.random(0.00005, 0.00105));
+                if(moveSpeed > 0.8) {
+                    e.setY(mc.thePlayer.motionY += 0.028888888888888 + MathUtils.random(0.00005, 0.00105));
                 }
-                MovementUtils.setSpeed(e, moveSpeed *= 0.98);
+                MovementUtils.setSpeed(e, moveSpeed -= moveSpeed / 49);
                 if(back && mc.thePlayer.onGround)
                     getFlight().toggle();
             }
