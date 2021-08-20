@@ -14,7 +14,7 @@ difficulty:1
 fancyGraphics:true
 ao:2
 renderClouds:false
-resourcePacks:["! §5Nebula §8[§732x§8].zip"]
+resourcePacks:["Scope Eum3 Edit.zip"]
 incompatibleResourcePacks:[]
 lastServer:tiddies.club
 lang:en_US

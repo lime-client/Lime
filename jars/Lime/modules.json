@@ -2,7 +2,7 @@
   "informations": [
     {
       "author": "Lime Auto Save",
-      "time": 1629093971
+      "time": 1629453167
     }
   ],
   "modules": [
@@ -20,13 +20,25 @@
           "name": "Health",
           "type": "slider",
           "value": 10.0
+        },
+        {
+          "name": "Show",
+          "type": "bool",
+          "value": true
         }
       ]
     },
     {
       "moduleName": "Auto Sword",
       "key": -1,
-      "toggled": false
+      "toggled": false,
+      "settings": [
+        {
+          "name": "Show",
+          "type": "bool",
+          "value": true
+        }
+      ]
     },
     {
       "moduleName": "Criticals",
@@ -37,6 +49,11 @@
           "name": "Mode",
           "type": "enum",
           "value": "packet"
+        },
+        {
+          "name": "Show",
+          "type": "bool",
+          "value": true
         }
       ]
     },
@@ -53,7 +70,7 @@
         {
           "name": "Mode",
           "type": "enum",
-          "value": "single"
+          "value": "multi"
         },
         {
           "name": "Priority",
@@ -93,12 +110,12 @@
         {
           "name": "Auto Block Range",
           "type": "slider",
-          "value": 11.55
+          "value": 4.95
         },
         {
           "name": "Range",
           "type": "slider",
-          "value": 5.75
+          "value": 4.95
         },
         {
           "name": "CPS",
@@ -123,12 +140,12 @@
         {
           "name": "Mobs",
           "type": "bool",
-          "value": true
+          "value": false
         },
         {
           "name": "Teams",
           "type": "bool",
-          "value": false
+          "value": true
         },
         {
           "name": "Ray Cast",
@@ -149,6 +166,16 @@
           "name": "Death Check",
           "type": "bool",
           "value": false
+        },
+        {
+          "name": "Particles",
+          "type": "bool",
+          "value": false
+        },
+        {
+          "name": "Show",
+          "type": "bool",
+          "value": true
         }
       ]
     },
@@ -161,6 +188,11 @@
           "name": "Mode",
           "type": "enum",
           "value": "packet"
+        },
+        {
+          "name": "Show",
+          "type": "bool",
+          "value": false
         }
       ]
     },
@@ -176,6 +208,11 @@
         },
         {
           "name": "Remove",
+          "type": "bool",
+          "value": true
+        },
+        {
+          "name": "Show",
           "type": "bool",
           "value": true
         }
@@ -210,6 +247,11 @@
           "name": "Soup",
           "type": "bool",
           "value": false
+        },
+        {
+          "name": "Show",
+          "type": "bool",
+          "value": false
         }
       ]
     },
@@ -232,6 +274,11 @@
           "name": "Range",
           "type": "slider",
           "value": 50.0
+        },
+        {
+          "name": "Show",
+          "type": "bool",
+          "value": true
         }
       ]
     },
@@ -249,13 +296,25 @@
           "name": "Sigma ESP",
           "type": "bool",
           "value": true
+        },
+        {
+          "name": "Show",
+          "type": "bool",
+          "value": true
         }
       ]
     },
     {
       "moduleName": "Anti Stuck",
       "key": -1,
-      "toggled": false
+      "toggled": false,
+      "settings": [
+        {
+          "name": "Show",
+          "type": "bool",
+          "value": true
+        }
+      ]
     },
     {
       "moduleName": "Disabler",
@@ -276,18 +335,37 @@
           "name": "Password",
           "type": "text",
           "value": ""
+        },
+        {
+          "name": "Show",
+          "type": "bool",
+          "value": true
         }
       ]
     },
     {
       "moduleName": "Fast Bow",
       "key": -1,
-      "toggled": false
+      "toggled": false,
+      "settings": [
+        {
+          "name": "Show",
+          "type": "bool",
+          "value": true
+        }
+      ]
     },
     {
       "moduleName": "No Clip",
       "key": -1,
-      "toggled": false
+      "toggled": false,
+      "settings": [
+        {
+          "name": "Show",
+          "type": "bool",
+          "value": true
+        }
+      ]
     },
     {
       "moduleName": "Blink",
@@ -298,6 +376,11 @@
           "name": "Blink Delay",
           "type": "slider",
           "value": 500.0
+        },
+        {
+          "name": "Show",
+          "type": "bool",
+          "value": true
         }
       ]
     },
@@ -310,6 +393,11 @@
           "name": "Mode",
           "type": "enum",
           "value": "clip"
+        },
+        {
+          "name": "Show",
+          "type": "bool",
+          "value": true
         }
       ]
     },
@@ -321,7 +409,7 @@
         {
           "name": "Distance",
           "type": "slider",
-          "value": 1.1
+          "value": 2.7
         },
         {
           "name": "Space Only",
@@ -330,6 +418,11 @@
         },
         {
           "name": "Third Person",
+          "type": "bool",
+          "value": false
+        },
+        {
+          "name": "Show",
           "type": "bool",
           "value": false
         }
@@ -379,6 +472,11 @@
           "name": "Speed After Damage",
           "type": "bool",
           "value": false
+        },
+        {
+          "name": "Show",
+          "type": "bool",
+          "value": true
         }
       ]
     },
@@ -396,18 +494,28 @@
           "name": "Speed",
           "type": "slider",
           "value": 5.0
+        },
+        {
+          "name": "Show",
+          "type": "bool",
+          "value": true
         }
       ]
     },
     {
       "moduleName": "No Slow",
       "key": -1,
-      "toggled": true,
+      "toggled": false,
       "settings": [
         {
           "name": "Mode",
           "type": "enum",
-          "value": "vanilla"
+          "value": "ncp"
+        },
+        {
+          "name": "Show",
+          "type": "bool",
+          "value": true
         }
       ]
     },
@@ -435,28 +543,45 @@
           "name": "Verus Glide",
           "type": "bool",
           "value": true
+        },
+        {
+          "name": "Show",
+          "type": "bool",
+          "value": true
         }
       ]
     },
     {
       "moduleName": "Sprint",
       "key": -1,
-      "toggled": true
+      "toggled": true,
+      "settings": [
+        {
+          "name": "Show",
+          "type": "bool",
+          "value": false
+        }
+      ]
     },
     {
       "moduleName": "Speed",
       "key": 47,
-      "toggled": false,
+      "toggled": true,
       "settings": [
         {
           "name": "Mode",
           "type": "enum",
-          "value": "mineplex2"
+          "value": "mineplex"
         },
         {
           "name": "Speed",
           "type": "slider",
           "value": 0.6
+        },
+        {
+          "name": "Show",
+          "type": "bool",
+          "value": true
         }
       ]
     },
@@ -469,13 +594,18 @@
           "name": "Mode",
           "type": "enum",
           "value": "verus"
+        },
+        {
+          "name": "Show",
+          "type": "bool",
+          "value": true
         }
       ]
     },
     {
       "moduleName": "Step",
       "key": -1,
-      "toggled": false,
+      "toggled": true,
       "settings": [
         {
           "name": "Mode",
@@ -485,17 +615,22 @@
         {
           "name": "Height",
           "type": "slider",
-          "value": 2.5
+          "value": 1.0
         },
         {
           "name": "Timer",
           "type": "slider",
-          "value": 0.36
+          "value": 0.4
         },
         {
           "name": "Delay",
           "type": "slider",
           "value": 0.1
+        },
+        {
+          "name": "Show",
+          "type": "bool",
+          "value": true
         }
       ]
     },
@@ -518,23 +653,49 @@
           "name": "Drop Junk",
           "type": "bool",
           "value": true
+        },
+        {
+          "name": "Show",
+          "type": "bool",
+          "value": true
         }
       ]
     },
     {
       "moduleName": "Lagback Checker",
       "key": -1,
-      "toggled": false
+      "toggled": false,
+      "settings": [
+        {
+          "name": "Show",
+          "type": "bool",
+          "value": true
+        }
+      ]
     },
     {
       "moduleName": "Inventory Move",
       "key": -1,
-      "toggled": true
+      "toggled": true,
+      "settings": [
+        {
+          "name": "Show",
+          "type": "bool",
+          "value": false
+        }
+      ]
     },
     {
       "moduleName": "Click Teleport",
       "key": -1,
-      "toggled": false
+      "toggled": false,
+      "settings": [
+        {
+          "name": "Show",
+          "type": "bool",
+          "value": true
+        }
+      ]
     },
     {
       "moduleName": "Chest Stealer",
@@ -575,13 +736,25 @@
           "name": "Aura",
           "type": "bool",
           "value": false
+        },
+        {
+          "name": "Show",
+          "type": "bool",
+          "value": true
         }
       ]
     },
     {
       "moduleName": "Chat Bypass",
       "key": -1,
-      "toggled": false
+      "toggled": false,
+      "settings": [
+        {
+          "name": "Show",
+          "type": "bool",
+          "value": true
+        }
+      ]
     },
     {
       "moduleName": "Auto Armor",
@@ -597,18 +770,37 @@
           "name": "Delay",
           "type": "slider",
           "value": 65.0
+        },
+        {
+          "name": "Show",
+          "type": "bool",
+          "value": true
         }
       ]
     },
     {
       "moduleName": "Speed Mine",
       "key": -1,
-      "toggled": true
+      "toggled": true,
+      "settings": [
+        {
+          "name": "Show",
+          "type": "bool",
+          "value": false
+        }
+      ]
     },
     {
       "moduleName": "Fast Place",
       "key": -1,
-      "toggled": true
+      "toggled": true,
+      "settings": [
+        {
+          "name": "Show",
+          "type": "bool",
+          "value": false
+        }
+      ]
     },
     {
       "moduleName": "Streamer",
@@ -619,13 +811,25 @@
           "name": "Name",
           "type": "text",
           "value": "nigger"
+        },
+        {
+          "name": "Show",
+          "type": "bool",
+          "value": true
         }
       ]
     },
     {
       "moduleName": "Auto Tool",
       "key": -1,
-      "toggled": true
+      "toggled": true,
+      "settings": [
+        {
+          "name": "Show",
+          "type": "bool",
+          "value": false
+        }
+      ]
     },
     {
       "moduleName": "KillSult",
@@ -636,6 +840,11 @@
           "name": "Prefix",
           "type": "text",
           "value": "@"
+        },
+        {
+          "name": "Show",
+          "type": "bool",
+          "value": true
         }
       ]
     },
@@ -653,18 +862,37 @@
           "name": "Pullback",
           "type": "slider",
           "value": 500.0
+        },
+        {
+          "name": "Show",
+          "type": "bool",
+          "value": true
         }
       ]
     },
     {
       "moduleName": "Freecam",
       "key": -1,
-      "toggled": false
+      "toggled": false,
+      "settings": [
+        {
+          "name": "Show",
+          "type": "bool",
+          "value": true
+        }
+      ]
     },
     {
       "moduleName": "Fast Eat",
       "key": -1,
-      "toggled": false
+      "toggled": false,
+      "settings": [
+        {
+          "name": "Show",
+          "type": "bool",
+          "value": true
+        }
+      ]
     },
     {
       "moduleName": "No Fall",
@@ -675,6 +903,11 @@
           "name": "Mode",
           "type": "enum",
           "value": "vanilla"
+        },
+        {
+          "name": "Show",
+          "type": "bool",
+          "value": true
         }
       ]
     },
@@ -692,28 +925,61 @@
           "name": "Sneak",
           "type": "bool",
           "value": true
+        },
+        {
+          "name": "Show",
+          "type": "bool",
+          "value": true
         }
       ]
     },
     {
       "moduleName": "Render Test",
       "key": -1,
-      "toggled": false
+      "toggled": false,
+      "settings": [
+        {
+          "name": "Show",
+          "type": "bool",
+          "value": true
+        }
+      ]
     },
     {
       "moduleName": "Block Overlay",
       "key": -1,
-      "toggled": false
+      "toggled": false,
+      "settings": [
+        {
+          "name": "Show",
+          "type": "bool",
+          "value": false
+        }
+      ]
     },
     {
       "moduleName": "No Scoreboard",
       "key": -1,
-      "toggled": false
+      "toggled": false,
+      "settings": [
+        {
+          "name": "Show",
+          "type": "bool",
+          "value": true
+        }
+      ]
     },
     {
       "moduleName": "Projectiles",
       "key": -1,
-      "toggled": true
+      "toggled": true,
+      "settings": [
+        {
+          "name": "Show",
+          "type": "bool",
+          "value": false
+        }
+      ]
     },
     {
       "moduleName": "Animations",
@@ -723,34 +989,79 @@
         {
           "name": "Mode",
           "type": "enum",
-          "value": "nuf"
+          "value": "swing"
         },
         {
           "name": "Swing Slowdown",
           "type": "slider",
           "value": 1.0
+        },
+        {
+          "name": "Show",
+          "type": "bool",
+          "value": false
         }
       ]
     },
     {
       "moduleName": "Full Bright",
       "key": -1,
-      "toggled": false
+      "toggled": false,
+      "settings": [
+        {
+          "name": "Show",
+          "type": "bool",
+          "value": true
+        }
+      ]
+    },
+    {
+      "moduleName": "Pointer ESP",
+      "key": -1,
+      "toggled": false,
+      "settings": [
+        {
+          "name": "Show",
+          "type": "bool",
+          "value": false
+        }
+      ]
     },
     {
       "moduleName": "DreamESP",
       "key": -1,
-      "toggled": false
+      "toggled": false,
+      "settings": [
+        {
+          "name": "Show",
+          "type": "bool",
+          "value": true
+        }
+      ]
     },
     {
       "moduleName": "Nametags",
       "key": -1,
-      "toggled": false
+      "toggled": false,
+      "settings": [
+        {
+          "name": "Show",
+          "type": "bool",
+          "value": true
+        }
+      ]
     },
     {
       "moduleName": "China Hat",
       "key": -1,
-      "toggled": false
+      "toggled": false,
+      "settings": [
+        {
+          "name": "Show",
+          "type": "bool",
+          "value": true
+        }
+      ]
     },
     {
       "moduleName": "ClickGUI",
@@ -761,6 +1072,11 @@
           "name": "Mode",
           "type": "enum",
           "value": "frame"
+        },
+        {
+          "name": "Show",
+          "type": "bool",
+          "value": true
         }
       ]
     },
@@ -773,13 +1089,25 @@
           "name": "Mode",
           "type": "enum",
           "value": "outline"
+        },
+        {
+          "name": "Show",
+          "type": "bool",
+          "value": false
         }
       ]
     },
     {
       "moduleName": "Tracers",
       "key": -1,
-      "toggled": false
+      "toggled": false,
+      "settings": [
+        {
+          "name": "Show",
+          "type": "bool",
+          "value": true
+        }
+      ]
     },
     {
       "moduleName": "Camera",
@@ -789,7 +1117,7 @@
         {
           "name": "No Hurt Cam",
           "type": "bool",
-          "value": true
+          "value": false
         },
         {
           "name": "No Fire",
@@ -799,7 +1127,12 @@
         {
           "name": "No FOV",
           "type": "bool",
-          "value": true
+          "value": false
+        },
+        {
+          "name": "Show",
+          "type": "bool",
+          "value": false
         }
       ]
     },
@@ -816,7 +1149,12 @@
         {
           "name": "Only Targets",
           "type": "bool",
-          "value": true
+          "value": false
+        },
+        {
+          "name": "Show",
+          "type": "bool",
+          "value": false
         }
       ]
     },
@@ -859,6 +1197,11 @@
           "name": "Width",
           "type": "slider",
           "value": 1.0
+        },
+        {
+          "name": "Show",
+          "type": "bool",
+          "value": false
         }
       ]
     },
@@ -900,7 +1243,7 @@
         {
           "name": "Fade Color",
           "type": "color",
-          "value": -1432026
+          "value": -2538727
         },
         {
           "name": "Custom Font",
@@ -916,6 +1259,11 @@
           "name": "FPS",
           "type": "bool",
           "value": true
+        },
+        {
+          "name": "Show",
+          "type": "bool",
+          "value": false
         }
       ]
     },
@@ -927,10 +1275,15 @@
         {
           "name": "Time",
           "type": "slider",
-          "value": 21000.0
+          "value": 22000.0
         },
         {
           "name": "Rain",
+          "type": "bool",
+          "value": false
+        },
+        {
+          "name": "Show",
           "type": "bool",
           "value": false
         }
@@ -1004,12 +1357,12 @@
         {
           "name": "Same Y",
           "type": "bool",
-          "value": true
+          "value": false
         },
         {
           "name": "No Swing",
           "type": "bool",
-          "value": true
+          "value": false
         },
         {
           "name": "Swapper",
@@ -1019,7 +1372,7 @@
         {
           "name": "Downwards",
           "type": "bool",
-          "value": false
+          "value": true
         },
         {
           "name": "Random Vec",
@@ -1030,13 +1383,25 @@
           "name": "RayCast",
           "type": "bool",
           "value": false
+        },
+        {
+          "name": "Show",
+          "type": "bool",
+          "value": true
         }
       ]
     },
     {
       "moduleName": "No Rotate",
       "key": -1,
-      "toggled": true
+      "toggled": true,
+      "settings": [
+        {
+          "name": "Show",
+          "type": "bool",
+          "value": false
+        }
+      ]
     },
     {
       "moduleName": "Breaker",
@@ -1062,13 +1427,25 @@
           "name": "No Swing",
           "type": "bool",
           "value": true
+        },
+        {
+          "name": "Show",
+          "type": "bool",
+          "value": true
         }
       ]
     },
     {
       "moduleName": "Eater",
       "key": -1,
-      "toggled": true
+      "toggled": true,
+      "settings": [
+        {
+          "name": "Show",
+          "type": "bool",
+          "value": false
+        }
+      ]
     },
     {
       "moduleName": "Timer",
@@ -1079,13 +1456,25 @@
           "name": "Timer Speed",
           "type": "slider",
           "value": 1.1
+        },
+        {
+          "name": "Show",
+          "type": "bool",
+          "value": true
         }
       ]
     },
     {
       "moduleName": "Eagle",
       "key": -1,
-      "toggled": false
+      "toggled": false,
+      "settings": [
+        {
+          "name": "Show",
+          "type": "bool",
+          "value": true
+        }
+      ]
     },
     {
       "moduleName": "cock",

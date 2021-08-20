@@ -76,6 +76,7 @@ public class ModuleManager {
         registerModule(new Projectiles());
         registerModule(new Animations());
         registerModule(new FullBright());
+        registerModule(new PointerESP());
         registerModule(new DreamESP());
         registerModule(new Nametags());
         registerModule(new ChinaHat());

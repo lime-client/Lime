@@ -185,7 +185,7 @@ public class Scaffold extends Module {
 
         boolean isAirUnderPos = isAirBlock(mc.theWorld.getBlockState(new BlockPos(mc.thePlayer.posX, mc.thePlayer.posY - 1, mc.thePlayer.posZ)).getBlock());
 
-        if(isAirUnderPos) {
+        if(isAirUnderPos || (downwards.isEnabled() && Keyboard.isKeyDown(mc.gameSettings.keyBindSneak.getKeyCode()))) {
             x = mc.thePlayer.posX;
             z = mc.thePlayer.posZ;
         }
@@ -227,7 +227,6 @@ public class Scaffold extends Module {
             if((e.isPre() && state.is("pre")) || (!e.isPre() && state.is("post")))
             {
                 int slot = mc.thePlayer.inventory.currentItem;
-
                 int blockSlot = InventoryUtils.hasBlock(blacklistedBlocks, false, true);
 
                 if(blockSlot == -1)
@@ -253,7 +252,6 @@ public class Scaffold extends Module {
                         KillAura.isBlocking = false;
                         break;
                 }
-
                 if(blockData != null && mc.playerController.onPlayerRightClick(mc.thePlayer, mc.theWorld, mc.thePlayer.inventory.getCurrentItem(), blockData.getBlockPos(), blockData.getEnumFacing(), getVec3(blockData)))
                 {
                     if(noSwing.isEnabled())
@@ -280,7 +278,6 @@ public class Scaffold extends Module {
                         }
                     }
                 }
-
                 if(itemSpoof.is("spoof"))
                 {
                     mc.thePlayer.inventory.currentItem = slot;

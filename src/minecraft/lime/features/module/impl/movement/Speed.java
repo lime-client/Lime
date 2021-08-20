@@ -14,7 +14,6 @@ import lime.features.setting.impl.EnumValue;
 import lime.features.setting.impl.SlideValue;
 import lime.utils.movement.HopFriction;
 import lime.utils.movement.MovementUtils;
-import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.network.play.client.C03PacketPlayer;
 import net.minecraft.network.play.server.S08PacketPlayerPosLook;
 import net.minecraft.potion.Potion;
@@ -22,11 +21,10 @@ import net.minecraft.potion.Potion;
 @ModuleData(name = "Speed", category = Category.MOVEMENT)
 public class Speed extends Module {
 
-    private final EnumValue mode = new EnumValue("Mode", this, "Vanilla", "Vanilla", "Vanilla_BHOP", "Verus", "Verus_LOWHOP", "Strafe", "NCP", "Funcraft", "Funcraft_YPORT", "Mineplex", "Mineplex2");
+    private final EnumValue mode = new EnumValue("Mode", this, "Vanilla", "Vanilla", "Vanilla_BHOP", "Verus", "Verus_LOWHOP", "NCP", "Funcraft", "Funcraft_YPORT", "Mineplex");
     private final SlideValue speed = new SlideValue("Speed", this, 0.2, 5, 0.6, 0.1).onlyIf(mode.getSettingName(), "enum", "vanilla_bhop", "vanilla");
-    private double currentDistance, moveSpeed, lastDist;
+    private double moveSpeed, lastDist;
     private int stage;
-    private boolean prevOnGround;
 
     private final HopFriction hopFriction = new HopFriction();
 
@@ -64,12 +62,6 @@ public class Speed extends Module {
                 }
             }
 
-        }
-
-        if(mode.is("strafe")) {
-            MovementUtils.strafe();
-            if(mc.thePlayer.onGround)
-                mc.thePlayer.jump();
         }
 
         if(mode.is("verus") || mode.is("verus_lowhop")) {
@@ -121,38 +113,17 @@ public class Speed extends Module {
     public void onPacket(EventPacket e) {
         if(e.getPacket() instanceof S08PacketPlayerPosLook) {
             lastDist = 0;
+            if(mode.is("mineplex")) {
+                moveSpeed = 0;
+            }
         }
     }
 
     @EventTarget
     public void onMove(EventMove e) {
         if(mode.is("mineplex")) {
-            if(mc.thePlayer.onGround) {
-                e.setY(mc.thePlayer.motionY = 0.42);
-                currentDistance = moveSpeed;
-                prevOnGround = true;
-                moveSpeed = 0;
-            } else {
-                if(prevOnGround) {
-                    moveSpeed = currentDistance + 0.56;
-                    prevOnGround = false;
-                } else {
-                    moveSpeed = lastDist * 0.985;
-                }
-            }
-
-            double max = 0.8;
-            if (KillAura.getEntity() != null) {
-                TargetStrafe targetStrafe2 = (TargetStrafe) Lime.getInstance().getModuleManager().getModuleC(TargetStrafe.class);
-                targetStrafe2.setMoveSpeed(e, Math.max(Math.min(moveSpeed, max), prevOnGround ? 0 : 0.42));
-            } else {
-                MovementUtils.setSpeed(e, Math.max(Math.min(moveSpeed, max), prevOnGround ? 0 : 0.42));
-            }
-        }
-
-        if(mode.is("mineplex2")) {
             if (mc.thePlayer.isMoving() && mc.thePlayer.onGround) {
-                moveSpeed = moveSpeed < 0.5 ? 0.8 : moveSpeed + .4;
+                moveSpeed = moveSpeed < 0.5 ? 0.8 : moveSpeed + .5;
                 e.setY(mc.thePlayer.motionY = 0.42);
                 mc.getNetHandler().addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY + 0.42, mc.thePlayer.posZ, true));
             }
@@ -161,20 +132,57 @@ public class Speed extends Module {
             }
             if(KillAura.getEntity() != null && Lime.getInstance().getModuleManager().getModuleC(TargetStrafe.class).isToggled()) {
                 TargetStrafe targetStrafe = (TargetStrafe) Lime.getInstance().getModuleManager().getModuleC(TargetStrafe.class);
-                targetStrafe.setMoveSpeed(e, Math.max(Math.min(2, moveSpeed -= moveSpeed / 44), 0.4));
+                targetStrafe.setMoveSpeed(e, Math.max(Math.min(5, moveSpeed -= moveSpeed / 44), 0.4));
             } else {
-                MovementUtils.setSpeed(e, Math.max(Math.min(2, moveSpeed -= moveSpeed / 44), 0.4));
+                MovementUtils.setSpeed(e, Math.max(Math.min(5, moveSpeed -= moveSpeed / 44), 0.4));
             }
         }
 
         if(mode.is("funcraft") || mode.is("funcraft_yport") || mode.is("ncp")) {
-            mc.timer.timerSpeed = 1.0866f;
-            mc.thePlayer.motionX *= 1.0199999809265137;
-            mc.thePlayer.motionZ *= 1.0199999809265137;
-            if(mc.thePlayer.ticksExisted % 5 == 0 && (mode.is("funcraft") || mode.is("funcraft_yport"))) {
-                mc.timer.timerSpeed = 1.75f;
+            if (mc.thePlayer.isMoving()) {
+                if(!Lime.getInstance().getModuleManager().getModuleC(Scaffold.class).isToggled()) {
+                    mc.timer.timerSpeed = 1.0866f;
+                    mc.thePlayer.motionX *= 1.0199999809265137;
+                    mc.thePlayer.motionZ *= 1.0199999809265137;
+                    if(mc.thePlayer.ticksExisted % 5 == 0 && mode.is("funcraft")) {
+                        mc.timer.timerSpeed = 1.75f;
+                    }
+                }
+                if(mc.thePlayer.onGround)
+                    this.stage = 1;
+                if(stage == 0) {
+                    this.moveSpeed = 1.35 * MovementUtils.getBaseMoveSpeed() - 0.01;
+                    this.stage = 1;
+                } else if (stage == 1 && mc.thePlayer.onGround) {
+                    stage = 2;
+                    if(!mode.is("funcraft_yport")) mc.thePlayer.motionY = 0.399399995803833;
+                    e.setY(0.399399995803833);
+                    this.moveSpeed *= 2.149;
+                } else if (stage == 2) {
+                    this.stage = 3;
+                    double difference = 0.66 * (this.lastDist - MovementUtils.getBaseMoveSpeed());
+                    this.moveSpeed = this.lastDist - difference;
+                } else {
+                    if (mc.theWorld.getCollidingBoundingBoxes(mc.thePlayer, mc.thePlayer.getEntityBoundingBox().offset(0.0, mc.thePlayer.motionY, 0.0)).size() > 0 || mc.thePlayer.isCollidedVertically) {
+                        this.stage = 0;
+                    }
+                    this.moveSpeed = this.lastDist - this.lastDist / 159.0;
+                    mc.thePlayer.motionY -= 0.0000099;
+                }
+            } else {
+                mc.timer.timerSpeed = 1;
+                this.stage = -1;
+                this.lastDist = 0;
+                this.moveSpeed = MovementUtils.getBaseMoveSpeed();
             }
-            this.hopFriction.updateFriction(e, !mode.is("funcraft_yport"),0.399399995803833, 2.14999, mode.is("funcraft") || mode.is("funcraft_yport") ? Lime.getInstance().getModuleManager().getModuleC(Scaffold.class).isToggled() ? .80 : .66 : .84, 159, lastDist);
+
+            this.moveSpeed = Math.max(this.moveSpeed, MovementUtils.getBaseMoveSpeed());
+            if (KillAura.getEntity() != null) {
+                TargetStrafe targetStrafe2 = (TargetStrafe) Lime.getInstance().getModuleManager().getModuleC(TargetStrafe.class);
+                targetStrafe2.setMoveSpeed(e, moveSpeed);
+            } else {
+                MovementUtils.setSpeed(e, moveSpeed);
+            }
         }
     }
 }

@@ -161,12 +161,14 @@ public class FrameCategory {
             }
             FontManager.ProductSans20.getFont().drawString(module.getName() + (module == bindingModule ? " [Binding...]" : "") + (Keyboard.isKeyDown(29) && Keyboard.isKeyDown(42) && module.getKey() != -1 ? " [" + Keyboard.getKeyName(module.getKey()) + "]" : ""), x + 3, y + 16 + (i * 16), module.isToggled() ? new Color(125, 125, 125).getRGB() : -1, true);
             if(module.hasSettings()) {
-                GL11.glPushMatrix();
-                GL11.glColor4f(1, 1, 1, 1);
-                mc.getTextureManager().bindTexture(!openedModules.isEmpty() && openedModules.contains(module) ? new ResourceLocation("lime/clickgui/frame/expand.png") : new ResourceLocation("lime/clickgui/frame/collapse.png"));
-                GL11.glScalef(0.5f, 0.5f, 0.5f);
-                Gui.drawModalRectWithCustomSizedTexture((x + width - 12) * 2, (y + 20 + (i * 16)) * 2, 0, 0, 16, 10, 16, 10);
-                GL11.glPopMatrix();
+                if(Lime.getInstance().getSettingsManager().getSettingsFromModule(module).size() != 1 && !Lime.getInstance().getSettingsManager().getSettingsFromModule(module).get(0).getSettingName().equalsIgnoreCase("show")) {
+                    GL11.glPushMatrix();
+                    GL11.glColor4f(1, 1, 1, 1);
+                    mc.getTextureManager().bindTexture(!openedModules.isEmpty() && openedModules.contains(module) ? new ResourceLocation("lime/clickgui/frame/expand.png") : new ResourceLocation("lime/clickgui/frame/collapse.png"));
+                    GL11.glScalef(0.5f, 0.5f, 0.5f);
+                    Gui.drawModalRectWithCustomSizedTexture((x + width - 12) * 2, (y + 20 + (i * 16)) * 2, 0, 0, 16, 10, 16, 10);
+                    GL11.glPopMatrix();
+                }
                 if(openedModules.contains(module)) {
                     ArrayList<Component> moduleComponents = this.components.stream().filter(component -> component.setting.getParentModule() == module).collect(Collectors.toCollection(ArrayList::new));
 

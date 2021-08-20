@@ -39,6 +39,10 @@ public abstract class Module {
         hudAnimation.setSpeed(125);
     }
 
+    public Module(String name, Category category) {
+        this(name, -1, category);
+    }
+
     public String getName() {
         return name;
     }

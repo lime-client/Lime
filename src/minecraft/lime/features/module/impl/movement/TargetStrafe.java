@@ -14,15 +14,16 @@ import lime.features.setting.impl.BoolValue;
 import lime.features.setting.impl.SlideValue;
 import lime.utils.combat.CombatUtils;
 import lime.utils.movement.MovementUtils;
+import lime.utils.render.ColorUtils;
 import lime.utils.render.RenderUtils;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.Vec3;
 import org.lwjgl.input.Keyboard;
-import org.lwjgl.opengl.GL11;
+import static org.lwjgl.opengl.GL11.*;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Comparator;
 
@@ -59,33 +60,83 @@ public class TargetStrafe extends Module {
                 thirdPersonView = mc.gameSettings.thirdPersonView;
                 mc.gameSettings.thirdPersonView = 1;
             }
-            EntityLivingBase entity = KillAura.getEntity();
+            glPushMatrix();
+            glDisable(GL_TEXTURE_2D);
+            RenderUtils.startSmooth();
+            glDisable(GL_DEPTH_TEST);
+            glDepthMask(false);
+            glLineWidth(6.0f);
+            glBegin(GL_LINE_STRIP);
 
-            double x = entity.lastTickPosX + (entity.posX - entity.lastTickPosX) * mc.timer.renderPartialTicks - mc.getRenderManager().viewerPosX;
-            double y = entity.lastTickPosY + (entity.posY - entity.lastTickPosY) * mc.timer.renderPartialTicks - mc.getRenderManager().viewerPosY;
-            double z = entity.lastTickPosZ + (entity.posZ - entity.lastTickPosZ) * mc.timer.renderPartialTicks - mc.getRenderManager().viewerPosZ;
-
-            GL11.glPushMatrix();
-            GlStateManager.disableDepth();
-            GlStateManager.enableBlend();
-            GlStateManager.disableTexture2D();
-            GL11.glEnable(GL11.GL_LINE_SMOOTH);
-            RenderUtils.glColor(HUD.getColor(0));
-
-            GL11.glBegin(3);
-            for(int i = 0; i < 361; ++i)
-            {
-                GL11.glVertex3d(x - Math.sin(Math.toRadians(i)) * distance.getCurrent(), y, z + Math.cos(Math.toRadians(i)) * distance.getCurrent());
+            EntityLivingBase entity = mc.thePlayer;
+            if (canMove()) {
+                entity = KillAura.getEntity();
             }
-            GL11.glEnd();
 
-            GL11.glColor4f(1, 1, 1, 1);
-            GlStateManager.resetColor();
-            GL11.glDisable(GL11.GL_LINE_SMOOTH);
-            GlStateManager.enableTexture2D();
-            GlStateManager.disableBlend();
-            GlStateManager.enableDepth();
-            GL11.glPopMatrix();
+            double x = entity.lastTickPosX + (entity.posX - entity.lastTickPosX) * mc.timer.elapsedPartialTicks - mc.getRenderManager().viewerPosX;
+            double y = entity.lastTickPosY + (entity.posY - entity.lastTickPosY) * mc.timer.elapsedPartialTicks - mc.getRenderManager().viewerPosY;
+            double z = entity.lastTickPosZ + (entity.posZ - entity.lastTickPosZ) * mc.timer.elapsedPartialTicks - mc.getRenderManager().viewerPosZ;
+
+
+            int color1 = HUD.getColor(0).getRGB();
+            int sides = (int) (distance.getCurrent() * 10);
+            double pix2 = Math.PI * 2.0D;
+            for (int i = 0; i <= 90; ++i) {
+                RenderUtils.glColor(color1);
+                glVertex3d(x + distance.getCurrent() * Math.cos(i * pix2 / sides), y, z + distance.getCurrent() * Math.sin(i * pix2 / sides));
+            }
+
+            glEnd();
+            glDepthMask(true);
+            glEnable(GL_DEPTH_TEST);
+            RenderUtils.endSmooth();
+            glEnable(GL_TEXTURE_2D);
+            glPopMatrix();
+
+            glPushMatrix();
+            glDisable(GL_TEXTURE_2D);
+            RenderUtils.startSmooth();
+            glDisable(GL_DEPTH_TEST);
+            glDepthMask(false);
+            glLineWidth(2.0f);
+            glBegin(GL_LINE_STRIP);
+
+            float r1 = ((float) 1 / 255) * Color.black.getRed();
+            float g1 = ((float) 1 / 255) * Color.black.getGreen();
+            float b1 = ((float) 1 / 255) * Color.black.getBlue();
+
+            for (int i = 0; i <= 90; ++i) {
+                glColor3f(r1, g1, b1);
+                glVertex3d(x + (distance.getCurrent() + 0.01) * Math.cos(i * pix2 / sides), y, z + (distance.getCurrent() + 0.01) * Math.sin(i * pix2 / sides));
+            }
+
+            glEnd();
+            glDepthMask(true);
+            glEnable(GL_DEPTH_TEST);
+            RenderUtils.endSmooth();
+            glEnable(GL_TEXTURE_2D);
+            glPopMatrix();
+
+            glPushMatrix();
+            glDisable(GL_TEXTURE_2D);
+            RenderUtils.startSmooth();
+            glDisable(GL_DEPTH_TEST);
+            glDepthMask(false);
+            glLineWidth(2.0f);
+            glBegin(GL_LINE_STRIP);
+
+
+            for (int i = 0; i <= 90; ++i) {
+                glColor3f(r1, g1, b1);
+                glVertex3d(x + (distance.getCurrent() - 0.01) * Math.cos(i * pix2 / sides), y, z + (distance.getCurrent() - 0.01) * Math.sin(i * pix2 / sides));
+            }
+
+            glEnd();
+            glDepthMask(true);
+            glEnable(GL_DEPTH_TEST);
+            glEnable(GL_TEXTURE_2D);
+            glPopMatrix();
+            RenderUtils.endSmooth();
         } else {
             if(flag) {
                 flag = false;
@@ -113,12 +164,13 @@ public class TargetStrafe extends Module {
 
         EntityLivingBase target = KillAura.getEntity();
         ArrayList<Vec3> posArrayList = new ArrayList<>();
-        for (float rotation = 0; rotation < (Math.PI * 2); rotation += Math.PI * 2 / 28) {
+        for (float rotation = 0; rotation < (Math.PI * 2); rotation += Math.PI * 2 / (distance.getCurrent() * 10)) {
             final Vec3 pos = new Vec3(distance.getCurrent() * Math.cos(rotation) + target.posX, target.posY, distance.getCurrent() * Math.sin(rotation) + target.posZ);
             posArrayList.add(pos);
         }
 
         arraySize = posArrayList.size();
+        index = Math.min(index, arraySize - 1);
         if(!set) {
             ArrayList<Vec3> posBuffer = new ArrayList<>(posArrayList);
             posBuffer.sort(Comparator.comparingDouble(vec3 -> mc.thePlayer.getDistance(vec3.xCoord, vec3.yCoord, vec3.zCoord)));
@@ -126,7 +178,7 @@ public class TargetStrafe extends Module {
             set = true;
         } else {
             BlockPos blockPos = new BlockPos(posArrayList.get(index).xCoord, posArrayList.get(index).yCoord, posArrayList.get(index).zCoord);
-            indexPos = new Vec3(blockPos.getX() + .5, posArrayList.get(index).yCoord, blockPos.getZ());
+            indexPos = new Vec3(blockPos.getX()+.5, posArrayList.get(index).yCoord, blockPos.getZ()+.5);
 
             if (!(!inVoid(indexPos) && mc.theWorld.getBlockState(new BlockPos(indexPos.xCoord, mc.thePlayer.posY, indexPos.zCoord)).getBlock().getCollisionBoundingBox(mc.theWorld, new BlockPos(indexPos.xCoord, mc.thePlayer.posY, indexPos.zCoord), mc.theWorld.getBlockState(new BlockPos(indexPos.xCoord, mc.thePlayer.posY, indexPos.zCoord))) == null && mc.theWorld.getBlockState(new BlockPos(indexPos.xCoord, mc.thePlayer.posY + 1, indexPos.zCoord)).getBlock().getCollisionBoundingBox(mc.theWorld, new BlockPos(indexPos.xCoord, mc.thePlayer.posY + 1, indexPos.zCoord), mc.theWorld.getBlockState(new BlockPos(indexPos.xCoord, mc.thePlayer.posY + 1, indexPos.zCoord))) == null && mc.theWorld.getBlockState(new BlockPos(indexPos.xCoord, mc.thePlayer.posY + 2, indexPos.zCoord)).getBlock().getCollisionBoundingBox(mc.theWorld, new BlockPos(indexPos.xCoord, mc.thePlayer.posY + 2, indexPos.zCoord), mc.theWorld.getBlockState(new BlockPos(indexPos.xCoord, mc.thePlayer.posY + 2, indexPos.zCoord))) == null)) {
                 direction = -direction;

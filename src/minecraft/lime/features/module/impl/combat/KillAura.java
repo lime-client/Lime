@@ -6,6 +6,7 @@ import lime.core.events.impl.*;
 import lime.features.module.Category;
 import lime.features.module.Module;
 import lime.features.module.ModuleData;
+import lime.features.module.impl.combat.killaura.Multi;
 import lime.features.module.impl.combat.killaura.Single;
 import lime.features.module.impl.render.HUD;
 import lime.features.setting.impl.BoolValue;
@@ -15,30 +16,20 @@ import lime.ui.notifications.Notification;
 import lime.ui.targethud.impl.AstolfoTargetHUD;
 import lime.ui.targethud.impl.LimeTargetHUD;
 import lime.utils.combat.CombatUtils;
-import lime.utils.combat.Rotation;
-import lime.utils.other.MathUtils;
-import lime.utils.other.Timer;
 import lime.utils.render.ColorUtils;
 import lime.utils.render.RenderUtils;
 import lime.utils.time.DeltaTime;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemSword;
-import net.minecraft.network.play.client.C02PacketUseEntity;
-import net.minecraft.network.play.client.C07PacketPlayerDigging;
-import net.minecraft.network.play.client.C08PacketPlayerBlockPlacement;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.EnumFacing;
 import org.lwjgl.opengl.GL11;
 
-import java.awt.*;
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Comparator;
 
@@ -47,7 +38,7 @@ public class KillAura extends Module {
 
     // Settings
     public final EnumValue state = new EnumValue("State", this, "PRE", "PRE", "POST");
-    private final EnumValue mode = new EnumValue("Mode", this, "Single", "Single");
+    private final EnumValue mode = new EnumValue("Mode", this, "Single", "Single", "Multi");
     private final EnumValue priority = new EnumValue("Priority", this, "Distance", "Distance", "Health", "FOV");
     public final EnumValue rotations = new EnumValue("Rotations", this, "Basic", "None", "Basic", "Smooth");
     private final EnumValue targetEsp = new EnumValue("Target ESP", this, "Circle", "None", "Circle");
@@ -67,7 +58,7 @@ public class KillAura extends Module {
     private final BoolValue throughWalls = new BoolValue("Through Walls", this, true);
     public final BoolValue keepSprint = new BoolValue("Keep Sprint", this, true);
     private final BoolValue deathCheck = new BoolValue("Death Check", this, true);
-    //
+    public final BoolValue particles = new BoolValue("Particles", this, false);
 
     public static EntityLivingBase entity;
 
@@ -79,6 +70,7 @@ public class KillAura extends Module {
     public final AstolfoTargetHUD astolfoTargetHUD = new AstolfoTargetHUD();
 
     private final Single single = new Single(this);
+    private final Multi multi = new Multi(this);
 
     @Override
     public void onEnable() {
@@ -88,12 +80,18 @@ public class KillAura extends Module {
         if(mode.is("single")) {
             single.onEnable();
         }
+        if(mode.is("multi")) {
+            multi.onEnable();
+        }
     }
 
     @Override
     public void onDisable() {
         if(mode.is("single")) {
             single.onDisable();
+        }
+        if(mode.is("multi")) {
+            multi.onDisable();
         }
     }
 
@@ -103,9 +101,14 @@ public class KillAura extends Module {
 
     @EventTarget
     public void onMotion(EventMotion e) {
+        this.setSuffix(mode.getSelected());
         if(mode.is("single")) {
             single.onMotion(e);
             entity = single.getTargetedEntity();
+        }
+        if(mode.is("multi")) {
+            multi.onMotion(e);
+            entity = multi.getTargetedEntity();
         }
     }
 
@@ -120,7 +123,14 @@ public class KillAura extends Module {
     @EventTarget
     public void on2D(Event2D e)
     {
-        single.on2D(e);
+        if(autoBlockRange.getCurrent() < range.getCurrent()) {
+            autoBlockRange.setCurrentValue(range.getCurrent());
+        }
+        if(mode.is("single")) {
+            single.on2D(e);
+        } else if(mode.is("multi")) {
+            multi.on2D(e);
+        }
     }
 
     public int getColor(int count) {
@@ -139,6 +149,9 @@ public class KillAura extends Module {
             if(mode.is("single")) {
                 single.on3D(e);
             }
+            if(mode.is("multi")) {
+                multi.on3D(e);
+            }
         }
     }
 
@@ -152,12 +165,9 @@ public class KillAura extends Module {
             down = false;
         }
 
-        final net.minecraft.util.Timer timer = mc.timer;
-        final RenderManager renderManager = mc.getRenderManager();
-
-        final double x = e.lastTickPosX + (e.posX - e.lastTickPosX) * timer.renderPartialTicks - renderManager.renderPosX;
-        final double y = e.lastTickPosY + (e.posY - e.lastTickPosY) * timer.renderPartialTicks - renderManager.renderPosY;
-        final double z = e.lastTickPosZ + (e.posZ - e.lastTickPosZ) * timer.renderPartialTicks - renderManager.renderPosZ;
+        final double x = e.lastTickPosX + (e.posX - e.lastTickPosX) * mc.timer.renderPartialTicks - mc.getRenderManager().renderPosX;
+        final double y = e.lastTickPosY + (e.posY - e.lastTickPosY) * mc.timer.renderPartialTicks - mc.getRenderManager().renderPosY;
+        final double z = e.lastTickPosZ + (e.posZ - e.lastTickPosZ) * mc.timer.renderPartialTicks - mc.getRenderManager().renderPosZ;
 
         GlStateManager.enableBlend();
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
@@ -210,13 +220,13 @@ public class KillAura extends Module {
     public void sortEntities(ArrayList<EntityLivingBase> entities) {
         switch(priority.getSelected().toLowerCase()) {
             case "health":
-                entities.sort(Comparator.comparingDouble(entity -> ((EntityLivingBase) entity).getHealth()));
+                entities.sort(Comparator.comparingDouble(EntityLivingBase::getHealth));
                 break;
             case "distance":
                 entities.sort(Comparator.comparingDouble(entity -> mc.thePlayer.getDistanceToEntity(entity)));
                 break;
             case "fov":
-                entities.sort(Comparator.comparingDouble(entity -> CombatUtils.getRotationDifference((EntityLivingBase) entity)));
+                entities.sort(Comparator.comparingDouble(CombatUtils::getRotationDifference));
                 break;
         }
     }
@@ -226,8 +236,8 @@ public class KillAura extends Module {
         if(entity instanceof EntityPlayer && antiBot.checkBot((EntityPlayer) entity)) return false;
         if(teams.isEnabled() && entity instanceof EntityLivingBase && mc.thePlayer.isOnSameTeam((EntityLivingBase) entity)) return false;
         if((deathCheck.isEnabled() && !entity.isEntityAlive()) || (!mc.thePlayer.canEntityBeSeen(entity) && !throughWalls.isEnabled())) return false;
-        if(autoBlock.is("none") && mc.thePlayer.getDistanceToEntity(entity) >= this.range.getCurrent()) return false;
-        if(!autoBlock.is("none") && mc.thePlayer.getDistanceToEntity(entity) >= this.autoBlockRange.getCurrent()) return false;
+        if(autoBlock.is("none") && mc.thePlayer.getDistanceToEntity(entity) >= this.range.getCurrent() && (autoBlock.is("none") || !hasSword())) return false;
+        if((!autoBlock.is("none") && mc.thePlayer.getDistanceToEntity(entity) >= this.autoBlockRange.getCurrent())) return false;
         return (entity instanceof EntityPlayer && this.players.isEnabled()) || ((entity instanceof EntityVillager || entity instanceof EntityAnimal) && this.passives.isEnabled()) || (entity instanceof EntityMob && this.mobs.isEnabled());
     }
 }

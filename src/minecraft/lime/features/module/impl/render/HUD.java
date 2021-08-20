@@ -55,7 +55,7 @@ public class HUD extends Module {
         if(customFont.isEnabled())
             FontManager.ProductSans20.getFont().drawStringWithShadow(clientName.getText(), 1, 1, -1);
         else
-            mc.fontRendererObj.drawStringWithShadow(clientName.getText(), 3, 3, -1);
+            mc.fontRendererObj.drawStringWithShadow(clientName.getText(), 1, 1, -1);
 
         if(fps.isEnabled()) {
             if(customFont.isEnabled()) {
@@ -85,6 +85,7 @@ public class HUD extends Module {
         int increment = customFont.isEnabled() ? FontManager.ProductSans18.getFont().getFontHeight() : mc.fontRendererObj.FONT_HEIGHT;
         int yCount = 0;
         for (Module module : modules) {
+            if(module.hasSettings() && !((BoolValue) Lime.getInstance().getSettingsManager().getSetting("Show", module)).isEnabled()) continue;
             String moduleName = module.getName() + (suffix.isEnabled() && module.getSuffix() != null && !module.getSuffix().isEmpty() ? "§7 " + module.getSuffix().replace("_", " ") + (customFont.isEnabled() ? " " : "") : "");
 
             // HUD Animation

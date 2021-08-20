@@ -14,7 +14,7 @@ public class Mineplex extends FlightValue {
         super("Mineplex");
     }
 
-    private boolean back, prevOnGround;
+    private boolean back;
     private int stage;
     private double moveSpeed;
 

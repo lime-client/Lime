@@ -1,6 +1,9 @@
 package lime.core;
 
+import lime.features.module.Module;
+import lime.features.setting.impl.BoolValue;
 import lime.scripting.ScriptManager;
+import lime.ui.gui.MainScreen;
 import lime.ui.notifications.utils.NotificationManager;
 import lime.utils.other.file.FileSaver;
 import lime.managers.CommandManager;
@@ -8,6 +11,7 @@ import lime.managers.ModuleManager;
 import lime.features.setting.SettingsManager;
 import lime.ui.clickgui.frame.ClickGUI;
 import lime.utils.other.security.UserCheckThread;
+import net.minecraft.client.Minecraft;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import viamcp.ViaMCP;
@@ -36,6 +40,7 @@ public class Lime {
 
     public void initClient() {
         if(this.userCheckThread == null) return;
+
         Logger logger = LogManager.getLogger("Lime");
 
         logger.info("[LIME] Starting client");
@@ -62,6 +67,10 @@ public class Lime {
         notificationManager = new NotificationManager();
         fileSaver = new FileSaver();
 
+        for (Module module : moduleManager.getModules()) {
+            new BoolValue("Show", module, true);
+        }
+
         if((new File("Lime" + java.io.File.separator + "modules.json").exists()))
             fileSaver.applyJson("Lime" + java.io.File.separator + "modules.json", true);
 
@@ -71,6 +80,8 @@ public class Lime {
         this.scriptManager = new ScriptManager().loadScripts();
 
         new EventListener();
+
+        Minecraft.getMinecraft().displayGuiScreen(new MainScreen());
 
         logger.info("[LIME] Client initialised.");
     }

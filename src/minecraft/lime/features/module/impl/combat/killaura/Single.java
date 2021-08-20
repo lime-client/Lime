@@ -4,12 +4,14 @@ import lime.core.Lime;
 import lime.core.events.impl.Event2D;
 import lime.core.events.impl.Event3D;
 import lime.core.events.impl.EventMotion;
+import lime.features.module.impl.combat.Criticals;
 import lime.features.module.impl.combat.KillAura;
 import lime.features.module.impl.render.HUD;
 import lime.utils.combat.CombatUtils;
 import lime.utils.combat.Rotation;
 import lime.utils.other.MathUtils;
 import lime.utils.other.Timer;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemSword;
@@ -139,10 +141,12 @@ public class Single extends KillAuraMode {
                 mc.getNetHandler().addToSendQueue(new C02PacketUseEntity(entity, C02PacketUseEntity.Action.ATTACK));
                 cpsTimer.reset();
 
-                if(!mc.thePlayer.onGround) {
+                if(!mc.thePlayer.onGround && !Lime.getInstance().getModuleManager().getModuleC(Criticals.class).isToggled() && killAura.particles.isEnabled()) {
                     mc.thePlayer.onCriticalHit(entity);
                 }
-                mc.thePlayer.onEnchantmentCritical(entity);
+                if(killAura.hasSword() && killAura.particles.isEnabled() && EnchantmentHelper.getEnchantmentLevel(16, mc.thePlayer.getHeldItem()) != 0) {
+                    mc.thePlayer.onEnchantmentCritical(entity);
+                }
             }
         } else {
             killAura.limeTargetHUD.resetArmorAnimated();
@@ -180,6 +184,10 @@ public class Single extends KillAuraMode {
             if(entity1 instanceof EntityLivingBase && killAura.isValid(entity1) && entity1 != mc.thePlayer) {
                 entities.add((EntityLivingBase) entity1);
             }
+        }
+
+        if(!entities.isEmpty() && mc.thePlayer.getDistanceToEntity(entities.get(0)) <= killAura.range.getCurrent()) {
+            entities.removeIf(entity -> mc.thePlayer.getDistanceToEntity(entity) > killAura.range.getCurrent());
         }
 
         killAura.sortEntities(entities);

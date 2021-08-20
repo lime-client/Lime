@@ -14,7 +14,6 @@ public class MineplexFast extends FlightValue {
     }
 
     private double moveSpeed;
-    private double lastKnownY = 0, currentY = 0;
 
     @Override
     public void onEnable() {
@@ -23,7 +22,7 @@ public class MineplexFast extends FlightValue {
             this.getFlight().toggle();
             return;
         }
-        moveSpeed = lastKnownY = currentY = 0;
+        moveSpeed = 0.3;
     }
 
     @Override
@@ -33,7 +32,7 @@ public class MineplexFast extends FlightValue {
     @Override
     public void onMove(EventMove e) {
         if(!mc.thePlayer.isMoving() || mc.gameSettings.keyBindJump.isKeyDown() || mc.gameSettings.keyBindSneak.isKeyDown()) {
-            moveSpeed = 0.2;
+            moveSpeed = 0.3;
         }
 
         if(mc.gameSettings.keyBindJump.isKeyDown() || mc.gameSettings.keyBindSneak.isKeyDown()) {
@@ -44,7 +43,7 @@ public class MineplexFast extends FlightValue {
         if(mc.thePlayer.ticksExisted % 6 == 0) {
             e.setY(mc.thePlayer.motionY = 0.2);
             MovementUtils.setSpeed(e, 0);
-            moveSpeed += 0.31;
+            moveSpeed += 0.315;
         } else {
             MovementUtils.setSpeed(e, Math.min(moveSpeed -= moveSpeed / 29.25, 2.5));
         }

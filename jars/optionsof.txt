@@ -32,7 +32,7 @@ ofLagometer:false
 ofShowFps:false
 ofAutoSaveTicks:4000
 ofBetterGrass:2
-ofConnectedTextures:2
+ofConnectedTextures:3
 ofWeather:true
 ofSky:false
 ofStars:true
