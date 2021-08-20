@@ -4,13 +4,15 @@ import lime.core.events.EventTarget;
 import lime.core.events.impl.EventUpdate;
 import lime.features.module.Category;
 import lime.features.module.Module;
-import lime.features.module.ModuleData;
 import net.minecraft.client.gui.GuiChat;
 import net.minecraft.client.settings.KeyBinding;
 import org.lwjgl.input.Keyboard;
 
-@ModuleData(name = "Inventory Move", category = Category.PLAYER)
 public class InventoryMove extends Module {
+    public InventoryMove() {
+        super("Inventory Move", Category.PLAYER);
+    }
+
     private final KeyBinding[] keyBindings = new KeyBinding[] {
             mc.gameSettings.keyBindJump,
             mc.gameSettings.keyBindSneak,

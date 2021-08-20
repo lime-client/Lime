@@ -4,7 +4,6 @@ import lime.core.events.EventTarget;
 import lime.core.events.impl.Event3D;
 import lime.features.module.Category;
 import lime.features.module.Module;
-import lime.features.module.ModuleData;
 import lime.utils.render.RenderUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -17,8 +16,11 @@ import org.lwjgl.util.glu.Cylinder;
 import java.util.ArrayList;
 import java.util.List;
 
-@ModuleData(name = "Projectiles", category = Category.RENDER)
 public class Projectiles extends Module {
+
+    public Projectiles() {
+        super("Projectiles", Category.RENDER);
+    }
 
     @EventTarget
     public void on3D(Event3D e) {

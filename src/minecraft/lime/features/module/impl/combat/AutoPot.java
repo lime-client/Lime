@@ -5,7 +5,6 @@ import lime.core.events.Priority;
 import lime.core.events.impl.EventMotion;
 import lime.features.module.Category;
 import lime.features.module.Module;
-import lime.features.module.ModuleData;
 import lime.features.setting.impl.BoolValue;
 import lime.features.setting.impl.SlideValue;
 import lime.utils.movement.MovementUtils;
@@ -23,8 +22,11 @@ import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 
-@ModuleData(name = "Auto Pot", category = Category.COMBAT)
 public class AutoPot extends Module {
+
+    public AutoPot() {
+        super("Auto Pot", Category.COMBAT);
+    }
 
     private static class ItemPot {
         private final ItemStack itemStack;

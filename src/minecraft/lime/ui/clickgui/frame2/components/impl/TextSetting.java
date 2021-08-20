@@ -1,11 +1,14 @@
 package lime.ui.clickgui.frame2.components.impl;
 
 import lime.features.setting.SettingValue;
+import lime.features.setting.impl.TextValue;
 import lime.managers.FontManager;
 import lime.ui.clickgui.frame2.components.Component;
 import lime.ui.clickgui.frame2.components.FrameModule;
+import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiScreen;
 import org.apache.commons.lang3.StringUtils;
+import org.lwjgl.opengl.GL11;
 
 import static lime.ui.clickgui.frame2.Priority.*;
 
@@ -25,13 +28,23 @@ public class TextSetting extends Component {
 
     @Override
     public void drawScreen(int mouseX, int mouseY) {
+        GL11.glPushMatrix();
+        GL11.glScalef(0.9f, 0.9f, 0);
+        FontManager.ProductSans18.getFont().drawStringWithShadow(getSetting().getSettingName(), (x + 5) / 0.9f, y / 0.9F, -1);
+        GL11.glPopMatrix();
 
+        Gui.drawRect(x + 6, y + 18, x + defaultWidth - 3, y + 19, -1);
+        FontManager.ProductSans20.getFont().drawStringWithShadow(text + (focused ? System.currentTimeMillis() / 500 % 2 == 0 ? "_" : "" : ""), (x + 5), y + 6, -1);
+
+        ((TextValue) getSetting()).setText(text);
     }
 
     @Override
     public boolean mouseClicked(int mouseX, int mouseY, int mouseButton) {
-
-        return focused = GuiScreen.hover(x + 5, y, mouseX, mouseY, defaultWidth - 10, getOffset());
+        if(mouseButton == 0) {
+            focused = GuiScreen.hover(x + 5, y, mouseX, mouseY, defaultWidth - 3, getOffset());
+        }
+        return focused;
     }
 
     @Override
@@ -52,10 +65,15 @@ public class TextSetting extends Component {
 
     @Override
     public int getOffset() {
-        return ((int) (FontManager.ProductSans20.getFont().getFontHeight() / 2F) + 15);
+        return 20;
     }
 
     private boolean isAscii(char c) {
-        return c < 128;
+        char[] allowedChars = "abcdefghijklmnopqrstuvwxyz1234567890&~#'{([-|`_\\ç^@)]=},;:!?./§".toCharArray();
+        for (char allowedChar : allowedChars) {
+            if(c == allowedChar)
+                return true;
+        }
+        return false;
     }
 }

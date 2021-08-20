@@ -7,7 +7,6 @@ import lime.core.events.impl.EventMove;
 import lime.core.events.impl.EventPacket;
 import lime.features.module.Category;
 import lime.features.module.Module;
-import lime.features.module.ModuleData;
 import lime.features.module.impl.combat.KillAura;
 import lime.features.module.impl.world.Scaffold;
 import lime.features.setting.impl.EnumValue;
@@ -18,8 +17,11 @@ import net.minecraft.network.play.client.C03PacketPlayer;
 import net.minecraft.network.play.server.S08PacketPlayerPosLook;
 import net.minecraft.potion.Potion;
 
-@ModuleData(name = "Speed", category = Category.MOVEMENT)
 public class Speed extends Module {
+
+    public Speed() {
+        super("Speed", Category.MOVEMENT);
+    }
 
     private final EnumValue mode = new EnumValue("Mode", this, "Vanilla", "Vanilla", "Vanilla_BHOP", "Verus", "Verus_LOWHOP", "NCP", "Funcraft", "Funcraft_YPORT", "Mineplex");
     private final SlideValue speed = new SlideValue("Speed", this, 0.2, 5, 0.6, 0.1).onlyIf(mode.getSettingName(), "enum", "vanilla_bhop", "vanilla");

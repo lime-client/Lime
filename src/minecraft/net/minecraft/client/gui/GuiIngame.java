@@ -9,6 +9,7 @@ import java.util.Random;
 
 import lime.core.events.EventBus;
 import lime.core.events.impl.Event2D;
+import lime.core.events.impl.EventCrosshair;
 import lime.core.events.impl.EventScoreboard;
 import lime.managers.FontManager;
 import lime.utils.render.ColorUtils;
@@ -171,9 +172,13 @@ public class GuiIngame extends Gui
 
         if (this.showCrosshair() && this.mc.gameSettings.thirdPersonView < 1)
         {
-            GlStateManager.tryBlendFuncSeparate(775, 769, 1, 0);
-            GlStateManager.enableAlpha();
-            this.drawTexturedModalRect(i / 2 - 7, j / 2 - 7, 0, 0, 16, 16);
+            EventCrosshair e = new EventCrosshair();
+            EventBus.INSTANCE.call(e);
+            if(!e.isCanceled()) {
+                GlStateManager.tryBlendFuncSeparate(775, 769, 1, 0);
+                GlStateManager.enableAlpha();
+                this.drawTexturedModalRect(i / 2 - 7, j / 2 - 7, 0, 0, 16, 16);
+            }
         }
 
         GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);

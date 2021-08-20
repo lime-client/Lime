@@ -82,15 +82,17 @@ public class FrameModule {
         }
 
         if(module.hasSettings()) {
-            GL11.glPushMatrix();
-            GlStateManager.enableBlend();
-            GL11.glColor4f(1, 1, 1, 1);
-            GL11.glScalef(0.5f, 0.5f, 0.5f);
-            RenderUtils.drawImage(opened ? new ResourceLocation("lime/clickgui/frame/expand.png") : new ResourceLocation("lime/clickgui/frame/collapse.png"), (x + defaultWidth - 12) * 2, (y + 5) * 2, 16, 10, true);
-            GL11.glColor4f(1, 1, 1, 1);
-            GlStateManager.resetColor();
-            GlStateManager.disableBlend();
-            GL11.glPopMatrix();
+            if(Lime.getInstance().getSettingsManager().getSettingsFromModule(module).size() != 1 && !Lime.getInstance().getSettingsManager().getSettingsFromModule(module).get(0).getSettingName().equalsIgnoreCase("show")) {
+                GL11.glPushMatrix();
+                GlStateManager.enableBlend();
+                GL11.glColor4f(1, 1, 1, 1);
+                GL11.glScalef(0.5f, 0.5f, 0.5f);
+                RenderUtils.drawImage(opened ? new ResourceLocation("lime/clickgui/frame/expand.png") : new ResourceLocation("lime/clickgui/frame/collapse.png"), (x + defaultWidth - 12) * 2, (y + 5) * 2, 16, 10, true);
+                GL11.glColor4f(1, 1, 1, 1);
+                GlStateManager.resetColor();
+                GlStateManager.disableBlend();
+                GL11.glPopMatrix();
+            }
         }
 
         FontManager.ProductSans20.getFont().drawString(module.getName(), x+3, y + (moduleHeight / 2F - (FontManager.ProductSans20.getFont().getFontHeight() / 2F)), module.isToggled() ? new Color(stringColor).darker().darker().getRGB() : stringColor, true);
@@ -135,9 +137,9 @@ public class FrameModule {
             return true;
         }
 
-        if(GuiScreen.hover(owner.getX(), owner.getY(), mouseX, mouseY, defaultWidth, owner.getHeight()) && opened) {
+        if(opened) {
             for (Component component : this.components) {
-                if(!component.getSetting().isHide() && component.mouseClicked(mouseX, mouseY, mouseButton))
+                if((GuiScreen.hover(owner.getX(), owner.getY(), mouseX, mouseY, defaultWidth, owner.getHeight()) || component instanceof TextSetting) && !component.getSetting().isHide() && component.mouseClicked(mouseX, mouseY, mouseButton))
                     return true;
             }
         }

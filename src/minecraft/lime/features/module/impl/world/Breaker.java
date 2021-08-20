@@ -3,16 +3,13 @@ package lime.features.module.impl.world;
 import lime.core.events.EventTarget;
 import lime.core.events.impl.Event3D;
 import lime.core.events.impl.EventMotion;
-import lime.core.events.impl.EventUpdate;
 import lime.features.module.Category;
 import lime.features.module.Module;
-import lime.features.module.ModuleData;
 import lime.features.setting.impl.BoolValue;
 import lime.features.setting.impl.SlideValue;
 import lime.utils.combat.CombatUtils;
 import lime.utils.combat.Rotation;
 import lime.utils.render.RenderUtils;
-import net.minecraft.block.BlockBed;
 import net.minecraft.init.Blocks;
 import net.minecraft.network.play.client.C0APacketAnimation;
 import net.minecraft.util.*;
@@ -21,11 +18,13 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.Comparator;
 
-@ModuleData(name = "Breaker", category = Category.WORLD)
 public class Breaker extends Module {
 
+    public Breaker() {
+        super("Breaker", Category.WORLD);
+    }
+
     private final SlideValue range = new SlideValue("Range", this, 1, 6, 4, 0.5);
-    private final BoolValue throughWalls = new BoolValue("Through Walls", this, true);
     private final BoolValue rotations = new BoolValue("Rotations", this, true);
     private final BoolValue noSwing = new BoolValue("No Swing", this, true);
 

@@ -8,10 +8,12 @@ import lime.utils.render.RenderUtils;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.GlStateManager;
+import org.lwjgl.BufferUtils;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
+import java.nio.IntBuffer;
 
 public class ColorSetting extends Component {
 
@@ -29,9 +31,6 @@ public class ColorSetting extends Component {
     private Color currentRGB;
     private Color color;
 
-    private Point colorPoint;
-    private Point rgbPoint;
-
     private Point minecraftColorPoint;
     private Point minecraftRGBPoint;
 
@@ -41,22 +40,20 @@ public class ColorSetting extends Component {
 
         //GuiScreen.hover(x + 30, y + 4, mouseX, mouseY, 100, 100)
         if(GuiScreen.hover(x + 2, y + 114, mouseX, mouseY, 110, 15) && Mouse.isButtonDown(0)) {
-            rgbPoint = MouseInfo.getPointerInfo().getLocation();
             minecraftRGBPoint = new Point(mouseX, mouseY);
-            this.currentRGB = this.robot.getPixelColor(this.rgbPoint.x, this.rgbPoint.y);
+            this.currentRGB = new Color(getColorUnderMouse());
         }
 
         if(GuiScreen.hover(x + 2, y + 4, mouseX, mouseY, 110, 100) && Mouse.isButtonDown(0)) {
-            colorPoint = MouseInfo.getPointerInfo().getLocation();
             minecraftColorPoint = new Point(mouseX, mouseY);
-            this.color = this.robot.getPixelColor(this.colorPoint.x, this.colorPoint.y);
+            this.color = new Color(getColorUnderMouse());
             ((ColorValue) setting).setColor(color.getRGB());
         }
 
-        if(rgbPoint != null) {
+        if(minecraftRGBPoint != null) {
             RenderUtils.drawCircle(minecraftRGBPoint.x, y + 114, 3, 83886080, Color.black.getRGB());
         }
-        if(colorPoint != null) {
+        if(minecraftColorPoint != null) {
             RenderUtils.drawCircle(minecraftColorPoint.x, minecraftColorPoint.y, 3, 83886080, Color.black.getRGB());
         }
 
@@ -65,6 +62,14 @@ public class ColorSetting extends Component {
             FontManager.ProductSans20.getFont().drawString(this.setting.getSettingName(), mouseX + 6, mouseY - 3, -1);
         }
 
+    }
+
+    public int getColorUnderMouse() {
+        final IntBuffer intbuffer = BufferUtils.createIntBuffer(1);
+        final int[] ints = { 0 };
+        GL11.glReadPixels(Mouse.getX(), Mouse.getY(), 1, 1, 32993, 33639, intbuffer);
+        intbuffer.get(ints);
+        return ints[0];
     }
 
     @Override

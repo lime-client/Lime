@@ -16,7 +16,7 @@ import java.util.Date;
 public class Config extends Command {
     @Override
     public String getUsage() {
-        return "cfg load/save/delete/list <name>";
+        return "config load/save/delete/list <name>";
     }
 
     @Override

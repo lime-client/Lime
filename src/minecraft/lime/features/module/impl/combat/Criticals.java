@@ -4,15 +4,16 @@ import lime.core.events.EventTarget;
 import lime.core.events.impl.EventPacket;
 import lime.features.module.Category;
 import lime.features.module.Module;
-import lime.features.module.ModuleData;
 import lime.features.setting.impl.EnumValue;
 import lime.utils.other.Timer;
 import net.minecraft.network.play.client.C02PacketUseEntity;
 import net.minecraft.network.play.client.C03PacketPlayer;
-import org.apache.commons.lang3.StringUtils;
 
-@ModuleData(name = "Criticals", category = Category.COMBAT)
 public class Criticals extends Module {
+
+    public Criticals() {
+        super("Criticals", Category.COMBAT);
+    }
 
     private final EnumValue mode = new EnumValue("Mode", this, "Packet", "Packet");
 

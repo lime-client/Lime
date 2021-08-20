@@ -4,7 +4,6 @@ import lime.core.events.EventTarget;
 import lime.core.events.impl.EventUpdate;
 import lime.features.module.Category;
 import lime.features.module.Module;
-import lime.features.module.ModuleData;
 import lime.utils.other.InventoryUtils;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
@@ -15,8 +14,11 @@ import net.minecraft.network.play.client.C07PacketPlayerDigging;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 
-@ModuleData(name = "Eater", category = Category.WORLD)
 public class Eater extends Module {
+
+    public Eater() {
+        super("Eater", Category.WORLD);
+    }
 
     @EventTarget
     public void onUpdate(EventUpdate e){

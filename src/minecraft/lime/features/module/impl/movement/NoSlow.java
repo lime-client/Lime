@@ -5,16 +5,17 @@ import lime.core.events.impl.EventMotion;
 import lime.core.events.impl.EventSlow;
 import lime.features.module.Category;
 import lime.features.module.Module;
-import lime.features.module.ModuleData;
 import lime.features.setting.impl.EnumValue;
 import net.minecraft.network.play.client.C07PacketPlayerDigging;
 import net.minecraft.network.play.client.C08PacketPlayerBlockPlacement;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
-import org.apache.commons.lang3.StringUtils;
 
-@ModuleData(name = "No Slow", category = Category.MOVEMENT)
 public class NoSlow extends Module {
+
+    public NoSlow() {
+        super("No Slow", Category.MOVEMENT);
+    }
 
     private final EnumValue mode = new EnumValue("Mode", this, "Vanilla", "Vanilla", "NCP");
 

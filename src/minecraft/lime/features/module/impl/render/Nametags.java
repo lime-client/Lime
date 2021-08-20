@@ -6,7 +6,6 @@ import lime.core.events.impl.Event2D;
 import lime.core.events.impl.EventLivingLabel;
 import lime.features.module.Category;
 import lime.features.module.Module;
-import lime.features.module.ModuleData;
 import lime.utils.render.RenderUtils;
 import net.minecraft.client.entity.EntityOtherPlayerMP;
 import net.minecraft.client.gui.Gui;
@@ -34,8 +33,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-@ModuleData(name = "Nametags", category = Category.RENDER)
 public class Nametags extends Module {
+
+    public Nametags() {
+        super("Nametags", Category.RENDER);
+    }
+
     @EventTarget
     public void on2D(Event2D e) {
         drawNameTags(e);

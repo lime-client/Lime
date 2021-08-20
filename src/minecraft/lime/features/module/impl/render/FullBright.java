@@ -4,12 +4,15 @@ import lime.core.events.EventTarget;
 import lime.core.events.impl.EventUpdate;
 import lime.features.module.Category;
 import lime.features.module.Module;
-import lime.features.module.ModuleData;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 
-@ModuleData(name = "Full Bright", category = Category.RENDER)
 public class FullBright extends Module {
+
+    public FullBright() {
+        super("Full Bright", Category.RENDER);
+    }
+
     @Override
     public void onDisable() {
         mc.thePlayer.removePotionEffectClient(Potion.nightVision.getId());

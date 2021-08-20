@@ -4,10 +4,7 @@ import lime.core.events.EventTarget;
 import lime.core.events.impl.Event3D;
 import lime.features.module.Category;
 import lime.features.module.Module;
-import lime.features.module.ModuleData;
 import lime.features.setting.impl.EnumValue;
-import lime.utils.render.ColorUtils;
-import lime.utils.render.RenderUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
@@ -15,17 +12,17 @@ import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.client.shader.Framebuffer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityChest;
-import net.minecraft.util.BlockPos;
 import org.lwjgl.opengl.EXTFramebufferObject;
 import org.lwjgl.opengl.EXTPackedDepthStencil;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
 
-@ModuleData(name = "Chest ESP", category = Category.RENDER)
 public class ChestESP extends Module {
 
-    private final EnumValue mode = new EnumValue("Mode", this, "Outline", "Outline", "Fill");
+    public ChestESP() {
+        super("Chest ESP", Category.RENDER);
+    }
 
     @EventTarget
     public void on3D(Event3D e) {

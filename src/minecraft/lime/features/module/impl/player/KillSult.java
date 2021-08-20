@@ -4,10 +4,8 @@ import lime.core.events.EventTarget;
 import lime.core.events.impl.EventPacket;
 import lime.features.module.Category;
 import lime.features.module.Module;
-import lime.features.module.ModuleData;
 import lime.features.setting.impl.TextValue;
 import lime.utils.other.ChatUtils;
-import net.minecraft.network.play.client.C01PacketChatMessage;
 import net.minecraft.network.play.server.S02PacketChat;
 import org.apache.commons.io.FileUtils;
 
@@ -16,14 +14,13 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.concurrent.ThreadLocalRandom;
-
-@ModuleData(name = "KillSult", category = Category.PLAYER)
 public class KillSult extends Module {
 
     private final TextValue prefix = new TextValue("Prefix", this, "@");
     public static ArrayList<String> killsults = new ArrayList<>();
 
     public KillSult() {
+        super("KillSult", Category.PLAYER);
         if(!new File("Lime" + File.separator + "killsults.txt").exists()) {
             try {
                 FileUtils.write(new File("Lime" + File.separator + "killsults.txt"), String.join("\n", getMessages()));

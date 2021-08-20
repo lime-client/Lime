@@ -7,7 +7,6 @@ import lime.core.events.impl.EventMove;
 import lime.core.events.impl.EventPacket;
 import lime.features.module.Category;
 import lime.features.module.Module;
-import lime.features.module.ModuleData;
 import lime.features.setting.impl.EnumValue;
 import lime.features.setting.impl.SlideValue;
 import lime.ui.notifications.Notification;
@@ -15,7 +14,6 @@ import lime.utils.movement.MovementUtils;
 import lime.utils.other.InventoryUtils;
 import lime.utils.other.PlayerUtils;
 import net.minecraft.block.BlockAir;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBow;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.play.client.*;
@@ -23,8 +21,12 @@ import net.minecraft.network.play.server.S12PacketEntityVelocity;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 
-@ModuleData(name = "Long Jump", category = Category.MOVEMENT)
 public class LongJump extends Module {
+
+    public LongJump() {
+        super("Long Jump", Category.MOVEMENT);
+    }
+
     private final EnumValue mode = new EnumValue("Mode", this, "Vanilla", "Vanilla", "Funcraft", "NCP_Bow", "Verus", "Verus_Bow", "Kokscraft");
     private final SlideValue speed = new SlideValue("Speed", this, 1, 9, 5, 0.5).onlyIf(mode.getSettingName(), "enum", "verus_bow", "verus");
 

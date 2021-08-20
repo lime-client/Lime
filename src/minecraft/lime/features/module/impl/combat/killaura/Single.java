@@ -186,11 +186,13 @@ public class Single extends KillAuraMode {
             }
         }
 
+        killAura.sortEntities(entities, true);
+
         if(!entities.isEmpty() && mc.thePlayer.getDistanceToEntity(entities.get(0)) <= killAura.range.getCurrent()) {
             entities.removeIf(entity -> mc.thePlayer.getDistanceToEntity(entity) > killAura.range.getCurrent());
         }
 
-        killAura.sortEntities(entities);
+        killAura.sortEntities(entities, false);
 
         if(entities.isEmpty()) return null;
         return entities.get(0);

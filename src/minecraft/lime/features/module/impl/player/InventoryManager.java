@@ -4,7 +4,6 @@ import lime.core.events.EventTarget;
 import lime.core.events.impl.EventMotion;
 import lime.features.module.Category;
 import lime.features.module.Module;
-import lime.features.module.ModuleData;
 import lime.features.setting.impl.BoolValue;
 import lime.features.setting.impl.EnumValue;
 import lime.features.setting.impl.SlideValue;
@@ -20,8 +19,11 @@ import java.util.Comparator;
 
 import static lime.utils.other.InventoryUtils.*;
 
-@ModuleData(name = "Inventory Manager", category = Category.PLAYER)
 public class InventoryManager extends Module {
+
+    public InventoryManager() {
+        super("Inventory Manager", Category.PLAYER);
+    }
 
     private final EnumValue mode = new EnumValue("Mode", this, "Normal", "Normal", "OpenInv");
     private final SlideValue delay = new SlideValue("Delay", this, 5, 100, 80, 5);

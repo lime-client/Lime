@@ -20,16 +20,6 @@ public abstract class Module {
 
     private boolean isToggled = false;
 
-    public Module()
-    {
-        ModuleData moduleData = this.getClass().getAnnotation(ModuleData.class);
-        this.name = moduleData.name();
-        this.category = moduleData.category();
-        this.key = moduleData.key();
-        this.hudAnimation.setEase(Easing.CUBIC_OUT);
-        hudAnimation.setSpeed(125);
-    }
-
     public Module(String name, int key, Category category)
     {
         this.name = name;

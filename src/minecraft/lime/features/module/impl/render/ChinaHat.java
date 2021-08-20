@@ -4,14 +4,17 @@ import lime.core.events.EventTarget;
 import lime.core.events.impl.Event3D;
 import lime.features.module.Category;
 import lime.features.module.Module;
-import lime.features.module.ModuleData;
 import lime.utils.render.ColorUtils;
 import lime.utils.render.RenderUtils;
 import net.minecraft.client.renderer.GlStateManager;
 import org.lwjgl.opengl.GL11;
 
-@ModuleData(name = "China Hat", category = Category.RENDER)
 public class ChinaHat extends Module {
+
+    public ChinaHat() {
+        super("China Hat", Category.RENDER);
+    }
+
     @EventTarget
     public void on3D(Event3D e) {
         GL11.glPushMatrix();
@@ -31,6 +34,13 @@ public class ChinaHat extends Module {
         for(int i = 0; i < 361; ++i) {
             RenderUtils.glColor(ColorUtils.setAlpha(HUD.getColor(0), 150));
             GL11.glVertex3d(x, y + mc.thePlayer.height + 0.6, z);
+            GL11.glVertex3d(x - Math.sin(Math.toRadians(i)), y + mc.thePlayer.height + 0.1, z + Math.cos(Math.toRadians(i)));
+
+        }
+        GL11.glEnd();
+        GL11.glBegin(GL11.GL_LINE_STRIP);
+        for(int i = 0; i < 361; ++i) {
+            RenderUtils.glColor(ColorUtils.setAlpha(HUD.getColor(0).darker(), 150));
             GL11.glVertex3d(x - Math.sin(Math.toRadians(i)), y + mc.thePlayer.height + 0.1, z + Math.cos(Math.toRadians(i)));
 
         }

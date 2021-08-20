@@ -5,7 +5,6 @@ import lime.core.events.EventTarget;
 import lime.core.events.impl.*;
 import lime.features.module.Category;
 import lime.features.module.Module;
-import lime.features.module.ModuleData;
 import lime.features.module.impl.combat.KillAura;
 import lime.features.setting.impl.BoolValue;
 import lime.features.setting.impl.EnumValue;
@@ -35,8 +34,11 @@ import java.util.Arrays;
 import java.util.List;
 
 
-@ModuleData(name = "Scaffold", category = Category.WORLD)
 public class Scaffold extends Module {
+
+    public Scaffold() {
+        super("Scaffold", Category.WORLD);
+    }
 
     private static final List<Block> blacklistedBlocks = Arrays.asList(
             Blocks.air, Blocks.water, Blocks.flowing_water, Blocks.lava, Blocks.flowing_lava,

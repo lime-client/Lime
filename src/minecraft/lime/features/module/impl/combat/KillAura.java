@@ -5,7 +5,6 @@ import lime.core.events.EventTarget;
 import lime.core.events.impl.*;
 import lime.features.module.Category;
 import lime.features.module.Module;
-import lime.features.module.ModuleData;
 import lime.features.module.impl.combat.killaura.Multi;
 import lime.features.module.impl.combat.killaura.Single;
 import lime.features.module.impl.render.HUD;
@@ -33,8 +32,11 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Comparator;
 
-@ModuleData(name = "Kill Aura", category = Category.COMBAT)
 public class KillAura extends Module {
+
+    public KillAura() {
+        super("Kill Aura", Category.COMBAT);
+    }
 
     // Settings
     public final EnumValue state = new EnumValue("State", this, "PRE", "PRE", "POST");
@@ -217,7 +219,7 @@ public class KillAura extends Module {
         return mc.thePlayer.getHeldItem() != null && mc.thePlayer.getHeldItem().getItem() instanceof ItemSword;
     }
 
-    public void sortEntities(ArrayList<EntityLivingBase> entities) {
+    public void sortEntities(ArrayList<EntityLivingBase> entities, boolean distance) {
         switch(priority.getSelected().toLowerCase()) {
             case "health":
                 entities.sort(Comparator.comparingDouble(EntityLivingBase::getHealth));
@@ -229,15 +231,21 @@ public class KillAura extends Module {
                 entities.sort(Comparator.comparingDouble(CombatUtils::getRotationDifference));
                 break;
         }
+
+        if(distance) {
+            entities.sort(Comparator.comparingDouble(entity -> mc.thePlayer.getDistanceToEntity(entity)));
+        }
     }
 
     public boolean isValid(Entity entity) {
         AntiBot antiBot = (AntiBot) Lime.getInstance().getModuleManager().getModuleC(AntiBot.class);
         if(entity instanceof EntityPlayer && antiBot.checkBot((EntityPlayer) entity)) return false;
+        if(Lime.getInstance().getFriendManager().isFriend(entity)) return false;
         if(teams.isEnabled() && entity instanceof EntityLivingBase && mc.thePlayer.isOnSameTeam((EntityLivingBase) entity)) return false;
         if((deathCheck.isEnabled() && !entity.isEntityAlive()) || (!mc.thePlayer.canEntityBeSeen(entity) && !throughWalls.isEnabled())) return false;
-        if(autoBlock.is("none") && mc.thePlayer.getDistanceToEntity(entity) >= this.range.getCurrent() && (autoBlock.is("none") || !hasSword())) return false;
+        if(autoBlock.is("none") && mc.thePlayer.getDistanceToEntity(entity) >= this.range.getCurrent()) return false;
         if((!autoBlock.is("none") && mc.thePlayer.getDistanceToEntity(entity) >= this.autoBlockRange.getCurrent())) return false;
+        if(!autoBlock.is("none") && mc.thePlayer.getDistanceToEntity(entity) <= this.autoBlockRange.getCurrent() && !hasSword()) return false;
         return (entity instanceof EntityPlayer && this.players.isEnabled()) || ((entity instanceof EntityVillager || entity instanceof EntityAnimal) && this.passives.isEnabled()) || (entity instanceof EntityMob && this.mobs.isEnabled());
     }
 }

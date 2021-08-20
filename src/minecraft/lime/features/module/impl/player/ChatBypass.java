@@ -4,14 +4,16 @@ import lime.core.events.EventTarget;
 import lime.core.events.impl.EventPacket;
 import lime.features.module.Category;
 import lime.features.module.Module;
-import lime.features.module.ModuleData;
 import net.minecraft.network.play.client.C01PacketChatMessage;
 
-import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
-@ModuleData(name = "Chat Bypass", category = Category.PLAYER)
 public class ChatBypass extends Module {
+
+    public ChatBypass() {
+        super("Chat Bypass", Category.PLAYER);
+    }
+
     @EventTarget
     public void onPacket(EventPacket e) {
         if(e.getPacket() instanceof C01PacketChatMessage) {

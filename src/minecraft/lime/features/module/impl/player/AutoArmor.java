@@ -1,16 +1,12 @@
 package lime.features.module.impl.player;
 
 import lime.core.events.EventTarget;
-import lime.core.events.impl.EventMotion;
 import lime.core.events.impl.EventUpdate;
 import lime.features.module.Category;
 import lime.features.module.Module;
-import lime.features.module.ModuleData;
 import lime.features.setting.impl.EnumValue;
 import lime.features.setting.impl.SlideValue;
 import lime.utils.other.InventoryUtils;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiChat;
 import net.minecraft.client.gui.inventory.GuiInventory;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -18,10 +14,11 @@ import net.minecraft.inventory.ContainerChest;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 
-import java.lang.reflect.Field;
-
-@ModuleData(name = "Auto Armor", category = Category.PLAYER)
 public class AutoArmor extends Module {
+
+    public AutoArmor() {
+        super("Auto Armor", Category.PLAYER);
+    }
 
     private final EnumValue mode = new EnumValue("Mode", this, "Normal", "Normal", "OpenInv");
     private final SlideValue delay = new SlideValue("Delay", this, 0, 100, 50, 5);

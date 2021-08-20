@@ -4,7 +4,6 @@ import lime.core.events.EventTarget;
 import lime.core.events.impl.*;
 import lime.features.module.Category;
 import lime.features.module.Module;
-import lime.features.module.ModuleData;
 import lime.features.module.impl.movement.flights.FlightValue;
 import lime.features.module.impl.movement.flights.impl.*;
 import lime.features.setting.impl.BoolValue;
@@ -15,7 +14,6 @@ import lime.utils.render.Graph;
 
 import java.util.ArrayList;
 
-@ModuleData(name = "Flight", category = Category.MOVEMENT)
 public class Flight extends Module {
 
     private final Graph speedGraph = new Graph("Speed");
@@ -32,6 +30,8 @@ public class Flight extends Module {
 
     public Flight()
     {
+        super("Flight", Category.MOVEMENT);
+
         this.flights.add(new FuncraftGamer());
         this.flights.add(new VerusFast());
         this.flights.add(new Funcraft());

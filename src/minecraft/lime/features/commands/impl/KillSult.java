@@ -6,7 +6,7 @@ import lime.features.commands.Command;
 public class KillSult extends Command {
     @Override
     public String getUsage() {
-        return "killsult reload";
+        return "Reload killsults";
     }
 
     @Override

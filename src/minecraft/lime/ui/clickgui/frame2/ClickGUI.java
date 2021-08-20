@@ -56,6 +56,12 @@ public class ClickGUI extends GuiScreen {
     }
 
     @Override
+    protected void keyTyped(char typedChar, int keyCode) throws IOException {
+        categories.forEach(frameCategory -> frameCategory.keyTyped(typedChar, keyCode));
+        super.keyTyped(typedChar, keyCode);
+    }
+
+    @Override
     public boolean doesGuiPauseGame()
     {
         return false;

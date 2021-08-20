@@ -9,7 +9,6 @@ import lime.core.Lime;
 import lime.core.events.EventBus;
 import lime.core.events.impl.EventSafeWalk;
 import lime.core.events.impl.EventStep;
-import lime.features.module.impl.exploit.SigmaJello;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFence;
 import net.minecraft.block.BlockFenceGate;
@@ -1010,7 +1009,7 @@ public abstract class Entity implements ICommandSender
     {
         if (!this.isSilent())
         {
-            this.worldObj.playSoundAtEntity(this, name, Lime.getInstance().getModuleManager().getModuleC(SigmaJello.class).isToggled() ? 3000 : volume, pitch);
+            this.worldObj.playSoundAtEntity(this, name, volume, pitch);
         }
     }
 

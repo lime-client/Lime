@@ -27,11 +27,9 @@ public class ModuleManager {
         registerModule(new Velocity());
         registerModule(new AntiBot());
         registerModule(new AutoPot());
-        registerModule(new TPAura());
+        registerModule(new TeleportAura());
 
         // EXPLOIT
-        registerModule(new SigmaJello());
-        registerModule(new AntiStuck());
         registerModule(new Disabler());
         registerModule(new FastBow());
         registerModule(new NoClip());
@@ -64,19 +62,20 @@ public class ModuleManager {
         registerModule(new AutoTool());
         registerModule(new KillSult());
         registerModule(new AntiVoid());
+        registerModule(new Spammer());
         registerModule(new Freecam());
         registerModule(new FastEat());
         registerModule(new NoFall());
         registerModule(new Derp());
 
         // RENDER
-        registerModule(new RenderTestModule());
         registerModule(new BlockOverlay());
         registerModule(new NoScoreboard());
         registerModule(new Projectiles());
         registerModule(new Animations());
         registerModule(new FullBright());
         registerModule(new PointerESP());
+        registerModule(new Crosshair());
         registerModule(new DreamESP());
         registerModule(new Nametags());
         registerModule(new ChinaHat());

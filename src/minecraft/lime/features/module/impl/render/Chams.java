@@ -4,20 +4,21 @@ import lime.core.events.EventTarget;
 import lime.core.events.impl.EventRendererEntity;
 import lime.features.module.Category;
 import lime.features.module.Module;
-import lime.features.module.ModuleData;
 import lime.features.module.impl.combat.KillAura;
 import lime.features.setting.impl.BoolValue;
 import lime.features.setting.impl.EnumValue;
 import lime.utils.render.RenderUtils;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.player.EntityPlayer;
-import org.apache.commons.lang3.StringUtils;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
 
-@ModuleData(name = "Chams", category = Category.RENDER)
 public class Chams extends Module {
+
+    public Chams() {
+        super("Chams", Category.RENDER);
+    }
 
     private final EnumValue mode = new EnumValue("Mode", this, "Colored", "Colored");
     private final BoolValue onlyTargets = new BoolValue("Only Targets", this, false);

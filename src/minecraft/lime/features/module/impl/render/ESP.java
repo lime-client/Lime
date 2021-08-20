@@ -5,7 +5,6 @@ import lime.core.events.impl.Event2D;
 import lime.core.events.impl.Event3D;
 import lime.features.module.Category;
 import lime.features.module.Module;
-import lime.features.module.ModuleData;
 import lime.features.setting.impl.BoolValue;
 import lime.features.setting.impl.EnumValue;
 import lime.features.setting.impl.SlideValue;
@@ -30,8 +29,11 @@ import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 
-@ModuleData(name = "ESP", category = Category.RENDER)
 public class ESP extends Module {
+
+    public ESP() {
+        super("ESP", Category.RENDER);
+    }
 
     private final BoolValue esp3d = new BoolValue("3D ESP", this, false);
 

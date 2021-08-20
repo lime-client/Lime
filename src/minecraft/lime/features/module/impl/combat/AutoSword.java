@@ -4,13 +4,16 @@ import lime.core.events.EventTarget;
 import lime.core.events.impl.EventPacket;
 import lime.features.module.Category;
 import lime.features.module.Module;
-import lime.features.module.ModuleData;
 import lime.utils.other.InventoryUtils;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.play.client.C02PacketUseEntity;
 
-@ModuleData(name = "Auto Sword", category = Category.COMBAT)
 public class AutoSword extends Module {
+
+    public AutoSword() {
+        super("Auto Sword", Category.COMBAT);
+    }
+
     @EventTarget
     public void onPacket(EventPacket e) {
         if(e.getPacket() instanceof C02PacketUseEntity) {

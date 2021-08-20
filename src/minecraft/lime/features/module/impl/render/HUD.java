@@ -7,11 +7,10 @@ import lime.core.events.impl.Event2D;
 import lime.core.events.impl.EventScoreboard;
 import lime.core.events.impl.EventUpdate;
 import lime.core.events.impl.EventWorldChange;
+import lime.features.module.Category;
 import lime.features.setting.impl.*;
 import lime.managers.FontManager;
-import lime.features.module.Category;
 import lime.features.module.Module;
-import lime.features.module.ModuleData;
 import lime.utils.movement.MovementUtils;
 import lime.utils.render.ColorUtils;
 import lime.utils.render.animation.easings.Animate;
@@ -24,8 +23,11 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 
-@ModuleData(name = "HUD", category = Category.RENDER)
 public class HUD extends Module {
+
+    public HUD() {
+        super("HUD", Category.RENDER);
+    }
 
     private final TextValue clientName = new TextValue("Client Name", this, "Lime");
     public final EnumValue targetHud = new EnumValue("Target HUD", this, "Lime", "None", "Lime", "Astolfo");
@@ -36,6 +38,7 @@ public class HUD extends Module {
     private final ColorValue fadeColor = new ColorValue("Fade Color", this, new Color(200, 0, 0).getRGB()).onlyIf(color.getSettingName(), "enum", "fade");
     private final BoolValue customFont = new BoolValue("Custom Font", this, true);
     private final BoolValue suffix = new BoolValue("Suffix", this, true);
+    private final BoolValue bps = new BoolValue("BP/S", this, true);
     private final BoolValue fps = new BoolValue("FPS", this, true);
 
     private final Animate scoreboardAnimation = new Animate();
@@ -50,10 +53,16 @@ public class HUD extends Module {
         ScaledResolution sr = new ScaledResolution(mc);
         scoreboardAnimation.setEase(Easing.LINEAR).setSpeed(125).setMin(0).update();
 
-        FontManager.ProductSans20.getFont().drawStringWithShadow("BP/S: " + MovementUtils.getBPS(), 1, 15, -1);
+        if(bps.isEnabled()) {
+            if(customFont.isEnabled()) {
+                FontManager.ProductSans20.getFont().drawStringWithShadow("BP/S: §f" + MovementUtils.getBPS(), 0, FontManager.ProductSans20.getFont().getFontHeight() - 2, HUD.getColor(0).getRGB());
+            } else {
+                mc.fontRendererObj.drawStringWithShadow("BP/S: §f" + MovementUtils.getBPS(), 1, mc.fontRendererObj.FONT_HEIGHT, HUD.getColor(0).getRGB());
+            }
+        }
 
         if(customFont.isEnabled())
-            FontManager.ProductSans20.getFont().drawStringWithShadow(clientName.getText(), 1, 1, -1);
+            FontManager.ProductSans20.getFont().drawStringWithShadow(clientName.getText(), 0, 0, -1);
         else
             mc.fontRendererObj.drawStringWithShadow(clientName.getText(), 1, 1, -1);
 

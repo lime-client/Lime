@@ -2,6 +2,7 @@ package lime.core;
 
 import lime.features.module.Module;
 import lime.features.setting.impl.BoolValue;
+import lime.managers.FriendManager;
 import lime.scripting.ScriptManager;
 import lime.ui.gui.MainScreen;
 import lime.ui.notifications.utils.NotificationManager;
@@ -26,6 +27,7 @@ public class Lime {
     private ModuleManager moduleManager;
     private ScriptManager scriptManager;
     private CommandManager commandManager;
+    private FriendManager friendManager;
     private NotificationManager notificationManager;
     private ClickGUI clickGUI;
     private lime.ui.clickgui.frame2.ClickGUI clickGUI2;
@@ -65,6 +67,7 @@ public class Lime {
         moduleManager = new ModuleManager();
         commandManager = new CommandManager();
         notificationManager = new NotificationManager();
+        friendManager = new FriendManager();
         fileSaver = new FileSaver();
 
         for (Module module : moduleManager.getModules()) {
@@ -108,6 +111,10 @@ public class Lime {
 
     public ModuleManager getModuleManager() {
         return moduleManager;
+    }
+
+    public FriendManager getFriendManager() {
+        return friendManager;
     }
 
     public ScriptManager getScriptManager() {

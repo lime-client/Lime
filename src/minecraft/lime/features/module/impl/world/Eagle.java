@@ -4,15 +4,17 @@ import lime.core.events.EventTarget;
 import lime.core.events.impl.EventUpdate;
 import lime.features.module.Category;
 import lime.features.module.Module;
-import lime.features.module.ModuleData;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
 
-@ModuleData(name = "Eagle", category = Category.WORLD)
 public class Eagle extends Module {
+
+    public Eagle() {
+        super("Eagle", Category.WORLD);
+    }
 
     @Override
     public void onDisable() {

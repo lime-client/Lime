@@ -2,6 +2,7 @@ package lime.managers;
 
 import lime.features.commands.Command;
 import lime.features.commands.impl.*;
+import lime.utils.other.ChatUtils;
 
 import java.util.ArrayList;
 
@@ -19,6 +20,9 @@ public class CommandManager {
         registerCommand(new Script());
         registerCommand(new KillSult());
         registerCommand(new Account());
+        registerCommand(new Friend());
+        registerCommand(new Help());
+        registerCommand(new Toggle());
     }
 
     private void registerCommand(Command command) {
@@ -40,9 +44,11 @@ public class CommandManager {
                     } catch (Exception e) {
                         System.out.println("Failed to execute " + s + " command! Error: " + e.getMessage());
                     }
-                    break;
+                    return;
                 }
             }
         }
+
+        ChatUtils.sendMessage("§a" + message.split(" ")[0] + " §7doesn't exist!");
     }
 }

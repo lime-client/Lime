@@ -5,7 +5,6 @@ import lime.core.events.EventTarget;
 import lime.core.events.impl.EventPacket;
 import lime.features.module.Category;
 import lime.features.module.Module;
-import lime.features.module.ModuleData;
 import lime.features.module.impl.movement.Flight;
 import lime.features.module.impl.movement.LongJump;
 import lime.features.module.impl.movement.Speed;
@@ -13,8 +12,11 @@ import lime.ui.notifications.Notification;
 import lime.utils.other.Timer;
 import net.minecraft.network.play.server.S08PacketPlayerPosLook;
 
-@ModuleData(name = "Lagback Checker", category = Category.PLAYER)
 public class LagbackChecker extends Module {
+
+    public LagbackChecker() {
+        super("Lagback Checker", Category.PLAYER);
+    }
 
     private final Timer timer = new Timer();
 

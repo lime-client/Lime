@@ -4,14 +4,16 @@ import lime.core.events.EventTarget;
 import lime.core.events.impl.EventMotion;
 import lime.features.module.Category;
 import lime.features.module.Module;
-import lime.features.module.ModuleData;
 import lime.features.setting.impl.EnumValue;
 import lime.features.setting.impl.SlideValue;
 import lime.utils.movement.MovementUtils;
 import lime.utils.other.Timer;
 
-@ModuleData(name = "Anti Void", category = Category.PLAYER)
 public class AntiVoid extends Module {
+
+    public AntiVoid() {
+        super("Anti Void", Category.PLAYER);
+    }
 
     private final EnumValue mode = new EnumValue("Mode", this, "Motion", "Motion");
     private final SlideValue pullBack = new SlideValue("Pullback", this, 500, 3000, 500, 500);

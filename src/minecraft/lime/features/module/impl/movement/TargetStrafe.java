@@ -7,14 +7,12 @@ import lime.core.events.impl.EventMotion;
 import lime.core.events.impl.EventMove;
 import lime.features.module.Category;
 import lime.features.module.Module;
-import lime.features.module.ModuleData;
 import lime.features.module.impl.combat.KillAura;
 import lime.features.module.impl.render.HUD;
 import lime.features.setting.impl.BoolValue;
 import lime.features.setting.impl.SlideValue;
 import lime.utils.combat.CombatUtils;
 import lime.utils.movement.MovementUtils;
-import lime.utils.render.ColorUtils;
 import lime.utils.render.RenderUtils;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Blocks;
@@ -27,8 +25,11 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.Comparator;
 
-@ModuleData(name = "Target Strafe", category = Category.MOVEMENT)
 public class TargetStrafe extends Module {
+
+    public TargetStrafe() {
+        super("Target Strafe", Category.MOVEMENT);
+    }
 
     private final SlideValue distance = new SlideValue("Distance", this, 0.5, 6, 2.5, 0.1);
     private final BoolValue spaceOnly = new BoolValue("Space Only", this, false);

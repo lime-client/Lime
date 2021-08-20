@@ -5,15 +5,16 @@ import lime.core.events.EventTarget;
 import lime.core.events.impl.EventMotion;
 import lime.features.module.Category;
 import lime.features.module.Module;
-import lime.features.module.ModuleData;
 import lime.features.module.impl.movement.LongJump;
 import lime.features.setting.impl.EnumValue;
-import org.apache.commons.lang3.StringUtils;
 
-@ModuleData(name = "No Fall", category = Category.PLAYER)
 public class NoFall extends Module {
 
-    private EnumValue mode = new EnumValue("Mode", this, "Vanilla", "Vanilla", "Verus");
+    public NoFall() {
+        super("No Fall", Category.PLAYER);
+    }
+
+    private final EnumValue mode = new EnumValue("Mode", this, "Vanilla", "Vanilla", "Verus");
 
     @EventTarget
     public void onUpdate(EventMotion e) {

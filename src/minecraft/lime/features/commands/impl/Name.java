@@ -7,7 +7,7 @@ import net.minecraft.client.gui.GuiScreen;
 public class Name extends Command {
     @Override
     public String getUsage() {
-        return "name";
+        return "Copy username";
     }
 
     @Override

@@ -86,13 +86,15 @@ public class FrameCategory {
 
         if(Mouse.hasWheel() && GuiScreen.hover(x, y, mouseX, mouseY, defaultWidth, height))
         {
-            int offsetMultiplier = 5;
+            int offsetMultiplier = 15;
             int wheel = Mouse.getDWheel();
-            if(wheel > 0 && offset - (offsetMultiplier - 1) > 0) {
+            if(wheel > 0 && offset - (5 - 1) > 0) {
                 offset -= offsetMultiplier;
-            } else if(wheel < 0 && offset + (offsetMultiplier - 1) <= (offCat.get()) - height + categoryNameHeight) {
+            } else if(wheel < 0 && offset + (5 - 1) <= (offCat.get()) - height + categoryNameHeight) {
                 offset += offsetMultiplier;
             }
+
+            offset = Math.max(Math.min(offset, offCat.get()), 0);
         }
 
         if((offCat.get()) - height + categoryNameHeight < offset) {
@@ -163,6 +165,12 @@ public class FrameCategory {
             setYDrag(getY() - mouseY);
         } else
             setDrag(false);
+    }
+
+    public void keyTyped(char typedChar, int key) {
+        for (FrameModule module : this.modules) {
+            module.keyTyped(typedChar, key);
+        }
     }
 
     @SuppressWarnings("unused")

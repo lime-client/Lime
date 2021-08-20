@@ -5,7 +5,6 @@ import lime.core.events.impl.EventPacket;
 import lime.core.events.impl.EventUpdate;
 import lime.features.module.Category;
 import lime.features.module.Module;
-import lime.features.module.ModuleData;
 import lime.features.setting.impl.BoolValue;
 import lime.features.setting.impl.EnumValue;
 import lime.features.setting.impl.SlideValue;
@@ -14,8 +13,11 @@ import lime.utils.other.Timer;
 import net.minecraft.network.play.client.C03PacketPlayer;
 import net.minecraft.network.play.server.S12PacketEntityVelocity;
 
-@ModuleData(name = "Custom Flight", category = Category.MOVEMENT)
 public class CustomFlight extends Module {
+
+    public CustomFlight() {
+        super("Custom Flight", Category.MOVEMENT);
+    }
 
     private final EnumValue damage = new EnumValue("Damage", this, "None", "None", "Basic");
     private final SlideValue timer = new SlideValue("Timer", this, 0.1, 10, 1, 0.5);

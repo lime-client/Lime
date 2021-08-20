@@ -5,13 +5,15 @@ import lime.core.events.impl.EventMotion;
 import lime.core.events.impl.EventPacket;
 import lime.features.module.Category;
 import lime.features.module.Module;
-import lime.features.module.ModuleData;
 import lime.features.setting.impl.BoolValue;
 import lime.features.setting.impl.SlideValue;
 import net.minecraft.network.play.server.S03PacketTimeUpdate;
 
-@ModuleData(name = "Time Changer", category = Category.WORLD)
 public class TimeChanger extends Module {
+
+    public TimeChanger() {
+        super("Time Changer", Category.WORLD);
+    }
 
     private final SlideValue time = new SlideValue("Time", this, 0, 24000, 21000, 1000);
     private final BoolValue rain = new BoolValue("Rain", this, false);

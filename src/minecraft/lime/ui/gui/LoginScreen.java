@@ -1,14 +1,11 @@
 package lime.ui.gui;
 
 import lime.core.Lime;
-import lime.features.module.Category;
-import lime.features.module.ModuleData;
 import lime.managers.FontManager;
 import lime.ui.fields.ButtonField;
 import lime.ui.fields.TextField;
 import lime.utils.other.ChatUtils;
 import lime.utils.other.Timer;
-import lime.utils.other.WebUtils;
 import lime.utils.other.security.CipherEncryption;
 import lime.utils.other.security.User;
 import lime.utils.other.security.UserCheckThread;
@@ -19,7 +16,6 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.Util;
 import org.apache.commons.codec.digest.DigestUtils;
-import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
 
@@ -36,7 +32,6 @@ import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
 
-@ModuleData(name = "Click GUI", category = Category.RENDER)
 public class LoginScreen extends GuiScreen {
 
     private long initTime;

@@ -4,15 +4,18 @@ import lime.core.events.EventTarget;
 import lime.core.events.impl.Event3D;
 import lime.features.module.Category;
 import lime.features.module.Module;
-import lime.features.module.ModuleData;
 import lime.utils.render.RenderUtils;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import org.lwjgl.opengl.GL11;
 
-@ModuleData(name = "Tracers", category = Category.RENDER)
 public class Tracers extends Module {
+
+    public Tracers() {
+        super("Tracers", Category.RENDER);
+    }
+
     @EventTarget
     public void on3D(Event3D e) {
         for(Entity entity : mc.theWorld.getLoadedEntityList()) {

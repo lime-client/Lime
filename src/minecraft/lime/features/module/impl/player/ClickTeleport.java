@@ -4,7 +4,6 @@ import lime.core.events.EventTarget;
 import lime.core.events.impl.EventMotion;
 import lime.features.module.Category;
 import lime.features.module.Module;
-import lime.features.module.ModuleData;
 import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemSword;
 import net.minecraft.network.play.client.C03PacketPlayer;
@@ -13,8 +12,11 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import org.lwjgl.input.Mouse;
 
-@ModuleData(name = "Click Teleport", category = Category.PLAYER)
 public class ClickTeleport extends Module {
+
+    public ClickTeleport() {
+        super("Click Teleport", Category.PLAYER);
+    }
 
     private int delay = 0;
 

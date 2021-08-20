@@ -4,7 +4,6 @@ import lime.core.events.EventTarget;
 import lime.core.events.impl.EventMotion;
 import lime.features.module.Category;
 import lime.features.module.Module;
-import lime.features.module.ModuleData;
 import lime.features.setting.impl.BoolValue;
 import lime.features.setting.impl.SlideValue;
 import lime.utils.combat.CombatUtils;
@@ -25,8 +24,12 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Random;
 
-@ModuleData(name = "Chest Stealer", category = Category.PLAYER)
 public class ChestStealer extends Module {
+
+    public ChestStealer() {
+        super("Chest Stealer", Category.PLAYER);
+    }
+
     private final SlideValue delayBeforeClose = new SlideValue("Delay before close", this, 0, 150, 100, 10);
     private final SlideValue delay = new SlideValue("Delay", this, 0, 150, 50, 5);
     private final BoolValue ignoreJunk = new BoolValue("Ignore Junk", this, true);

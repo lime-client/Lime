@@ -5,13 +5,16 @@ import lime.core.events.impl.EventMotion;
 import lime.core.events.impl.EventPacket;
 import lime.features.module.Category;
 import lime.features.module.Module;
-import lime.features.module.ModuleData;
 import lime.utils.movement.MovementUtils;
 import net.minecraft.client.entity.EntityOtherPlayerMP;
 import net.minecraft.network.play.client.C03PacketPlayer;
 
-@ModuleData(name = "Freecam", category = Category.PLAYER)
 public class Freecam extends Module {
+
+    public Freecam() {
+        super("Freecam", Category.PLAYER);
+    }
+
     private EntityOtherPlayerMP entity;
 
     @Override

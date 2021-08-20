@@ -1,11 +1,9 @@
 package lime.features.module.impl.movement;
 
 import lime.core.events.EventTarget;
-import lime.core.events.impl.EventMotion;
 import lime.core.events.impl.EventStep;
 import lime.features.module.Category;
 import lime.features.module.Module;
-import lime.features.module.ModuleData;
 import lime.features.setting.impl.EnumValue;
 import lime.features.setting.impl.SlideValue;
 import lime.utils.other.Timer;
@@ -13,14 +11,17 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.network.play.client.C03PacketPlayer;
 import net.minecraft.util.BlockPos;
-import org.apache.commons.lang3.StringUtils;
 
 import java.util.Arrays;
 import java.util.List;
 
-@ModuleData(name = "Step", category = Category.MOVEMENT)
 public class Step extends Module {
-    boolean resetTimer;
+
+    public Step() {
+        super("Step", Category.MOVEMENT);
+    }
+
+    private boolean resetTimer;
     Timer time = new Timer();
     public static Timer lastStep = new Timer();
 

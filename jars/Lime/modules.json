@@ -2,7 +2,7 @@
   "informations": [
     {
       "author": "Lime Auto Save",
-      "time": 1629453167
+      "time": 1629474232
     }
   ],
   "modules": [
@@ -110,7 +110,7 @@
         {
           "name": "Auto Block Range",
           "type": "slider",
-          "value": 4.95
+          "value": 9.950000000000001
         },
         {
           "name": "Range",
@@ -256,8 +256,8 @@
       ]
     },
     {
-      "moduleName": "TP Aura",
-      "key": 21,
+      "moduleName": "Teleport Aura",
+      "key": -1,
       "toggled": false,
       "settings": [
         {
@@ -283,40 +283,6 @@
       ]
     },
     {
-      "moduleName": "Sigma Jello",
-      "key": -1,
-      "toggled": false,
-      "settings": [
-        {
-          "name": "FPS Booster",
-          "type": "bool",
-          "value": true
-        },
-        {
-          "name": "Sigma ESP",
-          "type": "bool",
-          "value": true
-        },
-        {
-          "name": "Show",
-          "type": "bool",
-          "value": true
-        }
-      ]
-    },
-    {
-      "moduleName": "Anti Stuck",
-      "key": -1,
-      "toggled": false,
-      "settings": [
-        {
-          "name": "Show",
-          "type": "bool",
-          "value": true
-        }
-      ]
-    },
-    {
       "moduleName": "Disabler",
       "key": -1,
       "toggled": true,
@@ -325,16 +291,6 @@
           "name": "Mode",
           "type": "enum",
           "value": "mineplex"
-        },
-        {
-          "name": "Mail",
-          "type": "text",
-          "value": ""
-        },
-        {
-          "name": "Password",
-          "type": "text",
-          "value": ""
         },
         {
           "name": "Show",
@@ -557,6 +513,11 @@
       "toggled": true,
       "settings": [
         {
+          "name": "Omni",
+          "type": "bool",
+          "value": false
+        },
+        {
           "name": "Show",
           "type": "bool",
           "value": false
@@ -593,7 +554,7 @@
         {
           "name": "Mode",
           "type": "enum",
-          "value": "verus"
+          "value": "chunk"
         },
         {
           "name": "Show",
@@ -871,6 +832,33 @@
       ]
     },
     {
+      "moduleName": "Spammer",
+      "key": -1,
+      "toggled": false,
+      "settings": [
+        {
+          "name": "Text",
+          "type": "text",
+          "value": "Lime best clarinet"
+        },
+        {
+          "name": "Delay",
+          "type": "slider",
+          "value": 1.5
+        },
+        {
+          "name": "Random Chars",
+          "type": "bool",
+          "value": true
+        },
+        {
+          "name": "Show",
+          "type": "bool",
+          "value": true
+        }
+      ]
+    },
+    {
       "moduleName": "Freecam",
       "key": -1,
       "toggled": false,
@@ -934,18 +922,6 @@
       ]
     },
     {
-      "moduleName": "Render Test",
-      "key": -1,
-      "toggled": false,
-      "settings": [
-        {
-          "name": "Show",
-          "type": "bool",
-          "value": true
-        }
-      ]
-    },
-    {
       "moduleName": "Block Overlay",
       "key": -1,
       "toggled": false,
@@ -989,7 +965,7 @@
         {
           "name": "Mode",
           "type": "enum",
-          "value": "swing"
+          "value": "exhibition2"
         },
         {
           "name": "Swing Slowdown",
@@ -1011,7 +987,7 @@
         {
           "name": "Show",
           "type": "bool",
-          "value": true
+          "value": false
         }
       ]
     },
@@ -1028,7 +1004,54 @@
       ]
     },
     {
-      "moduleName": "DreamESP",
+      "moduleName": "Crosshair",
+      "key": -1,
+      "toggled": true,
+      "settings": [
+        {
+          "name": "Thickness",
+          "type": "slider",
+          "value": 1.0
+        },
+        {
+          "name": "Length",
+          "type": "slider",
+          "value": 2.0
+        },
+        {
+          "name": "Gap",
+          "type": "slider",
+          "value": 3.5
+        },
+        {
+          "name": "Outline",
+          "type": "bool",
+          "value": true
+        },
+        {
+          "name": "Outline Thickness",
+          "type": "slider",
+          "value": 0.5
+        },
+        {
+          "name": "Dot",
+          "type": "bool",
+          "value": true
+        },
+        {
+          "name": "Color",
+          "type": "color",
+          "value": -15523372
+        },
+        {
+          "name": "Show",
+          "type": "bool",
+          "value": false
+        }
+      ]
+    },
+    {
+      "moduleName": "Dream ESP",
       "key": -1,
       "toggled": false,
       "settings": [
@@ -1071,7 +1094,7 @@
         {
           "name": "Mode",
           "type": "enum",
-          "value": "frame"
+          "value": "framenew"
         },
         {
           "name": "Show",
@@ -1085,11 +1108,6 @@
       "key": -1,
       "toggled": true,
       "settings": [
-        {
-          "name": "Mode",
-          "type": "enum",
-          "value": "outline"
-        },
         {
           "name": "Show",
           "type": "bool",
@@ -1213,7 +1231,7 @@
         {
           "name": "Client Name",
           "type": "text",
-          "value": "Lime"
+          "value": "pacohakcszs"
         },
         {
           "name": "Target HUD",
@@ -1252,6 +1270,11 @@
         },
         {
           "name": "Suffix",
+          "type": "bool",
+          "value": true
+        },
+        {
+          "name": "BP/S",
           "type": "bool",
           "value": true
         },
@@ -1412,11 +1435,6 @@
           "name": "Range",
           "type": "slider",
           "value": 4.0
-        },
-        {
-          "name": "Through Walls",
-          "type": "bool",
-          "value": true
         },
         {
           "name": "Rotations",

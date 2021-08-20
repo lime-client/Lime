@@ -7,7 +7,6 @@ import lime.core.events.impl.Event3D;
 import lime.core.events.impl.EventUpdate;
 import lime.features.module.Category;
 import lime.features.module.Module;
-import lime.features.module.ModuleData;
 import lime.features.module.impl.render.HUD;
 import lime.features.setting.impl.SlideValue;
 import lime.ui.targethud.impl.AstolfoTargetHUD;
@@ -16,9 +15,7 @@ import lime.utils.movement.pathfinder.CustomVec;
 import lime.utils.movement.pathfinder.utils.PathComputer;
 import lime.utils.other.Timer;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.play.client.C03PacketPlayer;
 import org.lwjgl.opengl.GL11;
@@ -28,8 +25,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
-@ModuleData(name = "TP Aura", category = Category.COMBAT)
-public class TPAura extends Module {
+public class TeleportAura extends Module {
+
+    public TeleportAura() {
+        super("Teleport Aura", Category.COMBAT);
+    }
 
     private final SlideValue cps = new SlideValue("CPS", this, 1, 20, 5, 1);
     private final SlideValue _targets = new SlideValue("Targets", this, 1, 10, 1, 1);
@@ -155,7 +155,7 @@ public class TPAura extends Module {
     private ArrayList<Entity> getTargets() {
         ArrayList<Entity> entities = new ArrayList<>();
         for(Entity entity : mc.theWorld.getLoadedEntityList()) {
-            if(entity instanceof EntityPlayer && entity != mc.thePlayer && mc.thePlayer.getDistanceToEntity(entity) <= range.getCurrent()) {
+            if(entity instanceof EntityPlayer && entity != mc.thePlayer && mc.thePlayer.getDistanceToEntity(entity) <= range.getCurrent() && !Lime.getInstance().getFriendManager().isFriend(entity)) {
                 entities.add(entity);
             }
         }

@@ -4,16 +4,17 @@ import lime.core.events.EventTarget;
 import lime.core.events.impl.Event3D;
 import lime.features.module.Category;
 import lime.features.module.Module;
-import lime.features.module.ModuleData;
 import lime.utils.render.RenderUtils;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.MovingObjectPosition;
 import org.lwjgl.opengl.GL11;
 
-import java.awt.Color;
-
-@ModuleData(name = "Block Overlay", category = Category.RENDER)
 public class BlockOverlay extends Module {
+
+    public BlockOverlay() {
+        super("Block Overlay", Category.RENDER);
+    }
+
     @EventTarget
     public void on3D(Event3D e) {
         if(mc.objectMouseOver != null && mc.objectMouseOver.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK) {

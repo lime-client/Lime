@@ -4,7 +4,6 @@ import lime.core.events.EventTarget;
 import lime.core.events.impl.EventUpdate;
 import lime.features.module.Category;
 import lime.features.module.Module;
-import lime.features.module.ModuleData;
 import lime.features.setting.impl.SlideValue;
 import lime.utils.other.InventoryUtils;
 import lime.utils.other.Timer;
@@ -14,8 +13,12 @@ import net.minecraft.network.play.client.C08PacketPlayerBlockPlacement;
 import net.minecraft.network.play.client.C09PacketHeldItemChange;
 import net.minecraft.util.BlockPos;
 
-@ModuleData(name = "Auto Gapple", category = Category.COMBAT)
 public class AutoGapple extends Module {
+
+    public AutoGapple() {
+        super("Auto Gapple", Category.COMBAT);
+    }
+
     private final SlideValue delay = new SlideValue("Delay", this, 50, 1000, 100, 50);
     private final SlideValue health = new SlideValue("Health", this, 1, 20, 10, 0.5);
 
