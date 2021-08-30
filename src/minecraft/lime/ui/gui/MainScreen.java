@@ -6,7 +6,6 @@ import lime.managers.FontManager;
 import lime.ui.altmanager.AltLoginScreen;
 import lime.ui.fields.ButtonField;
 import lime.ui.proxymanager.ProxyManagerScreen;
-import lime.utils.render.GLSLSandboxShader;
 import lime.utils.render.RenderUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiMultiplayer;
@@ -20,7 +19,6 @@ import org.lwjgl.opengl.GL20;
 
 import java.awt.*;
 import java.io.IOException;
-import java.lang.reflect.Field;
 
 public class MainScreen extends GuiScreen {
     private final long initTime;

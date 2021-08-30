@@ -1,12 +1,13 @@
 package lime.utils.render;
+
 import lime.utils.other.MathUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.GlStateManager;
 import org.lwjgl.opengl.GL11;
+
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class Graph {
     private final String name;

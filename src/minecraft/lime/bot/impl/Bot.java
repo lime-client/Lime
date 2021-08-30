@@ -1,16 +1,16 @@
 package lime.bot.impl;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import lime.bot.mc.auth.exception.request.RequestException;
 import lime.bot.mc.protocol.MinecraftProtocol;
-import lime.bot.mc.protocol.data.game.PlayerListEntry;
-import lime.bot.mc.protocol.data.game.PlayerListEntryAction;
 import lime.bot.mc.protocol.data.message.Message;
 import lime.bot.mc.protocol.packet.MinecraftPacket;
 import lime.bot.mc.protocol.packet.ingame.client.ClientChatPacket;
 import lime.bot.mc.protocol.packet.ingame.client.player.ClientPlayerPositionRotationPacket;
 import lime.bot.mc.protocol.packet.ingame.server.ServerChatPacket;
 import lime.bot.mc.protocol.packet.ingame.server.ServerJoinGamePacket;
-import lime.bot.mc.protocol.packet.ingame.server.ServerPlayerListEntryPacket;
 import lime.bot.mc.protocol.packet.ingame.server.entity.ServerEntityMovementPacket;
 import lime.bot.mc.protocol.packet.ingame.server.entity.ServerEntityPositionPacket;
 import lime.bot.mc.protocol.packet.ingame.server.entity.player.ServerPlayerPositionRotationPacket;
@@ -20,25 +20,17 @@ import lime.bot.packetlib.event.session.DisconnectedEvent;
 import lime.bot.packetlib.event.session.PacketReceivedEvent;
 import lime.bot.packetlib.event.session.SessionAdapter;
 import lime.bot.packetlib.tcp.TcpSessionFactory;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import java.net.Proxy;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
-
 import lime.core.Lime;
 import lime.ui.notifications.Notification;
 import lime.utils.other.ChatUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.play.client.C01PacketChatMessage;
-import org.apache.commons.lang3.tuple.MutablePair;
+
+import java.net.Proxy;
 
 public class Bot {
     private Position position;
     private final JsonParser jsonParser = new JsonParser();
-    public final Map<UUID, MutablePair<Integer, String>> hashMap = new HashMap<>();
     private int playerId;
     private String userName;
     private Client client;
@@ -52,7 +44,6 @@ public class Bot {
     }
 
     private Client createClient() {
-        //skid btw
         MinecraftProtocol protocol;
         String[] userInfo = new String[] {mail, password};
         try {
@@ -66,7 +57,6 @@ public class Bot {
         final Client client = new Client("tiddies.club", 25565, protocol, new TcpSessionFactory());
         client.getSession().setFlag("auth-proxy", Proxy.NO_PROXY);
         client.getSession().addListener(new SessionAdapter(){
-
             @Override
             public void packetReceived(PacketReceivedEvent event) {
                 MinecraftPacket packet;
@@ -88,9 +78,8 @@ public class Bot {
                 if (event.getPacket() instanceof ServerPlayerPositionRotationPacket) {
                     ServerPlayerPositionRotationPacket positionRotationPacket = event.getPacket();
                     position = new Position(positionRotationPacket.getX(), positionRotationPacket.getY(), positionRotationPacket.getZ());
-                    for (int i = 0; i < 2; ++i) {
-                        client.getSession().send(new ClientPlayerPositionRotationPacket(true, positionRotationPacket.getX(), positionRotationPacket.getY(), positionRotationPacket.getZ(), 0.0f, 0.0f));
-                    }
+                    client.getSession().send(new ClientPlayerPositionRotationPacket(true, positionRotationPacket.getX(), positionRotationPacket.getY(), positionRotationPacket.getZ(), 0, 0));
+                    client.getSession().send(new ClientPlayerPositionRotationPacket(true, positionRotationPacket.getX(), positionRotationPacket.getY(), positionRotationPacket.getZ(), 0, 0));
                 }
                 if (event.getPacket() instanceof ServerEntityPositionPacket && ((ServerEntityMovementPacket)(packet = event.getPacket())).getEntityId() == playerId) {
                     position = new Position(((ServerEntityMovementPacket)packet).getMovementX(), ((ServerEntityMovementPacket)packet).getMovementY(), ((ServerEntityMovementPacket)packet).getMovementZ());
@@ -105,22 +94,12 @@ public class Bot {
                     if (((ServerSpawnPlayerPacket)packet).getEntityId() == playerId) {
                         position = new Position(((ServerSpawnPlayerPacket)packet).getX(), ((ServerSpawnPlayerPacket)packet).getY(), ((ServerSpawnPlayerPacket)packet).getZ());
                     }
-                    hashMap.put(((ServerSpawnPlayerPacket)packet).getUUID(), new MutablePair<>(((ServerSpawnPlayerPacket)packet).getEntityId(), ""));
-                }
-                if (event.getPacket() instanceof ServerPlayerListEntryPacket && ((ServerPlayerListEntryPacket)(packet = event.getPacket())).getAction() == PlayerListEntryAction.ADD_PLAYER) {
-                    for (PlayerListEntry entry : ((ServerPlayerListEntryPacket)packet).getEntries()) {
-                        for (UUID set : hashMap.keySet()) {
-                            if (!set.equals(entry.getProfile().getId())) continue;
-                            hashMap.get(set).right = entry.getProfile().getName();
-                        }
-                    }
                 }
             }
 
             @Override
             public void disconnected(DisconnectedEvent event) {
                 System.out.println("Bot Kicked: " + Message.fromString(event.getReason()).getText());
-                hashMap.clear();
                 if (event.getCause() != null) {
                     event.getCause().printStackTrace();
                 }

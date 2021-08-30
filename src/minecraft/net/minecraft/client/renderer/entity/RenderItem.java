@@ -64,6 +64,7 @@ import net.optifine.CustomItems;
 import net.optifine.Reflector;
 import net.optifine.shadersmod.client.Shaders;
 import net.optifine.shadersmod.client.ShadersRender;
+import org.lwjgl.opengl.GL11;
 
 public class RenderItem implements IResourceManagerReloadListener
 {

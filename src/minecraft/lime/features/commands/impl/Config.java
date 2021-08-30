@@ -11,7 +11,6 @@ import lime.utils.other.ChatUtils;
 import java.io.File;
 import java.io.FileReader;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 
 public class Config extends Command {
     @Override

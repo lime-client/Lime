@@ -8,7 +8,6 @@ import lime.ui.fields.PasswordField;
 import lime.ui.notifications.Notification;
 import lime.ui.realaltmanager.AltManager;
 import lime.utils.other.WebUtils;
-import lime.utils.render.GLSLSandboxShader;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;

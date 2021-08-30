@@ -1,11 +1,11 @@
 package lime.ui.clickgui.frame.components;
 
 import lime.core.Lime;
-import lime.managers.FontManager;
 import lime.features.module.Category;
 import lime.features.module.Module;
 import lime.features.setting.SettingValue;
 import lime.features.setting.impl.*;
+import lime.managers.FontManager;
 import lime.ui.clickgui.frame.components.settings.*;
 import lime.utils.render.RenderUtils;
 import lime.utils.render.animation.easings.Animate;

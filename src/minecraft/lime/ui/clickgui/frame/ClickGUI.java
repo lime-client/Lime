@@ -1,8 +1,8 @@
 package lime.ui.clickgui.frame;
 
 import lime.core.Lime;
-import lime.managers.FontManager;
 import lime.features.module.Category;
+import lime.managers.FontManager;
 import lime.ui.clickgui.frame.components.FrameCategory;
 import lime.utils.render.animation.easings.Animate;
 import lime.utils.render.animation.easings.Easing;
@@ -10,7 +10,6 @@ import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.util.ResourceLocation;
-import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;

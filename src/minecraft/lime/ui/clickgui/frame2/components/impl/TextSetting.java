@@ -10,7 +10,7 @@ import net.minecraft.client.gui.GuiScreen;
 import org.apache.commons.lang3.StringUtils;
 import org.lwjgl.opengl.GL11;
 
-import static lime.ui.clickgui.frame2.Priority.*;
+import static lime.ui.clickgui.frame2.Priority.defaultWidth;
 
 public class TextSetting extends Component {
     public TextSetting(int x, int y, FrameModule owner, SettingValue setting) {
@@ -69,7 +69,7 @@ public class TextSetting extends Component {
     }
 
     private boolean isAscii(char c) {
-        char[] allowedChars = "abcdefghijklmnopqrstuvwxyz1234567890&~#'{([-|`_\\ç^@)]=},;:!?./§".toCharArray();
+        char[] allowedChars = "abcdefghijklmnopqrstuvwxyz1234567890&~#'{([-|`_\\ç^@)]=},;:!?./§ ABCDEFGHIJKLMNOPQRSTUVWXYZ".toCharArray();
         for (char allowedChar : allowedChars) {
             if(c == allowedChar)
                 return true;

@@ -2,11 +2,8 @@ package lime.ui.fields;
 
 import lime.utils.render.RenderUtils;
 import lime.utils.render.fontRenderer.GlyphPageFontRenderer;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.util.ResourceLocation;
 import org.apache.commons.lang3.StringUtils;
 import org.lwjgl.opengl.GL11;
 

@@ -3,14 +3,13 @@ package lime.features.module.impl.render;
 import lime.core.Lime;
 import lime.core.events.EventTarget;
 import lime.core.events.impl.Event2D;
-
 import lime.core.events.impl.EventScoreboard;
 import lime.core.events.impl.EventUpdate;
 import lime.core.events.impl.EventWorldChange;
 import lime.features.module.Category;
+import lime.features.module.Module;
 import lime.features.setting.impl.*;
 import lime.managers.FontManager;
-import lime.features.module.Module;
 import lime.utils.movement.MovementUtils;
 import lime.utils.render.ColorUtils;
 import lime.utils.render.animation.easings.Animate;

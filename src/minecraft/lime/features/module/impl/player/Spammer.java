@@ -34,7 +34,7 @@ public class Spammer extends Module {
     public String generateRandomChars() {
         char[] chars = "abcdefghijklmnopqrstuvwxyz0123456789".toCharArray();
 
-        int size = 10;
+        int size = 25;
         String s = "";
 
         while(s.length() < size) {

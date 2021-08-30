@@ -15,23 +15,27 @@ public class Mineplex extends FlightValue {
     }
 
     private boolean back;
-    private int stage;
-    private double moveSpeed;
+    private int stage, ticks;
+    private double moveSpeed, y;
 
     @Override
     public void onEnable() {
         back = false;
         stage = 0;
         moveSpeed = 0.25;
+        y = 0;
     }
 
     @Override
     public void onMove(EventMove e) {
         if(stage == 0 && mc.thePlayer.isMoving()) {
             if(mc.thePlayer.onGround) {
-                e.setY(mc.thePlayer.motionY = 0.42);
+                e.setY(mc.thePlayer.motionY = 0.42 + y);
                 MovementUtils.setSpeed(e, -0.07);
                 moveSpeed += 0.45;
+                //mc.timer.timerSpeed = 1.5f;
+                ticks = 0;
+                y += 0.04;
                 return;
             }
 
@@ -44,11 +48,13 @@ public class Mineplex extends FlightValue {
                 moveSpeed = 1.45;
                 back = false;
             }
+            ticks++;
         }
         if(stage == 1) {
+            mc.timer.timerSpeed = 1;
             if(mc.thePlayer.onGround) {
                 MovementUtils.setSpeed(e, -0.07);
-                e.setY(mc.thePlayer.motionY = 0.42);
+                e.setY(mc.thePlayer.motionY = 0.42 + y);
                 back = true;
             } else {
                 if(moveSpeed > 0.8) {

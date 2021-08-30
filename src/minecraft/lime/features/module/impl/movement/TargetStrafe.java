@@ -19,11 +19,12 @@ import net.minecraft.init.Blocks;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.Vec3;
 import org.lwjgl.input.Keyboard;
-import static org.lwjgl.opengl.GL11.*;
 
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Comparator;
+
+import static org.lwjgl.opengl.GL11.*;
 
 public class TargetStrafe extends Module {
 
@@ -32,6 +33,7 @@ public class TargetStrafe extends Module {
     }
 
     private final SlideValue distance = new SlideValue("Distance", this, 0.5, 6, 2.5, 0.1);
+    private final SlideValue sides = new SlideValue("Sides", this, 1, 20, 8, 1);
     private final BoolValue spaceOnly = new BoolValue("Space Only", this, false);
     private final BoolValue thirdPerson = new BoolValue("Third Person", this, false);
 
@@ -55,7 +57,7 @@ public class TargetStrafe extends Module {
 
     @EventTarget
     public void on3D(Event3D e) {
-        if(canMove() && (!spaceOnly.isEnabled() || Keyboard.isKeyDown(Keyboard.KEY_SPACE))) {
+        if(canMove()) {
             if(!flag && thirdPerson.isEnabled()) {
                 flag = true;
                 thirdPersonView = mc.gameSettings.thirdPersonView;
@@ -80,7 +82,7 @@ public class TargetStrafe extends Module {
 
 
             int color1 = HUD.getColor(0).getRGB();
-            int sides = (int) (distance.getCurrent() * 10);
+            int sides = this.sides.intValue();
             double pix2 = Math.PI * 2.0D;
             for (int i = 0; i <= 90; ++i) {
                 RenderUtils.glColor(color1);
@@ -165,7 +167,7 @@ public class TargetStrafe extends Module {
 
         EntityLivingBase target = KillAura.getEntity();
         ArrayList<Vec3> posArrayList = new ArrayList<>();
-        for (float rotation = 0; rotation < (Math.PI * 2); rotation += Math.PI * 2 / (distance.getCurrent() * 10)) {
+        for (float rotation = 0; rotation < (Math.PI * 2); rotation += Math.PI * 2 / sides.intValue()) {
             final Vec3 pos = new Vec3(distance.getCurrent() * Math.cos(rotation) + target.posX, target.posY, distance.getCurrent() * Math.sin(rotation) + target.posZ);
             posArrayList.add(pos);
         }
@@ -242,7 +244,7 @@ public class TargetStrafe extends Module {
     public void setMoveSpeed(EventMove event, final double speed) {
         voidTicks++;
         if (KillAura.getEntity() != null) {
-            if (inVoid() && voidTicks > 4) {
+            if (inVoid() && voidTicks >= 5) {
                 voidTicks = 0;
                 direction = -direction;
             }
@@ -274,7 +276,8 @@ public class TargetStrafe extends Module {
     }
 
     public static boolean canMove() {
-        return KillAura.getEntity() != null;
+        TargetStrafe targetStrafe = (TargetStrafe) Lime.getInstance().getModuleManager().getModuleC(TargetStrafe.class);
+        return KillAura.getEntity() != null && (!targetStrafe.spaceOnly.isEnabled() || Keyboard.isKeyDown(Keyboard.KEY_SPACE));
     }
 
     private boolean inVoid(Vec3 vec3) {

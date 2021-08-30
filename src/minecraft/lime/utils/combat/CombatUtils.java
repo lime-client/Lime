@@ -3,14 +3,11 @@ package lime.utils.combat;
 import com.google.common.base.Predicates;
 import lime.utils.IUtil;
 import lime.utils.other.MathUtils;
-import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.*;
 
 import java.util.List;
-
-import static lime.utils.other.MathUtils.random;
 
 public class CombatUtils implements IUtil {
 
@@ -86,11 +83,11 @@ public class CombatUtils implements IUtil {
             yaw = (float) (90 +Math.toDegrees(Math.atan(deltaZ / deltaX)));
         }else if(deltaX > 0 && deltaZ < 0) {
             yaw = (float) (-90 +Math.toDegrees(Math.atan(deltaZ / deltaX)));
-        }
+        }*/
 
 
 
-        /*double x = e.posX + (e.ticksExisted > 2 ? (e.posX - e.lastTickPosX) : 0) - mc.thePlayer.posX;
+        double x = e.posX + (e.ticksExisted > 2 ? (e.posX - e.lastTickPosX) : 0) - mc.thePlayer.posX;
         double z = e.posZ + (e.ticksExisted > 2 ? (e.posZ - e.lastTickPosZ) : 0) - mc.thePlayer.posZ;
         double y = e.posY + e.getEyeHeight() * 0.75D - (mc.thePlayer.posY + mc.thePlayer.getEyeHeight());
 
@@ -98,10 +95,10 @@ public class CombatUtils implements IUtil {
 
         float yaw = (float) (Math.atan2(z, x) * 180.0D / Math.PI) - 90.0F;
         float pitch = (float) -((Math.atan2(y, distance) * 180.0D / Math.PI));
-        */
-        Rotation rotation = getEntityRotations(e.posX, e.posY, e.posZ);
 
-        return new float[] { rotation.getYaw(), rotation.getPitch() };
+        //Rotation rotation = getEntityRotations(e.posX, e.posY, e.posZ);
+
+        return new float[] { yaw + (random ? MathUtils.random(-0.5, 0.5) : 0), pitch + (random ? MathUtils.random(-0.5, 0.5) : 0) };
     }
 
     public static Rotation smoothAngle(float[] dst, float[] src, float randMin, float randMax) {

@@ -11,7 +11,6 @@ import lime.features.module.impl.combat.KillAura;
 import lime.features.module.impl.world.Scaffold;
 import lime.features.setting.impl.EnumValue;
 import lime.features.setting.impl.SlideValue;
-import lime.utils.movement.HopFriction;
 import lime.utils.movement.MovementUtils;
 import net.minecraft.network.play.client.C03PacketPlayer;
 import net.minecraft.network.play.server.S08PacketPlayerPosLook;
@@ -28,8 +27,6 @@ public class Speed extends Module {
     private double moveSpeed, lastDist;
     private int stage;
 
-    private final HopFriction hopFriction = new HopFriction();
-
     @Override
     public void onEnable() {
         if(mc.thePlayer == null) {
@@ -42,7 +39,6 @@ public class Speed extends Module {
 
     @Override
     public void onDisable() {
-        this.hopFriction.reset();
         mc.timer.timerSpeed = 1;
         if(mc.thePlayer != null)
             mc.thePlayer.speedInAir = 0.02f;
@@ -121,6 +117,9 @@ public class Speed extends Module {
         }
     }
 
+    boolean collided;
+    double stair, less;
+
     @EventTarget
     public void onMove(EventMove e) {
         if(mode.is("mineplex")) {
@@ -147,7 +146,7 @@ public class Speed extends Module {
                     mc.thePlayer.motionX *= 1.0199999809265137;
                     mc.thePlayer.motionZ *= 1.0199999809265137;
                     if(mc.thePlayer.ticksExisted % 5 == 0 && mode.is("funcraft")) {
-                        mc.timer.timerSpeed = 1.75f;
+                        mc.timer.timerSpeed = 1.4f;
                     }
                 }
                 if(mc.thePlayer.onGround)

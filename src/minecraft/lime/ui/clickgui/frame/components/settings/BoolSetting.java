@@ -1,8 +1,8 @@
 package lime.ui.clickgui.frame.components.settings;
 
-import lime.managers.FontManager;
 import lime.features.setting.SettingValue;
 import lime.features.setting.impl.BoolValue;
+import lime.managers.FontManager;
 import lime.ui.clickgui.frame.components.Component;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiScreen;

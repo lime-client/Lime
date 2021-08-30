@@ -1,6 +1,5 @@
 package lime.features.commands.impl;
 
-import lime.core.Lime;
 import lime.features.commands.Command;
 
 public class KillSult extends Command {

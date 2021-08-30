@@ -1,10 +1,7 @@
 package lime.utils.other;
 
 import lime.utils.IUtil;
-import net.minecraft.client.gui.Gui;
-import net.minecraft.network.play.client.C00PacketKeepAlive;
 import net.minecraft.network.play.client.C03PacketPlayer;
-import net.minecraft.network.play.client.C0FPacketConfirmTransaction;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 

@@ -2,7 +2,7 @@
   "informations": [
     {
       "author": "Lime Auto Save",
-      "time": 1629474232
+      "time": 1630327490
     }
   ],
   "modules": [
@@ -110,7 +110,7 @@
         {
           "name": "Auto Block Range",
           "type": "slider",
-          "value": 9.950000000000001
+          "value": 11.15
         },
         {
           "name": "Range",
@@ -120,7 +120,7 @@
         {
           "name": "CPS",
           "type": "slider",
-          "value": 14.0
+          "value": 8.0
         },
         {
           "name": "Randomize CPS",
@@ -145,7 +145,7 @@
         {
           "name": "Teams",
           "type": "bool",
-          "value": true
+          "value": false
         },
         {
           "name": "Ray Cast",
@@ -170,7 +170,7 @@
         {
           "name": "Particles",
           "type": "bool",
-          "value": false
+          "value": true
         },
         {
           "name": "Show",
@@ -192,7 +192,7 @@
         {
           "name": "Show",
           "type": "bool",
-          "value": false
+          "value": true
         }
       ]
     },
@@ -257,7 +257,7 @@
     },
     {
       "moduleName": "Teleport Aura",
-      "key": -1,
+      "key": 21,
       "toggled": false,
       "settings": [
         {
@@ -285,7 +285,7 @@
     {
       "moduleName": "Disabler",
       "key": -1,
-      "toggled": true,
+      "toggled": false,
       "settings": [
         {
           "name": "Mode",
@@ -304,6 +304,23 @@
       "key": -1,
       "toggled": false,
       "settings": [
+        {
+          "name": "Show",
+          "type": "bool",
+          "value": true
+        }
+      ]
+    },
+    {
+      "moduleName": "Crasher",
+      "key": -1,
+      "toggled": false,
+      "settings": [
+        {
+          "name": "Mode",
+          "type": "enum",
+          "value": "poslook"
+        },
         {
           "name": "Show",
           "type": "bool",
@@ -365,7 +382,12 @@
         {
           "name": "Distance",
           "type": "slider",
-          "value": 2.7
+          "value": 3.0
+        },
+        {
+          "name": "Sides",
+          "type": "slider",
+          "value": 9.0
         },
         {
           "name": "Space Only",
@@ -839,12 +861,12 @@
         {
           "name": "Text",
           "type": "text",
-          "value": "Lime best clarinet"
+          "value": "noggerqsz"
         },
         {
           "name": "Delay",
           "type": "slider",
-          "value": 1.5
+          "value": 1.0
         },
         {
           "name": "Random Chars",
@@ -960,17 +982,32 @@
     {
       "moduleName": "Animations",
       "key": -1,
-      "toggled": true,
+      "toggled": false,
       "settings": [
         {
           "name": "Mode",
           "type": "enum",
-          "value": "exhibition2"
+          "value": "swank"
         },
         {
           "name": "Swing Slowdown",
           "type": "slider",
           "value": 1.0
+        },
+        {
+          "name": "X",
+          "type": "slider",
+          "value": -0.25
+        },
+        {
+          "name": "Y",
+          "type": "slider",
+          "value": 0.1
+        },
+        {
+          "name": "Z",
+          "type": "slider",
+          "value": 0.1
         },
         {
           "name": "Show",
@@ -1041,7 +1078,7 @@
         {
           "name": "Color",
           "type": "color",
-          "value": -15523372
+          "value": -10197916
         },
         {
           "name": "Show",
@@ -1167,7 +1204,7 @@
         {
           "name": "Only Targets",
           "type": "bool",
-          "value": false
+          "value": true
         },
         {
           "name": "Show",
@@ -1231,7 +1268,7 @@
         {
           "name": "Client Name",
           "type": "text",
-          "value": "pacohakcszs"
+          "value": "cocker client real op 2020"
         },
         {
           "name": "Target HUD",
@@ -1298,7 +1335,7 @@
         {
           "name": "Time",
           "type": "slider",
-          "value": 22000.0
+          "value": 17000.0
         },
         {
           "name": "Rain",
@@ -1380,7 +1417,7 @@
         {
           "name": "Same Y",
           "type": "bool",
-          "value": false
+          "value": true
         },
         {
           "name": "No Swing",
@@ -1467,7 +1504,7 @@
     },
     {
       "moduleName": "Timer",
-      "key": -1,
+      "key": 0,
       "toggled": false,
       "settings": [
         {

@@ -1,11 +1,7 @@
 package lime.ui.proxymanager;
 
-import com.thealtening.auth.TheAlteningAuthentication;
 import lime.core.Lime;
 import lime.ui.fields.PasswordField;
-import lime.ui.notifications.Notification;
-import lime.utils.other.WebUtils;
-import lime.utils.render.GLSLSandboxShader;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
@@ -16,7 +12,6 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
 
 import java.awt.*;
-import java.awt.datatransfer.DataFlavor;
 import java.io.IOException;
 import java.net.Proxy;
 
@@ -75,9 +70,9 @@ public class ProxyManagerScreen extends GuiScreen {
         password.drawTextBox();
 
         if(username.getText().isEmpty())
-            this.drawString(mc.fontRendererObj, "Username", this.width / 2 - 95, this.height / 2 - 20 - 34, new Color(75, 75, 75).getRGB());
+            this.drawString(mc.fontRendererObj, "IP", this.width / 2 - 95, this.height / 2 - 20 - 34, new Color(75, 75, 75).getRGB());
         if(password.getText().isEmpty())
-            this.drawString(mc.fontRendererObj, "Password", this.width / 2 - 95, this.height / 2 - 20 - 10, new Color(75, 75, 75).getRGB());
+            this.drawString(mc.fontRendererObj, "Port", this.width / 2 - 95, this.height / 2 - 20 - 10, new Color(75, 75, 75).getRGB());
 
         this.drawCenteredString(mc.fontRendererObj, "Proxy Manager", this.width / 2, 10, new Color(75, 75, 75).getRGB());
         this.drawCenteredString(mc.fontRendererObj, this.runningThread == null || this.runningThread.getStatus().contains("wait") ? this.username.getText().length() > 16 && !this.username.getText().contains("@") && this.password.getText().isEmpty() ? "§4Warning: You can't use a cracked account with more than 16 characters" : "Waiting" : this.runningThread.getStatus(), this.width / 2, 20, new Color(75, 75, 75).getRGB());

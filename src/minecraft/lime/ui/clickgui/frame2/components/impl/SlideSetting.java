@@ -9,10 +9,11 @@ import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.util.MathHelper;
 import org.lwjgl.input.Mouse;
-import static lime.ui.clickgui.frame2.Priority.*;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+
+import static lime.ui.clickgui.frame2.Priority.*;
 
 public class SlideSetting extends Component {
     public SlideSetting(int x, int y, FrameModule owner, SettingValue setting) {

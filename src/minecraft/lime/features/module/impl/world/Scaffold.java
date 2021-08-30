@@ -16,6 +16,7 @@ import lime.utils.movement.MovementUtils;
 import lime.utils.other.BlockUtils;
 import lime.utils.other.InventoryUtils;
 import lime.utils.other.MathUtils;
+import lime.utils.other.Timer;
 import lime.utils.render.RenderUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockSnow;
@@ -25,7 +26,6 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.play.client.C0APacketAnimation;
 import net.minecraft.util.*;
-import lime.utils.other.Timer;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 

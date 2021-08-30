@@ -2,9 +2,8 @@ package lime.managers;
 
 import lime.features.module.Category;
 import lime.features.module.Module;
-import lime.features.module.impl.exploit.*;
-import lime.features.module.impl.exploit.Phase;
 import lime.features.module.impl.combat.*;
+import lime.features.module.impl.exploit.*;
 import lime.features.module.impl.movement.*;
 import lime.features.module.impl.player.*;
 import lime.features.module.impl.render.*;
@@ -32,6 +31,7 @@ public class ModuleManager {
         // EXPLOIT
         registerModule(new Disabler());
         registerModule(new FastBow());
+        registerModule(new Crasher());
         registerModule(new NoClip());
         registerModule(new Blink());
         registerModule(new Phase());

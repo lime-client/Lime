@@ -25,9 +25,9 @@ public class Criticals extends Module {
         if(e.getPacket() instanceof C02PacketUseEntity) {
             C02PacketUseEntity packet = (C02PacketUseEntity) e.getPacket();
             if(packet.getAction() == C02PacketUseEntity.Action.ATTACK && mc.thePlayer.onGround && timer.hasReached(450)) {
-                double[] offsets = {0.07, 0.07, 0.001, 0.001};
+                double[] offsets = {.11, .1100013579, 1.3579E-6};
                 for (double offset : offsets) {
-                    mc.getNetHandler().addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY + offset + (Math.random() * 0.0003), mc.thePlayer.posZ, false));
+                    mc.getNetHandler().addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY + offset, mc.thePlayer.posZ, false));
                 }
                 mc.thePlayer.onCriticalHit(packet.getEntityFromWorld(mc.theWorld));
                 timer.reset();

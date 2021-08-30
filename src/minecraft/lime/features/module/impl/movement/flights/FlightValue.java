@@ -1,6 +1,5 @@
 package lime.features.module.impl.movement.flights;
 
-import lime.core.Lime;
 import lime.core.events.impl.EventBoundingBox;
 import lime.core.events.impl.EventMotion;
 import lime.core.events.impl.EventMove;

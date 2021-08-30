@@ -7,7 +7,7 @@ import lime.ui.clickgui.frame2.components.Component;
 import lime.ui.clickgui.frame2.components.FrameModule;
 import net.minecraft.client.gui.GuiScreen;
 
-import static lime.ui.clickgui.frame2.Priority.*;
+import static lime.ui.clickgui.frame2.Priority.defaultWidth;
 
 public class EnumSetting extends Component {
     public EnumSetting(int x, int y, FrameModule owner, SettingValue setting) {

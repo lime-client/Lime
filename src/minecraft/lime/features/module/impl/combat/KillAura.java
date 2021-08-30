@@ -2,7 +2,10 @@ package lime.features.module.impl.combat;
 
 import lime.core.Lime;
 import lime.core.events.EventTarget;
-import lime.core.events.impl.*;
+import lime.core.events.impl.Event2D;
+import lime.core.events.impl.Event3D;
+import lime.core.events.impl.EventMotion;
+import lime.core.events.impl.EventWorldChange;
 import lime.features.module.Category;
 import lime.features.module.Module;
 import lime.features.module.impl.combat.killaura.Multi;
@@ -28,7 +31,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemSword;
 import org.lwjgl.opengl.GL11;
 
-import java.awt.Color;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Comparator;
 
@@ -245,7 +248,7 @@ public class KillAura extends Module {
         if((deathCheck.isEnabled() && !entity.isEntityAlive()) || (!mc.thePlayer.canEntityBeSeen(entity) && !throughWalls.isEnabled())) return false;
         if(autoBlock.is("none") && mc.thePlayer.getDistanceToEntity(entity) >= this.range.getCurrent()) return false;
         if((!autoBlock.is("none") && mc.thePlayer.getDistanceToEntity(entity) >= this.autoBlockRange.getCurrent())) return false;
-        if(!autoBlock.is("none") && mc.thePlayer.getDistanceToEntity(entity) <= this.autoBlockRange.getCurrent() && !hasSword()) return false;
+        if(!autoBlock.is("none") && mc.thePlayer.getDistanceToEntity(entity) <= this.autoBlockRange.getCurrent() && !hasSword() && mc.thePlayer.getDistanceToEntity(entity) >= this.range.getCurrent()) return false;
         return (entity instanceof EntityPlayer && this.players.isEnabled()) || ((entity instanceof EntityVillager || entity instanceof EntityAnimal) && this.passives.isEnabled()) || (entity instanceof EntityMob && this.mobs.isEnabled());
     }
 }

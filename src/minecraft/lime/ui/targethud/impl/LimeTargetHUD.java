@@ -1,7 +1,6 @@
 package lime.ui.targethud.impl;
 
 
-import lime.core.Lime;
 import lime.managers.FontManager;
 import lime.ui.targethud.TargetHUD;
 import lime.utils.other.MathUtils;

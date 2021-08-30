@@ -91,7 +91,7 @@ public class Single extends KillAuraMode {
 
                 switch(killAura.rotations.getSelected().toLowerCase()) {
                     case "basic":
-                        rotations = CombatUtils.getEntityRotations(entity, false);
+                        rotations = CombatUtils.getEntityRotations(entity, true);
                         break;
                     case "smooth":
                         rotations = CombatUtils.getEntityRotations(entity, false);

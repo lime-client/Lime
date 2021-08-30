@@ -1,16 +1,16 @@
 package lime.core;
 
 import lime.features.module.Module;
+import lime.features.setting.SettingsManager;
 import lime.features.setting.impl.BoolValue;
+import lime.managers.CommandManager;
 import lime.managers.FriendManager;
+import lime.managers.ModuleManager;
 import lime.scripting.ScriptManager;
+import lime.ui.clickgui.frame.ClickGUI;
 import lime.ui.gui.MainScreen;
 import lime.ui.notifications.utils.NotificationManager;
 import lime.utils.other.file.FileSaver;
-import lime.managers.CommandManager;
-import lime.managers.ModuleManager;
-import lime.features.setting.SettingsManager;
-import lime.ui.clickgui.frame.ClickGUI;
 import lime.utils.other.security.UserCheckThread;
 import net.minecraft.client.Minecraft;
 import org.apache.logging.log4j.LogManager;

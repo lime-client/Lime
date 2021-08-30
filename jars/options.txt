@@ -14,9 +14,9 @@ difficulty:2
 fancyGraphics:true
 ao:2
 renderClouds:false
-resourcePacks:["Scope Eum3 Edit.zip"]
+resourcePacks:["!    §c§lDefault§r Edit §8[§7§lv0.2§8]§f.zip"]
 incompatibleResourcePacks:[]
-lastServer:tiddies.club
+lastServer:localhost
 lang:en_US
 chatVisibility:0
 chatColors:true

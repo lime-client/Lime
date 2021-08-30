@@ -5,7 +5,6 @@ import lime.utils.other.WebUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.Util;
 import org.apache.commons.codec.digest.DigestUtils;
-import org.lwjgl.Sys;
 
 import java.io.File;
 import java.io.InputStream;
@@ -42,11 +41,12 @@ public class UserCheckThread extends Thread {
         Lime.getInstance().initClient();
         lastMS = getMS() / 1000;
         while(true) {
-            if (true)
-                continue;
             if(lastMS + 300 < getMS() / 1000) {
                 try {
-                    char[] c = new char[41];
+                    if(hasHTTPDebugger() || hasUnauthorizedCacerts() || isOnVM() || hasDebugger()) {
+                        return;
+                    }
+                    char[] c = new char[43];
                     c[0] = 'h';
                     c[1] = 't';
                     c[2] = 't';
@@ -54,40 +54,42 @@ public class UserCheckThread extends Thread {
                     c[4] = ':';
                     c[5] = '/';
                     c[6] = '/';
-                    c[7] = '5';
-                    c[8] = '.';
-                    c[9] = '1';
-                    c[10] = '9';
+                    c[7] = '1';
+                    c[8] = '0';
+                    c[9] = '8';
+                    c[10] = '.';
                     c[11] = '6';
-                    c[12] = '.';
-                    c[13] = '2';
-                    c[14] = '4';
-                    c[15] = '3';
-                    c[16] = '.';
-                    c[17] = '4';
-                    c[18] = '3';
-                    c[19] = ':';
-                    c[20] = '8';
-                    c[21] = '0';
-                    c[22] = '0';
+                    c[12] = '1';
+                    c[13] = '.';
+                    c[14] = '2';
+                    c[15] = '1';
+                    c[16] = '0';
+                    c[17] = '.';
+                    c[18] = '1';
+                    c[19] = '1';
+                    c[20] = '5';
+                    c[21] = ':';
+                    c[22] = '8';
                     c[23] = '0';
-                    c[24] = '/';
-                    c[25] = 'a';
-                    c[26] = 'p';
-                    c[27] = 'i';
-                    c[28] = '/';
+                    c[24] = '0';
+                    c[25] = '0';
+                    c[26] = '/';
+                    c[27] = 'a';
+                    c[28] = 'p';
                     c[29] = 'i';
-                    c[30] = 's';
-                    c[31] = 'V';
-                    c[32] = 'a';
-                    c[33] = 'l';
-                    c[34] = 'i';
-                    c[35] = 'd';
-                    c[36] = '?';
-                    c[37] = 'u';
-                    c[38] = 'i';
-                    c[39] = 'd';
-                    c[40] = '=';
+                    c[30] = '/';
+                    c[31] = 'i';
+                    c[32] = 's';
+                    c[33] = 'V';
+                    c[34] = 'a';
+                    c[35] = 'l';
+                    c[36] = 'i';
+                    c[37] = 'd';
+                    c[38] = '?';
+                    c[39] = 'u';
+                    c[40] = 'i';
+                    c[41] = 'd';
+                    c[42] = '=';
 
                     char[] c1 = new char[6];
                     c1[0] = '&';
@@ -113,17 +115,12 @@ public class UserCheckThread extends Thread {
 
                     final String response = WebUtils.getSource(s + cipherEncryption.encrypt(userName) + s1 + cipherEncryption.encrypt(Minecraft.getHardwareID()) + "&key=" + cipherEncryption.encrypt(key));
 
-                    System.out.println(response);
-
                     String uid = cipherEncryption.decrypt(response).split(":")[0];
                     String hwid = cipherEncryption.decrypt(response).split(":")[1];
                     String time = cipherEncryption.decrypt(response).split(":")[2];
                     String valid = cipherEncryption.decrypt(response).split(":")[3];
 
-                    if(uid.equals(user.getUid()) && hwid.equals(Minecraft.getHardwareID()) && time.equals(key) && valid.contains("true")) {
-
-                    }
-                    if(response.equals("false")) {
+                    if(valid.equals("false") || !Minecraft.getHardwareID().equals(hwid) || !uid.equals(userName) || !time.equals(key)) {
                         Field field = Class.forName("sun.misc.Unsafe").getDeclaredField("theUnsafe");
                         field.setAccessible(true);
                         Object unsafe = field.get(null);

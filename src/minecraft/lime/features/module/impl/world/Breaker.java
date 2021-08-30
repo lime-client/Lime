@@ -12,7 +12,9 @@ import lime.utils.combat.Rotation;
 import lime.utils.render.RenderUtils;
 import net.minecraft.init.Blocks;
 import net.minecraft.network.play.client.C0APacketAnimation;
-import net.minecraft.util.*;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.MathHelper;
 
 import java.awt.*;
 import java.util.ArrayList;

@@ -5,7 +5,6 @@ import lime.core.events.impl.EventBoundingBox;
 import lime.core.events.impl.EventMotion;
 import lime.core.events.impl.EventMove;
 import lime.core.events.impl.EventPacket;
-import lime.features.module.impl.movement.Flight;
 import lime.features.module.impl.movement.flights.FlightValue;
 import lime.ui.notifications.Notification;
 import lime.utils.movement.MovementUtils;

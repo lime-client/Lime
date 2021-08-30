@@ -15,7 +15,7 @@ public class AntiVoid extends Module {
         super("Anti Void", Category.PLAYER);
     }
 
-    private final EnumValue mode = new EnumValue("Mode", this, "Motion", "Motion");
+    private final EnumValue mode = new EnumValue("Mode", this, "Motion", "Motion", "Blink");
     private final SlideValue pullBack = new SlideValue("Pullback", this, 500, 3000, 500, 500);
 
     private final Timer timer = new Timer();
@@ -29,6 +29,9 @@ public class AntiVoid extends Module {
                     timer.reset();
                     mc.thePlayer.motionY = 1;
                 }
+            }
+            if(mode.is("blink")) {
+                e.setCanceled(true);
             }
         } else timer.reset();
     }

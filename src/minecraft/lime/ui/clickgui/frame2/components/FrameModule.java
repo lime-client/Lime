@@ -2,20 +2,27 @@ package lime.ui.clickgui.frame2.components;
 
 import lime.core.Lime;
 import lime.features.module.Module;
-import lime.features.setting.impl.*;
+import lime.features.setting.impl.BoolValue;
+import lime.features.setting.impl.EnumValue;
+import lime.features.setting.impl.SlideValue;
+import lime.features.setting.impl.TextValue;
 import lime.managers.FontManager;
 import lime.ui.clickgui.frame2.Priority;
-import lime.ui.clickgui.frame2.components.impl.*;
+import lime.ui.clickgui.frame2.components.impl.BoolSetting;
+import lime.ui.clickgui.frame2.components.impl.EnumSetting;
+import lime.ui.clickgui.frame2.components.impl.SlideSetting;
+import lime.ui.clickgui.frame2.components.impl.TextSetting;
 import lime.utils.render.ColorUtils;
 import lime.utils.render.RenderUtils;
-import lime.utils.render.animation.easings.*;
+import lime.utils.render.animation.easings.Animate;
+import lime.utils.render.animation.easings.Easing;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
-import java.awt.Color;
+import java.awt.*;
 import java.util.ArrayList;
 
 import static lime.ui.clickgui.frame2.Priority.*;

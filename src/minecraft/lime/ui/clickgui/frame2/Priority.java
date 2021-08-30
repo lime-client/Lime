@@ -1,6 +1,6 @@
 package lime.ui.clickgui.frame2;
 
-import java.awt.Color;
+import java.awt.*;
 
 public class Priority {
     public static int stringColor = -1;

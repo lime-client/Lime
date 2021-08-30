@@ -353,6 +353,7 @@ public class ItemRenderer
         GlStateManager.enableRescaleNormal();
         GlStateManager.pushMatrix();
 
+
         if (this.itemToRender != null)
         {
             if (this.itemToRender.getItem() instanceof ItemMap)
@@ -376,6 +377,7 @@ public class ItemRenderer
 
                     case BLOCK:
                         Animations animations = (Animations) Lime.getInstance().getModuleManager().getModuleC(Animations.class);
+                        GlStateManager.translate(-(animations.x.getCurrent()), -(animations.y.getCurrent()), -(animations.z.getCurrent()));
                         float progress;
                         float var15 = MathHelper.sin(MathHelper.sqrt_float(f1) * (float) Math.PI);
                         switch (animations.mode.getSelected().toUpperCase()) {

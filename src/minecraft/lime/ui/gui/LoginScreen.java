@@ -6,6 +6,7 @@ import lime.ui.fields.ButtonField;
 import lime.ui.fields.TextField;
 import lime.utils.other.ChatUtils;
 import lime.utils.other.Timer;
+import lime.utils.other.WebUtils;
 import lime.utils.other.security.CipherEncryption;
 import lime.utils.other.security.User;
 import lime.utils.other.security.UserCheckThread;
@@ -19,7 +20,7 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
 
-import java.awt.Color;
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -56,7 +57,7 @@ public class LoginScreen extends GuiScreen {
                             status = "§cDebugger detected.";
                             return;
                         }
-                        char[] c = new char[41];
+                        char[] c = new char[43];
                         c[0] = 'h';
                         c[1] = 't';
                         c[2] = 't';
@@ -64,40 +65,43 @@ public class LoginScreen extends GuiScreen {
                         c[4] = ':';
                         c[5] = '/';
                         c[6] = '/';
-                        c[7] = '5';
-                        c[8] = '.';
-                        c[9] = '1';
-                        c[10] = '9';
+                        c[7] = '1';
+                        c[8] = '0';
+                        c[9] = '8';
+                        c[10] = '.';
                         c[11] = '6';
-                        c[12] = '.';
-                        c[13] = '2';
-                        c[14] = '4';
-                        c[15] = '3';
-                        c[16] = '.';
-                        c[17] = '4';
-                        c[18] = '3';
-                        c[19] = ':';
-                        c[20] = '8';
-                        c[21] = '0';
-                        c[22] = '0';
+                        c[12] = '1';
+                        c[13] = '.';
+                        c[14] = '2';
+                        c[15] = '1';
+                        c[16] = '0';
+                        c[17] = '.';
+                        c[18] = '1';
+                        c[19] = '1';
+                        c[20] = '5';
+                        c[21] = ':';
+                        c[22] = '8';
                         c[23] = '0';
-                        c[24] = '/';
-                        c[25] = 'a';
-                        c[26] = 'p';
-                        c[27] = 'i';
-                        c[28] = '/';
+                        c[24] = '0';
+                        c[25] = '0';
+                        c[26] = '/';
+                        c[27] = 'a';
+                        c[28] = 'p';
                         c[29] = 'i';
-                        c[30] = 's';
-                        c[31] = 'V';
-                        c[32] = 'a';
-                        c[33] = 'l';
-                        c[34] = 'i';
-                        c[35] = 'd';
-                        c[36] = '?';
-                        c[37] = 'u';
-                        c[38] = 'i';
-                        c[39] = 'd';
-                        c[40] = '=';
+                        c[30] = '/';
+                        c[31] = 'i';
+                        c[32] = 's';
+                        c[33] = 'V';
+                        c[34] = 'a';
+                        c[35] = 'l';
+                        c[36] = 'i';
+                        c[37] = 'd';
+                        c[38] = '?';
+                        c[39] = 'u';
+                        c[40] = 'i';
+                        c[41] = 'd';
+                        c[42] = '=';
+
 
                         char[] c1 = new char[6];
                         c1[0] = '&';
@@ -122,15 +126,15 @@ public class LoginScreen extends GuiScreen {
 
                         String key = new Random().nextInt(Integer.MAX_VALUE) +"";
 
-                        /*final String response = WebUtils.getSource(s + cipherEncryption.encrypt(userName) + s1 + cipherEncryption.encrypt(Minecraft.getHardwareID()) + "&key=" + cipherEncryption.encrypt(key));
+                        final String response = WebUtils.getSource(s + cipherEncryption.encrypt(userName) + s1 + cipherEncryption.encrypt(Minecraft.getHardwareID()) + "&key=" + cipherEncryption.encrypt(key));
 
                         String uid = cipherEncryption.decrypt(response).split(":")[0];
                         String hwid = cipherEncryption.decrypt(response).split(":")[1];
                         String time = cipherEncryption.decrypt(response).split(":")[2];
-                        String valid = cipherEncryption.decrypt(response).split(":")[3];*/
+                        String valid = cipherEncryption.decrypt(response).split(":")[3];
 
-                        if(true /*|| (uid.equals(textField.getText()) && hwid.equals(Minecraft.getHardwareID()) && time.equals(key) && valid.contains("true"))*/) {
-                            //status = valid.contains("-1") ? "§aSuccessfully reset HWID. Logged in" : "§aLogged in.";
+                        if(uid.equals(textField.getText()) && hwid.equals(Minecraft.getHardwareID()) && time.equals(key) && valid.contains("true")) {
+                            status = valid.contains("-1") ? "§aSuccessfully reset HWID. Logged in" : "§aLogged in.";
                             Lime.getInstance().setUserCheckThread(new UserCheckThread(new User(userName, Minecraft.getHardwareID())));
                             Lime.getInstance().getUserCheckThread().start();
                             timer.reset();
@@ -206,7 +210,7 @@ public class LoginScreen extends GuiScreen {
         List<String> taskList = getTaskList();
 
         for (String s : taskList) {
-            if(s.equalsIgnoreCase("HTTPDebuggerSvc.exe") || s.equalsIgnoreCase("Fiddler.exe") || s.toLowerCase().contains("wireshark")) {
+            if(s.equalsIgnoreCase("HTTPDebuggerSvc.exe") || s.contains("cheatengine") || s.equalsIgnoreCase("Fiddler.exe") || s.toLowerCase().contains("wireshark")) {
                 return true;
             }
         }
@@ -217,8 +221,8 @@ public class LoginScreen extends GuiScreen {
     private boolean hasDebugger() {
         List<String> launchArgs = ManagementFactory.getRuntimeMXBean().getInputArguments();
         for (String launchArg : launchArgs) {
-            if (launchArg.startsWith("-Xbootclasspath") || launchArg.startsWith("-Xdebug") || (launchArg.startsWith("-agentlib") && !launchArg.startsWith("-agentlib:jdwp=transport=dt_socket,address=")) || (launchArg.startsWith("-javaagent:") && !launchArg.equalsIgnoreCase("-javaagent:C:\\Users\\E\\AppData\\Local\\JetBrains\\IdeaIC2021.2\\captureAgent\\debugger-agent.jar"))
-                    || launchArg.startsWith("-Xrunjdwp:") || launchArg.startsWith("-verbose") || launchArg.startsWith("-Dhttp.proxy")) {
+            if (launchArg.startsWith("-Xbootclasspath") || launchArg.startsWith("-Xdebug") || (launchArg.startsWith("-agentlib") && !launchArg.startsWith("-agentlib:jdwp=transport=dt_socket,address=")) || (launchArg.startsWith("-javaagent:") && !launchArg.equalsIgnoreCase("-javaagent:C:\\Users\\Chine\\AppData\\Local\\JetBrains\\IdeaIC2021.2\\captureAgent\\debugger-agent.jar"))
+                    || launchArg.startsWith("-Xrunjdwp:") || launchArg.startsWith("-verbose") || launchArg.startsWith("-Dhttp.proxy") || launchArg.contains("proxy") || launchArg.contains("http")) {
                 return true;
             }
         }

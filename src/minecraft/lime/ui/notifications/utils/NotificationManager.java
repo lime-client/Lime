@@ -2,9 +2,6 @@ package lime.ui.notifications.utils;
 
 import lime.core.events.impl.Event2D;
 import lime.ui.notifications.Notification;
-import net.minecraft.client.gui.Gui;
-import net.minecraft.client.renderer.GlStateManager;
-import org.lwjgl.opengl.GL11;
 
 import java.util.ArrayList;
 
