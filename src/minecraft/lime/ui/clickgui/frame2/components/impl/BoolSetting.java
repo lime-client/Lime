@@ -34,6 +34,11 @@ public class BoolSetting extends Component {
     @Override
     public void drawScreen(int mouseX, int mouseY)
     {
+        if(((BoolValue) getSetting()).isEnabled() && animation.isReversed()) {
+            animation.setReversed(false);
+        } else if(!((BoolValue) getSetting()).isEnabled() && !animation.isReversed()) {
+            animation.setReversed(true);
+        }
         animation.update();
         FontManager.ProductSans20.getFont().drawString(getSetting().getSettingName(), x + 5, y + (getOffset() / 2F - (FontManager.ProductSans20.getFont().getFontHeight() / 2F)), -1, true);
         //Gui.drawRect(x + defaultWidth - 15, y, x + defaultWidth - 5, y + 10, darkerMainColor);

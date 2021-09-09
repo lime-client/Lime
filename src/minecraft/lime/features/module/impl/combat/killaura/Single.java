@@ -169,6 +169,7 @@ public class Single extends KillAuraMode {
             switch(hud.targetHud.getSelected().toLowerCase()) {
                 case "lime":
                     killAura.limeTargetHUD.draw(entity, (float) hud.targetHudX.getCurrent() / 100f * (e.getScaledResolution().getScaledWidth() - 174), (float) hud.targetHudY.getCurrent() / 100f * (e.getScaledResolution().getScaledHeight() - 70), killAura.getColor(Math.round(entity.getHealth())));
+                    //killAura.limeTargetHUD.draw(entity, (float) hud.targetHudX.getCurrent() / 100f * (e.getScaledResolution().getScaledWidth() - 174), (float) hud.targetHudY.getCurrent() / 100f * (e.getScaledResolution().getScaledHeight() - 70), killAura.getColor(Math.round(entity.getHealth())));
                     break;
                 case "astolfo":
                     killAura.astolfoTargetHUD.draw(entity, (float) hud.targetHudX.getCurrent() / 100f * (e.getScaledResolution().getScaledWidth() - 174), (float) hud.targetHudY.getCurrent() / 100f * (e.getScaledResolution().getScaledHeight() - 70), killAura.getColor(Math.round(entity.getHealth())));

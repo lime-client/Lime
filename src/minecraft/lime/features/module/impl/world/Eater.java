@@ -34,36 +34,13 @@ public class Eater extends Module {
                     final Block block = this.mc.theWorld.getBlockState(blockPos).getBlock();
                     if (cakeBesideOrAt(blockPos) && (block == Blocks.cake || block == Blocks.wool || block == Blocks.hardened_clay || block == Blocks.stained_hardened_clay || block == Blocks.planks || block == Blocks.end_stone)) {
                         if(block == Blocks.cake && cakeCovered(blockPos)) continue;
+                        System.out.println(EnumFacing.NORTH.ordinal());
                         mc.getNetHandler().sendPacketNoEvent(new C07PacketPlayerDigging(C07PacketPlayerDigging.Action.START_DESTROY_BLOCK, blockPos, EnumFacing.NORTH));
                         mc.getNetHandler().sendPacketNoEvent(new C07PacketPlayerDigging(C07PacketPlayerDigging.Action.STOP_DESTROY_BLOCK, blockPos, EnumFacing.NORTH));
                     }
                 }
             }
         }
-    }
-
-    private int pickaxeSlot() {
-        for(int i = 36; i < 45; ++i) {
-            if(InventoryUtils.getSlot(i).getHasStack()) {
-                ItemStack itemStack = InventoryUtils.getSlot(i).getStack();
-                if(itemStack.getItem() instanceof ItemPickaxe) {
-                    return i - 36;
-                }
-            }
-        }
-        return -1;
-    }
-
-    private int axeSlot() {
-        for(int i = 36; i < 45; ++i) {
-            if(InventoryUtils.getSlot(i).getHasStack()) {
-                ItemStack itemStack = InventoryUtils.getSlot(i).getStack();
-                if(itemStack.getItem() instanceof ItemAxe) {
-                    return i - 36;
-                }
-            }
-        }
-        return -1;
     }
 
     private boolean cakeBesideOrAt(BlockPos blockPos) {

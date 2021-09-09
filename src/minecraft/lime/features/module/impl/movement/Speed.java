@@ -16,13 +16,15 @@ import net.minecraft.network.play.client.C03PacketPlayer;
 import net.minecraft.network.play.server.S08PacketPlayerPosLook;
 import net.minecraft.potion.Potion;
 
+import java.util.List;
+
 public class Speed extends Module {
 
     public Speed() {
         super("Speed", Category.MOVEMENT);
     }
 
-    private final EnumValue mode = new EnumValue("Mode", this, "Vanilla", "Vanilla", "Vanilla_BHOP", "Verus", "Verus_LOWHOP", "NCP", "Funcraft", "Funcraft_YPORT", "Mineplex");
+    private final EnumValue mode = new EnumValue("Mode", this, "Vanilla", "Vanilla", "Vanilla_BHOP", "Verus", "Verus_LOWHOP", "NCP", "Funcraft", "Funcraft2", "Funcraft_YPORT", "Mineplex");
     private final SlideValue speed = new SlideValue("Speed", this, 0.2, 5, 0.6, 0.1).onlyIf(mode.getSettingName(), "enum", "vanilla_bhop", "vanilla");
     private double moveSpeed, lastDist;
     private int stage;
@@ -114,11 +116,11 @@ public class Speed extends Module {
             if(mode.is("mineplex")) {
                 moveSpeed = 0;
             }
+            if(mode.is("funcraft2")) {
+                moveSpeed = MovementUtils.getBaseMoveSpeed();
+            }
         }
     }
-
-    boolean collided;
-    double stair, less;
 
     @EventTarget
     public void onMove(EventMove e) {
@@ -136,6 +138,41 @@ public class Speed extends Module {
                 targetStrafe.setMoveSpeed(e, Math.max(Math.min(5, moveSpeed -= moveSpeed / 44), 0.4));
             } else {
                 MovementUtils.setSpeed(e, Math.max(Math.min(5, moveSpeed -= moveSpeed / 44), 0.4));
+            }
+        }
+
+        if(mode.is("funcraft2")) {
+            if(!mc.thePlayer.isMoving()) {
+                moveSpeed = 0;
+                stage = 0;
+                return;
+            }
+            mc.timer.timerSpeed = 1.0888F;
+            if(stage == 1 && mc.thePlayer.isMoving()) {
+                moveSpeed = 2.5 * MovementUtils.getBaseMoveSpeed() - 0.1;
+            } else if(stage != 2 || !mc.thePlayer.isMoving()) {
+                if(stage == 3) {
+                    moveSpeed = lastDist - 0.66D * (lastDist - MovementUtils.getBaseMoveSpeed());
+                } else {
+                    List collidingList = mc.theWorld.getCollidingBoundingBoxes(mc.thePlayer, mc.thePlayer.getEntityBoundingBox().offset(0, mc.thePlayer.motionY, 0));
+                    if((collidingList.size() > 0 || mc.thePlayer.isCollidedVertically) && stage > 0) {
+                        stage = mc.thePlayer.moveForward == 0 && mc.thePlayer.moveStrafing == 0 ? 0 : 1;
+                    }
+                    moveSpeed = lastDist - lastDist / 159;
+                }
+            } else {
+                e.setY(mc.thePlayer.motionY = 0.3999);
+                moveSpeed *= 2.14999;
+            }
+
+            if (KillAura.getEntity() != null) {
+                TargetStrafe targetStrafe2 = (TargetStrafe) Lime.getInstance().getModuleManager().getModuleC(TargetStrafe.class);
+                targetStrafe2.setMoveSpeed(e, moveSpeed = Math.max(moveSpeed, MovementUtils.getBaseMoveSpeed() * 1.3));
+            } else {
+                MovementUtils.setSpeed(e, moveSpeed = Math.max(moveSpeed, MovementUtils.getBaseMoveSpeed() * 1.3));
+            }
+            if(mc.thePlayer.isMoving()) {
+                ++stage;
             }
         }
 

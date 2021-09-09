@@ -17,6 +17,7 @@ import lime.features.setting.impl.SlideValue;
 import lime.ui.notifications.Notification;
 import lime.ui.targethud.impl.AstolfoTargetHUD;
 import lime.ui.targethud.impl.LimeTargetHUD;
+import lime.ui.targethud.impl.TestTargetHUD;
 import lime.utils.combat.CombatUtils;
 import lime.utils.render.ColorUtils;
 import lime.utils.render.RenderUtils;
@@ -55,6 +56,7 @@ public class KillAura extends Module {
     public final SlideValue range = new SlideValue("Range", this, 2.8, 6, 4.2, 0.05);
     public final SlideValue cps = new SlideValue("CPS", this, 1, 20, 8, 1);
     public final SlideValue randomizeCps = new SlideValue("Randomize CPS", this, 0, 5, 3, 1);
+    public final SlideValue randomizeYaw = new SlideValue("Randomize Yaw", this, 0, 5, 3, 1).onlyIf(rotations.getSettingName(), "enum", "Smooth", "Basic");
     private final BoolValue players = new BoolValue("Players", this, true);
     private final BoolValue passives = new BoolValue("Passives", this, false);
     private final BoolValue mobs = new BoolValue("Mobs", this, true);
@@ -73,6 +75,7 @@ public class KillAura extends Module {
     // TargetHUD
     public final LimeTargetHUD limeTargetHUD = new LimeTargetHUD();
     public final AstolfoTargetHUD astolfoTargetHUD = new AstolfoTargetHUD();
+    public final TestTargetHUD testTargetHUD = new TestTargetHUD(150, 36);
 
     private final Single single = new Single(this);
     private final Multi multi = new Multi(this);
@@ -81,6 +84,7 @@ public class KillAura extends Module {
     public void onEnable() {
         limeTargetHUD.resetHealthAnimated();
         astolfoTargetHUD.resetHealthAnimated();
+        testTargetHUD.reset();
 
         if(mode.is("single")) {
             single.onEnable();

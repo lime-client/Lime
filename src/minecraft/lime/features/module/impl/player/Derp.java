@@ -16,6 +16,7 @@ public class Derp extends Module {
     }
 
     private final SlideValue rotationsSpeed = new SlideValue("Rotations Speed", this, 1, 100, 50, 1);
+    private final BoolValue headless = new BoolValue("Headless", this, true);
     private final BoolValue sneak = new BoolValue("Sneak", this, true);
 
     private float yaw = -180;
@@ -39,7 +40,9 @@ public class Derp extends Module {
         yaw += rotationsSpeed.intValue();
 
         e.setYaw(yaw);
-        e.setPitch(-180);
+        if(headless.isEnabled()) {
+            e.setPitch(-180);
+        }
 
         mc.thePlayer.setRotationsTP(e);
     }

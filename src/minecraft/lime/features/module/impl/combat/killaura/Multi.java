@@ -69,7 +69,7 @@ public class Multi extends KillAuraMode {
 
                 switch(killAura.rotations.getSelected().toLowerCase()) {
                     case "basic":
-                        rotations = CombatUtils.getEntityRotations(entities.get(index), false);
+                        rotations = CombatUtils.getEntityRotations(entities.get(index), true);
                         break;
                 }
 

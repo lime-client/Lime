@@ -84,6 +84,7 @@ public class ModuleManager {
         registerModule(new Tracers());
         registerModule(new Camera());
         registerModule(new Chams());
+        registerModule(new ESP2D());
         registerModule(new ESP());
         registerModule(new HUD());
 

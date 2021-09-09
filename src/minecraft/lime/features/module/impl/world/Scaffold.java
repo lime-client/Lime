@@ -70,6 +70,8 @@ public class Scaffold extends Module {
     private final BoolValue downwards = new BoolValue("Downwards", this, false);
     private final BoolValue randomVec = new BoolValue("Random Vec", this, false);
     private final BoolValue rayCast = new BoolValue("RayCast", this, false);
+    private final BoolValue blockInfo = new BoolValue("Block Info", this, false);
+    private final BoolValue blockEsp = new BoolValue("Block ESP", this, false);
 
     //ToDo : KeepSpoof
 
@@ -109,6 +111,7 @@ public class Scaffold extends Module {
 
     @EventTarget
     public void on2D(Event2D e) {
+        if(!blockInfo.isEnabled()) return;
         GL11.glEnable(3089);
         Gui.drawRect(e.getScaledResolution().getScaledWidth() / 2F - 45, e.getScaledResolution().getScaledHeight() / 2F + 15, e.getScaledResolution().getScaledWidth() / 2F + 45,e.getScaledResolution().getScaledHeight() / 2F + 25, 2013265920);
         RenderUtils.prepareScissorBox(e.getScaledResolution().getScaledWidth() / 2F - 45, e.getScaledResolution().getScaledHeight() / 2F + 15, e.getScaledResolution().getScaledWidth() / 2F + 45,e.getScaledResolution().getScaledHeight() / 2F + 25);
@@ -137,7 +140,7 @@ public class Scaffold extends Module {
 
     @EventTarget
     public void on3D(Event3D e) {
-        if(blockData != null) {
+        if(blockData != null && blockEsp.isEnabled()) {
             RenderUtils.drawBox(blockData.getBlockPos().getX(), blockData.getBlockPos().getY(), blockData.getBlockPos().getZ(), 1, new Color(255, 0, 0, 100), true, true);
             RenderUtils.drawBox(blockData.getBlockPos().getX(), blockData.getBlockPos().getY(), blockData.getBlockPos().getZ(), 1, new Color(255, 0, 0), true, false);
         }
@@ -426,7 +429,7 @@ public class Scaffold extends Module {
                         mc.thePlayer.motionZ = 0;
                         mc.thePlayer.jumpMovementFactor = 0;
                         if (isAirBlock(underBlock) && blockData != null) {
-                            mc.timer.timerSpeed = 10f;
+                            mc.timer.timerSpeed = 2f;
                             mc.thePlayer.motionY = 0.41982;
                             mc.thePlayer.motionX = 0;
                             mc.thePlayer.motionZ = 0;

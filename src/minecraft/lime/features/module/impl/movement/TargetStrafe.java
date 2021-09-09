@@ -14,6 +14,7 @@ import lime.features.setting.impl.SlideValue;
 import lime.utils.combat.CombatUtils;
 import lime.utils.movement.MovementUtils;
 import lime.utils.render.RenderUtils;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.BlockPos;
@@ -277,7 +278,7 @@ public class TargetStrafe extends Module {
 
     public static boolean canMove() {
         TargetStrafe targetStrafe = (TargetStrafe) Lime.getInstance().getModuleManager().getModuleC(TargetStrafe.class);
-        return KillAura.getEntity() != null && (!targetStrafe.spaceOnly.isEnabled() || Keyboard.isKeyDown(Keyboard.KEY_SPACE));
+        return KillAura.getEntity() != null && (!targetStrafe.spaceOnly.isEnabled() || Keyboard.isKeyDown(Keyboard.KEY_SPACE)) && Minecraft.getMinecraft().thePlayer.canEntityBeSeen(KillAura.getEntity());
     }
 
     private boolean inVoid(Vec3 vec3) {

@@ -1,6 +1,8 @@
 package lime.utils.combat;
 
 import com.google.common.base.Predicates;
+import lime.core.Lime;
+import lime.features.module.impl.combat.KillAura;
 import lime.utils.IUtil;
 import lime.utils.other.MathUtils;
 import net.minecraft.entity.Entity;
@@ -98,7 +100,9 @@ public class CombatUtils implements IUtil {
 
         //Rotation rotation = getEntityRotations(e.posX, e.posY, e.posZ);
 
-        return new float[] { yaw + (random ? MathUtils.random(-0.5, 0.5) : 0), pitch + (random ? MathUtils.random(-0.5, 0.5) : 0) };
+        KillAura killAura = (KillAura) Lime.getInstance().getModuleManager().getModuleC(KillAura.class);
+
+        return new float[] { yaw + (random ? MathUtils.random(-killAura.randomizeYaw.getCurrent(), killAura.randomizeYaw.getCurrent()) : 0), pitch + (random ? MathUtils.random(-killAura.randomizeYaw.getCurrent(), killAura.randomizeYaw.getCurrent()) : 0) };
     }
 
     public static Rotation smoothAngle(float[] dst, float[] src, float randMin, float randMax) {

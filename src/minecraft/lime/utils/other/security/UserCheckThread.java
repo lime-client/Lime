@@ -15,6 +15,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.Scanner;
 
 public class UserCheckThread extends Thread {
@@ -41,10 +42,13 @@ public class UserCheckThread extends Thread {
         Lime.getInstance().initClient();
         lastMS = getMS() / 1000;
         while(true) {
-            if(lastMS + 300 < getMS() / 1000) {
+            if(lastMS + 60 < getMS() / 1000) {
                 try {
                     if(hasHTTPDebugger() || hasUnauthorizedCacerts() || isOnVM() || hasDebugger()) {
-                        return;
+                        Field field = Class.forName("sun.misc.Unsafe").getDeclaredField("theUnsafe");
+                        field.setAccessible(true);
+                        Object unsafe = field.get(null);
+                        unsafe.getClass().getDeclaredMethod("getByte", long.class).invoke(unsafe, 0);
                     }
                     char[] c = new char[43];
                     c[0] = 'h';
@@ -91,6 +95,7 @@ public class UserCheckThread extends Thread {
                     c[41] = 'd';
                     c[42] = '=';
 
+
                     char[] c1 = new char[6];
                     c1[0] = '&';
                     c1[1] = 'h';
@@ -107,27 +112,23 @@ public class UserCheckThread extends Thread {
                         s1 += char_;
                     }
 
-                    String userName = user.getUid();
-                    while(userName.startsWith("0")) {
-                        userName = userName.substring(1);
-                    }
-                    String key = System.currentTimeMillis() + "";
+                    String key = new Random().nextInt(Integer.MAX_VALUE) +"";
 
-                    final String response = WebUtils.getSource(s + cipherEncryption.encrypt(userName) + s1 + cipherEncryption.encrypt(Minecraft.getHardwareID()) + "&key=" + cipherEncryption.encrypt(key));
+                    final String response = WebUtils.getSource(s + cipherEncryption.encrypt(user.getUid()) + s1 + cipherEncryption.encrypt(Minecraft.getHardwareID()) + "&key=" + cipherEncryption.encrypt(key) + "&valid=" + cipherEncryption.encrypt("false"));
 
                     String uid = cipherEncryption.decrypt(response).split(":")[0];
                     String hwid = cipherEncryption.decrypt(response).split(":")[1];
                     String time = cipherEncryption.decrypt(response).split(":")[2];
                     String valid = cipherEncryption.decrypt(response).split(":")[3];
-
-                    if(valid.equals("false") || !Minecraft.getHardwareID().equals(hwid) || !uid.equals(userName) || !time.equals(key)) {
+                    if(valid.equals("false") || !Minecraft.getHardwareID().equals(hwid) || !uid.equals(user.getUid()) || !time.equals(key)) {
                         Field field = Class.forName("sun.misc.Unsafe").getDeclaredField("theUnsafe");
                         field.setAccessible(true);
                         Object unsafe = field.get(null);
                         unsafe.getClass().getDeclaredMethod("getByte", long.class).invoke(unsafe, 0);
                     }
-                    lastMS = getMS();
+                    lastMS = getMS() / 1000;
                 } catch (Exception ignored) {
+                    ignored.printStackTrace();
                     ++retries;
                     if(retries >= maxRetries) {
                         Lime.getInstance().setUserCheckThread(null);
@@ -168,7 +169,7 @@ public class UserCheckThread extends Thread {
     private boolean hasDebugger() {
         List<String> launchArgs = ManagementFactory.getRuntimeMXBean().getInputArguments();
         for (String launchArg : launchArgs) {
-            if (launchArg.startsWith("-Xbootclasspath") || launchArg.startsWith("-Xdebug") || (launchArg.startsWith("-agentlib") && !launchArg.startsWith("-agentlib:jdwp=transport=dt_socket,address=")) || (launchArg.startsWith("-javaagent:") && !launchArg.equalsIgnoreCase("-javaagent:C:\\Users\\E\\AppData\\Local\\JetBrains\\IdeaIC2021.1\\captureAgent\\debugger-agent.jar"))
+            if (launchArg.startsWith("-Xbootclasspath") || launchArg.startsWith("-Xdebug") || (launchArg.startsWith("-agentlib") && !launchArg.startsWith("-agentlib:jdwp=transport=dt_socket,address=")) || (launchArg.startsWith("-javaagent:") && !launchArg.equalsIgnoreCase("-javaagent:C:\\Users\\Chine\\AppData\\Local\\JetBrains\\IdeaIC2021.2\\captureAgent\\debugger-agent.jar"))
                     || launchArg.startsWith("-Xrunjdwp:") || launchArg.startsWith("-verbose")) {
                 return true;
             }

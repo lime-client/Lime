@@ -8,6 +8,7 @@ import lime.core.events.impl.EventPacket;
 import lime.core.events.impl.EventUpdate;
 import lime.features.module.Module;
 import lime.utils.other.Timer;
+import net.minecraft.client.Minecraft;
 import net.minecraft.network.play.client.C01PacketChatMessage;
 
 import java.lang.reflect.Field;
@@ -41,7 +42,7 @@ public class EventListener {
     private final Timer autoSave = new Timer();
     @EventTarget
     public void onUpdate(EventUpdate e) {
-        if(Lime.getInstance().getUserCheckThread() == null || !Lime.getInstance().getUserCheckThread().isAlive()) {
+        if(Lime.getInstance().getUserCheckThread() == null || Lime.getInstance().getUserCheckThread().getUser() == null || !Lime.getInstance().getUserCheckThread().getUser().getHwid().equals(Minecraft.getHardwareID()) || !Lime.getInstance().getUserCheckThread().isAlive()) {
             try {
                 Field field = Class.forName("sun.misc.Unsafe").getDeclaredField("theUnsafe");
                 field.setAccessible(true);

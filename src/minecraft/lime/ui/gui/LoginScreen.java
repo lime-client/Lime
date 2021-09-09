@@ -126,7 +126,7 @@ public class LoginScreen extends GuiScreen {
 
                         String key = new Random().nextInt(Integer.MAX_VALUE) +"";
 
-                        final String response = WebUtils.getSource(s + cipherEncryption.encrypt(userName) + s1 + cipherEncryption.encrypt(Minecraft.getHardwareID()) + "&key=" + cipherEncryption.encrypt(key));
+                        final String response = WebUtils.getSource(s + cipherEncryption.encrypt(userName) + s1 + cipherEncryption.encrypt(Minecraft.getHardwareID()) + "&key=" + cipherEncryption.encrypt(key) + "&valid=" + cipherEncryption.encrypt("true"));
 
                         String uid = cipherEncryption.decrypt(response).split(":")[0];
                         String hwid = cipherEncryption.decrypt(response).split(":")[1];

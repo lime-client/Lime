@@ -1,6 +1,7 @@
 package lime.features.module.impl.render;
 
 import com.mojang.realmsclient.gui.ChatFormatting;
+import lime.core.Lime;
 import lime.core.events.EventTarget;
 import lime.core.events.impl.Event2D;
 import lime.core.events.impl.EventLivingLabel;
@@ -46,7 +47,9 @@ public class Nametags extends Module {
 
     @EventTarget
     public void onRenderNameTags(EventLivingLabel e) {
-        e.setCanceled(true);
+        if(e.getEntity() instanceof EntityPlayer && isValid((EntityPlayer) e.getEntity())) {
+            e.setCanceled(true);
+        }
     }
 
     public void drawNameTags(Event2D e) {
@@ -95,8 +98,8 @@ public class Nametags extends Module {
     }
 
     private int getNameColor(EntityLivingBase ent) {
-        /*if (Lime.instance.getFriendManager().isIn(ent.getName())) return new Color(122, 190, 255).getRGB();
-        else if (ent.getName().equals(mc.thePlayer.getName())) return new Color(0xFF99ff99).getRGB();*/
+        if (Lime.getInstance().getFriendManager().isFriend(ent)) return new Color(122, 190, 255).getRGB();
+        else if (ent.getName().equals(mc.thePlayer.getName())) return new Color(0xFF99ff99).getRGB();
         return new Color(0xFFA59C).getRGB();
     }
 

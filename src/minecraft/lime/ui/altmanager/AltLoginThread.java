@@ -49,7 +49,7 @@ public class AltLoginThread extends Thread {
         } else {
             Session session = this.createSession(this.username, this.password);
             if(session == null) {
-                this.status = "§4Invalid mail or passord!";
+                this.status = "§4Invalid mail or password!";
                 return;
             }
             this.status = "§aLogged in as " + session.getUsername() + " (Premium)";

@@ -17,28 +17,33 @@ public class Funcraft extends FlightValue {
         super("Funcraft");
     }
 
-    private double moveSpeed;
+    private double moveSpeed, timerSpeed;
     private double lastDist;
     private int stage;
 
     @Override
     public void onEnable() {
         stage = 0;
+        moveSpeed = 0;
+        lastDist = 0;
+        timerSpeed = getFlight().funcraftTimerSpeed.getCurrent();
     }
 
     @Override
     public void onPacket(EventPacket e) {
         if(e.getPacket() instanceof S08PacketPlayerPosLook) {
             moveSpeed = 0.25;
+            timerSpeed = 1.75;
         }
     }
 
     @Override
     public void onMotion(EventMotion e) {
-
         if(!Lime.getInstance().getModuleManager().getModuleC(Timer.class).isToggled())
         {
-            mc.timer.timerSpeed = mc.thePlayer.isMoving() ? 1.6f : 1;
+            mc.timer.timerSpeed = mc.thePlayer.isMoving() ? (float) timerSpeed : 1;
+            timerSpeed -= timerSpeed / 360;
+            timerSpeed = Math.max(timerSpeed, 1.6);
         }
 
         if(!mc.thePlayer.isMoving()) {
@@ -78,11 +83,11 @@ public class Funcraft extends FlightValue {
                         break;
                     case 1:
                         if(mc.thePlayer.onGround && mc.thePlayer.isCollidedVertically)
-                            e.setY(mc.thePlayer.motionY = 0.42);
+                            e.setY(mc.thePlayer.motionY = 0.3999);
                         this.moveSpeed *= 2.149;
                         break;
                     case 2:
-                        this.moveSpeed = 1.6;
+                        this.moveSpeed = getFlight().funcraftSpeed.getCurrent();
                         break;
                     default:
                         this.moveSpeed = this.lastDist - this.lastDist / 159;

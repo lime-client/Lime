@@ -28,6 +28,7 @@ public class TextSetting extends Component {
 
     @Override
     public void drawScreen(int mouseX, int mouseY) {
+        text = ((TextValue) getSetting()).getText();
         GL11.glPushMatrix();
         GL11.glScalef(0.9f, 0.9f, 0);
         FontManager.ProductSans18.getFont().drawStringWithShadow(getSetting().getSettingName(), (x + 5) / 0.9f, y / 0.9F, -1);
@@ -35,8 +36,6 @@ public class TextSetting extends Component {
 
         Gui.drawRect(x + 6, y + 18, x + defaultWidth - 3, y + 19, -1);
         FontManager.ProductSans20.getFont().drawStringWithShadow(text + (focused ? System.currentTimeMillis() / 500 % 2 == 0 ? "_" : "" : ""), (x + 5), y + 6, -1);
-
-        ((TextValue) getSetting()).setText(text);
     }
 
     @Override
@@ -61,6 +60,8 @@ public class TextSetting extends Component {
         if(keyCode == 14) {
             text = StringUtils.chop(text);
         }
+
+        ((TextValue) getSetting()).setText(text);
     }
 
     @Override

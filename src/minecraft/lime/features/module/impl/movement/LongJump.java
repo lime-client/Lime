@@ -12,6 +12,7 @@ import lime.features.setting.impl.SlideValue;
 import lime.ui.notifications.Notification;
 import lime.utils.movement.MovementUtils;
 import lime.utils.other.InventoryUtils;
+import lime.utils.other.MathUtils;
 import lime.utils.other.PlayerUtils;
 import net.minecraft.block.BlockAir;
 import net.minecraft.item.ItemBow;
@@ -30,24 +31,22 @@ public class LongJump extends Module {
         super("Long Jump", Category.MOVEMENT);
     }
 
-    private final EnumValue mode = new EnumValue("Mode", this, "Vanilla", "Vanilla", "Funcraft", "NCP_Bow", "Verus", "Verus_Bow", "Kokscraft");
+    private final EnumValue mode = new EnumValue("Mode", this, "Vanilla", "Vanilla", "Funcraft", "Mineplex", "NCP_Bow", "Verus", "Verus_Bow", "Kokscraft");
     private final SlideValue speed = new SlideValue("Speed", this, 1, 9, 5, 0.5).onlyIf(mode.getSettingName(), "enum", "verus_bow", "verus");
 
-    private double moveSpeed = 0;
-    private boolean receivedS12 = false;
+    private double moveSpeed = 0, y;
 
-    private boolean boosted;
-    private boolean bowd;
+    private boolean boosted, bowd, receivedS12, back;
     private int ticks, stage;
 
     @Override
     public void onEnable() {
-        receivedS12 = false;
-        boosted = false;
-        bowd = false;
-        moveSpeed = 0;
-        stage = 0;
-        ticks = 0;
+        receivedS12 = back = boosted = bowd = false;
+        moveSpeed = y = 0;
+        if(mode.is("mineplex")) {
+            moveSpeed = 0.25;
+        }
+        stage = ticks = 0;
         if(mode.is("verus") && (!mc.thePlayer.onGround || new BlockPos(mc.thePlayer.posX, mc.thePlayer.posY - 1, mc.thePlayer.posZ).getBlock() instanceof BlockAir)) {
             Lime.getInstance().getNotificationManager().addNotification(new Notification("Error", "Can damage only on the ground!", Notification.Type.ERROR));
             this.toggle();
@@ -87,17 +86,6 @@ public class LongJump extends Module {
 
     @EventTarget
     public void onMotion(EventMotion e) {
-        /*if(true) {
-            for (EntityPlayer playerEntity : mc.theWorld.playerEntities) {
-                if(playerEntity.getName().equals("spazzymcgee42")) {
-                    mc.thePlayer.setPosition(playerEntity.posX, playerEntity.posY, playerEntity.posZ);
-                    mc.thePlayer.rotationYaw = playerEntity.rotationYaw;
-                    mc.thePlayer.rotationPitch = playerEntity.rotationPitch;
-                    mc.getNetHandler().addToSendQueue(new C18PacketSpectate(playerEntity.getUniqueID()));
-                }
-            }
-            return;
-        }*/
         this.setSuffix(mode.getSelected());
 
         // Auto Bow
@@ -169,6 +157,45 @@ public class LongJump extends Module {
                 e.setZ(0);
             } else if(mode.is("ncp_bow") || mode.is("survivaldub")) {
                 e.setCanceled(true);
+            }
+        }
+
+        if(mode.is("mineplex")) {
+            if(stage == 0 && mc.thePlayer.isMoving()) {
+                if(mc.thePlayer.onGround) {
+                    e.setY(mc.thePlayer.motionY = 0.42 + y);
+                    MovementUtils.setSpeed(e, -0.07);
+                    moveSpeed += 0.45;
+                    ticks = 0;
+                    y += 0.04;
+                    return;
+                }
+
+                moveSpeed -= moveSpeed / 80;
+                MovementUtils.setSpeed(e, back ? -moveSpeed : moveSpeed);
+                back = !back;
+
+                if(moveSpeed > 1.25) {
+                    stage = 1;
+                    moveSpeed = 1.45;
+                    back = false;
+                }
+                ticks++;
+            }
+            if(stage == 1) {
+                mc.timer.timerSpeed = 1;
+                if(mc.thePlayer.onGround) {
+                    MovementUtils.setSpeed(e, -0.07);
+                    e.setY(mc.thePlayer.motionY = 0.42 + y);
+                    back = true;
+                } else {
+                    if(moveSpeed > 0.8) {
+                        e.setY(mc.thePlayer.motionY += 0.028888888888888 + MathUtils.random(0.00005, 0.00105));
+                    }
+                    MovementUtils.setSpeed(e, moveSpeed -= moveSpeed / 49);
+                    if(back && mc.thePlayer.onGround)
+                        this.toggle();
+                }
             }
         }
 
