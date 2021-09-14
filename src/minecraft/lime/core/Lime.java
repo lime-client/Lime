@@ -9,7 +9,7 @@ import lime.managers.ModuleManager;
 import lime.scripting.ScriptManager;
 import lime.ui.clickgui.frame.ClickGUI;
 import lime.ui.gui.MainScreen;
-import lime.ui.notifications.utils.NotificationManager;
+import lime.ui.notifications.NotificationManager;
 import lime.utils.other.file.FileSaver;
 import lime.utils.other.security.UserCheckThread;
 import net.minecraft.client.Minecraft;

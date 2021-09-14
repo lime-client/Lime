@@ -11,7 +11,7 @@ import net.minecraft.util.BlockPos;
 import java.util.ArrayList;
 
 public class PathComputer {
-    public static ArrayList<CustomVec> computePath(CustomVec from, CustomVec to, int loops, int depth, int dashDistance) {
+    public static ArrayList<CustomVec> computePath(CustomVec from, CustomVec to, int loops, int depth, double dashDistance) {
         if (!canPassThrow(new BlockPos(from.mc()))) {
             from = from.addVector(0, 1, 0);
         }

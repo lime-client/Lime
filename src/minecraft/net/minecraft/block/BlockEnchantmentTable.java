@@ -1,6 +1,9 @@
 package net.minecraft.block;
 
 import java.util.Random;
+
+import lime.core.Lime;
+import lime.features.module.impl.render.NoRender;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -33,6 +36,8 @@ public class BlockEnchantmentTable extends BlockContainer
 
     public void randomDisplayTick(World worldIn, BlockPos pos, IBlockState state, Random rand)
     {
+        NoRender noRender = (NoRender) Lime.getInstance().getModuleManager().getModuleC(NoRender.class);
+        if(noRender.isToggled() && noRender.enchantmentTable.isEnabled()) return;
         super.randomDisplayTick(worldIn, pos, state, rand);
 
         for (int i = -2; i <= 2; ++i)

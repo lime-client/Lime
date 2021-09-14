@@ -1,6 +1,9 @@
 package lime.utils.movement;
 
+import lime.core.Lime;
 import lime.core.events.impl.EventMove;
+import lime.features.module.impl.combat.KillAura;
+import lime.features.module.impl.movement.TargetStrafe;
 import lime.utils.IUtil;
 import lime.utils.other.MathUtils;
 import net.minecraft.block.Block;
@@ -99,7 +102,12 @@ public class MovementUtils implements IUtil {
     }
 
     public static void setSpeed(final EventMove moveEvent, final double moveSpeed) {
-        setSpeed(moveEvent, moveSpeed, mc.thePlayer.rotationYaw, mc.thePlayer.movementInput.moveStrafe, mc.thePlayer.movementInput.moveForward);
+        TargetStrafe targetStrafe = (TargetStrafe) Lime.getInstance().getModuleManager().getModuleC(TargetStrafe.class);
+        if(targetStrafe.isToggled() && KillAura.getEntity() != null) {
+            targetStrafe.setMoveSpeed(moveEvent, moveSpeed);
+        } else {
+            setSpeed(moveEvent, moveSpeed, mc.thePlayer.rotationYaw, mc.thePlayer.moveStrafing, mc.thePlayer.movementInput.moveForward);
+        }
     }
 
     public static void strafe() {
@@ -147,6 +155,14 @@ public class MovementUtils implements IUtil {
 
     public static double getBaseMoveSpeed() {
         double baseSpeed = 0.2873;
+        if (mc.thePlayer.isPotionActive(Potion.moveSpeed)) {
+            baseSpeed *= 1.0 + 0.2 * (mc.thePlayer.getActivePotionEffect(Potion.moveSpeed).getAmplifier() + 1);
+        }
+        return baseSpeed;
+    }
+
+    public static double getBaseMoveSpeed(double base) {
+        double baseSpeed = base;
         if (mc.thePlayer.isPotionActive(Potion.moveSpeed)) {
             baseSpeed *= 1.0 + 0.2 * (mc.thePlayer.getActivePotionEffect(Potion.moveSpeed).getAmplifier() + 1);
         }

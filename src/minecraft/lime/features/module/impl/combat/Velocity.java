@@ -26,6 +26,9 @@ public class Velocity extends Module {
     public void onPacket(EventPacket e) {
         if(e.getPacket() instanceof S12PacketEntityVelocity || e.getPacket() instanceof S27PacketExplosion) {
             if(mode.is("packet")) {
+                if(mc.thePlayer.capabilities.isFlying && mc.getCurrentServerData() != null && mc.getCurrentServerData().serverIP.contains("funcraft")) {
+                    return;
+                }
                 e.setCanceled(true);
             }
         }

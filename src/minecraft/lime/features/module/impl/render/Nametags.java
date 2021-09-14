@@ -83,9 +83,9 @@ public class Nametags extends Module {
                         GL11.glPushMatrix();
                         drawArmor(ent, (int) (position.x + ((position.z - position.x) / 2)), (int) position.y - 4 - mc.fontRendererObj.FONT_HEIGHT * 2);
                         GlStateManager.scale(.5f, .5f, .5f);
-                        float x = (float) position.x * 2;
-                        float x2 = (float) position.z * 2;
-                        float y = (float) position.y * 2;
+                        float x = (float) position.x / .5f;
+                        float x2 = (float) position.z / .5f;
+                        float y = (float) position.y / .5f;
                         final String nametext = entity.getName() + " (" + Math.round(mc.thePlayer.getDistance(ent.posX, ent.posY, ent.posZ)) + "m) " + getNameHealthColor(ent) + " : " + (int) (Math.min(ent.getHealth(), ent.getMaxHealth()));
                         Gui.drawRect((x + (x2 - x) / 2) - (mc.fontRendererObj.getStringWidth(nametext) >> 1) - 2, y - mc.fontRendererObj.FONT_HEIGHT - 4, (x + (x2 - x) / 2) + (mc.fontRendererObj.getStringWidth(nametext) >> 1) + 2, y - 2, new Color(0, 0, 0, 120).getRGB());
 
@@ -98,9 +98,9 @@ public class Nametags extends Module {
     }
 
     private int getNameColor(EntityLivingBase ent) {
-        if (Lime.getInstance().getFriendManager().isFriend(ent)) return new Color(122, 190, 255).getRGB();
+        if (Lime.getInstance().getFriendManager().isFriend(ent) || mc.thePlayer.isOnSameTeam(ent)) return new Color(122, 190, 255).getRGB();
         else if (ent.getName().equals(mc.thePlayer.getName())) return new Color(0xFF99ff99).getRGB();
-        return new Color(0xFFA59C).getRGB();
+        return new Color(-1).getRGB();
     }
 
     private ChatFormatting getNameHealthColor(EntityLivingBase player) {

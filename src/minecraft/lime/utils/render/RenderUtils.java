@@ -133,6 +133,11 @@ public class RenderUtils implements IUtil {
         GlStateManager.disableBlend();
     }
 
+    public static void drawRecteredRect(double x, double y, double width, double height, double thickness, int counter, int color) {
+            drawHollowBox((float)x,(float) y,(float)width,(float)height,(float)thickness,counter);
+            Gui.drawRect(x,y,width,height,color);
+    }
+
     public static double interpolate(double current, double old, double scale) {
         return old + (current - old) * scale;
     }
@@ -302,6 +307,49 @@ public class RenderUtils implements IUtil {
         GL11.glColor4f(1, 1, 1, 1);
         GlStateManager.resetColor();
         GL11.glPopMatrix();
+    }
+
+    public static void drawRoundedRect(double x, double y, final double width, final double height, final double radius, final int color) {
+        GlStateManager.enableBlend();
+        GlStateManager.disableTexture2D();
+        GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
+        double x2 = x + width;
+        double y2 = y + height;
+        final float f = (color >> 24 & 0xFF) / 255.0f;
+        final float f2 = (color >> 16 & 0xFF) / 255.0f;
+        final float f3 = (color >> 8 & 0xFF) / 255.0f;
+        final float f4 = (color & 0xFF) / 255.0f;
+        GL11.glPushAttrib(0);
+        GL11.glScaled(0.5, 0.5, 0.5);
+        x *= 2.0;
+        y *= 2.0;
+        x2 *= 2.0;
+        y2 *= 2.0;
+        GL11.glDisable(3553);
+        GL11.glColor4f(f2, f3, f4, f);
+        GL11.glEnable(2848);
+        GL11.glBegin(9);
+        for (int i = 0; i <= 90; i += 3) {
+            GL11.glVertex2d(x + radius + Math.sin(i * 3.141592653589793 / 180.0) * (radius * -1.0), y + radius + Math.cos(i * 3.141592653589793 / 180.0) * (radius * -1.0));
+        }
+        for (int i = 90; i <= 180; i += 3) {
+            GL11.glVertex2d(x + radius + Math.sin(i * 3.141592653589793 / 180.0) * (radius * -1.0), y2 - radius + Math.cos(i * 3.141592653589793 / 180.0) * (radius * -1.0));
+        }
+        for (int i = 0; i <= 90; i += 3) {
+            GL11.glVertex2d(x2 - radius + Math.sin(i * 3.141592653589793 / 180.0) * radius, y2 - radius + Math.cos(i * 3.141592653589793 / 180.0) * radius);
+        }
+        for (int i = 90; i <= 180; i += 3) {
+            GL11.glVertex2d(x2 - radius + Math.sin(i * 3.141592653589793 / 180.0) * radius, y + radius + Math.cos(i * 3.141592653589793 / 180.0) * radius);
+        }
+        GL11.glEnd();
+        GL11.glEnable(3553);
+        GL11.glDisable(2848);
+        GL11.glEnable(3553);
+        GL11.glScaled(2.0, 2.0, 2.0);
+        GL11.glPopAttrib();
+        GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+        GlStateManager.enableTexture2D();
+        GlStateManager.disableBlend();
     }
 
     public static void drawFilledCircle(final float xx, final float yy, final float radius, final Color color) {

@@ -15,13 +15,13 @@ import lime.utils.other.InventoryUtils;
 import lime.utils.other.MathUtils;
 import lime.utils.other.PlayerUtils;
 import net.minecraft.block.BlockAir;
-import net.minecraft.item.ItemBow;
-import net.minecraft.item.ItemStack;
+import net.minecraft.item.*;
 import net.minecraft.network.play.client.C07PacketPlayerDigging;
 import net.minecraft.network.play.client.C08PacketPlayerBlockPlacement;
 import net.minecraft.network.play.client.C09PacketHeldItemChange;
 import net.minecraft.network.play.client.C0FPacketConfirmTransaction;
 import net.minecraft.network.play.server.S12PacketEntityVelocity;
+import net.minecraft.potion.Potion;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 
@@ -31,7 +31,7 @@ public class LongJump extends Module {
         super("Long Jump", Category.MOVEMENT);
     }
 
-    private final EnumValue mode = new EnumValue("Mode", this, "Vanilla", "Vanilla", "Funcraft", "Mineplex", "NCP_Bow", "Verus", "Verus_Bow", "Kokscraft");
+    private final EnumValue mode = new EnumValue("Mode", this, "Vanilla", "Vanilla", "Funcraft", "Mineplex", "Hypixel", "Hypixel_Bow", "Verus", "Verus_Bow", "Kokscraft");
     private final SlideValue speed = new SlideValue("Speed", this, 1, 9, 5, 0.5).onlyIf(mode.getSettingName(), "enum", "verus_bow", "verus");
 
     private double moveSpeed = 0, y;
@@ -48,17 +48,17 @@ public class LongJump extends Module {
         }
         stage = ticks = 0;
         if(mode.is("verus") && (!mc.thePlayer.onGround || new BlockPos(mc.thePlayer.posX, mc.thePlayer.posY - 1, mc.thePlayer.posZ).getBlock() instanceof BlockAir)) {
-            Lime.getInstance().getNotificationManager().addNotification(new Notification("Error", "Can damage only on the ground!", Notification.Type.ERROR));
+            Lime.getInstance().getNotificationManager().addNotification("Error", "Can damage only on the ground!", Notification.Type.FAIL);
             this.toggle();
             return;
         }
-        if(mode.is("ncp_bow") || mode.is("verus_bow")) {
+        if(mode.is("hypixel_bow") || mode.is("verus_bow")) {
             ItemStack bow = null;
             int slot = -1;
             for(int i = 36; i < 45; ++i) {
                 if(InventoryUtils.getSlot(i).getHasStack()) {
                     ItemStack itemStack = InventoryUtils.getSlot(i).getStack();
-                    if(itemStack.getItem() instanceof ItemBow) {
+                    if(itemStack.getItem() instanceof ItemBow || itemStack.getItem() instanceof ItemFishingRod) {
                         bow = itemStack;
                         slot = i - 36;
                     }
@@ -89,7 +89,7 @@ public class LongJump extends Module {
         this.setSuffix(mode.getSelected());
 
         // Auto Bow
-        if((mode.is("verus_bow") || mode.is("ncp_bow")) && !bowd) {
+        if((mode.is("verus_bow") || mode.is("hypixel_bow")) && !bowd) {
             MovementUtils.setSpeed(0);
             e.setPitch(-90);
             if(ticks >= 3 && !bowd) {
@@ -99,23 +99,6 @@ public class LongJump extends Module {
             }
         }
 
-        if(mode.is("ncp_bow")) {
-            if(receivedS12) {
-                if(e.isPre()) {
-                    if(mc.thePlayer.onGround) {
-                        if(moveSpeed == 0) {
-                            mc.thePlayer.jump();
-                            MovementUtils.setSpeed(moveSpeed = .85);
-                        } else {
-                            this.toggle();
-                        }
-                    } else {
-                        MovementUtils.setSpeed(moveSpeed -= moveSpeed / 15);
-                        MovementUtils.strafe();
-                    }
-                }
-            }
-        }
         if(mode.is("verus_bow")) {
             if(!receivedS12) {
                 MovementUtils.setSpeed(0);
@@ -155,8 +138,43 @@ public class LongJump extends Module {
             if(mode.is("verus_bow") || mode.is("verus")) {
                 e.setX(0);
                 e.setZ(0);
-            } else if(mode.is("ncp_bow") || mode.is("survivaldub")) {
+            } else if(mode.is("hypixel_bow") || mode.is("survivaldub")) {
                 e.setCanceled(true);
+            }
+        }
+
+        if(mode.is("hypixel_bow")) {
+            if(receivedS12) {
+                if(mc.thePlayer.onGround) {
+                    if(moveSpeed == 0) {
+                        e.setY(mc.thePlayer.motionY = MovementUtils.getJumpBoostModifier(0.6));
+                        int amplifier = mc.thePlayer.isPotionActive(Potion.moveSpeed) ? mc.thePlayer.getActivePotionEffect(Potion.moveSpeed).getAmplifier() : -1;
+                        MovementUtils.setSpeed(e, moveSpeed = (amplifier == -1 ? .7 : amplifier == 0 ? .8 : .85));
+                        ticks = 0;
+                    } else {
+                        this.toggle();
+                    }
+                } else {
+                    MovementUtils.setSpeed(e, Math.max(moveSpeed -= moveSpeed / 30, MovementUtils.getBaseMoveSpeed()));
+                    e.setY(e.getY() * 0.7);
+                }
+            }
+        }
+
+        if(mode.is("hypixel")) {
+            if(mc.thePlayer.onGround) {
+                if(moveSpeed == 0) {
+                    e.setY(mc.thePlayer.motionY = 0.42);
+                    int amplifier = mc.thePlayer.isPotionActive(Potion.moveSpeed) ? mc.thePlayer.getActivePotionEffect(Potion.moveSpeed).getAmplifier() : -1;
+                    MovementUtils.setSpeed(e, moveSpeed = (amplifier == -1 ? .55 : amplifier == 0 ? .8 : .85));
+                } else {
+                    this.toggle();
+                }
+            } else {
+                MovementUtils.setSpeed(e, Math.max(moveSpeed -= moveSpeed / 30, MovementUtils.getBaseMoveSpeed()));
+                if(ticks > 10 && ticks < 30) {
+                    e.setY(e.getY() * 0.8);
+                }
             }
         }
 
@@ -180,7 +198,6 @@ public class LongJump extends Module {
                     moveSpeed = 1.45;
                     back = false;
                 }
-                ticks++;
             }
             if(stage == 1) {
                 mc.timer.timerSpeed = 1;

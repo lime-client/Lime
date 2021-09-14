@@ -51,17 +51,17 @@ public class AntiVoid extends Module {
                 }
             }
             if(mode.is("funcraft")) {
-                if(mc.thePlayer.fallDistance > 1.5 && timer1.hasReached(1000) && !Lime.getInstance().getModuleManager().getModuleC(Flight.class).isToggled() && !waitingForPacket) {
+                if(mc.thePlayer.fallDistance > 3 && timer1.hasReached(1000) && !Lime.getInstance().getModuleManager().getModuleC(Flight.class).isToggled() && !waitingForPacket) {
                     mc.getNetHandler().addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY + 1, mc.thePlayer.posZ, false));
                     waitingForPacket = true;
                     timer1.reset();
                 }
             }
-            if(mode.is("hypixel")) {
+            if(mode.is("hypixel") && timer.hasReached((int) pullBack.getCurrent())) {
                 if(mc.thePlayer.fallDistance > 3) {
-                    e.setX(Integer.MIN_VALUE);
-                    e.setY(Integer.MIN_VALUE);
-                    e.setZ(Integer.MIN_VALUE);
+                    e.setX(-9999);
+                    e.setY(-9999);
+                    e.setZ(-9999);
                     mc.thePlayer.fallDistance = 0;
                 }
             }

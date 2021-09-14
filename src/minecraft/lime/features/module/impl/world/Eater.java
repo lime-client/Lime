@@ -34,7 +34,6 @@ public class Eater extends Module {
                     final Block block = this.mc.theWorld.getBlockState(blockPos).getBlock();
                     if (cakeBesideOrAt(blockPos) && (block == Blocks.cake || block == Blocks.wool || block == Blocks.hardened_clay || block == Blocks.stained_hardened_clay || block == Blocks.planks || block == Blocks.end_stone)) {
                         if(block == Blocks.cake && cakeCovered(blockPos)) continue;
-                        System.out.println(EnumFacing.NORTH.ordinal());
                         mc.getNetHandler().sendPacketNoEvent(new C07PacketPlayerDigging(C07PacketPlayerDigging.Action.START_DESTROY_BLOCK, blockPos, EnumFacing.NORTH));
                         mc.getNetHandler().sendPacketNoEvent(new C07PacketPlayerDigging(C07PacketPlayerDigging.Action.STOP_DESTROY_BLOCK, blockPos, EnumFacing.NORTH));
                     }

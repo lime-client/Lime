@@ -8,140 +8,251 @@ import lime.features.module.Module;
 import lime.features.setting.impl.BoolValue;
 import lime.features.setting.impl.EnumValue;
 import lime.features.setting.impl.SlideValue;
+import lime.utils.render.ColorUtils;
 import lime.utils.render.GLUProjection;
 import lime.utils.render.RenderUtils;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.model.ModelPlayer;
+import net.minecraft.client.renderer.GLAllocation;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.boss.EntityDragon;
 import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.monster.EntityGolem;
+import net.minecraft.entity.monster.EntityMob;
+import net.minecraft.entity.monster.EntitySlime;
+import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.potion.Potion;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.StringUtils;
 import net.minecraft.util.Vec3;
 import net.minecraft.util.Vector3d;
+import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.util.glu.GLU;
 import org.lwjgl.util.vector.Vector4f;
 
+import javax.vecmath.Vector4d;
 import java.awt.*;
+import java.nio.FloatBuffer;
+import java.nio.IntBuffer;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class ESP extends Module {
 
     public ESP() {
         super("ESP", Category.RENDER);
+        this.collectedEntities = new ArrayList<>();
+        this.viewport = GLAllocation.createDirectIntBuffer(16);
+        this.modelview = GLAllocation.createDirectFloatBuffer(16);
+        this.projection = GLAllocation.createDirectFloatBuffer(16);
+        this.vector = GLAllocation.createDirectFloatBuffer(4);
+        this.color = Color.WHITE.getRGB();
+        this.backgroundColor = (new Color(0, 0, 0, 120)).getRGB();
+        this.black = Color.BLACK.getRGB();
     }
 
-    private final BoolValue esp3d = new BoolValue("3D ESP", this, false);
-
-    private final EnumValue mode = new EnumValue("Mode", this, "Box", "Box", "Cylinder").onlyIf(esp3d.getSettingName(), "bool", "true");
-    private final BoolValue box = new BoolValue("Box", this, true);
-    private final BoolValue items = new BoolValue("Items", this, false);
-    private final BoolValue health = new BoolValue("Health", this, true);
+    public final EnumValue boxMode = new EnumValue("Box Mode", this, "Box", "Box", "Corners");
+    public final BoolValue healthBar = new BoolValue("Health bar", this, true);
+    public final BoolValue armorBar = new BoolValue("Armor bar", this,true);
+    public final BoolValue you = new BoolValue("You", this,true);
+    public final BoolValue players = new BoolValue("Players", this,true);
+    public final BoolValue invisibles = new BoolValue("Invisibles", this,false);
+    public final BoolValue mobs = new BoolValue("Mobs", this,true);
+    public final BoolValue animals = new BoolValue("Animals", this,false);
+    public final BoolValue items = new BoolValue("Items", this,false);
+    public final java.util.List<Entity> collectedEntities;
+    private final IntBuffer viewport;
+    private final FloatBuffer modelview;
+    private final FloatBuffer projection;
+    private final FloatBuffer vector;
+    private final int color;
+    private final int backgroundColor;
+    private final int black;
     private final BoolValue skeleton = new BoolValue("Skeleton", this, false);
 
     private static final Map<EntityPlayer, float[][]> entities = new HashMap<>();
     private final SlideValue width = new SlideValue("Width", this, 0.5, 10, 1, 0.1).onlyIf(skeleton.getSettingName(), "bool", "true");
 
     @EventTarget
-    public void on2D(Event2D e)
-    {
-        final ScaledResolution scaledRes = new ScaledResolution(mc);
-        mc.theWorld.getLoadedEntityList().forEach(entity -> {
-            if (entity instanceof EntityItem && items.isEnabled()) {
-                EntityItem ent = (EntityItem) entity;
-                double posX = ent.lastTickPosX + (ent.posX - ent.lastTickPosX) * e.getPartialTicks();
-                double posY = ent.lastTickPosY + (ent.posY - ent.lastTickPosY) * e.getPartialTicks();
-                double posZ = ent.lastTickPosZ + (ent.posZ - ent.lastTickPosZ) * e.getPartialTicks();
-                AxisAlignedBB bb = entity.getEntityBoundingBox().expand(0.1, 0.1, 0.1);
-                Vector3d[] corners = {new Vector3d(posX + bb.minX - bb.maxX + entity.width / 2.0f, posY, posZ + bb.minZ - bb.maxZ + entity.width / 2.0f), new Vector3d(posX + bb.maxX - bb.minX - entity.width / 2.0f, posY, posZ + bb.minZ - bb.maxZ + entity.width / 2.0f), new Vector3d(posX + bb.minX - bb.maxX + entity.width / 2.0f, posY, posZ + bb.maxZ - bb.minZ - entity.width / 2.0f), new Vector3d(posX + bb.maxX - bb.minX - entity.width / 2.0f, posY, posZ + bb.maxZ - bb.minZ - entity.width / 2.0f), new Vector3d(posX + bb.minX - bb.maxX + entity.width / 2.0f, posY + bb.maxY - bb.minY, posZ + bb.minZ - bb.maxZ + entity.width / 2.0f), new Vector3d(posX + bb.maxX - bb.minX - entity.width / 2.0f, posY + bb.maxY - bb.minY, posZ + bb.minZ - bb.maxZ + entity.width / 2.0f), new Vector3d(posX + bb.minX - bb.maxX + entity.width / 2.0f, posY + bb.maxY - bb.minY, posZ + bb.maxZ - bb.minZ - entity.width / 2.0f), new Vector3d(posX + bb.maxX - bb.minX - entity.width / 2.0f, posY + bb.maxY - bb.minY, posZ + bb.maxZ - bb.minZ - entity.width / 2.0f)};
-                GLUProjection.Projection result;
-                Vector4f transformed = new Vector4f(scaledRes.getScaledWidth() * 2.0f, scaledRes.getScaledHeight() * 2.0f, -1.0f, -1.0f);
-                for (Vector3d vec : corners) {
-                    result = GLUProjection.getInstance().project(vec.getX() - mc.getRenderManager().viewerPosX, vec.getY() - mc.getRenderManager().viewerPosY, vec.getZ() - mc.getRenderManager().viewerPosZ, GLUProjection.ClampMode.NONE, true);
-                    transformed.setX((float) Math.min(transformed.getX(), result.getX()));
-                    transformed.setY((float) Math.min(transformed.getY(), result.getY()));
-                    transformed.setW((float) Math.max(transformed.getW(), result.getX()));
-                    transformed.setZ((float) Math.max(transformed.getZ(), result.getY()));
-                }
-                GlStateManager.pushMatrix();
-                if (RenderUtils.isInViewFrustrum(ent.getEntityBoundingBox())) {
-                    GlStateManager.pushMatrix();
-                    GlStateManager.enableBlend();
-                    GlStateManager.scale(.5f, .5f, .5f);
-                    float x = transformed.x * 2;
-                    float x2 = transformed.w * 2;
-                    float y = transformed.y * 2;
-                    float y2 = transformed.z * 2;
-                    if (box.isEnabled()) {
-                        RenderUtils.drawHollowBox(x, y, x2, y2, 3f, Color.BLACK.getRGB());
-                        RenderUtils.drawHollowBox(x + 1f, y + 1f, x2 - 1f, y2 + 1f, 1f, new Color(255, 255, 255).getRGB());
-                    }
-                    if (ent.getEntityItem().getMaxDamage() > 0) {
-                        double offset = y2 - y;
-                        double percentoffset = offset / ent.getEntityItem().getMaxDamage();
-                        double finalnumber = percentoffset * (ent.getEntityItem().getMaxDamage() - ent.getEntityItem().getItemDamage());
-                        Gui.drawRect(x - 4f, y, x - 1f, y2 + 3f, -0x1000000);
-                        Gui.drawRect(x - 3f, y2 - finalnumber + 1f, x - 2f, y2 + 2f, new Color(0x3E83E3).getRGB());
-                    }
-                    final String nametext = StringUtils.stripControlCodes(ent.getEntityItem().getItem().getItemStackDisplayName(ent.getEntityItem())) + (ent.getEntityItem().getMaxDamage() > 0 ? "§9 : " + (ent.getEntityItem().getMaxDamage() - ent.getEntityItem().getItemDamage()) : "");
-                    mc.fontRendererObj.drawStringWithShadow(nametext, (x + ((x2 - x) / 2)) - (mc.fontRendererObj.getStringWidth(nametext) / 2F), y - mc.fontRendererObj.FONT_HEIGHT - 2, -1);
-                    GlStateManager.popMatrix();
-                }
-                GlStateManager.popMatrix();
-            }
-            if (entity instanceof EntityLivingBase) {
-                EntityLivingBase ent = (EntityLivingBase) entity;
-                if (ent instanceof EntityPlayer && ent != mc.thePlayer) {
-                    double posX = ent.lastTickPosX + (ent.posX - ent.lastTickPosX) * e.getPartialTicks();
-                    double posY = ent.lastTickPosY + (ent.posY - ent.lastTickPosY) * e.getPartialTicks();
-                    double posZ = ent.lastTickPosZ + (ent.posZ - ent.lastTickPosZ) * e.getPartialTicks();
-                    AxisAlignedBB bb = entity.getEntityBoundingBox().expand(0.1, 0.1, 0.1);
-                    Vector3d[] corners = {new Vector3d(posX + bb.minX - bb.maxX + entity.width / 2.0f, posY, posZ + bb.minZ - bb.maxZ + entity.width / 2.0f), new Vector3d(posX + bb.maxX - bb.minX - entity.width / 2.0f, posY, posZ + bb.minZ - bb.maxZ + entity.width / 2.0f), new Vector3d(posX + bb.minX - bb.maxX + entity.width / 2.0f, posY, posZ + bb.maxZ - bb.minZ - entity.width / 2.0f), new Vector3d(posX + bb.maxX - bb.minX - entity.width / 2.0f, posY, posZ + bb.maxZ - bb.minZ - entity.width / 2.0f), new Vector3d(posX + bb.minX - bb.maxX + entity.width / 2.0f, posY + bb.maxY - bb.minY, posZ + bb.minZ - bb.maxZ + entity.width / 2.0f), new Vector3d(posX + bb.maxX - bb.minX - entity.width / 2.0f, posY + bb.maxY - bb.minY, posZ + bb.minZ - bb.maxZ + entity.width / 2.0f), new Vector3d(posX + bb.minX - bb.maxX + entity.width / 2.0f, posY + bb.maxY - bb.minY, posZ + bb.maxZ - bb.minZ - entity.width / 2.0f), new Vector3d(posX + bb.maxX - bb.minX - entity.width / 2.0f, posY + bb.maxY - bb.minY, posZ + bb.maxZ - bb.minZ - entity.width / 2.0f)};
-                    GLUProjection.Projection result;
-                    Vector4f transformed = new Vector4f(scaledRes.getScaledWidth() * 2.0f, scaledRes.getScaledHeight() * 2.0f, -1.0f, -1.0f);
-                    for (Vector3d vec : corners) {
-                        result = GLUProjection.getInstance().project(vec.getX() - mc.getRenderManager().viewerPosX, vec.getY() - mc.getRenderManager().viewerPosY, vec.getZ() - mc.getRenderManager().viewerPosZ, GLUProjection.ClampMode.NONE, true);
-                        transformed.setX((float) Math.min(transformed.getX(), result.getX()));
-                        transformed.setY((float) Math.min(transformed.getY(), result.getY()));
-                        transformed.setW((float) Math.max(transformed.getW(), result.getX()));
-                        transformed.setZ((float) Math.max(transformed.getZ(), result.getY()));
-                    }
-                    GlStateManager.pushMatrix();
-                    if (RenderUtils.isInViewFrustrum(ent.getEntityBoundingBox())) {
-                        GlStateManager.pushMatrix();
-                        GlStateManager.enableBlend();
-                        GlStateManager.scale(.5f, .5f, .5f);
-                        float x = transformed.x * 2;
-                        float x2 = transformed.w * 2;
-                        float y = transformed.y * 2;
-                        float y2 = transformed.z * 2;
-                        if (box.isEnabled()) {
-                            RenderUtils.drawHollowBox(x, y, x2, y2, 3f, Color.BLACK.getRGB());
-                            RenderUtils.drawHollowBox(x + 1f, y + 1f, x2 - 1f, y2 + 1f, 1f, new Color(0xFFF9F8).getRGB());
+    public void onRender(Event2D event) {
+        GL11.glPushMatrix();
+        this.collectEntities();
+        float partialTicks = event.getPartialTicks();
+        ScaledResolution scaledResolution = event.getScaledResolution();
+        int scaleFactor = scaledResolution.getScaleFactor();
+        double scaling = (double)scaleFactor / Math.pow(scaleFactor, 2.0D);
+        GL11.glScaled(scaling, scaling, scaling);
+        RenderManager renderMng = mc.getRenderManager();
+        boolean health = this.healthBar.isEnabled();
+        boolean armor = this.armorBar.isEnabled();
+        int i = 0;
+
+        for(int collectedEntitiesSize = collectedEntities.size(); i < collectedEntitiesSize; ++i) {
+            Entity entity = collectedEntities.get(i);
+            if (this.isValid(entity) && RenderUtils.isInViewFrustrum(entity.getEntityBoundingBox())) {
+                double x = RenderUtils.interpolate(entity.posX, entity.lastTickPosX, partialTicks);
+                double y = RenderUtils.interpolate(entity.posY, entity.lastTickPosY, partialTicks);
+                double z = RenderUtils.interpolate(entity.posZ, entity.lastTickPosZ, partialTicks);
+                double width = (double)entity.width / 1.5D;
+                double height = (double)entity.height + (entity.isSneaking() ? -0.3D : 0.2D);
+                AxisAlignedBB aabb = new AxisAlignedBB(x - width, y, z - width, x + width, y + height, z + width);
+                java.util.List<javax.vecmath.Vector3d> vectors = Arrays.asList(new javax.vecmath.Vector3d(aabb.minX, aabb.minY, aabb.minZ), new javax.vecmath.Vector3d(aabb.minX, aabb.maxY, aabb.minZ), new javax.vecmath.Vector3d(aabb.maxX, aabb.minY, aabb.minZ), new javax.vecmath.Vector3d(aabb.maxX, aabb.maxY, aabb.minZ), new javax.vecmath.Vector3d(aabb.minX, aabb.minY, aabb.maxZ), new javax.vecmath.Vector3d(aabb.minX, aabb.maxY, aabb.maxZ), new javax.vecmath.Vector3d(aabb.maxX, aabb.minY, aabb.maxZ), new javax.vecmath.Vector3d(aabb.maxX, aabb.maxY, aabb.maxZ));
+                mc.entityRenderer.setupCameraTransform(partialTicks, 0);
+                Vector4d position = null;
+                for (javax.vecmath.Vector3d vector3d : vectors) {
+                    vector3d = this.project2D(scaleFactor, vector3d.x - renderMng.viewerPosX, vector3d.y - renderMng.viewerPosY, vector3d.z - renderMng.viewerPosZ);
+                    if (vector3d != null && vector3d.z >= 0.0D && vector3d.z < 1.0D) {
+                        if (position == null) {
+                            position = new Vector4d(vector3d.x, vector3d.y, vector3d.z, 0.0D);
                         }
-                        if (health.isEnabled()) {
-                            float healthHeight = (y2 - y) * (((EntityLivingBase) entity).getHealth() / ((EntityLivingBase) entity).getMaxHealth());
-                            if(((EntityLivingBase) entity).getHealth() > 20) healthHeight = (y2 - y) * (20 / ((EntityLivingBase) entity).getMaxHealth());
-                            Gui.drawRect(x - 4f, y, x - 1f, y2 + 3f, -0x1000000);
-                            Gui.drawRect(x - 3f, y2 - healthHeight + 1f, x - 2f, y2 + 2f, getHealthColor(((EntityLivingBase) entity)));
-                        }
-                        GlStateManager.popMatrix();
+
+                        position.x = Math.min(vector3d.x, position.x);
+                        position.y = Math.min(vector3d.y, position.y);
+                        position.z = Math.max(vector3d.x, position.z);
+                        position.w = Math.max(vector3d.y, position.w);
                     }
-                    GlStateManager.popMatrix();
+                }
+
+                if (position != null) {
+                    mc.entityRenderer.setupOverlayRendering();
+                    double posX = position.x;
+                    double posY = position.y;
+                    double endPosX = position.z;
+                    double endPosY = position.w;
+                    if (boxMode.is("box")) {
+                        Gui.drawRect(posX - 1.0D, posY, posX + 0.5D, endPosY + 0.5D, black);
+                        Gui.drawRect(posX - 1.0D, posY - 0.5D, endPosX + 0.5D, posY + 0.5D + 0.5D, black);
+                        Gui.drawRect(endPosX - 0.5D - 0.5D, posY, endPosX + 0.5D, endPosY + 0.5D, black);
+                        Gui.drawRect(posX - 1.0D, endPosY - 0.5D - 0.5D, endPosX + 0.5D, endPosY + 0.5D, black);
+                        Gui.drawRect(posX - 0.5D, posY, posX + 0.5D - 0.5D, endPosY, color);
+                        Gui.drawRect(posX, endPosY - 0.5D, endPosX, endPosY, color);
+                        Gui.drawRect(posX - 0.5D, posY, endPosX, posY + 0.5D, color);
+                        Gui.drawRect(endPosX - 0.5D, posY, endPosX, endPosY, color);
+                    } else {
+                        Gui.drawRect(posX + 0.5D, posY, posX - 1.0D, posY + (endPosY - posY) / 4.0D + 0.5D, black);
+                        Gui.drawRect(posX - 1.0D, endPosY, posX + 0.5D, endPosY - (endPosY - posY) / 4.0D - 0.5D, black);
+                        Gui.drawRect(posX - 1.0D, posY - 0.5D, posX + (endPosX - posX) / 3.0D + 0.5D, posY + 1.0D, black);
+                        Gui.drawRect(endPosX - (endPosX - posX) / 3.0D - 0.5D, posY - 0.5D, endPosX, posY + 1.0D, black);
+                        Gui.drawRect(endPosX - 1.0D, posY, endPosX + 0.5D, posY + (endPosY - posY) / 4.0D + 0.5D, black);
+                        Gui.drawRect(endPosX - 1.0D, endPosY, endPosX + 0.5D, endPosY - (endPosY - posY) / 4.0D - 0.5D, black);
+                        Gui.drawRect(posX - 1.0D, endPosY - 1.0D, posX + (endPosX - posX) / 3.0D + 0.5D, endPosY + 0.5D, black);
+                        Gui.drawRect(endPosX - (endPosX - posX) / 3.0D - 0.5D, endPosY - 1.0D, endPosX + 0.5D, endPosY + 0.5D, black);
+                        Gui.drawRect(posX, posY, posX - 0.5D, posY + (endPosY - posY) / 4.0D, color);
+                        Gui.drawRect(posX, endPosY, posX - 0.5D, endPosY - (endPosY - posY) / 4.0D, color);
+                        Gui.drawRect(posX - 0.5D, posY, posX + (endPosX - posX) / 3.0D, posY + 0.5D, color);
+                        Gui.drawRect(endPosX - (endPosX - posX) / 3.0D, posY, endPosX, posY + 0.5D, color);
+                        Gui.drawRect(endPosX - 0.5D, posY, endPosX, posY + (endPosY - posY) / 4.0D, color);
+                        Gui.drawRect(endPosX - 0.5D, endPosY, endPosX, endPosY - (endPosY - posY) / 4.0D, color);
+                        Gui.drawRect(posX, endPosY - 0.5D, posX + (endPosX - posX) / 3.0D, endPosY, color);
+                        Gui.drawRect(endPosX - (endPosX - posX) / 3.0D, endPosY - 0.5D, endPosX - 0.5D, endPosY, color);
+                    }
+
+                    boolean living = entity instanceof EntityLivingBase;
+                    EntityLivingBase entityLivingBase;
+                    float armorValue;
+                    float itemDurability;
+                    double durabilityWidth;
+                    double textWidth;
+                    float tagY;
+                    if (living) {
+                        entityLivingBase = (EntityLivingBase)entity;
+                        if (health) {
+                            armorValue = entityLivingBase.getHealth();
+                            itemDurability = entityLivingBase.getMaxHealth();
+                            if (armorValue > itemDurability) {
+                                armorValue = itemDurability;
+                            }
+
+                            durabilityWidth = armorValue / itemDurability;
+                            textWidth = (endPosY - posY) * durabilityWidth;
+                            Gui.drawRect(posX - 3.5D, posY - 0.5D, posX - 1.5D, endPosY + 0.5D, backgroundColor);
+                            if (armorValue > 0.0F) {
+                                int healthColor = ColorUtils.getHealthColor(armorValue, itemDurability).getRGB();
+                                Gui.drawRect(posX - 3.0D, endPosY, posX - 2.0D, endPosY - textWidth, healthColor);
+                                tagY = entityLivingBase.getAbsorptionAmount();
+                                if (tagY > 0.0F) {
+                                    Gui.drawRect(posX - 3.0D, endPosY, posX - 2.0D, endPosY - (endPosY - posY) / 6.0D * (double)tagY / 2.0D, (new Color(Potion.absorption.getLiquidColor())).getRGB());
+                                }
+                            }
+                        }
+                    }
+
+                    if (armor) {
+                        if (living) {
+                            entityLivingBase = (EntityLivingBase)entity;
+                            armorValue = (float)entityLivingBase.getTotalArmorValue();
+                            double armorWidth = (endPosX - posX) * (double)armorValue / 20.0D;
+                            Gui.drawRect(posX - 0.5D, endPosY + 1.5D, posX - 0.5D + endPosX - posX + 1.0D, endPosY + 1.5D + 2.0D, backgroundColor);
+                            if (armorValue > 0.0F) {
+                                Gui.drawRect(posX, endPosY + 2.0D, posX + armorWidth, endPosY + 3.0D, 16777215);
+                            }
+                        } else if (entity instanceof EntityItem) {
+                            ItemStack itemStack = ((EntityItem)entity).getEntityItem();
+                            if (itemStack.isItemStackDamageable()) {
+                                int maxDamage = itemStack.getMaxDamage();
+                                itemDurability = (float)(maxDamage - itemStack.getItemDamage());
+                                durabilityWidth = (endPosX - posX) * (double)itemDurability / (double)maxDamage;
+                                Gui.drawRect(posX - 0.5D, endPosY + 1.5D, posX - 0.5D + endPosX - posX + 1.0D, endPosY + 1.5D + 2.0D, backgroundColor);
+                                Gui.drawRect(posX, endPosY + 2.0D, posX + durabilityWidth, endPosY + 3.0D, 16777215);
+                            }
+                        }
+                    }
                 }
             }
-        });
+        }
+
+        GL11.glPopMatrix();
+        GlStateManager.enableBlend();
+        mc.entityRenderer.setupOverlayRendering();
     }
 
-    private int getHealthColor(EntityLivingBase player) {
-        float f = player.getHealth();
-        float f1 = player.getMaxHealth();
-        float f2 = Math.max(0.0F, Math.min(f, f1) / f1);
-        return Color.HSBtoRGB(f2 / 3.0F, 1.0F, 1.0F) | 0xFF000000;
+    private void collectEntities() {
+        this.collectedEntities.clear();
+        List<Entity> playerEntities = mc.theWorld.loadedEntityList;
+        int i = 0;
+
+        for (Entity entity : playerEntities) {
+            if (this.isValid(entity)) {
+                this.collectedEntities.add(entity);
+            }
+        }
+    }
+
+    private javax.vecmath.Vector3d project2D(int scaleFactor, double x, double y, double z) {
+        GL11.glGetFloat(2982, this.modelview);
+        GL11.glGetFloat(2983, this.projection);
+        GL11.glGetInteger(2978, this.viewport);
+        return GLU.gluProject((float)x, (float)y, (float)z, this.modelview, this.projection, this.viewport, this.vector) ? new javax.vecmath.Vector3d((this.vector.get(0) / (float)scaleFactor), (((float) Display.getHeight() - this.vector.get(1)) / (float)scaleFactor), this.vector.get(2)) : null;
+    }
+
+    private boolean isValid(Entity entity) {
+        if (entity != mc.thePlayer || this.you.isEnabled() && mc.gameSettings.thirdPersonView != 0) {
+            if (entity.isDead) {
+                return false;
+            } else if (!this.invisibles.isEnabled() && entity.isInvisible()) {
+                return false;
+            } else if (this.items.isEnabled() && entity instanceof EntityItem && mc.thePlayer.getDistanceToEntity(entity) < 10.0F) {
+                return true;
+            } else if (this.animals.isEnabled() && entity instanceof EntityAnimal) {
+                return true;
+            } else if (this.players.isEnabled() && entity instanceof EntityPlayer) {
+                return true;
+            } else {
+                return this.mobs.isEnabled() && (entity instanceof EntityMob || entity instanceof EntitySlime || entity instanceof EntityDragon || entity instanceof EntityGolem);
+            }
+        } else {
+            return false;
+        }
     }
 
     @EventTarget
@@ -156,56 +267,13 @@ public class ESP extends Module {
             GlStateManager.color(1, 1, 1, 1);
             startEnd(false);
         }
-
-        this.setSuffix(mode.getSelected());
-        if(!esp3d.isEnabled())
-        {
-            this.setSuffix("");
-            return;
-        }
-        for(Entity entity : mc.theWorld.getLoadedEntityList()) {
-            if(entity == mc.thePlayer) continue;
-            if(entity instanceof EntityPlayer) {
-                GL11.glPushMatrix();
-
-                GlStateManager.enableBlend();
-                GL11.glEnable(GL11.GL_LINE_SMOOTH);
-                GlStateManager.disableTexture2D();
-                GlStateManager.disableDepth();
-
-                RenderUtils.glColor(HUD.getColor(0));
-                GL11.glLineWidth(2.5f);
-
-                double factor = entity.width - 0.15;
-                double yOffset = entity.height + 0.2;
-
-                double x = entity.lastTickPosX + (entity.posX - entity.lastTickPosX) * mc.timer.renderPartialTicks - mc.getRenderManager().viewerPosX;
-                double y = entity.lastTickPosY + (entity.posY - entity.lastTickPosY) * mc.timer.renderPartialTicks - mc.getRenderManager().viewerPosY;
-                double z = entity.lastTickPosZ + (entity.posZ - entity.lastTickPosZ) * mc.timer.renderPartialTicks - mc.getRenderManager().viewerPosZ;
-
-                if(mode.is("box")) {
-                    drawBox(x, y, z, factor, yOffset);
-                }
-                if(mode.is("cylinder")) {
-                    drawCylinder(x, y, z, factor, yOffset);
-                }
-
-                GL11.glLineWidth(1);
-                GL11.glDisable(GL11.GL_LINE_SMOOTH);
-                GlStateManager.enableDepth();
-                GlStateManager.enableTexture2D();
-                GlStateManager.disableBlend();
-
-                GL11.glPopMatrix();
-            }
-        }
     }
 
     private void drawSkeleton(Event3D event, EntityPlayer e) {
         final Color color = new Color(e.getName().equalsIgnoreCase(mc.thePlayer.getName()) ? 0xFF99ff99 : new Color(255, 255, 255).getRGB());
         if (!e.isInvisible()) {
             float[][] entPos = entities.get(e);
-            if (entPos != null && e.getEntityId() != -1488 && e.isEntityAlive() && RenderUtils.isInViewFrustrum(e.getEntityBoundingBox()) && !e.isDead && e != mc.thePlayer && !e.isPlayerSleeping()) {
+            if (entPos != null && e.getEntityId() != -1488 && RenderUtils.isInViewFrustrum(e.getEntityBoundingBox()) && !e.isDead && e != mc.thePlayer && !e.isPlayerSleeping()) {
                 GL11.glPushMatrix();
                 GL11.glEnable(GL11.GL_LINE_SMOOTH);
                 GL11.glLineWidth((float) width.getCurrent());

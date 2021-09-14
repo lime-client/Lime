@@ -1,98 +1,131 @@
 package lime.features.module.impl.movement.flights.impl;
 
+import lime.core.Lime;
 import lime.core.events.impl.EventMotion;
 import lime.core.events.impl.EventMove;
 import lime.core.events.impl.EventPacket;
+import lime.features.module.impl.combat.KillAura;
+import lime.features.module.impl.movement.TargetStrafe;
 import lime.features.module.impl.movement.flights.FlightValue;
+import lime.features.module.impl.world.Timer;
 import lime.utils.movement.MovementUtils;
+import lime.utils.other.ChatUtils;
 import lime.utils.other.PlayerUtils;
-import lime.utils.other.Timer;
-import net.minecraft.network.Packet;
 import net.minecraft.network.play.client.C03PacketPlayer;
-import net.minecraft.network.play.client.C0CPacketInput;
-
-import java.util.ArrayList;
+import net.minecraft.network.play.server.S08PacketPlayerPosLook;
+import net.minecraft.network.play.server.S12PacketEntityVelocity;
 
 public class SurvivalDub extends FlightValue {
-    public SurvivalDub() {
+    public SurvivalDub()
+    {
         super("Survival_Dub");
     }
 
-    private final ArrayList<Packet<?>> packets = new ArrayList<>();
-    private final Timer timer = new Timer();
-    private double lastDist, moveSpeed;
+    private double moveSpeed;
+    private double lastDist;
+    private int ticks;
     private int stage;
+    private boolean receivedS12;
 
     @Override
     public void onEnable() {
         stage = 0;
-        for (int i = 0; i < 8; i++) {
-            mc.getNetHandler().sendPacketNoEvent(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY + 0.42, mc.thePlayer.posZ, false));
-            mc.getNetHandler().sendPacketNoEvent(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY, mc.thePlayer.posZ, false));
-        }
-
-        mc.getNetHandler().sendPacketNoEvent(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY, mc.thePlayer.posZ, true));
         moveSpeed = 0;
-        super.onEnable();
+        lastDist = 0;
+        receivedS12 = false;
+        ticks = 0;
     }
 
     @Override
-    public void onDisable() {
-        for (Packet<?> packet : packets) {
-            mc.getNetHandler().addToSendQueue(packet);
+    public void onPacket(EventPacket e) {
+        if(e.getPacket() instanceof S08PacketPlayerPosLook) {
+            moveSpeed = 0.25;
         }
-        packets.clear();
-        super.onDisable();
+        if(e.getPacket() instanceof S12PacketEntityVelocity) {
+            S12PacketEntityVelocity packet = (S12PacketEntityVelocity) e.getPacket();
+            if(packet.getEntityID() == mc.thePlayer.getEntityId()) {
+                receivedS12 = true;
+            }
+        }
     }
 
     @Override
     public void onMotion(EventMotion e) {
         if(e.isPre()) {
-            if(stage == 1) {
-                e.setCanceled(true);
-                packets.add(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY, mc.thePlayer.posZ, false));
-                if(timer.hasReached(150)) {
-                    for (Packet<?> packet : packets) {
-                        mc.getNetHandler().sendPacketNoEvent(packet);
-                    }
-                    packets.clear();
-                    timer.reset();
-                }
+            ticks++;
+        }
+        if(!receivedS12 || ticks < 5) return;
+        if(!mc.thePlayer.isMoving()) {
+            MovementUtils.setSpeed(0);
+        }
+
+        e.setGround(true);
+
+        if(e.isPre())
+        {
+            double xDist = mc.thePlayer.posX - mc.thePlayer.prevPosX;
+            double zDist = mc.thePlayer.posZ - mc.thePlayer.prevPosZ;
+            lastDist = Math.sqrt(xDist * xDist + zDist * zDist);
+        }
+
+        if((stage > 2 || stage == -1) && !MovementUtils.isOnGround(3.33315597345063e-11))
+        {
+            mc.thePlayer.motionY = 0;
+            if(e.isPre())
+            {
+                MovementUtils.vClip(-(8.0E-6));
             }
         }
     }
 
     @Override
     public void onMove(EventMove e) {
-        mc.getNetHandler().sendPacketNoEvent(new C0CPacketInput((float) moveSpeed, (float) moveSpeed, false, false));
-        if(stage == 0) {
-            moveSpeed = 1.2;
-            if(mc.thePlayer.hurtTime > 0) {
-                MovementUtils.vClip(0.5 - 0.00160);
-                timer.reset();
+        if(ticks == 6) {
+            for (int i = 0; i < 8; i++) {
+                mc.getNetHandler().sendPacketNoEvent(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY + 0.4, mc.thePlayer.posZ, false));
+                mc.getNetHandler().sendPacketNoEvent(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY, mc.thePlayer.posZ, false));
+            }
+
+            mc.getNetHandler().sendPacketNoEvent(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY, mc.thePlayer.posZ, true));
+            e.setCanceled(true);
+            return;
+        } else if(!receivedS12 || ticks <= 5) {
+            e.setX(0);
+            e.setZ(0);
+            return;
+        }
+        if((stage == 0 && !mc.thePlayer.onGround) || mc.thePlayer.isCollidedHorizontally) stage = -1;
+        if(mc.thePlayer.isMoving())
+        {
+            if(stage != -1) {
+                switch(stage)
+                {
+                    case 0:
+                        if(mc.thePlayer.onGround && mc.thePlayer.isCollidedVertically)
+                            this.moveSpeed = 0.5;
+                        break;
+                    case 1:
+                        if(mc.thePlayer.onGround && mc.thePlayer.isCollidedVertically)
+                            e.setY(mc.thePlayer.motionY = 0.42);
+                        this.moveSpeed *= 2.149;
+                        break;
+                    case 2:
+                        this.moveSpeed = 1;
+                        break;
+                    default:
+                        this.moveSpeed = this.lastDist - this.lastDist / 159;
+                        break;
+                }
+
+
+                if (KillAura.getEntity() != null) {
+                    TargetStrafe targetStrafe2 = (TargetStrafe) Lime.getInstance().getModuleManager().getModuleC(TargetStrafe.class);
+                    targetStrafe2.setMoveSpeed(e, Math.max(moveSpeed, MovementUtils.getBaseMoveSpeed()));
+                } else {
+                    MovementUtils.setSpeed(e, Math.max(moveSpeed, MovementUtils.getBaseMoveSpeed()));
+                }
                 ++stage;
             }
-        } else {
-            moveSpeed = Math.max(moveSpeed -= moveSpeed / 145, MovementUtils.getBaseMoveSpeed());
-            mc.thePlayer.setPosition(mc.thePlayer.posX, mc.thePlayer.posY + 1.0E-12, mc.thePlayer.posZ);
-            mc.thePlayer.fallDistance -= 1E-12;
-            e.setY(mc.thePlayer.motionY = 0);
-            MovementUtils.setSpeed(e, moveSpeed);
         }
     }
-
-    @Override
-    public void onPacket(EventPacket e) {
-        super.onPacket(e);
-    }
-
-    /*
-    if(e.isPre()) {
-        e.setY(mc.thePlayer.posY - Math.random() * (0.001 - 0.0001) + 0.0001);
-        mc.thePlayer.motionY = -0.0055;
-        if(mc.thePlayer.onGround)
-            mc.thePlayer.jump();
-        mc.timer.timerSpeed = 1.0855f;
-    }
-     */
 }

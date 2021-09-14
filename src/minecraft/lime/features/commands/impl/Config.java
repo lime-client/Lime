@@ -37,11 +37,11 @@ public class Config extends Command {
                     Lime.getInstance().getFileSaver().saveModules("Lime" + File.separator + "configs" + File.separator + args[2] + ".json", "unknown", false);
                 }
                 //ChatUtils.sendMessage("Saved config to §aLime" + File.separator + "configs" + File.separator + args[2] + ".json");
-                Lime.getInstance().getNotificationManager().addNotification(new Notification("Config", "Saved config to §aLime" + File.separator + "configs" + File.separator + args[2] + ".json", Notification.Type.SUCCESS));
+                Lime.getInstance().getNotificationManager().addNotification("Config", "Saved config to §aLime" + File.separator + "configs" + File.separator + args[2] + ".json", Notification.Type.SUCCESS);
                 break;
             case "load":
                 Lime.getInstance().getFileSaver().applyJson("Lime" + File.separator + "configs" + File.separator + args[2] + ".json", false);
-                Lime.getInstance().getNotificationManager().addNotification(new Notification("Config", "Loaded §a" + args[2] + " §fconfig", Notification.Type.SUCCESS));
+                Lime.getInstance().getNotificationManager().addNotification("Config", "Loaded §a" + args[2] + " §fconfig", Notification.Type.SUCCESS);
                 break;
             case "delete":
                 if(args[2].equalsIgnoreCase("*")) {
@@ -50,12 +50,12 @@ public class Config extends Command {
                         File configFile = new File("Lime" + File.separator + "configs" + File.separator + s);
                         configFile.delete();
                     }
-                    Lime.getInstance().getNotificationManager().addNotification(new Notification("Config", "Deleted §a all§f configs", Notification.Type.SUCCESS));
+                    Lime.getInstance().getNotificationManager().addNotification("Config", "Deleted §a all§f configs", Notification.Type.SUCCESS);
                 } else {
                     File configFile = new File("Lime" + File.separator + "configs" + File.separator + args[2] + ".json");
                     if(configFile.exists()) {
                         configFile.delete();
-                        Lime.getInstance().getNotificationManager().addNotification(new Notification("Config", "Deleted §a" + args[2] + " §fconfig", Notification.Type.SUCCESS));
+                        Lime.getInstance().getNotificationManager().addNotification("Config", "Deleted §a" + args[2] + " §fconfig", Notification.Type.SUCCESS);
                         return;
                     }
                 }

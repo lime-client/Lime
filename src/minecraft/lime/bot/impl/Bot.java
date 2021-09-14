@@ -65,7 +65,7 @@ public class Bot {
                     JsonElement element = message.toJson();
                     try {
                         if (ChatUtils.removeColors(message.getFullText()).toLowerCase().contains("join> " + userName.toLowerCase())) {
-                            Lime.getInstance().getNotificationManager().addNotification(new Notification("Disabler", "Bot joined.", Notification.Type.SUCCESS));
+                            Lime.getInstance().getNotificationManager().addNotification("Disabler", "Bot joined.", Notification.Type.SUCCESS);
                             client.getSession().send(new ClientChatPacket("/spec"));
                         }
                         if (element instanceof JsonObject) {

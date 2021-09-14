@@ -29,6 +29,7 @@ public class ModuleManager {
         registerModule(new TeleportAura());
 
         // EXPLOIT
+        registerModule(new InfiniteChat());
         registerModule(new Disabler());
         registerModule(new FastBow());
         registerModule(new Crasher());
@@ -81,10 +82,10 @@ public class ModuleManager {
         registerModule(new ChinaHat());
         registerModule(new ClickGUI());
         registerModule(new ChestESP());
+        registerModule(new NoRender());
         registerModule(new Tracers());
         registerModule(new Camera());
         registerModule(new Chams());
-        registerModule(new ESP2D());
         registerModule(new ESP());
         registerModule(new HUD());
 

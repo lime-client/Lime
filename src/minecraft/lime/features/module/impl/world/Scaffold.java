@@ -25,6 +25,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.play.client.C0APacketAnimation;
+import net.minecraft.potion.Potion;
 import net.minecraft.util.*;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
@@ -70,6 +71,7 @@ public class Scaffold extends Module {
     private final BoolValue downwards = new BoolValue("Downwards", this, false);
     private final BoolValue randomVec = new BoolValue("Random Vec", this, false);
     private final BoolValue rayCast = new BoolValue("RayCast", this, false);
+    private final BoolValue slowSpeed = new BoolValue("Slow Speed", this, false);
     private final BoolValue blockInfo = new BoolValue("Block Info", this, false);
     private final BoolValue blockEsp = new BoolValue("Block ESP", this, false);
 
@@ -150,9 +152,14 @@ public class Scaffold extends Module {
     public void onMotion(EventMotion e)
     {
         if(InventoryUtils.hasBlock(blacklistedBlocks, true, true) == -1 && !safeWalk.isEnabled()) {
-            Lime.getInstance().getNotificationManager().addNotification(new Notification("Scaffold", "Disabled scaffold because you have no blocks!", Notification.Type.ERROR));
+            Lime.getInstance().getNotificationManager().addNotification("Scaffold", "Disabled scaffold because you have no blocks!", Notification.Type.FAIL);
             this.toggle();
             return;
+        }
+
+        if(slowSpeed.isEnabled() && e.isPre() && mc.thePlayer.isPotionActive(Potion.moveSpeed)) {
+            mc.thePlayer.motionX *= .75;
+            mc.thePlayer.motionZ *= .75;
         }
 
         if(keepRotations.isEnabled() && !rotations.is("none"))
@@ -351,7 +358,7 @@ public class Scaffold extends Module {
         double z = block.getZ() + 0.5 - mc.thePlayer.posZ +  (double) face.getFrontOffsetZ()/2;
         float yaw = (float) (Math.atan2(z, x) * 360.0D / Math.PI) - 90.0F;
 
-        if(rotations.is("legit") || rotations.is("hypixel")) {
+        if(rotations.is("legit")) {
             switch(face){
                 case NORTH:
                     yaw = 0;
@@ -371,9 +378,16 @@ public class Scaffold extends Module {
         } else if(rotations.is("legit2"))
         {
             yaw = (float) MathHelper.wrapDegrees(Math.toDegrees(MovementUtils.getDirection(mc.thePlayer)) - (180 - mc.theWorld.rand.nextFloat() / 100));
+        } else if(rotations.is("hypixel"))  {
+            Vec3 positionEyes = this.mc.thePlayer.getPositionEyes(2.0F);
+            Vec3 add = (new Vec3((double)block.getX() + 0.5D, (double)block.getY() + 0.5D, (double)block.getZ() + 0.5D)).add(new Vec3(face.getDirectionVec()).scale(0.49000000953674316D));
+            double n = add.xCoord - positionEyes.xCoord;
+            double n2 = add.yCoord - positionEyes.yCoord;
+            double n3 = add.zCoord - positionEyes.zCoord;
+            return new float[]{(float)(Math.atan2(n3, n) * 180.0D / 3.141592653589793D - 90.0D), -((float)(Math.atan2(n2, (double)((float)Math.hypot(n, n3))) * 180.0D / 3.141592653589793D))};
         }
 
-        return new float[]{rotations.is("hypixel") ? this.yawMouseFilter.smooth(yaw, 0.4f) : yaw, 85};
+        return new float[]{yaw, 85};
     }
 
     private Vec3 getVec3(BlockUtils.BlockData blockData)
@@ -429,12 +443,10 @@ public class Scaffold extends Module {
                         mc.thePlayer.motionZ = 0;
                         mc.thePlayer.jumpMovementFactor = 0;
                         if (isAirBlock(underBlock) && blockData != null) {
-                            mc.timer.timerSpeed = 2f;
                             mc.thePlayer.motionY = 0.41982;
                             mc.thePlayer.motionX = 0;
                             mc.thePlayer.motionZ = 0;
                             if(timerTower.hasReached(2500)) {
-                                mc.timer.timerSpeed = 1f;
                                 mc.thePlayer.motionY -= 0.28;
                                 timerTower.reset();
                             }

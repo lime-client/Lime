@@ -3164,10 +3164,6 @@ public class Minecraft implements IThreadListener, IPlayerUsage
                                 this.ingameGUI.getChatGUI().printChatMessage(new ChatComponentText("Not ready to start streaming yet!"));
                             }
                         }
-                        else
-                        {
-                            GuiStreamUnavailable.func_152321_a(this.currentScreen);
-                        }
                     }
                     else if (i == this.gameSettings.keyBindStreamPauseUnpause.getKeyCode())
                     {

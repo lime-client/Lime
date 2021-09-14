@@ -1,122 +1,90 @@
 package lime.ui.notifications;
 
-import lime.core.events.impl.Event2D;
 import lime.managers.FontManager;
 import lime.utils.other.ChatUtils;
-import lime.utils.other.MathUtils;
 import lime.utils.other.Timer;
 import lime.utils.render.RenderUtils;
 import lime.utils.render.animation.easings.Animate;
 import lime.utils.render.animation.easings.Easing;
-import net.minecraft.client.gui.Gui;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
-import org.lwjgl.opengl.GL11;
+
+import java.awt.*;
 
 public class Notification {
     public enum Type {
-        ERROR, SUCCESS, WARNING, INFORMATION
+        FAIL, WARNING, SUCCESS, INFORMATION
     }
 
-    private final Animate animationY;
-    private int lastKnownY;
-
-    private final String name, information;
-    private final Type _enum;
-    private final int seconds;
-
+    private final String name, displayName;
+    private final int time, width, height;
+    private final Type type;
     private final Timer timer;
-    private final Animate animate;
+    private final Animate animation;
 
-    private boolean finished;
-
-    public Notification(String name, String information, int seconds, Type type) {
+    public Notification(String name, String displayName, int time, Type type) {
         this.name = name;
-        this.information = information;
-        this._enum = type;
-        this.seconds = seconds;
+        this.displayName = displayName;
+        this.type = type;
         this.timer = new Timer();
-        this.timer.reset();
-
-        this.animate = new Animate();
-        animate.setEase(Easing.CUBIC_OUT);
-        animate.setSpeed(300);
-        animate.setMin(0);
-        animate.setMax(FontManager.ProductSans20.getFont().getStringWidth(ChatUtils.removeColors(information)) + 48);
-
-        this.animationY = new Animate();
-        animationY.setEase(Easing.CUBIC_OUT);
-        animationY.setSpeed(300);
-        animationY.setMin(0);
-        lastKnownY = -1;
+        timer.reset();
+        this.time = time * 1000;
+        this.width = Math.max(FontManager.ProductSans20.getFont().getStringWidth(ChatUtils.removeColors(displayName) + 3), FontManager.ProductSans20.getFont().getStringWidth(ChatUtils.removeColors(name)));
+        this.height = 28;
+        this.animation = new Animate().setEase(Easing.CUBIC_OUT).setSpeed(100).setValue(-1);
     }
 
-    public Notification(String name, String information, Type type) {
-        this(name, information, 3, type);
+    public Notification(String name, String displayName, Type type) {
+        this(name, displayName, 5, type);
     }
 
-    public void render(Event2D e, int yOffset) {
-        if(lastKnownY == -1) {
-            lastKnownY = yOffset;
-            animationY.setMin(0);
-            animationY.setMax(1);
-            animationY.reset();
+    public void drawNotification(int x, int y) {
+        if(animation.getValue() == -1) {
+            animation.setReversed(false).setMin(0).setMax(getWidth());
+            animation.reset();
+            animation.setValue(animation.getMax());
         }
-        if(lastKnownY != yOffset) {
-            animationY.setMax(yOffset - lastKnownY);
-            animationY.update();
+        animation.update();
+        x -= (int) animation.getValue() - getWidth();
+
+        if(timer.hasReached(time)) {
+            animation.setReversed(true);
         }
 
-        if(animationY.getValue() == yOffset) {
-            lastKnownY = yOffset;
-        }
-        animate.update();
-
-        float animPercentage = lastKnownY == yOffset ? yOffset : lastKnownY + animationY.getValue();
-        float width = FontManager.ProductSans20.getFont().getStringWidth(ChatUtils.removeColors(information)) + 44;
-        double percentage = MathUtils.scale(Math.min(timer.getTimeElapsed(), getSeconds() * 1000L), 0, getSeconds() * 1000, 0, width);
-        Gui.drawRect(e.getScaledResolution().getScaledWidth() - animate.getValue(), animPercentage, e.getScaledResolution().getScaledWidth() - animate.getValue() + width, animPercentage + 36, 0xCC << 24);
-        Gui.drawRect(e.getScaledResolution().getScaledWidth() - animate.getValue(), animPercentage + 35, e.getScaledResolution().getScaledWidth() - animate.getValue() + width - percentage, animPercentage + 36, -1);
-        GL11.glPushMatrix();
-        GL11.glScaled(0.5, 0.5, 1);
-        GL11.glColor4f(1, 1, 1, 1);
-        GlStateManager.resetColor();
-        RenderUtils.drawImage(new ResourceLocation("lime/images/" + getType().name().toLowerCase() + ".png"), (e.getScaledResolution().getScaledWidth() - animate.getValue() + 2) * 2, (animPercentage + 2) * 2, 64, 64, true);
-        GL11.glPopMatrix();
-        FontManager.ProductSans24.getFont().drawStringWithShadow(name, e.getScaledResolution().getScaledWidth() - animate.getValue() + 36, animPercentage, -1);
-        FontManager.ProductSans20.getFont().drawStringWithShadow(information, e.getScaledResolution().getScaledWidth() - animate.getValue() + 36, animPercentage + FontManager.ProductSans24.getFont().getFontHeight(), -1);
-
-        if(timer.hasReached(getSeconds() * 1000L)) {
-            animate.setReversed(true);
-
-            if(animate.getValue() == animate.getMin()) {
-                finished = true;
-            }
-        }
+        RenderUtils.drawRoundedRect(x,y,getWidth(),getHeight(), 15, new Color(41, 41, 41, 240).getRGB());
+        RenderUtils.drawImage(new ResourceLocation("lime/images/test/" + type.name().toLowerCase() + ".png"), (int) x - 4, y - 4, 16, 16);
+        FontManager.ProductSans20.getFont().drawStringWithShadow(getName(), x + 13.5f, y, -1);
+        FontManager.ProductSans20.getFont().drawStringWithShadow(getDisplayName(), x + 1.5f, y + FontManager.ProductSans20.getFont().getFontHeight(), -1);
     }
-
 
     public String getName() {
         return name;
     }
 
-    public String getInformation() {
-        return information;
+    public String getDisplayName() {
+        return displayName;
     }
 
-    public Type getType() {
-        return _enum;
+    public boolean isDone() {
+        return animation.isReversed() && timer.hasReached(time) && animation.getValue() == animation.getMin();
     }
 
-    public int getSeconds() {
-        return seconds;
+    public int getTime() {
+        return time;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight() {
+        return height;
     }
 
     public Timer getTimer() {
         return timer;
     }
 
-    public boolean isFinished() {
-        return finished;
+    public Type getType() {
+        return type;
     }
 }

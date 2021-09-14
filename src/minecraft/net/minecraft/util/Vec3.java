@@ -38,6 +38,10 @@ public class Vec3
         this((double)p_i46377_1_.getX(), (double)p_i46377_1_.getY(), (double)p_i46377_1_.getZ());
     }
 
+    public Vec3 scale(double value) {
+        return new Vec3(xCoord * value, yCoord * value, zCoord * value);
+    }
+
     /**
      * Returns a new vector with the result of the specified vector minus this.
      */

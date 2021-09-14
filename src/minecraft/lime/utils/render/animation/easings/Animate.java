@@ -66,5 +66,5 @@ public class Animate {
     public boolean isReversed() { return reversed; }
     public Easing getEase() { return ease; }
 
-    private float clamp(float num, float min, float max) { return num < min ? min : (num > max ? max : num); }
+    private float clamp(float num, float min, float max) { return num < min ? min : (Math.min(num, max)); }
 }

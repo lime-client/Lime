@@ -89,7 +89,7 @@ public abstract class Module {
         onDisable();
     }
 
-    public void onEnable() { }
+    public void onEnable() {}
     public void onDisable() { }
 
     public boolean hasSettings() {

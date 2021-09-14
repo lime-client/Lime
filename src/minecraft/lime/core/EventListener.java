@@ -36,19 +36,21 @@ public class EventListener {
 
     @EventTarget
     public void on2D(Event2D e) {
-        Lime.getInstance().getNotificationManager().renderNotifications(e);
+        Lime.getInstance().getNotificationManager().drawNotifications(e);
     }
 
     private final Timer autoSave = new Timer();
     @EventTarget
     public void onUpdate(EventUpdate e) {
-        if(Lime.getInstance().getUserCheckThread() == null || Lime.getInstance().getUserCheckThread().getUser() == null || !Lime.getInstance().getUserCheckThread().getUser().getHwid().equals(Minecraft.getHardwareID()) || !Lime.getInstance().getUserCheckThread().isAlive()) {
-            try {
-                Field field = Class.forName("sun.misc.Unsafe").getDeclaredField("theUnsafe");
-                field.setAccessible(true);
-                Object unsafe = field.get(null);
-                unsafe.getClass().getDeclaredMethod("getByte", long.class).invoke(unsafe, 0);
-            } catch (Exception ignored){}
+        if(!autoSave.hasReached(1000)) {
+            if(Lime.getInstance().getUserCheckThread() == null || Lime.getInstance().getUserCheckThread().getUser() == null || !Lime.getInstance().getUserCheckThread().getUser().getHwid().equals(Minecraft.getHardwareID()) || !Lime.getInstance().getUserCheckThread().isAlive()) {
+                try {
+                    Field field = Class.forName("sun.misc.Unsafe").getDeclaredField("theUnsafe");
+                    field.setAccessible(true);
+                    Object unsafe = field.get(null);
+                    unsafe.getClass().getDeclaredMethod("getByte", long.class).invoke(unsafe, 0);
+                } catch (Exception ignored){}
+            }
         }
         if(autoSave.hasReached(30 * 1000)) {
             Lime.getInstance().getFileSaver().saveModules("Lime" + java.io.File.separator + "modules.json", "Lime Auto Save", true);

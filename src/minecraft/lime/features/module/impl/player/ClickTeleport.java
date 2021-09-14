@@ -27,7 +27,7 @@ public class ClickTeleport extends Module {
 
     @EventTarget
     public void onMotion(EventMotion e) {
-        if(mc.thePlayer.getCurrentEquippedItem() != null && (!(mc.thePlayer.getCurrentEquippedItem().getItem() instanceof ItemSword) || !(mc.thePlayer.getCurrentEquippedItem().getItem() instanceof ItemFood)) && mc.thePlayer.isSneaking()) {
+        if(mc.thePlayer.isSneaking()) {
             if(e.isPre()) {
                 if(delay == 0 && Mouse.isButtonDown(2)) {
                     teleportToBlockPos(getBlinkBlock().getBlockPos().add(0, 1, 0));

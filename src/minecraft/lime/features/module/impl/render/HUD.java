@@ -4,7 +4,6 @@ import lime.core.Lime;
 import lime.core.events.EventTarget;
 import lime.core.events.impl.Event2D;
 import lime.core.events.impl.EventScoreboard;
-import lime.core.events.impl.EventUpdate;
 import lime.core.events.impl.EventWorldChange;
 import lime.features.module.Category;
 import lime.features.module.Module;
@@ -41,11 +40,6 @@ public class HUD extends Module {
     private final BoolValue fps = new BoolValue("FPS", this, true);
 
     private final Animate scoreboardAnimation = new Animate();
-
-    @EventTarget
-    public void onUpdate(EventUpdate e) {
-
-    }
 
     @EventTarget
     public void on2D(Event2D e) {
@@ -110,7 +104,6 @@ public class HUD extends Module {
                 } else if(sidebar.is("left")) {
                     Gui.drawRect(e.getScaledResolution().getScaledWidth() - module.hudAnimation.getValue() - 1, yCount, e.getScaledResolution().getScaledWidth()  - module.hudAnimation.getValue(), yCount + increment, color.getRGB());
                 }
-                //Gui.drawRect(e.getScaledResolution().getScaledWidth() - 1 - module.hudAnimation.getValue(), yCount, e.getScaledResolution().getScaledWidth() - 1, yCount + increment, (0xCC * 200) << 24);
                 if(customFont.isEnabled())
                     FontManager.ProductSans18.getFont().drawStringWithShadow(moduleName, (e.getScaledResolution().getScaledWidth() - module.hudAnimation.getValue()), yCount, color.getRGB());
                 else
@@ -128,7 +121,7 @@ public class HUD extends Module {
 
     @EventTarget
     public void onScoreboard(EventScoreboard e) {
-        int size = (int) Lime.getInstance().getModuleManager().getModules().stream().filter(Module::isToggled).count();
+        int size = (int) Lime.getInstance().getModuleManager().getModules().stream().filter(module -> module.isToggled() && ((BoolValue) Lime.getInstance().getSettingsManager().getSetting("Show", module)).isEnabled()).count();
         if(scoreboardAnimation.getValue() > size * 12) {
             scoreboardAnimation.setMin(size * 12);
             scoreboardAnimation.setReversed(true);

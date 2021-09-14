@@ -47,11 +47,11 @@ public class InventoryManager extends Module {
 
             getBestSword(36);
 
-            if(!timer.hasReached((long) delay.intValue())) return;
+            if(!timer.hasReached(delay.intValue())) return;
 
             getBestPickaxe(37);
 
-            if(!timer.hasReached((long) delay.intValue())) return;
+            if(!timer.hasReached(delay.intValue())) return;
 
             getBestAxe(38);
         }
@@ -138,6 +138,7 @@ public class InventoryManager extends Module {
             } else {
                 swap(findSlotByItem(bestPickaxe), slot - 36);
             }
+            timer.reset();
         } else
             return;
 
@@ -181,6 +182,7 @@ public class InventoryManager extends Module {
             } else {
                 swap(findSlotByItem(bestAxe), slot - 36);
             }
+            timer.reset();
         } else
             return;
 

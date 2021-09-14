@@ -24,7 +24,7 @@ public class VerusFast extends FlightValue {
     public void onEnable() {
         if(!mc.thePlayer.onGround)
         {
-            Lime.getInstance().getNotificationManager().addNotification(new Notification("Error", "Can damage only on the ground!", Notification.Type.ERROR));
+            Lime.getInstance().getNotificationManager().addNotification("Error", "Can damage only on the ground!", Notification.Type.FAIL);
             getFlight().toggle();
             return;
         }
@@ -45,7 +45,7 @@ public class VerusFast extends FlightValue {
 
         if(mc.thePlayer.isCollidedHorizontally && getFlight().getTicks() < 25)
         {
-            Lime.getInstance().getNotificationManager().addNotification(new Notification("Flight", "Disabled boost for safety", Notification.Type.WARNING));
+            Lime.getInstance().getNotificationManager().addNotification("Flight", "Disabled boost for safety", Notification.Type.WARNING);
             getFlight().setTicks(25);
         }
 

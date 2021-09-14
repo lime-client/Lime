@@ -4,10 +4,13 @@ import com.mojang.authlib.Agent;
 import com.mojang.authlib.exceptions.AuthenticationException;
 import com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService;
 import com.mojang.authlib.yggdrasil.YggdrasilUserAuthentication;
+import lime.utils.other.WebUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.Session;
 
-import java.net.Proxy;
+import java.io.OutputStream;
+import java.net.*;
+import java.nio.charset.StandardCharsets;
 
 public class AltLoginThread extends Thread {
 

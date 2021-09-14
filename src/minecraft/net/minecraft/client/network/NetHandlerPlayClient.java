@@ -17,7 +17,7 @@ import java.util.UUID;
 import java.util.Map.Entry;
 
 import lime.core.Lime;
-import lime.ui.notifications.Notification;
+import lime.features.module.impl.render.NoRender;
 import net.minecraft.block.Block;
 import net.minecraft.client.ClientBrandRetriever;
 import net.minecraft.client.Minecraft;
@@ -387,7 +387,10 @@ public class NetHandlerPlayClient implements INetHandlerPlayClient
         }
         else if (packetIn.getType() == 50)
         {
-            entity = new EntityTNTPrimed(this.clientWorldController, d0, d1, d2, (EntityLivingBase)null);
+            NoRender noRender = (NoRender) Lime.getInstance().getModuleManager().getModuleC(NoRender.class);
+            if(!noRender.isToggled() && !noRender.tnt.isEnabled()) {
+                entity = new EntityTNTPrimed(this.clientWorldController, d0, d1, d2, (EntityLivingBase)null);
+            }
         }
         else if (packetIn.getType() == 78)
         {
@@ -1721,7 +1724,6 @@ public class NetHandlerPlayClient implements INetHandlerPlayClient
 
             if (isLevelProtocol && (url.contains("..") || !url.endsWith("/resources.zip"))) {
                 System.out.println("Malicious server tried to access " + url);
-                Lime.getInstance().getNotificationManager().addNotification(new Notification("Resource Exploit Fix", "Blocked file exploit", Notification.Type.WARNING));
                 throw new URISyntaxException(url, "Invalid levelstorage resourcepack path");
             }
 

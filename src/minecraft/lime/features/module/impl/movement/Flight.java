@@ -19,7 +19,7 @@ public class Flight extends Module {
     private final Graph speedGraph = new Graph("Speed");
 
     //Settings
-    public final EnumValue mode = new EnumValue("Mode", this, "Vanilla", "Vanilla", "Funcraft", "Funcraft_Gamer", "Verus", "Verus_No_Damage", "Verus_Fast", "Survival_Dub", "Mineplex", "Astral", "KoksCraft");
+    public final EnumValue mode = new EnumValue("Mode", this, "Vanilla", "Vanilla", "Funcraft", "Funcraft_Gamer", "AAC", "Verus", "Verus_No_Damage", "Verus_Fast", "Survival_Dub", "Mineplex", "Astral", "KoksCraft");
     public final SlideValue speed = new SlideValue("Speed", this, 0.5, 10, 1.5, 0.5).onlyIf(mode.getSettingName(), "enum", "vanilla", "verus_fast");
     public final SlideValue funcraftSpeed = new SlideValue("Funcraft Speed", this, 0.2, 2, 1.6, 0.05).onlyIf(mode.getSettingName(), "enum", "funcraft");
     public final SlideValue funcraftTimerSpeed = new SlideValue("Funcraft Timer Speed", this, 1, 5, 3, 0.05).onlyIf(mode.getSettingName(), "enum", "funcraft");
@@ -44,6 +44,7 @@ public class Flight extends Module {
         this.flights.add(new Mineplex());
         this.flights.add(new KoksCraft());
         this.flights.add(new Astral());
+        this.flights.add(new AAC());
     }
 
     public int getTicks() {

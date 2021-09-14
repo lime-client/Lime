@@ -22,7 +22,7 @@ public class Mineplex extends FlightValue {
     @Override
     public void onEnable() {
         if(!Lime.getInstance().getModuleManager().getModuleC(Disabler.class).isToggled()) {
-            Lime.getInstance().getNotificationManager().addNotification(new Notification("Flight", "This flight need Mineplex Disabler!", Notification.Type.ERROR));
+            Lime.getInstance().getNotificationManager().addNotification("Flight", "This flight need Mineplex Disabler!", Notification.Type.FAIL);
             //this.getFlight().toggle();
             return;
         }

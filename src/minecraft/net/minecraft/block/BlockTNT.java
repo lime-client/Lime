@@ -1,5 +1,7 @@
 package net.minecraft.block;
 
+import lime.core.Lime;
+import lime.features.module.impl.render.NoRender;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyBool;
@@ -77,6 +79,10 @@ public class BlockTNT extends Block
     {
         if (!worldIn.isRemote)
         {
+            NoRender noRender = (NoRender) Lime.getInstance().getModuleManager().getModuleC(NoRender.class);
+            if(noRender.isToggled() && noRender.tnt.isEnabled()) {
+                return;
+            }
             if (((Boolean)state.getValue(EXPLODE)).booleanValue())
             {
                 EntityTNTPrimed entitytntprimed = new EntityTNTPrimed(worldIn, (double)((float)pos.getX() + 0.5F), (double)pos.getY(), (double)((float)pos.getZ() + 0.5F), igniter);
@@ -94,7 +100,11 @@ public class BlockTNT extends Block
 
             if (item == Items.flint_and_steel || item == Items.fire_charge)
             {
-                this.explode(worldIn, pos, state.withProperty(EXPLODE, Boolean.valueOf(true)), playerIn);
+                NoRender noRender = (NoRender) Lime.getInstance().getModuleManager().getModuleC(NoRender.class);
+                if(!noRender.isToggled() && !noRender.tnt.isEnabled()) {
+                    this.explode(worldIn, pos, state.withProperty(EXPLODE, Boolean.valueOf(true)), playerIn);
+                }
+
                 worldIn.setBlockToAir(pos);
 
                 if (item == Items.flint_and_steel)
@@ -124,7 +134,10 @@ public class BlockTNT extends Block
 
             if (entityarrow.isBurning())
             {
-                this.explode(worldIn, pos, worldIn.getBlockState(pos).withProperty(EXPLODE, Boolean.valueOf(true)), entityarrow.shootingEntity instanceof EntityLivingBase ? (EntityLivingBase)entityarrow.shootingEntity : null);
+                NoRender noRender = (NoRender) Lime.getInstance().getModuleManager().getModuleC(NoRender.class);
+                if(!noRender.isToggled() && !noRender.tnt.isEnabled()) {
+                    this.explode(worldIn, pos, worldIn.getBlockState(pos).withProperty(EXPLODE, Boolean.valueOf(true)), entityarrow.shootingEntity instanceof EntityLivingBase ? (EntityLivingBase)entityarrow.shootingEntity : null);
+                }
                 worldIn.setBlockToAir(pos);
             }
         }

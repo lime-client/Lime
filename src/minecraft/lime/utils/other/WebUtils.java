@@ -17,7 +17,7 @@ public class WebUtils {
         return toString(urlConnection.getInputStream());
     }
 
-    private static String toString(InputStream is) throws IOException
+    public static String toString(InputStream is) throws IOException
     {
         try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8)))
         {

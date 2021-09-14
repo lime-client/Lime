@@ -26,7 +26,7 @@ import org.lwjgl.util.vector.Matrix4f;
 
 public class ShaderGroup
 {
-    private Framebuffer mainFramebuffer;
+    public Framebuffer mainFramebuffer;
     private IResourceManager resourceManager;
     private String shaderGroupName;
     private final List<Shader> listShaders = Lists.<Shader>newArrayList();
@@ -116,6 +116,10 @@ public class ShaderGroup
         {
             IOUtils.closeQuietly(inputstream);
         }
+    }
+
+    public List<Shader> getShaders() {
+        return listShaders;
     }
 
     private void initTarget(JsonElement p_148027_1_) throws JsonException

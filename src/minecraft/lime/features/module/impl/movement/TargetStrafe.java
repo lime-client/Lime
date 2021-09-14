@@ -16,6 +16,7 @@ import lime.utils.movement.MovementUtils;
 import lime.utils.render.RenderUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.Vec3;
@@ -35,6 +36,8 @@ public class TargetStrafe extends Module {
 
     private final SlideValue distance = new SlideValue("Distance", this, 0.5, 6, 2.5, 0.1);
     private final SlideValue sides = new SlideValue("Sides", this, 1, 20, 8, 1);
+    private final BoolValue speedOnly = new BoolValue("Speed Only", this, true);
+    private final BoolValue playersOnly = new BoolValue("Players Only", this, true);
     private final BoolValue spaceOnly = new BoolValue("Space Only", this, false);
     private final BoolValue thirdPerson = new BoolValue("Third Person", this, false);
 
@@ -159,7 +162,7 @@ public class TargetStrafe extends Module {
         }
 
         if(mc.thePlayer.isCollidedHorizontally)
-            direction = direction == 1 ? -1 : 1;
+            direction = -direction;
 
         if(mc.gameSettings.keyBindLeft.isPressed())
             direction = 1;
@@ -186,13 +189,7 @@ public class TargetStrafe extends Module {
 
             if (!(!inVoid(indexPos) && mc.theWorld.getBlockState(new BlockPos(indexPos.xCoord, mc.thePlayer.posY, indexPos.zCoord)).getBlock().getCollisionBoundingBox(mc.theWorld, new BlockPos(indexPos.xCoord, mc.thePlayer.posY, indexPos.zCoord), mc.theWorld.getBlockState(new BlockPos(indexPos.xCoord, mc.thePlayer.posY, indexPos.zCoord))) == null && mc.theWorld.getBlockState(new BlockPos(indexPos.xCoord, mc.thePlayer.posY + 1, indexPos.zCoord)).getBlock().getCollisionBoundingBox(mc.theWorld, new BlockPos(indexPos.xCoord, mc.thePlayer.posY + 1, indexPos.zCoord), mc.theWorld.getBlockState(new BlockPos(indexPos.xCoord, mc.thePlayer.posY + 1, indexPos.zCoord))) == null && mc.theWorld.getBlockState(new BlockPos(indexPos.xCoord, mc.thePlayer.posY + 2, indexPos.zCoord)).getBlock().getCollisionBoundingBox(mc.theWorld, new BlockPos(indexPos.xCoord, mc.thePlayer.posY + 2, indexPos.zCoord), mc.theWorld.getBlockState(new BlockPos(indexPos.xCoord, mc.thePlayer.posY + 2, indexPos.zCoord))) == null)) {
                 direction = -direction;
-                if (direction == 1) {
-                    if (index + 1 > posArrayList.size() - 1) index = 0;
-                    else index++;
-                } else {
-                    if (index - 1 < 0) index = posArrayList.size() - 1;
-                    else index--;
-                }
+                changeIndex(posArrayList);
             } else {
                 if(mc.thePlayer.isCollidedHorizontally) {
                     if(!changeDir) {
@@ -278,7 +275,7 @@ public class TargetStrafe extends Module {
 
     public static boolean canMove() {
         TargetStrafe targetStrafe = (TargetStrafe) Lime.getInstance().getModuleManager().getModuleC(TargetStrafe.class);
-        return KillAura.getEntity() != null && (!targetStrafe.spaceOnly.isEnabled() || Keyboard.isKeyDown(Keyboard.KEY_SPACE)) && Minecraft.getMinecraft().thePlayer.canEntityBeSeen(KillAura.getEntity());
+        return KillAura.getEntity() != null && (!targetStrafe.playersOnly.isEnabled() || KillAura.getEntity() instanceof EntityPlayer) && ((Lime.getInstance().getModuleManager().getModuleC(Speed.class).isToggled() || Lime.getInstance().getModuleManager().getModuleC(Flight.class).isToggled()) || !targetStrafe.speedOnly.isEnabled()) && (!targetStrafe.spaceOnly.isEnabled() || Keyboard.isKeyDown(Keyboard.KEY_SPACE)) && Minecraft.getMinecraft().thePlayer.canEntityBeSeen(KillAura.getEntity());
     }
 
     private boolean inVoid(Vec3 vec3) {

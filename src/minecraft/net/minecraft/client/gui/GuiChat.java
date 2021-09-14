@@ -3,6 +3,9 @@ package net.minecraft.client.gui;
 import com.google.common.collect.Lists;
 import java.io.IOException;
 import java.util.List;
+
+import lime.core.Lime;
+import lime.features.module.impl.exploit.InfiniteChat;
 import net.minecraft.network.play.client.C14PacketTabComplete;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.ChatComponentText;
@@ -56,7 +59,7 @@ public class GuiChat extends GuiScreen
         Keyboard.enableRepeatEvents(true);
         this.sentHistoryCursor = this.mc.ingameGUI.getChatGUI().getSentMessages().size();
         this.inputField = new GuiTextField(0, this.fontRendererObj, 4, this.height - 12, this.width - 4, 12);
-        this.inputField.setMaxStringLength(100);
+        this.inputField.setMaxStringLength(Lime.getInstance().getModuleManager().getModuleC(InfiniteChat.class).isToggled() ? 100000000 : 100);
         this.inputField.setEnableBackgroundDrawing(false);
         this.inputField.setFocused(true);
         this.inputField.setText(this.defaultInputFieldText);
