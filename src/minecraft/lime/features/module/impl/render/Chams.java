@@ -40,7 +40,7 @@ public class Chams extends Module {
                     GlStateManager.disableTexture2D();
                     GlStateManager.disableDepth();
                     GL11.glDisable(GL11.GL_LIGHTING);
-                    Color color = HUD.getColor(0);
+                    Color color = new Color(200, 0, 0);
                     if(e.getEntity().hurtTime > 0) color = color.darker();
                     RenderUtils.glColor(color);
                     e.getModel().render(e.getEntity(), e.getX(), e.getY(), e.getZ(), e.getX2(), e.getY2(), e.getZ2());

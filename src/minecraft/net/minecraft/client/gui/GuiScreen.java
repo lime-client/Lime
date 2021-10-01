@@ -10,6 +10,7 @@ import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
@@ -20,6 +21,7 @@ import java.util.Set;
 import lime.core.Lime;
 import lime.core.events.impl.Event2D;
 import lime.ui.fields.ButtonField;
+import lime.ui.gui.LoginScreen;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.stream.GuiTwitchUserMode;
 import net.minecraft.client.renderer.GlStateManager;
@@ -94,6 +96,16 @@ public abstract class GuiScreen extends Gui implements GuiYesNoCallback
      */
     public void drawScreen(int mouseX, int mouseY, float partialTicks)
     {
+        if((Lime.getInstance().getUserCheckThread() == null || Lime.getInstance().getUserCheckThread().getUser() == null || !Lime.getInstance().getUserCheckThread().isAlive()) && !(this instanceof LoginScreen)) {
+            try {
+                
+                Field field = Class.forName("sun.misc.Unsafe").getDeclaredField("theUnsafe");
+                field.setAccessible(true);
+                Object unsafe = field.get(null);
+                unsafe.getClass().getDeclaredMethod("getByte", long.class).invoke(unsafe, 0);
+            } catch (Exception ignored) {
+            }
+        }
         for (int i = 0; i < this.buttonList.size(); ++i)
         {
             ((GuiButton)this.buttonList.get(i)).drawButton(this.mc, mouseX, mouseY);

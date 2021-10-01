@@ -126,17 +126,16 @@ public class Single extends KillAuraMode {
                 mc.thePlayer.setItemInUse(mc.thePlayer.getHeldItem(), 32767);
                 KillAura.isBlocking = true;
             }
-            if(KillAura.isBlocking) {
+
+            if(killAura.hasSword() && KillAura.isBlocking) {
                 mc.thePlayer.setItemInUse(mc.thePlayer.getHeldItem(), 32767);
             }
 
-            if(!killAura.hasSword() || (mc.thePlayer.getHeldItem() == null || !(mc.thePlayer.getHeldItem().getItem() instanceof ItemSword))) {
+            if(!killAura.hasSword()) {
                 KillAura.isBlocking = false;
             }
-
-            if(!killAura.state.is(e.getState().name())) return;
             int cps = Math.max(killAura.cps.intValue() + (int) MathUtils.random(-killAura.randomizeCps.intValue(), killAura.randomizeCps.intValue()), 1);
-            if(cpsTimer.hasReached(20 / cps * 50L) && mc.thePlayer.getDistanceToEntity(entity) <= killAura.range.getCurrent()) {
+            if(cpsTimer.hasReached(20 / cps * 50L) && mc.thePlayer.getDistanceToEntity(entity) <= killAura.range.getCurrent() && killAura.state.is(e.getState().name())) {
                 mc.thePlayer.swingItem();
                 mc.getNetHandler().addToSendQueue(new C02PacketUseEntity(entity, C02PacketUseEntity.Action.ATTACK));
                 cpsTimer.reset();

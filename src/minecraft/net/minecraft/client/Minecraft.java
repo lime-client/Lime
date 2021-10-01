@@ -17,6 +17,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Field;
 import java.net.Proxy;
 import java.net.SocketAddress;
 import java.nio.ByteBuffer;
@@ -30,12 +31,14 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.FutureTask;
 import javax.imageio.ImageIO;
 
+import lime.core.Lime;
 import lime.core.events.EventBus;
 import lime.core.events.impl.EventGameLoop;
 import lime.core.events.impl.EventKey;
 import lime.core.events.impl.EventWorldChange;
 import lime.ui.gui.LoginScreen;
 import lime.ui.gui.MainScreen;
+import lime.utils.other.security.CipherEncryption;
 import lime.utils.render.GLSLSandboxShader;
 import lime.utils.time.DeltaTime;
 import net.minecraft.block.Block;
@@ -1073,6 +1076,9 @@ public class Minecraft implements IThreadListener, IPlayerUsage
      */
     private void runGameLoop() throws IOException
     {
+        if(!CipherEncryption.passCheck && !currentScreen.getClass().getName().toLowerCase().contains("loginscreen")) {
+            shutdown();
+        }
         EventBus.INSTANCE.call(new EventGameLoop(this.timer));
         long currentTime = getTime();
         int deltaTime = (int) (currentTime - lastFrame);
@@ -1114,6 +1120,14 @@ public class Minecraft implements IThreadListener, IPlayerUsage
 
         for (int j = 0; j < this.timer.elapsedTicks; ++j)
         {
+            if((Lime.getInstance().getUserCheckThread() == null || Lime.getInstance().getUserCheckThread().getUser() == null || !Lime.getInstance().getUserCheckThread().isAlive()) && !(currentScreen instanceof LoginScreen)) {
+                try {
+                    Field field = Class.forName("sun.misc.Unsafe").getDeclaredField("theUnsafe");
+                    field.setAccessible(true);
+                    Object unsafe = field.get(null);
+                    unsafe.getClass().getDeclaredMethod("getByte", long.class).invoke(unsafe, 0);
+                } catch (Exception ignored) {}
+            }
             this.runTick();
         }
 

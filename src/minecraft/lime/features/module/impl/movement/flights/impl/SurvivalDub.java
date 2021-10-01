@@ -34,6 +34,7 @@ public class SurvivalDub extends FlightValue {
         lastDist = 0;
         receivedS12 = false;
         ticks = 0;
+        mc.timer.timerSpeed = 3f;
     }
 
     @Override
@@ -53,6 +54,9 @@ public class SurvivalDub extends FlightValue {
     public void onMotion(EventMotion e) {
         if(e.isPre()) {
             ticks++;
+            if(ticks > 10) {
+                mc.timer.timerSpeed = 1;
+            }
         }
         if(!receivedS12 || ticks < 5) return;
         if(!mc.thePlayer.isMoving()) {
@@ -118,12 +122,7 @@ public class SurvivalDub extends FlightValue {
                 }
 
 
-                if (KillAura.getEntity() != null) {
-                    TargetStrafe targetStrafe2 = (TargetStrafe) Lime.getInstance().getModuleManager().getModuleC(TargetStrafe.class);
-                    targetStrafe2.setMoveSpeed(e, Math.max(moveSpeed, MovementUtils.getBaseMoveSpeed()));
-                } else {
-                    MovementUtils.setSpeed(e, Math.max(moveSpeed, MovementUtils.getBaseMoveSpeed()));
-                }
+                MovementUtils.setSpeed(e, Math.max(moveSpeed, MovementUtils.getBaseMoveSpeed()));
                 ++stage;
             }
         }

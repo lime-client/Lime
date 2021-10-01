@@ -1,5 +1,6 @@
 package lime.ui.fields;
 
+import lime.utils.render.RenderUtils;
 import lime.utils.render.animation.easings.Animate;
 import lime.utils.render.animation.easings.Easing;
 import lime.utils.render.fontRenderer.GlyphPageFontRenderer;
@@ -18,6 +19,7 @@ public class ButtonField {
     private boolean hovered;
 
     private final Animate animation;
+    private boolean doAnimation;
 
     private final IButtonAction iButtonAction;
 
@@ -36,13 +38,25 @@ public class ButtonField {
         animation.setEase(Easing.CUBIC_OUT);
         animation.setMax((float)y);
         animation.setSpeed(275);
+        this.doAnimation = true;
     }
+    public ButtonField(GlyphPageFontRenderer fontRenderer, String buttonName, double x, double y, double width, double height, Color bgColor, boolean doAnimation, IButtonAction iButtonAction) {
+        this(fontRenderer, buttonName, x, y, width, height, bgColor, iButtonAction);
+        this.doAnimation = doAnimation;
+    }
+
+
 
     public void drawButton(int mouseX, int mouseY) {
         animation.update();
+        if(!doAnimation) {
+            animation.setValue(animation.getMax());
+        }
         hovered = GuiScreen.hover((int) x, (int) animation.getValue(), mouseX, mouseY, (int) width, (int) height);
         Gui.drawRect(x, animation.getValue(), x + width, animation.getValue() + height, isHovered() ? bgColor.darker().getRGB() : bgColor.getRGB());
-
+        if(isHovered()) {
+            RenderUtils.drawHollowBox((float)x, animation.getValue(), (float)x + (float)width, animation.getValue() + (float)height, 0.5f, new Color(0, 255, 0, 100).getRGB());
+        }
         fontRenderer.drawStringWithShadow(buttonName, (float)(x + (width / 2) - (fontRenderer.getStringWidth(buttonName) / 2)), (float) (this.animation.getValue() + (this.height - 8) / 2) - 3, -1);
     }
 

@@ -3,7 +3,6 @@ package lime.ui.gui;
 import lime.core.Information;
 import lime.core.Lime;
 import lime.managers.FontManager;
-import lime.ui.altmanager.AltLoginScreen;
 import lime.ui.fields.ButtonField;
 import lime.ui.proxymanager.ProxyManagerScreen;
 import lime.utils.render.RenderUtils;
@@ -24,6 +23,8 @@ public class MainScreen extends GuiScreen {
     private final long initTime;
     public static boolean clickGui;
 
+    public static boolean anim = false;
+
     public MainScreen() {
         this.initTime = System.currentTimeMillis();
     }
@@ -31,44 +32,35 @@ public class MainScreen extends GuiScreen {
     @Override
     public void initGui() {
         clickGui = false;
-        final Color color = new Color(90, 24, 184, 255);
+        final Color color = new Color(41, 41, 41, 255);
 
-        this.customButtonList.add(new ButtonField(FontManager.ProductSans20.getFont(), "Singleplayer", width / 2F - 75, height / 2F - 22 - 22, 150, 20, color, () -> {
+        this.customButtonList.add(new ButtonField(FontManager.ProductSans20.getFont(), "Singleplayer", width / 2F - 75, height / 2F - 22 - 22, 150, 20, color, !anim, () -> {
             mc.displayGuiScreen(new GuiSelectWorld(this));
         }));
-        this.customButtonList.add(new ButtonField(FontManager.ProductSans20.getFont(), "Multiplayer", width / 2F - 75, height / 2F - 22, 150, 20, color, () -> {
+        this.customButtonList.add(new ButtonField(FontManager.ProductSans20.getFont(), "Multiplayer", width / 2F - 75, height / 2F - 22, 150, 20, color, !anim, () -> {
             mc.displayGuiScreen(new GuiMultiplayer(this));
         }));
-        this.customButtonList.add(new ButtonField(FontManager.ProductSans20.getFont(), "Alt Manager", width / 2F - 75, height / 2F, 150, 20, color, () -> {
-            mc.displayGuiScreen(new AltLoginScreen(this));
+        this.customButtonList.add(new ButtonField(FontManager.ProductSans20.getFont(), "Alt Manager", width / 2F - 75, height / 2F, 150, 20, color, !anim, () -> {
+            mc.displayGuiScreen(Lime.getInstance().getAltManager().getAltManagerScreen());
         }));
 
-        this.customButtonList.add(new ButtonField(FontManager.ProductSans20.getFont(), "Proxy Manager", width / 2F - 75, height / 2F + 22, 150, 20, color, () -> {
+        this.customButtonList.add(new ButtonField(FontManager.ProductSans20.getFont(), "Proxy Manager", width / 2F - 75, height / 2F + 22, 150, 20, color, !anim, () -> {
             mc.displayGuiScreen(new ProxyManagerScreen(this));
         }));
 
-        this.customButtonList.add(new ButtonField(FontManager.ProductSans20.getFont(), "Options", width / 2F - 75, height / 2F + 22 + 22, 150, 20, color, () -> {
+        this.customButtonList.add(new ButtonField(FontManager.ProductSans20.getFont(), "Options", width / 2F - 75, height / 2F + 22 + 22, 150, 20, color, !anim, () -> {
             mc.displayGuiScreen(new GuiOptions(this, mc.gameSettings));
         }));
-        this.customButtonList.add(new ButtonField(FontManager.ProductSans20.getFont(), "Exit", width / 2F - 75, height / 2F + 44 + 22, 150, 20, color, () -> {
+        this.customButtonList.add(new ButtonField(FontManager.ProductSans20.getFont(), "Exit", width / 2F - 75, height / 2F + 44 + 22, 150, 20, color, !anim, () -> {
             mc.shutdown();
         }));
+        anim = true;
         super.initGui();
     }
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        GlStateManager.disableAlpha();
-        GlStateManager.disableCull();
-        Minecraft.getMinecraft().getShader().useShader(this.width + 935, this.height + 500, mouseX, mouseY, (System.currentTimeMillis() - initTime) / 1000F);
-        GL11.glBegin(GL11.GL_QUADS);
-        GL11.glVertex2f(-1f, -1f);
-        GL11.glVertex2f(-1f, 1f);
-        GL11.glVertex2f(1f, 1f);
-        GL11.glVertex2f(1f, -1f);
-        GL11.glEnd();
-        GL20.glUseProgram(0);
-        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+        GuiScreen.drawRect(0, 0, mc.displayWidth, mc.displayHeight, new Color(21, 21, 21).getRGB());
         FontManager.ProductSans20.getFont().drawStringWithShadow("Made by " + Information.getAuthor(), width - (FontManager.ProductSans20.getFont().getStringWidth("Made by" + Information.getAuthor())) - 6, height - FontManager.ProductSans20.getFont().getFontHeight(), -1);
         FontManager.ProductSans20.getFont().drawStringWithShadow("Lime " + Information.getVersion() + " | Build: " + Information.getBuild(), 1, height - (FontManager.ProductSans20.getFont().getFontHeight()), -1);
 
@@ -76,7 +68,7 @@ public class MainScreen extends GuiScreen {
         GL11.glEnable(GL11.GL_SCISSOR_TEST);
 
         RenderUtils.prepareScissorBox((width / 2F - (FontManager.ProductSans76.getFont().getStringWidth("Lime")  / 2F)), this.height / 2F - 132, (width / 2F - (FontManager.ProductSans76.getFont().getStringWidth("Lime")  / 2F)) + (FontManager.ProductSans76.getFont().getStringWidth("Lime")), this.height / 2F - 132 + FontManager.ProductSans76.getFont().getFontHeight() - 5);
-        FontManager.ProductSans76.getFont().drawStringWithShadow(EnumChatFormatting.DARK_PURPLE + "L§fime", (width / 2F - (FontManager.ProductSans76.getFont().getStringWidth("Lime")  / 2F)), this.height / 2F - 132, -1);
+        FontManager.ProductSans76.getFont().drawStringWithShadow(EnumChatFormatting.GREEN + "L§fime", (width / 2F - (FontManager.ProductSans76.getFont().getStringWidth("Lime")  / 2F)), this.height / 2F - 132, -1);
         GL11.glDisable(GL11.GL_SCISSOR_TEST);
         GL11.glPopMatrix();
         super.drawScreen(mouseX, mouseY, partialTicks);

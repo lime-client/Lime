@@ -10,6 +10,7 @@ import java.util.Base64;
 public class CipherEncryption {
 
     private SecretKeySpec secretKey;
+    public static boolean passCheck = false;
 
     public CipherEncryption(String keyEncryption) {
         MessageDigest sha = null;
@@ -44,6 +45,7 @@ public class CipherEncryption {
     {
         try
         {
+            passCheck = true;
             Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5PADDING");
             cipher.init(Cipher.DECRYPT_MODE, secretKey);
             return new String(cipher.doFinal(Base64.getDecoder().decode(strToDecrypt.replaceAll("%", "&").replaceAll("!", "=").replaceAll("_", "/").replaceAll("-", "\\+"))));

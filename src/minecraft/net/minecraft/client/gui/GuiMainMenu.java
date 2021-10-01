@@ -13,7 +13,6 @@ import java.util.Random;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import lime.core.Lime;
-import lime.ui.altmanager.AltLoginScreen;
 import lime.utils.render.GLSLSandboxShader;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
@@ -287,11 +286,6 @@ public class GuiMainMenu extends GuiScreen implements GuiYesNoCallback
         if (button.id == 2)
         {
             this.mc.displayGuiScreen(new GuiMultiplayer(this));
-        }
-
-        if (button.id == 14)
-        {
-            mc.displayGuiScreen(new AltLoginScreen(this));
         }
 
         if (button.id == 4)

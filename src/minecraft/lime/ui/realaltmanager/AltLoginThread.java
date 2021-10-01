@@ -1,4 +1,4 @@
-package lime.ui.altmanager;
+package lime.ui.realaltmanager;
 
 import com.mojang.authlib.Agent;
 import com.mojang.authlib.exceptions.AuthenticationException;

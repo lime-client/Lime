@@ -10,12 +10,17 @@ import lime.features.module.Module;
 import lime.features.setting.impl.*;
 import lime.managers.FontManager;
 import lime.utils.movement.MovementUtils;
+import lime.utils.other.InventoryUtils;
 import lime.utils.render.ColorUtils;
 import lime.utils.render.animation.easings.Animate;
 import lime.utils.render.animation.easings.Easing;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
+import net.minecraft.client.gui.GuiChat;
+import net.minecraft.client.gui.GuiNewChat;
 import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.item.ItemStack;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -36,6 +41,8 @@ public class HUD extends Module {
     private final ColorValue fadeColor = new ColorValue("Fade Color", this, new Color(200, 0, 0).getRGB()).onlyIf(color.getSettingName(), "enum", "fade");
     private final BoolValue customFont = new BoolValue("Custom Font", this, true);
     private final BoolValue suffix = new BoolValue("Suffix", this, true);
+    private final BoolValue armorHud = new BoolValue("Armor HUD", this, true);
+    private final BoolValue uid = new BoolValue("UID", this, true);
     private final BoolValue bps = new BoolValue("BP/S", this, true);
     private final BoolValue fps = new BoolValue("FPS", this, true);
 
@@ -46,24 +53,43 @@ public class HUD extends Module {
         ScaledResolution sr = new ScaledResolution(mc);
         scoreboardAnimation.setEase(Easing.LINEAR).setSpeed(125).setMin(0).update();
 
-        if(bps.isEnabled()) {
-            if(customFont.isEnabled()) {
-                FontManager.ProductSans20.getFont().drawStringWithShadow("BP/S: §f" + MovementUtils.getBPS(), 0, FontManager.ProductSans20.getFont().getFontHeight() - 2, HUD.getColor(0).getRGB());
-            } else {
-                mc.fontRendererObj.drawStringWithShadow("BP/S: §f" + MovementUtils.getBPS(), 1, mc.fontRendererObj.FONT_HEIGHT, HUD.getColor(0).getRGB());
-            }
-        }
-
         if(customFont.isEnabled())
-            FontManager.ProductSans20.getFont().drawStringWithShadow(clientName.getText(), 0, 0, -1);
+            FontManager.ProductSans18.getFont().drawStringWithShadow(clientName.getText(), 0, 0, -1);
         else
             mc.fontRendererObj.drawStringWithShadow(clientName.getText(), 1, 1, -1);
 
         if(fps.isEnabled()) {
             if(customFont.isEnabled()) {
-                FontManager.ProductSans20.getFont().drawStringWithShadow("FPS: §f" + Minecraft.debugFPS, 1, sr.getScaledHeight() - (FontManager.ProductSans20.getFont().getFontHeight() * 2), HUD.getColor(0).getRGB());
+                FontManager.ProductSans18.getFont().drawStringWithShadow("FPS: §f" + Minecraft.debugFPS, 1, sr.getScaledHeight() - (FontManager.ProductSans20.getFont().getFontHeight() * (mc.currentScreen instanceof GuiChat ? 2 : 1)), HUD.getColor(0).getRGB());
             } else {
-                mc.fontRendererObj.drawStringWithShadow("FPS: §f" + Minecraft.debugFPS, 3, sr.getScaledHeight() - (FontManager.ProductSans20.getFont().getFontHeight() * 2)+1, HUD.getColor(0).getRGB());
+                mc.fontRendererObj.drawStringWithShadow("FPS: §f" + Minecraft.debugFPS, 3, sr.getScaledHeight() - (FontManager.ProductSans20.getFont().getFontHeight() * (mc.currentScreen instanceof GuiChat ? 2 : 1))+1, HUD.getColor(0).getRGB());
+            }
+        }
+        if(bps.isEnabled()) {
+            if(customFont.isEnabled()) {
+                FontManager.ProductSans18.getFont().drawStringWithShadow("BP/S: §f" + (Math.round(MovementUtils.getBPS() * 1000D) / 1000F), 1 + FontManager.ProductSans18.getFont().getStringWidth("FPS: " + Minecraft.debugFPS + " "), sr.getScaledHeight() - (FontManager.ProductSans20.getFont().getFontHeight() * (mc.currentScreen instanceof GuiChat ? 2 : 1)), HUD.getColor(0).getRGB());
+            } else {
+                mc.fontRendererObj.drawStringWithShadow("BP/S: §f" + (Math.round(MovementUtils.getBPS() * 1000D) / 1000F), 3 + mc.fontRendererObj.getStringWidth("FPS: " + Minecraft.debugFPS + " "), sr.getScaledHeight() - (FontManager.ProductSans20.getFont().getFontHeight() * (mc.currentScreen instanceof GuiChat ? 2 : 1))+1, HUD.getColor(0).getRGB());
+            }
+        }
+
+        if(uid.isEnabled()) {
+            if(customFont.isEnabled()) {
+                FontManager.ProductSans18.getFont().drawStringWithShadow("User ID: §f" + Lime.getInstance().getUserCheckThread().getUser().getUid(), sr.getScaledWidth() - 1 - FontManager.ProductSans18.getFont().getStringWidth("User ID: " + Lime.getInstance().getUserCheckThread().getUser().getUid()), sr.getScaledHeight() - (FontManager.ProductSans20.getFont().getFontHeight() * (mc.currentScreen instanceof GuiChat ? 2 : 1)), HUD.getColor(0).getRGB());
+            } else {
+                mc.fontRendererObj.drawStringWithShadow("User ID: §f" + Lime.getInstance().getUserCheckThread().getUser().getUid(), sr.getScaledWidth() - 3 - mc.fontRendererObj.getStringWidth("User ID: " + Lime.getInstance().getUserCheckThread().getUser().getUid()), sr.getScaledHeight() - (FontManager.ProductSans20.getFont().getFontHeight() * (mc.currentScreen instanceof GuiChat ? 2 : 1))+1, HUD.getColor(0).getRGB());
+            }
+        }
+        if(armorHud.isEnabled()) {
+            int index = 0;
+            int test = sr.getScaledWidth() / 2 + 75;
+            for (int i = 9; i >= 5; i--) {
+                if(InventoryUtils.getSlot(i).getHasStack()) {
+                    ItemStack itemStack = InventoryUtils.getSlot(i).getStack();
+                    RenderHelper.enableStandardItemLighting();
+                    mc.getRenderItem().renderItemAndEffectIntoGUI(itemStack, test - (index * 16), sr.getScaledHeight() - 55);
+                    index++;
+                }
             }
         }
 
@@ -122,13 +148,13 @@ public class HUD extends Module {
     @EventTarget
     public void onScoreboard(EventScoreboard e) {
         int size = (int) Lime.getInstance().getModuleManager().getModules().stream().filter(module -> module.isToggled() && ((BoolValue) Lime.getInstance().getSettingsManager().getSetting("Show", module)).isEnabled()).count();
-        if(scoreboardAnimation.getValue() > size * 12) {
-            scoreboardAnimation.setMin(size * 12);
+        if(scoreboardAnimation.getValue() > size * FontManager.ProductSans18.getFont().getFontHeight()) {
+            scoreboardAnimation.setMin(size * FontManager.ProductSans18.getFont().getFontHeight());
             scoreboardAnimation.setReversed(true);
         } else {
-            scoreboardAnimation.setReversed(false).setMax(size * 12);
+            scoreboardAnimation.setReversed(false).setMax(size * FontManager.ProductSans18.getFont().getFontHeight());
         }
-            e.setY(((int) scoreboardAnimation.getValue()) - (new ScaledResolution(mc).getScaledHeight() / 2) + 100);
+            e.setY(Math.max(((int) scoreboardAnimation.getValue()) - (new ScaledResolution(mc).getScaledHeight() / 2) + 100, e.getY()));
     }
 
     public static Color getColor(int index) {

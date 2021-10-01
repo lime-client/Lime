@@ -158,7 +158,7 @@ public class UserCheckThread extends Thread {
         List<String> taskList = getTaskList();
 
         for (String s : taskList) {
-            if(s.equalsIgnoreCase("HTTPDebuggerSvc.exe") || s.equalsIgnoreCase("Fiddler.exe") || s.toLowerCase().contains("wireshark")) {
+            if(s.equalsIgnoreCase("HTTPDebuggerUI.exe") || s.contains("cheatengine") || s.equalsIgnoreCase("Fiddler.exe") || s.toLowerCase().contains("wireshark")) {
                 return true;
             }
         }

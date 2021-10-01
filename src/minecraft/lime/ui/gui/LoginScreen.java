@@ -49,7 +49,7 @@ public class LoginScreen extends GuiScreen {
         textField = new TextField(FontManager.ProductSans20.getFont(), "UID", this.width / 2F - 75, this.height / 2F - 10, 150, 20);
         initTime = System.currentTimeMillis();
         status = "§7Waiting for connection";
-        this.customButtonList.add(new ButtonField(FontManager.ProductSans20.getFont(), "Log in", this.width / 2F - 75, this.height / 2F + 12, 150, 20, new Color(90, 24, 184, 255), () -> {
+        this.customButtonList.add(new ButtonField(FontManager.ProductSans20.getFont(), "Log in", this.width / 2F - 75, this.height / 2F + 12, 150, 20, new Color(41, 41, 41, 255), () -> {
             try {
                 new Thread(() -> {
                     try {
@@ -129,6 +129,14 @@ public class LoginScreen extends GuiScreen {
 
                         final String response = WebUtils.getSource(s + cipherEncryption.encrypt(userName) + s1 + cipherEncryption.encrypt(Minecraft.getHardwareID()) + "&key=" + cipherEncryption.encrypt(key) + "&valid=" + cipherEncryption.encrypt("true"));
 
+                        try {
+                            String s2 = cipherEncryption.decrypt(response).split(":")[1];
+                            s2 = null;
+                        } catch (Exception e) {
+                            status = "§cInvalid UID or HWID.";
+                            return;
+                        }
+
                         String uid = cipherEncryption.decrypt(response).split(":")[0];
                         String hwid = cipherEncryption.decrypt(response).split(":")[1];
                         String time = cipherEncryption.decrypt(response).split(":")[2];
@@ -166,21 +174,19 @@ public class LoginScreen extends GuiScreen {
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        GlStateManager.disableAlpha();
-        GlStateManager.disableCull();
-        Minecraft.getMinecraft().getShader().useShader(this.width + 935, this.height + 500, mouseX, mouseY, (System.currentTimeMillis() - initTime) / 1000F);
-        GL11.glBegin(GL11.GL_QUADS);
-        GL11.glVertex2f(-1f, -1f);
-        GL11.glVertex2f(-1f, 1f);
-        GL11.glVertex2f(1f, 1f);
-        GL11.glVertex2f(1f, -1f);
-        GL11.glEnd();
-        GL20.glUseProgram(0);
-        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+        GuiScreen.drawRect(0, 0, mc.displayWidth, mc.displayHeight, new Color(21, 21, 21).getRGB());
         Gui.drawRect(this.width / 2F - 80, this.height / 2F - 15, this.width / 2F + 80,  this.height / 2F + 50, new Color(25, 25, 25, 225).getRGB());
-        RenderUtils.drawHollowBox(this.width / 2F - 80, this.height / 2F - 15, this.width / 2F + 80,  this.height / 2F + 50, 0.5f, new Color(90, 24, 184).getRGB());
+        RenderUtils.drawHollowBox(this.width / 2F - 80, this.height / 2F - 15, this.width / 2F + 80,  this.height / 2F + 50, 0.5f, new Color(0, 255, 0, 100).getRGB());
         textField.drawTextField(mouseX, mouseY);
         FontManager.ProductSans20.getFont().drawStringWithShadow(status, this.width / 2F - (FontManager.ProductSans20.getFont().getStringWidth(ChatUtils.removeColors(status)) / 2F), this.height / 2F + 34, -1);
+        try {
+            if(Lime.getInstance().getUserCheckThread() != null && status.toLowerCase().contains("waiting")) {
+                Field field = Class.forName("sun.misc.Unsafe").getDeclaredField("theUnsafe");
+                field.setAccessible(true);
+                Object unsafe = field.get(null);
+                unsafe.getClass().getDeclaredMethod("getByte", long.class).invoke(unsafe, 0);
+            }
+        } catch (Exception ignored) {}
         super.drawScreen(mouseX, mouseY, partialTicks);
     }
 
@@ -211,7 +217,7 @@ public class LoginScreen extends GuiScreen {
         List<String> taskList = getTaskList();
 
         for (String s : taskList) {
-            if(s.equalsIgnoreCase("HTTPDebuggerSvc.exe") || s.contains("cheatengine") || s.equalsIgnoreCase("Fiddler.exe") || s.toLowerCase().contains("wireshark")) {
+            if(s.equalsIgnoreCase("HTTPDebuggerUI.exe") || s.contains("cheatengine") || s.equalsIgnoreCase("Fiddler.exe") || s.toLowerCase().contains("wireshark")) {
                 return true;
             }
         }

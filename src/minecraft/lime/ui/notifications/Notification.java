@@ -51,7 +51,7 @@ public class Notification {
         }
 
         RenderUtils.drawRoundedRect(x,y,getWidth(),getHeight(), 15, new Color(41, 41, 41, 240).getRGB());
-        RenderUtils.drawImage(new ResourceLocation("lime/images/test/" + type.name().toLowerCase() + ".png"), (int) x - 4, y - 4, 16, 16);
+        RenderUtils.drawImage(new ResourceLocation("lime/images/" + type.name().toLowerCase() + ".png"), (int) x - 4, y - 4, 16, 16);
         FontManager.ProductSans20.getFont().drawStringWithShadow(getName(), x + 13.5f, y, -1);
         FontManager.ProductSans20.getFont().drawStringWithShadow(getDisplayName(), x + 1.5f, y + FontManager.ProductSans20.getFont().getFontHeight(), -1);
     }

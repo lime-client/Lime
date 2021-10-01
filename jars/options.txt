@@ -10,13 +10,13 @@ bobView:true
 anaglyph3d:false
 maxFps:200
 fboEnable:true
-difficulty:2
+difficulty:0
 fancyGraphics:true
 ao:2
 renderClouds:false
-resourcePacks:["!§bDynamic Duo§6[1.8].zip"]
+resourcePacks:["!         §3Aqua 32x.zip"]
 incompatibleResourcePacks:[]
-lastServer:play.derycube.fr
+lastServer:alderia.mine.fun
 lang:en_US
 chatVisibility:0
 chatColors:true
@@ -92,7 +92,7 @@ key_key.hotbar.9:10
 key_of.key.zoom:46
 soundCategory_master:0.44039735
 soundCategory_music:0.0
-soundCategory_record:0.35915494
+soundCategory_record:0.0
 soundCategory_weather:0.0
 soundCategory_block:0.44366196
 soundCategory_hostile:0.45774648

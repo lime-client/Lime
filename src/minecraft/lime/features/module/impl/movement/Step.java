@@ -25,7 +25,7 @@ public class Step extends Module {
     Timer time = new Timer();
     public static Timer lastStep = new Timer();
 
-    private final EnumValue mode = new EnumValue("Mode", this, "NCP", "Vanilla", "NCP");
+    private final EnumValue mode = new EnumValue("Mode", this, "NCP", "Vanilla", "NCP", "Verus");
     private final SlideValue height = new SlideValue("Height", this, 0.6, 5, 2.5, 0.1);
     private final SlideValue timer = new SlideValue("Timer", this, .01, 1, 0.4, 0.01);
     private final SlideValue delay = new SlideValue("Delay", this, 0, 2, 0.1, 0.1);
@@ -74,6 +74,7 @@ public class Step extends Module {
                 }
                 switch(mode.getSelected()){
                     case "NCP":
+                    case "Verus":
                         if(canStep){
                             mc.timer.timerSpeed = timer - (rheight >= 1 ? Math.abs(1-(float)rheight)*((float)timer*0.55f) : 0);
                             if(mc.timer.timerSpeed <= 0.05f){
@@ -96,37 +97,59 @@ public class Step extends Module {
         double posX = mc.thePlayer.posX; double posZ = mc.thePlayer.posZ;
         double y = mc.thePlayer.posY;
         if(height < 1.1){
-            double first = 0.42;
-            double second = 0.75;
-            if(height != 1){
-                first *= height;
-                second *= height;
-                if(first > 0.425){
-                    first = 0.425;
+            if (mode.is("ncp")) {
+                double first = 0.42;
+                double second = 0.75;
+                if(height != 1){
+                    first *= height;
+                    second *= height;
+                    if(first > 0.425){
+                        first = 0.425;
+                    }
+                    if(second > 0.78){
+                        second = 0.78;
+                    }
+                    if(second < 0.49){
+                        second = 0.49;
+                    }
                 }
-                if(second > 0.78){
-                    second = 0.78;
-                }
-                if(second < 0.49){
-                    second = 0.49;
+                if(first == 0.42)
+                    first = 0.41999998688698;
+                mc.thePlayer.sendQueue.addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(posX, y + first, posZ, false));
+                if(y+second < y + height)
+                    mc.thePlayer.sendQueue.addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(posX, y + second, posZ, false));
+            } else if(mode.is("verus")) {
+                double[] heights = {0.41999998688697815, 0.33319999363422426, 0.24813599859093927, 0.1647732818260721};
+                for(double off : heights){
+                    mc.thePlayer.sendQueue.addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(posX, y += off, posZ, false));
                 }
             }
-            if(first == 0.42)
-                first = 0.41999998688698;
-            mc.thePlayer.sendQueue.addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(posX, y + first, posZ, false));
-            if(y+second < y + height)
-                mc.thePlayer.sendQueue.addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(posX, y + second, posZ, false));
-            return;
         }else if(height <1.6){
-            for(int i = 0; i < offset.size(); i++){
-                double off = offset.get(i);
-                y += off;
-                mc.thePlayer.sendQueue.addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(posX, y, posZ, false));
+            if(mode.is("ncp")) {
+                for (double off : offset) {
+                    y += off;
+                    mc.thePlayer.sendQueue.addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(posX, y, posZ, false));
+                }
+            } else if(mode.is("verus")) {
+                double[] heights = {0.41999998688697815, 0.33319999363422426, 0.24813599859093927, 0.1647732818260721};
+                for(double off : heights){
+                    mc.thePlayer.sendQueue.addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(posX, y += off, posZ, false));
+                }
             }
         }else if(height < 2.1){
-            double[] heights = {0.425,0.821,0.699,0.599,1.022,1.372,1.652,1.869};
-            for(double off : heights){
-                mc.thePlayer.sendQueue.addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(posX, y + off, posZ, false));
+            if(mode.is("ncp")) {
+                double[] heights = {0.425,0.821,0.699,0.599,1.022,1.372,1.652,1.869};
+                for(double off : heights){
+                    mc.thePlayer.sendQueue.addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(posX, y + off, posZ, false));
+                }
+            } else if(mode.is("verus")) {
+                double[] heights = {0.41999998688697815, 0.33319999363422426, 0.24813599859093927, 0.1647732818260721, 0.33319999363422426, 0.24813599859093927, 0.1647732818260721};
+                for(double off : heights){
+                    mc.thePlayer.sendQueue.addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(posX, y += off, posZ, false));
+                }
+                for(double off : heights){
+                    mc.thePlayer.sendQueue.addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(posX, y += off, posZ, false));
+                }
             }
         }else{
             double[] heights = {0.425,0.821,0.699,0.599,1.022,1.372,1.652,1.869,2.019,1.907};

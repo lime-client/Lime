@@ -21,6 +21,8 @@ import lime.utils.render.RenderUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockSnow;
 import net.minecraft.client.gui.Gui;
+import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
@@ -84,6 +86,7 @@ public class Scaffold extends Module {
     private int slot, y;
 
     private BlockUtils.BlockData blockData;
+    private ItemStack itemStack;
 
     @Override
     public void onEnable() {
@@ -113,14 +116,12 @@ public class Scaffold extends Module {
 
     @EventTarget
     public void on2D(Event2D e) {
-        if(!blockInfo.isEnabled()) return;
-        GL11.glEnable(3089);
-        Gui.drawRect(e.getScaledResolution().getScaledWidth() / 2F - 45, e.getScaledResolution().getScaledHeight() / 2F + 15, e.getScaledResolution().getScaledWidth() / 2F + 45,e.getScaledResolution().getScaledHeight() / 2F + 25, 2013265920);
-        RenderUtils.prepareScissorBox(e.getScaledResolution().getScaledWidth() / 2F - 45, e.getScaledResolution().getScaledHeight() / 2F + 15, e.getScaledResolution().getScaledWidth() / 2F + 45,e.getScaledResolution().getScaledHeight() / 2F + 25);
-        double percentage = MathUtils.scale(getBlocksCount(), 0, 128, -45, 45);
-        Gui.drawRect(e.getScaledResolution().getScaledWidth() / 2F - 45, e.getScaledResolution().getScaledHeight() / 2F + 15, e.getScaledResolution().getScaledWidth() / 2F + percentage, e.getScaledResolution().getScaledHeight() / 2F + 25, new Color(255, 0, 0).getRGB());
-        GL11.glDisable(3089);
-        FontManager.ProductSans20.getFont().drawStringWithShadow(getBlocksCount() + " blocks left", (e.getScaledResolution().getScaledWidth() / 2F) - (FontManager.ProductSans20.getFont().getStringWidth(getBlocksCount() + " blocks left") / 2F), e.getScaledResolution().getScaledHeight() / 2F + 18 + (FontManager.ProductSans20.getFont().getFontHeight() / 2F), -1);
+        if(blockInfo.isEnabled() && itemStack != null) {
+            RenderHelper.enableGUIStandardItemLighting();
+            mc.getRenderItem().renderItemAndEffectIntoGUI(itemStack, (e.getScaledResolution().getScaledWidth() / 2) + 8, e.getScaledResolution().getScaledHeight() / 2 - 8);
+            FontManager.ProductSans20.getFont().drawStringWithShadow(getBlocksCount()+"", (e.getScaledResolution().getScaledWidth() / 2F) + 24, e.getScaledResolution().getScaledHeight() / 2F - 8, -1);
+            RenderHelper.disableStandardItemLighting();
+        }
     }
 
     public int getBlocksCount() {
@@ -248,12 +249,14 @@ public class Scaffold extends Module {
                     else {
                         blockSlot = InventoryUtils.hasBlock(blacklistedBlocks, true, false);
 
-                        if(blockSlot != -1)
+                        if(blockSlot != -1) {
                             InventoryUtils.swap(blockSlot, 6);
+                        }
 
                         blockSlot = 42;
                     }
                 }
+                itemStack = InventoryUtils.getSlot(blockSlot).getStack();
 
                 switch(itemSpoof.getSelected().toLowerCase())
                 {

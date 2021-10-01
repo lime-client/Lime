@@ -3,13 +3,15 @@ package lime.ui.realaltmanager;
 public class Alt {
     private final String mail, password;
     private String name;
+    private boolean selected;
 
     private long lastTimeTried, lastTimeConnected;
 
     public Alt(String mail, String password, String name) {
         this.mail = mail;
         this.password = password;
-        this.name = name == null || name.isEmpty() ? "" : name;
+        this.selected = false;
+        this.name = name == null || name.isEmpty() ? mail : name;
     }
 
     public Alt(String mail, String password) {
@@ -32,23 +34,13 @@ public class Alt {
         this.name = name;
     }
 
+    public boolean isSelected() { return selected; }
+
+    public void setSelected(boolean selected) {
+        this.selected = selected;
+    }
+
     public boolean isCracked() {
         return password == null || password.isEmpty();
-    }
-
-    public long getLastTimeConnected() {
-        return lastTimeConnected;
-    }
-
-    public long getLastTimeTried() {
-        return lastTimeTried;
-    }
-
-    public void setLastTimeConnected(long lastTimeConnected) {
-        this.lastTimeConnected = lastTimeConnected;
-    }
-
-    public void setLastTimeTried(long lastTimeTried) {
-        this.lastTimeTried = lastTimeTried;
     }
 }

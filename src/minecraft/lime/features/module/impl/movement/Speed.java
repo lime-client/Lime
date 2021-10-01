@@ -15,12 +15,15 @@ import lime.features.setting.impl.SlideValue;
 import lime.utils.movement.MovementUtils;
 import lime.utils.other.ChatUtils;
 import net.minecraft.block.BlockStairs;
+import net.minecraft.network.Packet;
 import net.minecraft.network.play.client.C03PacketPlayer;
+import net.minecraft.network.play.client.C0FPacketConfirmTransaction;
 import net.minecraft.network.play.server.S08PacketPlayerPosLook;
 import net.minecraft.potion.Potion;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.BlockPos;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Speed extends Module {
@@ -31,7 +34,9 @@ public class Speed extends Module {
 
     private final EnumValue mode = new EnumValue("Mode", this, "Vanilla", "Vanilla", "Vanilla_BHOP", "Hypixel", "Verus", "Verus_LOWHOP", "NCP", "Funcraft", "Funcraft2", "Funcraft_YPORT", "Mineplex");
     private final SlideValue speed = new SlideValue("Speed", this, 0.2, 5, 0.6, 0.1).onlyIf(mode.getSettingName(), "enum", "vanilla_bhop", "vanilla", "mineplex");
+    private final BoolValue hypixelStrafe = new BoolValue("Hypixel Strafe", this, false).onlyIf(mode.getSettingName(), "enum", "hypixel");
     private double moveSpeed, lastDist;
+    private final ArrayList<Packet<?>> packets = new ArrayList<>();
     private int stage, ticks;
 
     @Override
@@ -120,10 +125,16 @@ public class Speed extends Module {
 
                 if(mc.thePlayer.onGround) {
                     mc.thePlayer.motionY = MovementUtils.getJumpBoostModifier(0.39999998);
-                    double d = MovementUtils.getBaseMoveSpeed(0.47);
-                    MovementUtils.setSpeed(moveSpeed = d);
+                    double sped = 0.47;
+                    if(!hypixelStrafe.isEnabled()) {
+                        sped = MovementUtils.getBaseMoveSpeed(0.47);
+                    }
+                    MovementUtils.setSpeed(moveSpeed = sped);
                 } else {
-                    mc.timer.timerSpeed = 1.2f;
+                    //mc.timer.timerSpeed = 1.2f;
+                    if(hypixelStrafe.isEnabled()) {
+                        MovementUtils.setSpeed(MovementUtils.getSpeed());
+                    }
                 }
             }
         }
@@ -144,13 +155,16 @@ public class Speed extends Module {
                 moveSpeed = MovementUtils.getBaseMoveSpeed();
             }
         }
+        if(e.getPacket() instanceof C0FPacketConfirmTransaction) {
+
+        }
     }
 
     @EventTarget
     public void onMove(EventMove e) {
         if(mode.is("mineplex")) {
             if (mc.thePlayer.isMoving() && mc.thePlayer.onGround) {
-                moveSpeed = Math.min(moveSpeed < 0.5 ? 0.8 : moveSpeed + .5, speed.getCurrent());
+                moveSpeed = Math.min(moveSpeed < 0.5 ? 0.8 : moveSpeed + .4, speed.getCurrent());
                 e.setY(mc.thePlayer.motionY = 0.42);
                 mc.getNetHandler().addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY + 0.42, mc.thePlayer.posZ, true));
             }

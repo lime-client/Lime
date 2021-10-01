@@ -155,7 +155,7 @@ public class LongJump extends Module {
                         this.toggle();
                     }
                 } else {
-                    MovementUtils.setSpeed(e, Math.max(moveSpeed -= moveSpeed / 30, MovementUtils.getBaseMoveSpeed()));
+                    MovementUtils.setSpeed(e, Math.max(moveSpeed -= moveSpeed / 18, MovementUtils.getBaseMoveSpeed()));
                     e.setY(e.getY() * 0.7);
                 }
             }

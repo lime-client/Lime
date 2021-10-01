@@ -40,8 +40,11 @@ public class Config extends Command {
                 Lime.getInstance().getNotificationManager().addNotification("Config", "Saved config to §aLime" + File.separator + "configs" + File.separator + args[2] + ".json", Notification.Type.SUCCESS);
                 break;
             case "load":
-                Lime.getInstance().getFileSaver().applyJson("Lime" + File.separator + "configs" + File.separator + args[2] + ".json", false);
-                Lime.getInstance().getNotificationManager().addNotification("Config", "Loaded §a" + args[2] + " §fconfig", Notification.Type.SUCCESS);
+                if(Lime.getInstance().getFileSaver().applyJson("Lime" + File.separator + "configs" + File.separator + args[2] + ".json", false)) {
+                    Lime.getInstance().getNotificationManager().addNotification("Config", "Loaded §a" + args[2] + " §fconfig", Notification.Type.SUCCESS);
+                } else {
+                    Lime.getInstance().getNotificationManager().addNotification("Config", "Failed to load §c" + args[2] + " §fconfig", Notification.Type.FAIL);
+                }
                 break;
             case "delete":
                 if(args[2].equalsIgnoreCase("*")) {

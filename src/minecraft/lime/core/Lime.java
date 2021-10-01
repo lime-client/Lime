@@ -10,7 +10,9 @@ import lime.scripting.ScriptManager;
 import lime.ui.clickgui.frame.ClickGUI;
 import lime.ui.gui.MainScreen;
 import lime.ui.notifications.NotificationManager;
+import lime.ui.realaltmanager.AltManager;
 import lime.utils.other.file.FileSaver;
+import lime.utils.other.security.CipherEncryption;
 import lime.utils.other.security.UserCheckThread;
 import net.minecraft.client.Minecraft;
 import org.apache.logging.log4j.LogManager;
@@ -31,6 +33,7 @@ public class Lime {
     private NotificationManager notificationManager;
     private ClickGUI clickGUI;
     private lime.ui.clickgui.frame2.ClickGUI clickGUI2;
+    private AltManager altManager;
 
     private UserCheckThread userCheckThread;
 
@@ -41,7 +44,10 @@ public class Lime {
     public boolean theAltening;
 
     public void initClient() {
-        if(this.userCheckThread == null) return;
+        if(this.userCheckThread == null || !CipherEncryption.passCheck) {
+            System.out.println("e");
+            return;
+        }
 
         Logger logger = LogManager.getLogger("Lime");
 
@@ -69,6 +75,7 @@ public class Lime {
         notificationManager = new NotificationManager();
         friendManager = new FriendManager();
         fileSaver = new FileSaver();
+        altManager = new AltManager();
 
         for (Module module : moduleManager.getModules()) {
             new BoolValue("Show", module, true);
@@ -91,6 +98,10 @@ public class Lime {
 
     public CommandManager getCommandManager() {
         return commandManager;
+    }
+
+    public AltManager getAltManager() {
+        return altManager;
     }
 
     public ClickGUI getClickGUI() {
