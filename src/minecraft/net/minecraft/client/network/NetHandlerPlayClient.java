@@ -7,8 +7,11 @@ import com.mojang.authlib.GameProfile;
 import io.netty.buffer.Unpooled;
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -18,6 +21,8 @@ import java.util.Map.Entry;
 
 import lime.core.Lime;
 import lime.features.module.impl.render.NoRender;
+import lime.ui.notifications.Notification;
+import lime.utils.other.ChatUtils;
 import net.minecraft.block.Block;
 import net.minecraft.client.ClientBrandRetriever;
 import net.minecraft.client.Minecraft;
@@ -1711,40 +1716,45 @@ public class NetHandlerPlayClient implements INetHandlerPlayClient
         this.gameController.theWorld.playSound(packetIn.getX(), packetIn.getY(), packetIn.getZ(), packetIn.getSoundName(), packetIn.getVolume(), packetIn.getPitch(), false);
     }
 
-    private boolean validateResourcePackUrl(String url, String hash) {
+    public static boolean validateResourcePackUrl(NetHandlerPlayClient client, String url, String hash) {
         try {
             URI uri = new URI(url);
             String scheme = uri.getScheme();
             boolean isLevelProtocol = "level".equals(scheme);
 
             if (!"http".equals(scheme) && !"https".equals(scheme) && !isLevelProtocol) {
-                netManager.sendPacket(new C19PacketResourcePackStatus(hash, C19PacketResourcePackStatus.Action.FAILED_DOWNLOAD));
+                client.getNetworkManager().sendPacket(new C19PacketResourcePackStatus(hash, C19PacketResourcePackStatus.Action.FAILED_DOWNLOAD));
                 throw new URISyntaxException(url, "Wrong protocol");
             }
 
+            url = URLDecoder.decode(url.substring("level://".length()), StandardCharsets.UTF_8.toString());
+
             if (isLevelProtocol && (url.contains("..") || !url.endsWith("/resources.zip"))) {
                 System.out.println("Malicious server tried to access " + url);
+                EntityPlayerSP player = Minecraft.getMinecraft().thePlayer;
+
+                if (player != null) {
+                    Lime.getInstance().getNotificationManager().addNotification("Resource Pack Exploit Fix", "A server tried to use Resource Pack Exploit, blocked it.", Notification.Type.INFORMATION);
+                }
+
                 throw new URISyntaxException(url, "Invalid levelstorage resourcepack path");
             }
 
             return true;
         } catch (URISyntaxException e) {
-
             return false;
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
         }
+
+        return false;
     }
 
     public void handleResourcePack(S48PacketResourcePackSend packetIn)
     {
         final String s = packetIn.getURL();
         final String s1 = packetIn.getHash();
-
-        netManager.sendPacket(new C19PacketResourcePackStatus(s1, C19PacketResourcePackStatus.Action.ACCEPTED));
-        if(true)
-            return;
-
-        if(!validateResourcePackUrl(s, s1)) {
-            netManager.sendPacket(new C19PacketResourcePackStatus(s1, C19PacketResourcePackStatus.Action.DECLINED));
+        if(!validateResourcePackUrl(this, s, s1)) {
             return;
         }
 

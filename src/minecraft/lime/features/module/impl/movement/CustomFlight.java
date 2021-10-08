@@ -16,7 +16,7 @@ import net.minecraft.network.play.server.S12PacketEntityVelocity;
 public class CustomFlight extends Module {
 
     public CustomFlight() {
-        super("Custom Flight", Category.MOVEMENT);
+        super("Custom Flight", Category.MOVE);
     }
 
     private final EnumValue damage = new EnumValue("Damage", this, "None", "None", "Basic");

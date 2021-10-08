@@ -13,7 +13,7 @@ import org.lwjgl.opengl.GL11;
 public class Tracers extends Module {
 
     public Tracers() {
-        super("Tracers", Category.RENDER);
+        super("Tracers", Category.VISUALS);
     }
 
     @EventTarget

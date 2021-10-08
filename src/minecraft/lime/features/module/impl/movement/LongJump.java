@@ -28,10 +28,10 @@ import net.minecraft.util.EnumFacing;
 public class LongJump extends Module {
 
     public LongJump() {
-        super("Long Jump", Category.MOVEMENT);
+        super("Long Jump", Category.MOVE);
     }
 
-    private final EnumValue mode = new EnumValue("Mode", this, "Vanilla", "Vanilla", "Funcraft", "Mineplex", "Hypixel", "Hypixel_Bow", "Verus", "Verus_Bow", "Kokscraft");
+    private final EnumValue mode = new EnumValue("Mode", this, "Vanilla", "Vanilla", "Funcraft", "Hypixel", "Verus", "Verus_Bow", "Kokscraft");
     private final SlideValue speed = new SlideValue("Speed", this, 1, 9, 5, 0.5).onlyIf(mode.getSettingName(), "enum", "verus_bow", "verus");
 
     private double moveSpeed = 0, y;
@@ -52,7 +52,7 @@ public class LongJump extends Module {
             this.toggle();
             return;
         }
-        if(mode.is("hypixel_bow") || mode.is("verus_bow")) {
+        if(mode.is("hypixel") || mode.is("verus_bow")) {
             ItemStack bow = null;
             int slot = -1;
             for(int i = 36; i < 45; ++i) {
@@ -69,8 +69,7 @@ public class LongJump extends Module {
                 mc.getNetHandler().sendPacketNoEvent(new C09PacketHeldItemChange(slot));
                 mc.getNetHandler().sendPacketNoEvent(new C08PacketPlayerBlockPlacement(bow));
             } else {
-                this.toggle();
-                return;
+                back = true;
             }
         }
 
@@ -89,7 +88,7 @@ public class LongJump extends Module {
         this.setSuffix(mode.getSelected());
 
         // Auto Bow
-        if((mode.is("verus_bow") || mode.is("hypixel_bow")) && !bowd) {
+        if((mode.is("verus_bow") || mode.is("hypixel")) && !bowd && !back) {
             MovementUtils.setSpeed(0);
             e.setPitch(-90);
             if(ticks >= 3 && !bowd) {
@@ -138,42 +137,41 @@ public class LongJump extends Module {
             if(mode.is("verus_bow") || mode.is("verus")) {
                 e.setX(0);
                 e.setZ(0);
-            } else if(mode.is("hypixel_bow") || mode.is("survivaldub")) {
+            } else if((mode.is("hypixel") && !back) || mode.is("survivaldub")) {
                 e.setCanceled(true);
             }
         }
 
-        if(mode.is("hypixel_bow")) {
-            if(receivedS12) {
+        if(mode.is("hypixel")) {
+            if(back) {
                 if(mc.thePlayer.onGround) {
                     if(moveSpeed == 0) {
-                        e.setY(mc.thePlayer.motionY = MovementUtils.getJumpBoostModifier(0.6));
-                        int amplifier = mc.thePlayer.isPotionActive(Potion.moveSpeed) ? mc.thePlayer.getActivePotionEffect(Potion.moveSpeed).getAmplifier() : -1;
-                        MovementUtils.setSpeed(e, moveSpeed = (amplifier == -1 ? .7 : amplifier == 0 ? .8 : .85));
-                        ticks = 0;
+                        e.setY(mc.thePlayer.motionY = 0.42);
+                        MovementUtils.setSpeed(e, moveSpeed = .55);
                     } else {
                         this.toggle();
                     }
                 } else {
-                    MovementUtils.setSpeed(e, Math.max(moveSpeed -= moveSpeed / 18, MovementUtils.getBaseMoveSpeed()));
-                    e.setY(e.getY() * 0.7);
-                }
-            }
-        }
-
-        if(mode.is("hypixel")) {
-            if(mc.thePlayer.onGround) {
-                if(moveSpeed == 0) {
-                    e.setY(mc.thePlayer.motionY = 0.42);
-                    int amplifier = mc.thePlayer.isPotionActive(Potion.moveSpeed) ? mc.thePlayer.getActivePotionEffect(Potion.moveSpeed).getAmplifier() : -1;
-                    MovementUtils.setSpeed(e, moveSpeed = (amplifier == -1 ? .55 : amplifier == 0 ? .8 : .85));
-                } else {
-                    this.toggle();
+                    MovementUtils.setSpeed(e, Math.max(moveSpeed -= moveSpeed / 30, MovementUtils.getBaseMoveSpeed()));
+                    if(ticks > 10 && ticks < 30) {
+                        e.setY(e.getY() * 0.8);
+                    }
                 }
             } else {
-                MovementUtils.setSpeed(e, Math.max(moveSpeed -= moveSpeed / 30, MovementUtils.getBaseMoveSpeed()));
-                if(ticks > 10 && ticks < 30) {
-                    e.setY(e.getY() * 0.8);
+                if(receivedS12) {
+                    if(mc.thePlayer.onGround) {
+                        if(moveSpeed == 0) {
+                            e.setY(mc.thePlayer.motionY = MovementUtils.getJumpBoostModifier(0.6));
+                            int amplifier = mc.thePlayer.isPotionActive(Potion.moveSpeed) ? mc.thePlayer.getActivePotionEffect(Potion.moveSpeed).getAmplifier() : -1;
+                            MovementUtils.setSpeed(e, moveSpeed = (amplifier == -1 ? .7 : amplifier == 0 ? .8 : .85));
+                            ticks = 0;
+                        } else {
+                            this.toggle();
+                        }
+                    } else {
+                        MovementUtils.setSpeed(e, Math.max(moveSpeed -= moveSpeed / 18, MovementUtils.getBaseMoveSpeed()));
+                        e.setY(e.getY() * 0.7);
+                    }
                 }
             }
         }

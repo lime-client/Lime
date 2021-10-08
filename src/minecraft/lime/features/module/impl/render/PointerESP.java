@@ -18,7 +18,7 @@ import java.awt.*;
 
 public class PointerESP extends Module {
     public PointerESP() {
-        super("Pointer ESP", Category.RENDER);
+        super("Pointer ESP", Category.VISUALS);
     }
 
     @EventTarget

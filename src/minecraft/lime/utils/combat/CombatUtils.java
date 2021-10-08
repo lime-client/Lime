@@ -105,12 +105,30 @@ public class CombatUtils implements IUtil {
         return new float[] { yaw + (random ? MathUtils.random(-killAura.randomizeYaw.getCurrent(), killAura.randomizeYaw.getCurrent()) : 0), pitch + (random ? MathUtils.random(-killAura.randomizeYaw.getCurrent(), killAura.randomizeYaw.getCurrent()) : 0) };
     }
 
+
+
     public static Rotation smoothAngle(float[] dst, float[] src, float randMin, float randMax) {
         float[] smoothedAngle = new float[]{src[0] - dst[0], src[1] - dst[1]};
         smoothedAngle = constrainAngle(smoothedAngle);
         smoothedAngle[0] = src[0] - smoothedAngle[0] / 100.0F * MathUtils.random(randMin, randMax);
         smoothedAngle[1] = src[1] - smoothedAngle[1] / 100.0F * MathUtils.random(randMin, randMax);
         return new Rotation(smoothedAngle[0], smoothedAngle[1]);
+    }
+
+    public static float[] fixedSensitivity(float yaw, float pitch, float oldYaw, float oldPitch) {
+        float sensitivity = mc.gameSettings.mouseSensitivity;
+        float f = sensitivity * 0.6f + 0.2f;
+        float gcd = f * f * f * 1.2f;
+
+        float deltaYaw = yaw - oldYaw;
+        deltaYaw -= deltaYaw % gcd;
+        float yaw1 = oldYaw + deltaYaw;
+
+        float deltaPitch = pitch - oldPitch;
+        deltaPitch -= deltaPitch % gcd;
+        float pitch1 = oldPitch + deltaPitch;
+
+        return new float[] {yaw1, pitch1};
     }
 
     public static float[] constrainAngle(float[] vector) {

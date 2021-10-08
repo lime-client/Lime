@@ -64,6 +64,7 @@ public class KillAura extends Module {
     public final BoolValue rayCast = new BoolValue("Ray Cast", this, false);
     private final BoolValue throughWalls = new BoolValue("Through Walls", this, true);
     public final BoolValue keepSprint = new BoolValue("Keep Sprint", this, true);
+    public final BoolValue gcd = new BoolValue("GCD", this, false).onlyIf(rotations.getSettingName(), "enum", "smooth");
     private final BoolValue deathCheck = new BoolValue("Death Check", this, true);
     public final BoolValue particles = new BoolValue("Particles", this, false);
 

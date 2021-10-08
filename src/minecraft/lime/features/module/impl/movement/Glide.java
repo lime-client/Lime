@@ -10,7 +10,7 @@ import lime.utils.movement.MovementUtils;
 public class Glide extends Module {
 
     public Glide() {
-        super("Glide", Category.MOVEMENT);
+        super("Glide", Category.MOVE);
     }
 
     private final EnumValue mode = new EnumValue("Mode", this, "Chunk", "Chunk");

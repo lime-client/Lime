@@ -9,7 +9,7 @@ import org.lwjgl.opengl.Display;
 public class ClickGUI extends Module {
 
     public ClickGUI() {
-        super("ClickGUI", 54, Category.RENDER);
+        super("ClickGUI", 54, Category.VISUALS);
     }
 
     private final EnumValue mode = new EnumValue("Mode", this, "frame", "frame", "framenew");

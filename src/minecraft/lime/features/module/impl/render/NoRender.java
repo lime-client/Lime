@@ -6,7 +6,7 @@ import lime.features.setting.impl.BoolValue;
 
 public class NoRender extends Module {
     public NoRender() {
-        super("No Render", Category.RENDER);
+        super("No Render", Category.VISUALS);
     }
 
     public final BoolValue tnt = new BoolValue("TNT", this, true);

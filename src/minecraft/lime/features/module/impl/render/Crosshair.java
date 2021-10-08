@@ -16,7 +16,7 @@ import java.awt.*;
 
 public class Crosshair extends Module {
     public Crosshair() {
-        super("Crosshair", Category.RENDER);
+        super("Crosshair", Category.VISUALS);
     }
 
     private final SlideValue thickness = new SlideValue("Thickness", this, 0.5, 4, 1, 0.5);

@@ -3,12 +3,14 @@ package lime.features.module.impl.movement;
 import lime.core.Lime;
 import lime.core.events.EventTarget;
 import lime.core.events.impl.Event3D;
+import lime.core.events.impl.EventEntityAction;
 import lime.core.events.impl.EventMotion;
 import lime.core.events.impl.EventMove;
 import lime.features.module.Category;
 import lime.features.module.Module;
 import lime.features.module.impl.combat.KillAura;
 import lime.features.module.impl.render.HUD;
+import lime.features.module.impl.world.Scaffold;
 import lime.features.setting.impl.BoolValue;
 import lime.features.setting.impl.SlideValue;
 import lime.utils.combat.CombatUtils;
@@ -31,14 +33,15 @@ import static org.lwjgl.opengl.GL11.*;
 public class TargetStrafe extends Module {
 
     public TargetStrafe() {
-        super("Target Strafe", Category.MOVEMENT);
+        super("Target Strafe", Category.MOVE);
     }
 
     private final SlideValue distance = new SlideValue("Distance", this, 0.5, 6, 2.5, 0.1);
     private final SlideValue sides = new SlideValue("Sides", this, 1, 20, 8, 1);
     private final BoolValue speedOnly = new BoolValue("Speed Only", this, true);
     private final BoolValue playersOnly = new BoolValue("Players Only", this, true);
-    private final BoolValue spaceOnly = new BoolValue("Space Only", this, false);
+    public final BoolValue spaceOnly = new BoolValue("Space Only", this, false);
+    public final BoolValue stopJump = new BoolValue("Stop Jump", this, true).onlyIf(spaceOnly.getSettingName(), "bool", "true");
     private final BoolValue thirdPerson = new BoolValue("Third Person", this, false);
 
     private static int direction;
@@ -149,6 +152,13 @@ public class TargetStrafe extends Module {
                 flag = false;
                 mc.gameSettings.thirdPersonView = thirdPersonView;
             }
+        }
+    }
+
+    @EventTarget
+    public void onEntityAction(EventEntityAction e) {
+        if(spaceOnly.isEnabled() && stopJump.isEnabled() && Keyboard.isKeyDown(mc.gameSettings.keyBindJump.getKeyCode()) && KillAura.getEntity() != null && (Lime.getInstance().getModuleManager().getModuleC(Flight.class).isToggled() || Lime.getInstance().getModuleManager().getModuleC(Speed.class).isToggled())) {
+            e.setShouldJump(false);
         }
     }
 

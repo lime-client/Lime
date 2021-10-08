@@ -20,7 +20,7 @@ import java.awt.*;
 public class ChestESP extends Module {
 
     public ChestESP() {
-        super("Chest ESP", Category.RENDER);
+        super("Chest ESP", Category.VISUALS);
     }
 
     @EventTarget

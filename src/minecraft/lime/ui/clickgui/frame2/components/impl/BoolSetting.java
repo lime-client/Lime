@@ -2,7 +2,7 @@ package lime.ui.clickgui.frame2.components.impl;
 
 import lime.features.setting.SettingValue;
 import lime.features.setting.impl.BoolValue;
-import lime.managers.FontManager;
+import lime.management.FontManager;
 import lime.ui.clickgui.frame2.components.Component;
 import lime.ui.clickgui.frame2.components.FrameModule;
 import lime.utils.render.RenderUtils;

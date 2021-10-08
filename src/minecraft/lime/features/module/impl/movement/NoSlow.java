@@ -14,7 +14,7 @@ import net.minecraft.util.EnumFacing;
 public class NoSlow extends Module {
 
     public NoSlow() {
-        super("No Slow", Category.MOVEMENT);
+        super("No Slow", Category.MOVE);
     }
 
     private final EnumValue mode = new EnumValue("Mode", this, "Vanilla", "Vanilla", "NCP");

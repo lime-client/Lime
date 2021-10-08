@@ -2,7 +2,7 @@ package lime.ui.clickgui.frame2.components;
 
 import lime.core.Lime;
 import lime.features.module.Category;
-import lime.managers.FontManager;
+import lime.management.FontManager;
 import lime.utils.render.RenderUtils;
 import lime.utils.render.animation.Translate;
 import lime.utils.render.animation.easings.Animate;

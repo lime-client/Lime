@@ -9,6 +9,7 @@ import lime.features.module.impl.movement.TargetStrafe;
 import lime.features.module.impl.movement.flights.FlightValue;
 import lime.features.module.impl.world.Timer;
 import lime.utils.movement.MovementUtils;
+import lime.utils.other.ChatUtils;
 import net.minecraft.network.play.server.S08PacketPlayerPosLook;
 
 public class Funcraft extends FlightValue {
@@ -62,6 +63,9 @@ public class Funcraft extends FlightValue {
         if((stage > 2 || stage == -1) && !MovementUtils.isOnGround(3.33315597345063e-11))
         {
             mc.thePlayer.motionY = 0;
+            if(stage == -1 && mc.thePlayer.isMoving()) {
+                MovementUtils.setSpeed(.25);
+            }
             if(e.isPre())
             {
                 MovementUtils.vClip(-(3.33315597345063e-11));
@@ -71,6 +75,7 @@ public class Funcraft extends FlightValue {
 
     @Override
     public void onMove(EventMove e) {
+        mc.thePlayer.jumpMovementFactor = 0;
         if((stage == 0 && !mc.thePlayer.onGround) || mc.thePlayer.isCollidedHorizontally) stage = -1;
         if(mc.thePlayer.isMoving())
         {

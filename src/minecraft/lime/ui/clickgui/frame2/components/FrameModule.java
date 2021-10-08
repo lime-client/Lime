@@ -6,7 +6,7 @@ import lime.features.setting.impl.BoolValue;
 import lime.features.setting.impl.EnumValue;
 import lime.features.setting.impl.SlideValue;
 import lime.features.setting.impl.TextValue;
-import lime.managers.FontManager;
+import lime.management.FontManager;
 import lime.ui.clickgui.frame2.Priority;
 import lime.ui.clickgui.frame2.components.impl.BoolSetting;
 import lime.ui.clickgui.frame2.components.impl.EnumSetting;

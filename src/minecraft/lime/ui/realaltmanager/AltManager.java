@@ -76,6 +76,7 @@ public class AltManager {
     }
 
     public Alt getRandomAlt() {
+        if(alts.isEmpty()) return null;
         return alts.get(new Random().nextInt(alts.size() - 1));
     }
 

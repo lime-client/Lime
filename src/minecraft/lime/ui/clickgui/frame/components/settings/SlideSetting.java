@@ -2,7 +2,7 @@ package lime.ui.clickgui.frame.components.settings;
 
 import lime.features.setting.SettingValue;
 import lime.features.setting.impl.SlideValue;
-import lime.managers.FontManager;
+import lime.management.FontManager;
 import lime.ui.clickgui.frame.components.Component;
 import lime.utils.other.MathUtils;
 import net.minecraft.client.gui.Gui;

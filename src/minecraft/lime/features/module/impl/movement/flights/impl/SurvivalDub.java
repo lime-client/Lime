@@ -106,7 +106,7 @@ public class SurvivalDub extends FlightValue {
                 {
                     case 0:
                         if(mc.thePlayer.onGround && mc.thePlayer.isCollidedVertically)
-                            this.moveSpeed = 0.5;
+                            this.moveSpeed = 0.3;
                         break;
                     case 1:
                         if(mc.thePlayer.onGround && mc.thePlayer.isCollidedVertically)

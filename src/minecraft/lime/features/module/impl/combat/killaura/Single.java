@@ -97,8 +97,14 @@ public class Single extends KillAuraMode {
                         rotations = CombatUtils.getEntityRotations(entity, false);
                         float[] crt = new float[] {currentYaw, currentPitch};
                         Rotation rotation = CombatUtils.smoothAngle(new float[]{rotations[0], rotations[1]}, crt, (float) killAura.rotationsSpeedMin.getCurrent(), (float) killAura.rotationsSpeedMax.getCurrent());
-                        rotations[0] = rotation.getYaw();
-                        rotations[1] = rotation.getPitch();
+                        if(killAura.gcd.isEnabled()) {
+                            float[] fixedGcd = CombatUtils.fixedSensitivity(rotation.getYaw(), rotation.getPitch(), currentYaw, currentPitch);
+                            rotations[0] = fixedGcd[0];
+                            rotations[1] = fixedGcd[1];
+                        } else {
+                            rotations[0] = rotation.getYaw();
+                            rotations[1] = rotation.getPitch();
+                        }
                         currentYaw = rotations[0];
                         currentPitch = rotations[1];
                         break;

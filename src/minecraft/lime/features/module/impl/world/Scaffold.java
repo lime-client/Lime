@@ -9,7 +9,7 @@ import lime.features.module.impl.combat.KillAura;
 import lime.features.setting.impl.BoolValue;
 import lime.features.setting.impl.EnumValue;
 import lime.features.setting.impl.SlideValue;
-import lime.managers.FontManager;
+import lime.management.FontManager;
 import lime.ui.notifications.Notification;
 import lime.utils.combat.CombatUtils;
 import lime.utils.movement.MovementUtils;
@@ -20,9 +20,7 @@ import lime.utils.other.Timer;
 import lime.utils.render.RenderUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockSnow;
-import net.minecraft.client.gui.Gui;
 import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
@@ -30,7 +28,6 @@ import net.minecraft.network.play.client.C0APacketAnimation;
 import net.minecraft.potion.Potion;
 import net.minecraft.util.*;
 import org.lwjgl.input.Keyboard;
-import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
 import java.util.Arrays;
@@ -53,7 +50,7 @@ public class Scaffold extends Module {
             Blocks.stone_button, Blocks.wooden_button, Blocks.lever, Blocks.tallgrass, Blocks.tripwire, Blocks.tripwire_hook, Blocks.rail, Blocks.waterlily,
             Blocks.red_flower, Blocks.red_mushroom, Blocks.brown_mushroom, Blocks.vine, Blocks.trapdoor, Blocks.yellow_flower, Blocks.ladder, Blocks.furnace,
             Blocks.sand, Blocks.cactus, Blocks.dispenser, Blocks.noteblock, Blocks.dropper, Blocks.crafting_table, Blocks.web, Blocks.pumpkin, Blocks.sapling, Blocks.cobblestone_wall, Blocks.oak_fence,
-            Blocks.yellow_flower, Blocks.red_flower);
+            Blocks.yellow_flower, Blocks.red_flower, Blocks.flower_pot, Blocks.dragon_egg, Blocks.monster_egg);
 
     private final EnumValue state = new EnumValue("State", this, "POST", "PRE", "POST");
     private final EnumValue rotations = new EnumValue("Rotations", this, "Basic", "None", "Basic", "Hypixel", "Legit", "Legit2");

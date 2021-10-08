@@ -1,4 +1,4 @@
-package lime.managers;
+package lime.management;
 
 import lime.features.module.Category;
 import lime.features.module.Module;
@@ -109,8 +109,8 @@ public class ModuleManager {
         this.modules.add(module);
     }
 
-    public Module getModuleC(Class<? extends Module> clazz) {
-        return getModules().stream().filter(module -> module.getClass() == clazz).findFirst().orElse(null);
+    public <T extends Module> T getModuleC(Class<? extends Module> clazz) {
+        return (T) getModules().stream().filter(module -> module.getClass() == clazz).findFirst().orElse(null);
     }
 
     public Module getModule(String name) {

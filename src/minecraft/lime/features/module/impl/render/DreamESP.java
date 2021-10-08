@@ -14,7 +14,7 @@ import org.lwjgl.opengl.GL11;
 public class DreamESP extends Module {
 
     public DreamESP() {
-        super("Dream ESP", Category.RENDER);
+        super("Dream ESP", Category.VISUALS);
     }
 
     @EventTarget

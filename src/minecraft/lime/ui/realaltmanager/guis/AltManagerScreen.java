@@ -1,23 +1,19 @@
 package lime.ui.realaltmanager.guis;
 
 import lime.core.Lime;
-import lime.managers.FontManager;
+import lime.management.FontManager;
 import lime.ui.realaltmanager.AltLoginThread;
 import lime.ui.fields.ButtonField;
 import lime.ui.realaltmanager.Alt;
 import lime.ui.realaltmanager.AltManager;
 import lime.utils.render.RenderUtils;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL20;
 
 import java.awt.*;
 import java.io.IOException;
@@ -47,9 +43,11 @@ public class AltManagerScreen extends GuiScreen {
         }));
         this.customButtonList.add(new ButtonField(FontManager.ProductSans20.getFont(), "Random Alt", (sr.getScaledWidth() / 2F) + 200, sr.getScaledHeight() - 146, width, 20, new Color(25, 25, 25), false, () -> {
             Alt alt = Lime.getInstance().getAltManager().getRandomAlt();
-            this.alt = alt;
-            lastThread = new AltLoginThread(alt.getMail(), alt.getPassword());
-            lastThread.start();
+            if(alt != null) {
+                this.alt = alt;
+                lastThread = new AltLoginThread(alt.getMail(), alt.getPassword());
+                lastThread.start();
+            }
         }));
     }
 

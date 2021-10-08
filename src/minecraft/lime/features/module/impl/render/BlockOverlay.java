@@ -12,7 +12,7 @@ import org.lwjgl.opengl.GL11;
 public class BlockOverlay extends Module {
 
     public BlockOverlay() {
-        super("Block Overlay", Category.RENDER);
+        super("Block Overlay", Category.VISUALS);
     }
 
     @EventTarget

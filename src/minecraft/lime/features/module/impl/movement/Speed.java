@@ -8,14 +8,11 @@ import lime.core.events.impl.EventPacket;
 import lime.features.module.Category;
 import lime.features.module.Module;
 import lime.features.module.impl.combat.KillAura;
-import lime.features.module.impl.world.Scaffold;
 import lime.features.setting.impl.BoolValue;
 import lime.features.setting.impl.EnumValue;
 import lime.features.setting.impl.SlideValue;
 import lime.utils.movement.MovementUtils;
-import lime.utils.other.ChatUtils;
 import net.minecraft.block.BlockStairs;
-import net.minecraft.network.Packet;
 import net.minecraft.network.play.client.C03PacketPlayer;
 import net.minecraft.network.play.client.C0FPacketConfirmTransaction;
 import net.minecraft.network.play.server.S08PacketPlayerPosLook;
@@ -23,20 +20,18 @@ import net.minecraft.potion.Potion;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.BlockPos;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class Speed extends Module {
 
     public Speed() {
-        super("Speed", Category.MOVEMENT);
+        super("Speed", Category.MOVE);
     }
 
-    private final EnumValue mode = new EnumValue("Mode", this, "Vanilla", "Vanilla", "Vanilla_BHOP", "Hypixel", "Verus", "Verus_LOWHOP", "NCP", "Funcraft", "Funcraft2", "Funcraft_YPORT", "Mineplex");
-    private final SlideValue speed = new SlideValue("Speed", this, 0.2, 5, 0.6, 0.1).onlyIf(mode.getSettingName(), "enum", "vanilla_bhop", "vanilla", "mineplex");
+    private final EnumValue mode = new EnumValue("Mode", this, "Vanilla", "Vanilla", "Vanilla_BHOP", "Hypixel", "Verus", "Verus2", "Verus_LOWHOP", "NCP", "Funcraft", "Funcraft_YPORT");
+    private final SlideValue speed = new SlideValue("Speed", this, 0.2, 5, 0.6, 0.1).onlyIf(mode.getSettingName(), "enum", "vanilla_bhop", "vanilla");
     private final BoolValue hypixelStrafe = new BoolValue("Hypixel Strafe", this, false).onlyIf(mode.getSettingName(), "enum", "hypixel");
     private double moveSpeed, lastDist;
-    private final ArrayList<Packet<?>> packets = new ArrayList<>();
     private int stage, ticks;
 
     @Override
@@ -60,18 +55,20 @@ public class Speed extends Module {
     @EventTarget
     public void onMotion(EventMotion e) {
         this.setSuffix(mode.getSelected());
-        if(mode.is("vanilla") || mode.is("vanilla_bhop")) {
+        if(mode.is("vanilla")) {
             if(mc.thePlayer.isMoving()) {
                 MovementUtils.setSpeed(speed.getCurrent());
-                if(mode.is("vanilla_bhop")) {
-                    if(mc.thePlayer.isMoving() && mc.thePlayer.onGround)
-                        mc.thePlayer.motionY = 0.42;
-                    if(mc.thePlayer.isMoving()) {
-                        MovementUtils.setSpeed(speed.getCurrent());
-                    }
-                    if(mc.thePlayer.ticksExisted % 3 == 0) mc.thePlayer.motionY -= 0.04;
-                }
             }
+        }
+
+        if(mode.is("verus2") && e.isPre() && mc.thePlayer.isMoving()) {
+            if(mc.thePlayer.onGround) {
+                moveSpeed = MovementUtils.getBaseMoveSpeed() * 1.12;
+                mc.thePlayer.jump();
+                MovementUtils.setSpeed(moveSpeed);
+                return;
+            }
+            MovementUtils.setSpeed(Math.max(MovementUtils.getSpeed(), MovementUtils.getBaseMoveSpeed()));
         }
 
         if(mode.is("verus") || mode.is("verus_lowhop")) {
@@ -148,73 +145,41 @@ public class Speed extends Module {
     public void onPacket(EventPacket e) {
         if(e.getPacket() instanceof S08PacketPlayerPosLook) {
             lastDist = 0;
-            if(mode.is("mineplex")) {
+            if(mode.is("mineplex") || mode.is("funcraft")) {
                 moveSpeed = 0;
+                stage = 0;
             }
-            if(mode.is("funcraft2")) {
-                moveSpeed = MovementUtils.getBaseMoveSpeed();
-            }
-        }
-        if(e.getPacket() instanceof C0FPacketConfirmTransaction) {
-
         }
     }
 
     @EventTarget
     public void onMove(EventMove e) {
         if(mode.is("mineplex")) {
-            if (mc.thePlayer.isMoving() && mc.thePlayer.onGround) {
-                moveSpeed = Math.min(moveSpeed < 0.5 ? 0.8 : moveSpeed + .4, speed.getCurrent());
-                e.setY(mc.thePlayer.motionY = 0.42);
-                mc.getNetHandler().addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY + 0.42, mc.thePlayer.posZ, true));
-            }
-            if(mc.thePlayer.isCollidedHorizontally || !mc.thePlayer.isMoving()) {
-                moveSpeed = 0.32;
-            }
-            if(KillAura.getEntity() != null && Lime.getInstance().getModuleManager().getModuleC(TargetStrafe.class).isToggled()) {
-                TargetStrafe targetStrafe = (TargetStrafe) Lime.getInstance().getModuleManager().getModuleC(TargetStrafe.class);
-                targetStrafe.setMoveSpeed(e, Math.max(Math.min(5, moveSpeed -= moveSpeed / 44), 0.4));
-            } else {
-                MovementUtils.setSpeed(e, Math.max(Math.min(5, moveSpeed -= moveSpeed / 44), 0.4));
-            }
-        }
-
-        if(mode.is("funcraft2")) {
-            if(!mc.thePlayer.isMoving()) {
-                moveSpeed = 0;
-                stage = 0;
-                return;
-            }
-            mc.timer.timerSpeed = 1.0888F;
-            if(stage == 1 && mc.thePlayer.isMoving()) {
-                moveSpeed = 2.5 * MovementUtils.getBaseMoveSpeed() - 0.1;
-            } else if(stage != 2 || !mc.thePlayer.isMoving()) {
-                if(stage == 3) {
-                    moveSpeed = lastDist - 0.66D * (lastDist - MovementUtils.getBaseMoveSpeed());
-                } else {
-                    List<AxisAlignedBB> collidingList = mc.theWorld.getCollidingBoundingBoxes(mc.thePlayer, mc.thePlayer.getEntityBoundingBox().offset(0, mc.thePlayer.motionY, 0));
-                    if((collidingList.size() > 0 || mc.thePlayer.isCollidedVertically) && stage > 0) {
-                        stage = mc.thePlayer.moveForward == 0 && mc.thePlayer.moveStrafing == 0 ? 0 : 1;
-                    }
-                    moveSpeed = lastDist - lastDist / 159;
-                }
-            } else {
-                e.setY(mc.thePlayer.motionY = 0.3999);
-                moveSpeed *= 2.14999;
-            }
-
-            if (KillAura.getEntity() != null) {
-                TargetStrafe targetStrafe2 = (TargetStrafe) Lime.getInstance().getModuleManager().getModuleC(TargetStrafe.class);
-                targetStrafe2.setMoveSpeed(e, moveSpeed = Math.max(moveSpeed, MovementUtils.getBaseMoveSpeed() * 1.3));
-            } else {
-                MovementUtils.setSpeed(e, moveSpeed = Math.max(moveSpeed, MovementUtils.getBaseMoveSpeed() * 1.3));
-            }
             if(mc.thePlayer.isMoving()) {
+                if(mc.thePlayer.onGround) {
+                    stage = 0;
+                }
+                switch(stage) {
+                    case 0:
+                        if(mc.thePlayer.onGround) {
+                            e.setY(mc.thePlayer.motionY = 0.42);
+                            moveSpeed *= 2.149;
+                        }
+                        break;
+                    case 1:
+                        double difference = .84 * (this.lastDist - MovementUtils.getBaseMoveSpeed());
+                        this.moveSpeed = this.lastDist - difference;
+                        break;
+                    default:
+                        this.moveSpeed = this.lastDist - this.lastDist / 159;
+                        break;
+                }
                 ++stage;
+                MovementUtils.setSpeed(e, Math.max(moveSpeed, MovementUtils.getBaseMoveSpeed()));
             }
         }
 
-        if(mode.is("ncp") || mode.is("funcraft") || mode.is("funcraft_yport")) {
+        if(mode.is("ncp") || mode.is("funcraft") || mode.is("funcraft_yport") || mode.is("vanilla_bhop")) {
             mc.timer.timerSpeed = 1.0866f;
             if(mc.thePlayer.isMoving()) {
                 if(mc.thePlayer.onGround) {
@@ -243,6 +208,10 @@ public class Speed extends Module {
                 }
                 ++stage;
                 MovementUtils.setSpeed(e, Math.max(moveSpeed, MovementUtils.getBaseMoveSpeed()));
+            } else {
+                lastDist = 0;
+                stage = 0;
+                moveSpeed = 0;
             }
         }
     }

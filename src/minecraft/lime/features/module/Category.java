@@ -1,5 +1,5 @@
 package lime.features.module;
 
 public enum Category {
-    COMBAT, EXPLOIT, MOVEMENT, PLAYER, RENDER, WORLD, SCRIPT
+    COMBAT, EXPLOIT, MOVE, PLAYER, VISUALS, WORLD, SCRIPT
 }

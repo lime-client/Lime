@@ -1,4 +1,4 @@
-package lime.managers;
+package lime.management;
 
 import lime.features.commands.Command;
 import lime.features.commands.impl.*;

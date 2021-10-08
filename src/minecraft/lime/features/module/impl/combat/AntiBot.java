@@ -7,6 +7,7 @@ import lime.features.module.Category;
 import lime.features.module.Module;
 import lime.features.setting.impl.BoolValue;
 import lime.features.setting.impl.EnumValue;
+import lime.utils.other.ChatUtils;
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;

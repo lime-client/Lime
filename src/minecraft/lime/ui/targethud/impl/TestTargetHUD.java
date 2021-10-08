@@ -1,6 +1,6 @@
 package lime.ui.targethud.impl;
 
-import lime.managers.FontManager;
+import lime.management.FontManager;
 import lime.ui.targethud.TargetHUD;
 import lime.utils.render.RenderUtils;
 import lime.utils.render.animation.easings.Animate;

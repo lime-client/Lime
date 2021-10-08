@@ -1,4 +1,4 @@
-package lime.managers;
+package lime.management;
 
 import lime.utils.render.fontRenderer.GlyphPageFontRenderer;
 

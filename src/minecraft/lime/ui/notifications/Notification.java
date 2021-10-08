@@ -1,6 +1,6 @@
 package lime.ui.notifications;
 
-import lime.managers.FontManager;
+import lime.management.FontManager;
 import lime.utils.other.ChatUtils;
 import lime.utils.other.Timer;
 import lime.utils.render.RenderUtils;

@@ -50,7 +50,7 @@ import java.util.Map;
 public class ESP extends Module {
 
     public ESP() {
-        super("ESP", Category.RENDER);
+        super("ESP", Category.VISUALS);
         this.collectedEntities = new ArrayList<>();
         this.viewport = GLAllocation.createDirectIntBuffer(16);
         this.modelview = GLAllocation.createDirectFloatBuffer(16);

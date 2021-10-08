@@ -8,7 +8,7 @@ import lime.core.events.impl.EventWorldChange;
 import lime.features.module.Category;
 import lime.features.module.Module;
 import lime.features.setting.impl.*;
-import lime.managers.FontManager;
+import lime.utils.render.font2.FontManager;
 import lime.utils.movement.MovementUtils;
 import lime.utils.other.InventoryUtils;
 import lime.utils.render.ColorUtils;
@@ -17,7 +17,6 @@ import lime.utils.render.animation.easings.Easing;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiChat;
-import net.minecraft.client.gui.GuiNewChat;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.item.ItemStack;
@@ -29,7 +28,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class HUD extends Module {
 
     public HUD() {
-        super("HUD", Category.RENDER);
+        super("HUD", Category.VISUALS);
     }
 
     private final TextValue clientName = new TextValue("Client Name", this, "Lime");
@@ -54,36 +53,36 @@ public class HUD extends Module {
         scoreboardAnimation.setEase(Easing.LINEAR).setSpeed(125).setMin(0).update();
 
         if(customFont.isEnabled())
-            FontManager.ProductSans18.getFont().drawStringWithShadow(clientName.getText(), 0, 0, -1);
+            FontManager.SfUiArray.drawStringWithShadow(clientName.getText(), 1, 1, -1);
         else
             mc.fontRendererObj.drawStringWithShadow(clientName.getText(), 1, 1, -1);
 
         if(fps.isEnabled()) {
             if(customFont.isEnabled()) {
-                FontManager.ProductSans18.getFont().drawStringWithShadow("FPS: §f" + Minecraft.debugFPS, 1, sr.getScaledHeight() - (FontManager.ProductSans20.getFont().getFontHeight() * (mc.currentScreen instanceof GuiChat ? 2 : 1)), HUD.getColor(0).getRGB());
+                FontManager.SfUiArray.drawStringWithShadow("FPS: §f" + Minecraft.debugFPS, 1, sr.getScaledHeight() - (lime.management.FontManager.ProductSans20.getFont().getFontHeight() * (mc.currentScreen instanceof GuiChat ? 2 : 1))+2, HUD.getColor(0).getRGB());
             } else {
-                mc.fontRendererObj.drawStringWithShadow("FPS: §f" + Minecraft.debugFPS, 3, sr.getScaledHeight() - (FontManager.ProductSans20.getFont().getFontHeight() * (mc.currentScreen instanceof GuiChat ? 2 : 1))+1, HUD.getColor(0).getRGB());
+                mc.fontRendererObj.drawStringWithShadow("FPS: §f" + Minecraft.debugFPS, 3, sr.getScaledHeight() - (lime.management.FontManager.ProductSans20.getFont().getFontHeight() * (mc.currentScreen instanceof GuiChat ? 2 : 1))+1, HUD.getColor(0).getRGB());
             }
         }
         if(bps.isEnabled()) {
             if(customFont.isEnabled()) {
-                FontManager.ProductSans18.getFont().drawStringWithShadow("BP/S: §f" + (Math.round(MovementUtils.getBPS() * 1000D) / 1000F), 1 + FontManager.ProductSans18.getFont().getStringWidth("FPS: " + Minecraft.debugFPS + " "), sr.getScaledHeight() - (FontManager.ProductSans20.getFont().getFontHeight() * (mc.currentScreen instanceof GuiChat ? 2 : 1)), HUD.getColor(0).getRGB());
+                FontManager.SfUiArray.drawStringWithShadow("BP/S: §f" + (Math.round(MovementUtils.getBPS() * 1000D) / 1000F), 1 + FontManager.SfUiArray.getStringWidth("FPS: " + Minecraft.debugFPS + " "), sr.getScaledHeight() - (lime.management.FontManager.ProductSans20.getFont().getFontHeight() * (mc.currentScreen instanceof GuiChat ? 2 : 1))+2, HUD.getColor(0).getRGB());
             } else {
-                mc.fontRendererObj.drawStringWithShadow("BP/S: §f" + (Math.round(MovementUtils.getBPS() * 1000D) / 1000F), 3 + mc.fontRendererObj.getStringWidth("FPS: " + Minecraft.debugFPS + " "), sr.getScaledHeight() - (FontManager.ProductSans20.getFont().getFontHeight() * (mc.currentScreen instanceof GuiChat ? 2 : 1))+1, HUD.getColor(0).getRGB());
+                mc.fontRendererObj.drawStringWithShadow("BP/S: §f" + (Math.round(MovementUtils.getBPS() * 1000D) / 1000F), 3 + mc.fontRendererObj.getStringWidth("FPS: " + Minecraft.debugFPS + " "), sr.getScaledHeight() - (lime.management.FontManager.ProductSans20.getFont().getFontHeight() * (mc.currentScreen instanceof GuiChat ? 2 : 1))+1, HUD.getColor(0).getRGB());
             }
         }
 
         if(uid.isEnabled()) {
             if(customFont.isEnabled()) {
-                FontManager.ProductSans18.getFont().drawStringWithShadow("User ID: §f" + Lime.getInstance().getUserCheckThread().getUser().getUid(), sr.getScaledWidth() - 1 - FontManager.ProductSans18.getFont().getStringWidth("User ID: " + Lime.getInstance().getUserCheckThread().getUser().getUid()), sr.getScaledHeight() - (FontManager.ProductSans20.getFont().getFontHeight() * (mc.currentScreen instanceof GuiChat ? 2 : 1)), HUD.getColor(0).getRGB());
+                FontManager.SfUiArray.drawStringWithShadow("User ID: §f" + Lime.getInstance().getUser().getUid(), sr.getScaledWidth() - 1 - FontManager.SfUiArray.getStringWidth("User ID: " + Lime.getInstance().getUser().getUid()), sr.getScaledHeight() - (lime.management.FontManager.ProductSans20.getFont().getFontHeight() * (mc.currentScreen instanceof GuiChat ? 2 : 1))+2, HUD.getColor(0).getRGB());
             } else {
-                mc.fontRendererObj.drawStringWithShadow("User ID: §f" + Lime.getInstance().getUserCheckThread().getUser().getUid(), sr.getScaledWidth() - 3 - mc.fontRendererObj.getStringWidth("User ID: " + Lime.getInstance().getUserCheckThread().getUser().getUid()), sr.getScaledHeight() - (FontManager.ProductSans20.getFont().getFontHeight() * (mc.currentScreen instanceof GuiChat ? 2 : 1))+1, HUD.getColor(0).getRGB());
+                mc.fontRendererObj.drawStringWithShadow("User ID: §f" + Lime.getInstance().getUser().getUid(), sr.getScaledWidth() - 3 - mc.fontRendererObj.getStringWidth("User ID: " + Lime.getInstance().getUser().getUid()), sr.getScaledHeight() - (lime.management.FontManager.ProductSans20.getFont().getFontHeight() * (mc.currentScreen instanceof GuiChat ? 2 : 1))+1, HUD.getColor(0).getRGB());
             }
         }
         if(armorHud.isEnabled()) {
             int index = 0;
             int test = sr.getScaledWidth() / 2 + 75;
-            for (int i = 9; i >= 5; i--) {
+            for (int i = 8; i >= 5; i--) {
                 if(InventoryUtils.getSlot(i).getHasStack()) {
                     ItemStack itemStack = InventoryUtils.getSlot(i).getStack();
                     RenderHelper.enableStandardItemLighting();
@@ -96,10 +95,10 @@ public class HUD extends Module {
         ArrayList<Module> modules = new ArrayList<>(Lime.getInstance().getModuleManager().getModules());
 
         modules.sort((o1, o2) -> {
-            String o1Name = o1.getName() + (suffix.isEnabled() && o1.getSuffix() != null && !o1.getSuffix().isEmpty() ? "§7 " + o1.getSuffix().replace("_", " ") + (customFont.isEnabled() ? " " : "") : "");
-            String o2Name = o2.getName() + (suffix.isEnabled() && o2.getSuffix() != null && !o2.getSuffix().isEmpty() ? "§7 " + o2.getSuffix().replace("_", " ") + (customFont.isEnabled() ? " " : "") : "");
+            String o1Name = o1.getName() + (suffix.isEnabled() && o1.getSuffix() != null && !o1.getSuffix().isEmpty() ? "§7 " + o1.getSuffix().replace("_", " ") : "");
+            String o2Name = o2.getName() + (suffix.isEnabled() && o2.getSuffix() != null && !o2.getSuffix().isEmpty() ? "§7 " + o2.getSuffix().replace("_", " ") : "");
             if(customFont.isEnabled()) {
-                if(FontManager.ProductSans18.getFont().getStringWidth(o1Name)  > FontManager.ProductSans18.getFont().getStringWidth(o2Name))
+                if(FontManager.SfUiArray.getStringWidth(o1Name)  > FontManager.SfUiArray.getStringWidth(o2Name))
                     return -1;
                 else
                     return 1;
@@ -110,16 +109,16 @@ public class HUD extends Module {
                     return 1;
             }
         });
-        int increment = customFont.isEnabled() ? FontManager.ProductSans18.getFont().getFontHeight() : mc.fontRendererObj.FONT_HEIGHT;
+        int increment = customFont.isEnabled() ? FontManager.SfUiArray.getHeight() : mc.fontRendererObj.FONT_HEIGHT;
         int yCount = 0;
         for (Module module : modules) {
             if(module.hasSettings() && !((BoolValue) Lime.getInstance().getSettingsManager().getSetting("Show", module)).isEnabled()) continue;
-            String moduleName = module.getName() + (suffix.isEnabled() && module.getSuffix() != null && !module.getSuffix().isEmpty() ? "§7 " + module.getSuffix().replace("_", " ") + (customFont.isEnabled() ? " " : "") : "");
+            String moduleName = module.getName() + (suffix.isEnabled() && module.getSuffix() != null && !module.getSuffix().isEmpty() ? "§7 " + module.getSuffix().replace("_", " ") : "");
 
             // HUD Animation
             module.hudAnimation.setEase(Easing.SINE_OUT);
             module.hudAnimation.update();
-            module.hudAnimation.setMax((customFont.isEnabled() ? FontManager.ProductSans18.getFont().getStringWidth(moduleName) : mc.fontRendererObj.getStringWidth(moduleName)) + 4);
+            module.hudAnimation.setMax((customFont.isEnabled() ? FontManager.SfUiArray.getStringWidth(moduleName) : mc.fontRendererObj.getStringWidth(moduleName)) + 4);
             module.hudAnimation.setReversed(!module.isToggled());
 
             if(module.hudAnimation.getValue() > module.hudAnimation.getMin()) {
@@ -131,7 +130,7 @@ public class HUD extends Module {
                     Gui.drawRect(e.getScaledResolution().getScaledWidth() - module.hudAnimation.getValue() - 1, yCount, e.getScaledResolution().getScaledWidth()  - module.hudAnimation.getValue(), yCount + increment, color.getRGB());
                 }
                 if(customFont.isEnabled())
-                    FontManager.ProductSans18.getFont().drawStringWithShadow(moduleName, (e.getScaledResolution().getScaledWidth() - module.hudAnimation.getValue()), yCount, color.getRGB());
+                    FontManager.SfUiArray.drawStringWithShadow(moduleName, (e.getScaledResolution().getScaledWidth() - module.hudAnimation.getValue()) + 2, 2 + yCount, color.getRGB());
                 else
                     mc.fontRendererObj.drawString(moduleName, (e.getScaledResolution().getScaledWidth() - module.hudAnimation.getValue() + (sidebar.is("right") ? 0 : 3)), yCount + 1, color.getRGB(), true);
 
@@ -148,11 +147,11 @@ public class HUD extends Module {
     @EventTarget
     public void onScoreboard(EventScoreboard e) {
         int size = (int) Lime.getInstance().getModuleManager().getModules().stream().filter(module -> module.isToggled() && ((BoolValue) Lime.getInstance().getSettingsManager().getSetting("Show", module)).isEnabled()).count();
-        if(scoreboardAnimation.getValue() > size * FontManager.ProductSans18.getFont().getFontHeight()) {
-            scoreboardAnimation.setMin(size * FontManager.ProductSans18.getFont().getFontHeight());
+        if(scoreboardAnimation.getValue() > size * FontManager.SfUiArray.getHeight()) {
+            scoreboardAnimation.setMin(size * FontManager.SfUiArray.getHeight());
             scoreboardAnimation.setReversed(true);
         } else {
-            scoreboardAnimation.setReversed(false).setMax(size * FontManager.ProductSans18.getFont().getFontHeight());
+            scoreboardAnimation.setReversed(false).setMax(size * FontManager.SfUiArray.getHeight());
         }
             e.setY(Math.max(((int) scoreboardAnimation.getValue()) - (new ScaledResolution(mc).getScaledHeight() / 2) + 100, e.getY()));
     }

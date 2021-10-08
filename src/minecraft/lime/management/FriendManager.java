@@ -1,4 +1,4 @@
-package lime.managers;
+package lime.management;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;

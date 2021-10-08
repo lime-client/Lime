@@ -30,7 +30,7 @@ public class ChestStealer extends Module {
         super("Chest Stealer", Category.PLAYER);
     }
 
-    private final SlideValue delayBeforeClose = new SlideValue("Delay before close", this, 0, 150, 100, 10);
+    private final SlideValue delayBeforeClose = new SlideValue("Delay before close", this, 0, 500, 100, 10);
     private final SlideValue delay = new SlideValue("Delay", this, 0, 150, 50, 5);
     private final BoolValue ignoreJunk = new BoolValue("Ignore Junk", this, true);
     private final BoolValue randomizer = new BoolValue("Randomizer", this, true);
@@ -42,7 +42,7 @@ public class ChestStealer extends Module {
     private final Timer closeTimer = new Timer();
     private final Timer timer = new Timer();
 
-    private ArrayList<TileEntityChest> openedChests = new ArrayList<>();
+    private final ArrayList<TileEntityChest> openedChests = new ArrayList<>();
 
     @Override
     public void onEnable() {

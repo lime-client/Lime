@@ -12,7 +12,7 @@ import org.lwjgl.opengl.GL11;
 public class ChinaHat extends Module {
 
     public ChinaHat() {
-        super("China Hat", Category.RENDER);
+        super("China Hat", Category.VISUALS);
     }
 
     @EventTarget

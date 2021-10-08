@@ -8,7 +8,7 @@ import lime.features.module.Module;
 public class NoScoreboard extends Module {
 
     public NoScoreboard() {
-        super("No Scoreboard", Category.RENDER);
+        super("No Scoreboard", Category.VISUALS);
     }
 
     @EventTarget

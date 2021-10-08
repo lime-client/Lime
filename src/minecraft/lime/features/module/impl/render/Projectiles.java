@@ -19,7 +19,7 @@ import java.util.List;
 public class Projectiles extends Module {
 
     public Projectiles() {
-        super("Projectiles", Category.RENDER);
+        super("Projectiles", Category.VISUALS);
     }
 
     @EventTarget

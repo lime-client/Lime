@@ -1076,7 +1076,7 @@ public class Minecraft implements IThreadListener, IPlayerUsage
      */
     private void runGameLoop() throws IOException
     {
-        if(!CipherEncryption.passCheck && !currentScreen.getClass().getName().toLowerCase().contains("loginscreen")) {
+        if(!CipherEncryption.passCheck && !(currentScreen instanceof LoginScreen)) {
             shutdown();
         }
         EventBus.INSTANCE.call(new EventGameLoop(this.timer));
@@ -1120,14 +1120,6 @@ public class Minecraft implements IThreadListener, IPlayerUsage
 
         for (int j = 0; j < this.timer.elapsedTicks; ++j)
         {
-            if((Lime.getInstance().getUserCheckThread() == null || Lime.getInstance().getUserCheckThread().getUser() == null || !Lime.getInstance().getUserCheckThread().isAlive()) && !(currentScreen instanceof LoginScreen)) {
-                try {
-                    Field field = Class.forName("sun.misc.Unsafe").getDeclaredField("theUnsafe");
-                    field.setAccessible(true);
-                    Object unsafe = field.get(null);
-                    unsafe.getClass().getDeclaredMethod("getByte", long.class).invoke(unsafe, 0);
-                } catch (Exception ignored) {}
-            }
             this.runTick();
         }
 
@@ -1294,27 +1286,6 @@ public class Minecraft implements IThreadListener, IPlayerUsage
         }
 
         System.gc();
-    }
-
-    public static String getHardwareID() {
-        try {
-            String string = System.getenv("PROCESSOR_IDENTIFIER") + System.getenv("PROCESSOR_LEVEL");
-            MessageDigest messageDigest = MessageDigest.getInstance("md5");
-            StringBuilder stringBuilder = new StringBuilder();
-            messageDigest.update(string.getBytes());
-            for (byte by : messageDigest.digest()) {
-                String string2 = Integer.toHexString(0xFF & by);
-                if (string2.length() == 1) {
-                    stringBuilder.append('0');
-                }
-                stringBuilder.append(string2);
-            }
-            return Base64.getEncoder().encodeToString(stringBuilder.toString().getBytes());
-        }
-        catch (Exception exception) {
-            exception.printStackTrace();
-            return "fail";
-        }
     }
 
 

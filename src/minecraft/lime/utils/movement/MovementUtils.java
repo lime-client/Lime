@@ -102,7 +102,7 @@ public class MovementUtils implements IUtil {
     }
 
     public static void setSpeed(final EventMove moveEvent, final double moveSpeed) {
-        TargetStrafe targetStrafe = (TargetStrafe) Lime.getInstance().getModuleManager().getModuleC(TargetStrafe.class);
+        TargetStrafe targetStrafe = Lime.getInstance().getModuleManager().getModuleC(TargetStrafe.class);
         if(targetStrafe.isToggled() && KillAura.getEntity() != null) {
             targetStrafe.setMoveSpeed(moveEvent, moveSpeed);
         } else {

@@ -1,7 +1,7 @@
 package lime.ui.targethud.impl;
 
 
-import lime.managers.FontManager;
+import lime.management.FontManager;
 import lime.ui.targethud.TargetHUD;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.inventory.GuiInventory;

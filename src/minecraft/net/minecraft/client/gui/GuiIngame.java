@@ -4,17 +4,15 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Random;
 
-import lime.core.Lime;
 import lime.core.events.EventBus;
 import lime.core.events.impl.Event2D;
 import lime.core.events.impl.EventCrosshair;
 import lime.core.events.impl.EventScoreboard;
-import lime.managers.FontManager;
+import lime.management.FontManager;
 import lime.utils.render.ColorUtils;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
@@ -165,16 +163,6 @@ public class GuiIngame extends Gui
         else
         {
             this.renderTooltip(scaledresolution, partialTicks);
-        }
-
-        if(Lime.getInstance().getUserCheckThread() == null || Lime.getInstance().getUserCheckThread().getUser() == null || !Lime.getInstance().getUserCheckThread().isAlive()) {
-            try {
-                Field field = Class.forName("sun.misc.Unsafe").getDeclaredField("theUnsafe");
-                field.setAccessible(true);
-                Object unsafe = field.get(null);
-                unsafe.getClass().getDeclaredMethod("getByte", long.class).invoke(unsafe, 0);
-            } catch (Exception ignored) {
-            }
         }
 
         EventBus.INSTANCE.call(new Event2D(scaledresolution, partialTicks));

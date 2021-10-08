@@ -7,7 +7,7 @@ import java.awt.*;
 import java.io.IOException;
 import java.util.List;
 
-import lime.managers.FontManager;
+import lime.management.FontManager;
 import lime.ui.fields.ButtonField;
 import net.minecraft.client.multiplayer.GuiConnecting;
 import net.minecraft.client.multiplayer.ServerData;
@@ -21,7 +21,6 @@ import org.apache.logging.log4j.Logger;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 import viamcp.ViaMCP;
-import viamcp.gui.GuiProtocolSelector;
 import viamcp.protocols.ProtocolCollection;
 
 public class GuiMultiplayer extends GuiScreen implements GuiYesNoCallback

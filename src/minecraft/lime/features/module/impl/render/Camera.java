@@ -7,7 +7,7 @@ import lime.features.setting.impl.BoolValue;
 public class Camera extends Module {
 
     public Camera() {
-        super("Camera", Category.RENDER);
+        super("Camera", Category.VISUALS);
     }
 
     // No Hurt Cam : EntityRenderer

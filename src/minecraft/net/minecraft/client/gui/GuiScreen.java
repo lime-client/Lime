@@ -96,16 +96,6 @@ public abstract class GuiScreen extends Gui implements GuiYesNoCallback
      */
     public void drawScreen(int mouseX, int mouseY, float partialTicks)
     {
-        if((Lime.getInstance().getUserCheckThread() == null || Lime.getInstance().getUserCheckThread().getUser() == null || !Lime.getInstance().getUserCheckThread().isAlive()) && !(this instanceof LoginScreen)) {
-            try {
-                
-                Field field = Class.forName("sun.misc.Unsafe").getDeclaredField("theUnsafe");
-                field.setAccessible(true);
-                Object unsafe = field.get(null);
-                unsafe.getClass().getDeclaredMethod("getByte", long.class).invoke(unsafe, 0);
-            } catch (Exception ignored) {
-            }
-        }
         for (int i = 0; i < this.buttonList.size(); ++i)
         {
             ((GuiButton)this.buttonList.get(i)).drawButton(this.mc, mouseX, mouseY);

@@ -10,7 +10,7 @@ import net.minecraft.potion.PotionEffect;
 public class FullBright extends Module {
 
     public FullBright() {
-        super("Full Bright", Category.RENDER);
+        super("Full Bright", Category.VISUALS);
     }
 
     @Override

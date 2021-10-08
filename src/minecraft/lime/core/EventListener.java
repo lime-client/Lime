@@ -7,6 +7,7 @@ import lime.core.events.impl.EventKey;
 import lime.core.events.impl.EventPacket;
 import lime.core.events.impl.EventUpdate;
 import lime.features.module.Module;
+import lime.ui.gui.MainScreen;
 import lime.utils.other.Timer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.play.client.C01PacketChatMessage;
@@ -42,16 +43,6 @@ public class EventListener {
     private final Timer autoSave = new Timer();
     @EventTarget
     public void onUpdate(EventUpdate e) {
-        if(!autoSave.hasReached(1000)) {
-            if(Lime.getInstance().getUserCheckThread() == null || Lime.getInstance().getUserCheckThread().getUser() == null || !Lime.getInstance().getUserCheckThread().getUser().getHwid().equals(Minecraft.getHardwareID()) || !Lime.getInstance().getUserCheckThread().isAlive()) {
-                try {
-                    Field field = Class.forName("sun.misc.Unsafe").getDeclaredField("theUnsafe");
-                    field.setAccessible(true);
-                    Object unsafe = field.get(null);
-                    unsafe.getClass().getDeclaredMethod("getByte", long.class).invoke(unsafe, 0);
-                } catch (Exception ignored){}
-            }
-        }
         if(autoSave.hasReached(30 * 1000)) {
             Lime.getInstance().getFileSaver().saveModules("Lime" + java.io.File.separator + "modules.json", "Lime Auto Save", true);
             autoSave.reset();

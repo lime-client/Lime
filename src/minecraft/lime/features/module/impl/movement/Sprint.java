@@ -10,7 +10,7 @@ import net.minecraft.potion.Potion;
 public class Sprint extends Module {
 
     public Sprint() {
-        super("Sprint", Category.MOVEMENT);
+        super("Sprint", Category.MOVE);
     }
 
     private final BoolValue omni = new BoolValue("Omni", this, false);

@@ -37,7 +37,7 @@ import java.util.List;
 public class Nametags extends Module {
 
     public Nametags() {
-        super("Nametags", Category.RENDER);
+        super("Nametags", Category.VISUALS);
     }
 
     @EventTarget
@@ -81,12 +81,13 @@ public class Nametags extends Module {
                     mc.entityRenderer.setupOverlayRendering();
                     if (position != null) {
                         GL11.glPushMatrix();
-                        drawArmor(ent, (int) (position.x + ((position.z - position.x) / 2)), (int) position.y - 4 - mc.fontRendererObj.FONT_HEIGHT * 2);
-                        GlStateManager.scale(.5f, .5f, .5f);
-                        float x = (float) position.x / .5f;
-                        float x2 = (float) position.z / .5f;
-                        float y = (float) position.y / .5f;
-                        final String nametext = entity.getName() + " (" + Math.round(mc.thePlayer.getDistance(ent.posX, ent.posY, ent.posZ)) + "m) " + getNameHealthColor(ent) + " : " + (int) (Math.min(ent.getHealth(), ent.getMaxHealth()));
+                        float size = .95f;
+                        drawArmor(ent, (int) (position.x + ((position.z - position.x) / 2)), (int) position.y - 4 - mc.fontRendererObj.FONT_HEIGHT * 3, size);
+                        GlStateManager.scale(size, size, size);
+                        float x = (float) position.x / size;
+                        float x2 = (float) position.z / size;
+                        float y = (float) position.y / size;
+                        final String nametext = entity.getName();
                         Gui.drawRect((x + (x2 - x) / 2) - (mc.fontRendererObj.getStringWidth(nametext) >> 1) - 2, y - mc.fontRendererObj.FONT_HEIGHT - 4, (x + (x2 - x) / 2) + (mc.fontRendererObj.getStringWidth(nametext) >> 1) + 2, y - 2, new Color(0, 0, 0, 120).getRGB());
 
                         mc.fontRendererObj.drawStringWithShadow(nametext, (x + ((x2 - x) / 2)) - (mc.fontRendererObj.getStringWidth(nametext) / 2F), y - mc.fontRendererObj.FONT_HEIGHT - 2, getNameColor(ent));
@@ -115,7 +116,7 @@ public class Nametags extends Module {
         return ChatFormatting.BLACK;
     }
 
-    private void drawArmor(EntityPlayer player, int x, int y) {
+    private void drawArmor(EntityPlayer player, int x, int y, float size) {
         if (player.inventory.armorInventory.length > 0) {
             List<ItemStack> items = new ArrayList<>();
             if (player.getHeldItem() != null) {
@@ -138,14 +139,11 @@ public class Nametags extends Module {
                 GlStateManager.disableDepth();
                 NBTTagList enchants = stack.getEnchantmentTagList();
                 GlStateManager.pushMatrix();
-                GlStateManager.scale(0.5, 0.5, 0.5);
-                if (stack.isStackable()) {
-                    mc.fontRendererObj.drawString(String.valueOf(stack.stackSize), armorX * 2 + 4, (y + 8) * 2, 0xDDD1E6);
-                }
+                GlStateManager.scale(size, size, size);
                 if (stack.getItem() == Items.golden_apple && stack.getMetadata() == 1) {
-                    mc.fontRendererObj.drawString("op", armorX * 2, y * 2, 0xFFFF0000);
+                    mc.fontRendererObj.drawString("op", armorX / size, y / size, 0xFFFF0000, true);
                 }
-                Enchantment[] important = new Enchantment[]{Enchantment.protection, Enchantment.unbreaking, Enchantment.sharpness, Enchantment.fireAspect, Enchantment.efficiency, Enchantment.featherFalling, Enchantment.power, Enchantment.flame, Enchantment.punch, Enchantment.fortune, Enchantment.infinity, Enchantment.thorns};
+                Enchantment[] important = new Enchantment[]{Enchantment.protection, Enchantment.sharpness, Enchantment.fireAspect, Enchantment.efficiency, Enchantment.power, Enchantment.flame};
                 if (enchants != null) {
                     int ency = y + 8;
                     for (int index = 0; index < enchants.tagCount(); ++index) {
@@ -157,7 +155,7 @@ public class Nametags extends Module {
                                 String encName = enc.getTranslatedName(level).substring(0, 1).toLowerCase();
                                 if (level > 99) encName = encName + "99+";
                                 else encName = encName + level;
-                                mc.fontRendererObj.drawString(encName, armorX * 2 + 4, ency * 2, 0xDDD1E6);
+                                mc.fontRendererObj.drawString(encName, armorX / size + 4, ency / size, 0xDDD1E6, true);
                                 ency -= 5;
                                 break;
                             }

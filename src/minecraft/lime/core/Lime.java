@@ -3,9 +3,9 @@ package lime.core;
 import lime.features.module.Module;
 import lime.features.setting.SettingsManager;
 import lime.features.setting.impl.BoolValue;
-import lime.managers.CommandManager;
-import lime.managers.FriendManager;
-import lime.managers.ModuleManager;
+import lime.management.CommandManager;
+import lime.management.FriendManager;
+import lime.management.ModuleManager;
 import lime.scripting.ScriptManager;
 import lime.ui.clickgui.frame.ClickGUI;
 import lime.ui.gui.MainScreen;
@@ -13,7 +13,7 @@ import lime.ui.notifications.NotificationManager;
 import lime.ui.realaltmanager.AltManager;
 import lime.utils.other.file.FileSaver;
 import lime.utils.other.security.CipherEncryption;
-import lime.utils.other.security.UserCheckThread;
+import lime.utils.other.security.User;
 import net.minecraft.client.Minecraft;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -34,8 +34,7 @@ public class Lime {
     private ClickGUI clickGUI;
     private lime.ui.clickgui.frame2.ClickGUI clickGUI2;
     private AltManager altManager;
-
-    private UserCheckThread userCheckThread;
+    private User user;
 
     private FileSaver fileSaver;
 
@@ -44,7 +43,7 @@ public class Lime {
     public boolean theAltening;
 
     public void initClient() {
-        if(this.userCheckThread == null || !CipherEncryption.passCheck) {
+        if(!CipherEncryption.passCheck) {
             System.out.println("e");
             return;
         }
@@ -96,6 +95,14 @@ public class Lime {
         logger.info("[LIME] Client initialised.");
     }
 
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
     public CommandManager getCommandManager() {
         return commandManager;
     }
@@ -138,14 +145,6 @@ public class Lime {
 
     public FileSaver getFileSaver() {
         return fileSaver;
-    }
-
-    public UserCheckThread getUserCheckThread() {
-        return userCheckThread;
-    }
-
-    public void setUserCheckThread(UserCheckThread userCheckThread) {
-        this.userCheckThread = userCheckThread;
     }
 
     public Proxy getProxy() {

@@ -18,7 +18,7 @@ import java.util.List;
 public class Step extends Module {
 
     public Step() {
-        super("Step", Category.MOVEMENT);
+        super("Step", Category.MOVE);
     }
 
     private boolean resetTimer;

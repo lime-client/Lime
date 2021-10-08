@@ -8,6 +8,7 @@ import lime.core.events.impl.EventUpdate;
 import lime.features.module.Category;
 import lime.features.module.Module;
 import lime.features.module.impl.render.HUD;
+import lime.features.setting.impl.BoolValue;
 import lime.features.setting.impl.SlideValue;
 import lime.ui.targethud.impl.AstolfoTargetHUD;
 import lime.ui.targethud.impl.LimeTargetHUD;
@@ -34,9 +35,9 @@ public class TeleportAura extends Module {
     private final SlideValue cps = new SlideValue("CPS", this, 1, 20, 5, 1);
     private final SlideValue _targets = new SlideValue("Targets", this, 1, 10, 1, 1);
     private final SlideValue range = new SlideValue("Range", this, 5, 100, 50, 5);
+    private final BoolValue noSwing = new BoolValue("No Swing", this, false);
 
     private final Timer cpsTimer = new Timer();
-    private ArrayList<CustomVec> lastPath = new ArrayList<>();
     private ArrayList<CustomVec>[] paths = new ArrayList[50];
     private ArrayList<Entity> targets = new ArrayList<>();
 
@@ -135,7 +136,9 @@ public class TeleportAura extends Module {
                         }
 
                         mc.playerController.attackEntity(mc.thePlayer, entity);
-                        mc.thePlayer.swingItem();
+                        if(!noSwing.isEnabled()) {
+                            mc.thePlayer.swingItem();
+                        }
 
                         ArrayList<CustomVec> pathReversed = new ArrayList<>(path);
                         Collections.reverse(pathReversed);

@@ -5,8 +5,6 @@ public class Alt {
     private String name;
     private boolean selected;
 
-    private long lastTimeTried, lastTimeConnected;
-
     public Alt(String mail, String password, String name) {
         this.mail = mail;
         this.password = password;

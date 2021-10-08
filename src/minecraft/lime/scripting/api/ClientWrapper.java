@@ -1,7 +1,7 @@
 package lime.scripting.api;
 
 import jdk.nashorn.api.scripting.AbstractJSObject;
-import lime.managers.FontManager;
+import lime.management.FontManager;
 import lime.utils.other.ChatUtils;
 
 import java.util.Arrays;
