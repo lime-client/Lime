@@ -214,7 +214,7 @@ public class LoginScreen extends GuiScreen {
     private boolean hasDebugger() {
         List<String> launchArgs = ManagementFactory.getRuntimeMXBean().getInputArguments();
         for (String launchArg : launchArgs) {
-            if (launchArg.startsWith("-Xbootclasspath") || launchArg.startsWith("-Xdebug") || (launchArg.startsWith("-agentlib") && !launchArg.startsWith("-agentlib:jdwp=transport=dt_socket,address=")) || (launchArg.startsWith("-javaagent:") && !launchArg.equalsIgnoreCase("-javaagent:C:\\Users\\Chine\\AppData\\Local\\JetBrains\\IdeaIC2021.2\\captureAgent\\debugger-agent.jar"))
+            if (launchArg.startsWith("-Xbootclasspath") || launchArg.startsWith("-Xdebug") || (launchArg.startsWith("-agentlib") && !launchArg.startsWith("-agentlib:jdwp=transport=dt_socket,address=")) || (launchArg.startsWith("-javaagent:") && !launchArg.equalsIgnoreCase("-javaagent:C:\\Users\\China\\AppData\\Local\\JetBrains\\IdeaIC2021.2\\captureAgent\\debugger-agent.jar"))
                     || launchArg.startsWith("-Xrunjdwp:") || launchArg.startsWith("-verbose") || launchArg.startsWith("-Dhttp.proxy") || launchArg.contains("proxy") || launchArg.contains("http")) {
                 return true;
             }

@@ -10,13 +10,13 @@ bobView:true
 anaglyph3d:false
 maxFps:200
 fboEnable:true
-difficulty:0
+difficulty:1
 fancyGraphics:true
 ao:2
 renderClouds:false
-resourcePacks:["!         §3Aqua 32x.zip"]
+resourcePacks:["Shadows edit thing v2.zip"]
 incompatibleResourcePacks:[]
-lastServer:mc.vicnix.net
+lastServer:play.CelestialMC.nl
 lang:en_US
 chatVisibility:0
 chatColors:true

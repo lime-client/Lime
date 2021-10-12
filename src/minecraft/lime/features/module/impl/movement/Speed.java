@@ -183,30 +183,28 @@ public class Speed extends Module {
             mc.timer.timerSpeed = 1.0866f;
             if(mc.thePlayer.isMoving()) {
                 if(mc.thePlayer.onGround) {
-                    stage = 1;
+                    stage = 0;
                 }
                 switch(stage) {
                     case 0:
-                        MovementUtils.setSpeed(e, moveSpeed = 1.35 * MovementUtils.getBaseMoveSpeed() - 0.01);
-                        break;
-                    case 1:
                         if(mc.thePlayer.onGround) {
                             e.setY(0.399399995803833);
                             if(!mode.is("funcraft_yport")) {
                                 mc.thePlayer.motionY = 0.399399995803833;
                             }
                             moveSpeed *= 2.149;
+                            stage++;
                         }
                         break;
-                    case 2:
+                    case 1:
                         double difference = (mode.is("ncp") ? .84  : 0.66) * (this.lastDist - MovementUtils.getBaseMoveSpeed());
                         this.moveSpeed = this.lastDist - difference;
+                        ++stage;
                         break;
                     default:
                         this.moveSpeed = this.lastDist - this.lastDist / 159;
                         break;
                 }
-                ++stage;
                 MovementUtils.setSpeed(e, Math.max(moveSpeed, MovementUtils.getBaseMoveSpeed()));
             } else {
                 lastDist = 0;

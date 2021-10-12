@@ -10,7 +10,6 @@ import lime.features.module.Category;
 import lime.features.module.Module;
 import lime.features.module.impl.combat.KillAura;
 import lime.features.module.impl.render.HUD;
-import lime.features.module.impl.world.Scaffold;
 import lime.features.setting.impl.BoolValue;
 import lime.features.setting.impl.SlideValue;
 import lime.utils.combat.CombatUtils;
@@ -241,6 +240,7 @@ public class TargetStrafe extends Module {
     }
 
     public boolean inVoid() {
+        if(Lime.getInstance().getModuleManager().getModuleC(Flight.class).isToggled()) return false;
         for (int i = (int) Math.ceil(mc.thePlayer.posY); i >= 0; --i) {
             if (mc.theWorld.getBlockState(new BlockPos(mc.thePlayer.posX, i, mc.thePlayer.posZ)).getBlock() != Blocks.air) {
                 return false;
@@ -255,6 +255,8 @@ public class TargetStrafe extends Module {
             if (inVoid() && voidTicks >= 5) {
                 voidTicks = 0;
                 direction = -direction;
+            } else if(!inVoid()) {
+                voidTicks = 0;
             }
         }
         boolean shouldStrafe = this.isToggled()&& TargetStrafe.indexPos != null && canMove() && !(!mc.gameSettings.keyBindJump.isKeyDown() && spaceOnly.isEnabled());
@@ -284,7 +286,7 @@ public class TargetStrafe extends Module {
     }
 
     public static boolean canMove() {
-        TargetStrafe targetStrafe = (TargetStrafe) Lime.getInstance().getModuleManager().getModuleC(TargetStrafe.class);
+        TargetStrafe targetStrafe = Lime.getInstance().getModuleManager().getModuleC(TargetStrafe.class);
         return KillAura.getEntity() != null && (!targetStrafe.playersOnly.isEnabled() || KillAura.getEntity() instanceof EntityPlayer) && ((Lime.getInstance().getModuleManager().getModuleC(Speed.class).isToggled() || Lime.getInstance().getModuleManager().getModuleC(Flight.class).isToggled()) || !targetStrafe.speedOnly.isEnabled()) && (!targetStrafe.spaceOnly.isEnabled() || Keyboard.isKeyDown(Keyboard.KEY_SPACE)) && Minecraft.getMinecraft().thePlayer.canEntityBeSeen(KillAura.getEntity());
     }
 

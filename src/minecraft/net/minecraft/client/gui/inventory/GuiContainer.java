@@ -19,14 +19,12 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
-import net.minecraft.inventory.ContainerChest;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.input.Keyboard;
-import org.lwjgl.opengl.Display;
 
 public abstract class GuiContainer extends GuiScreen
 {
@@ -101,24 +99,6 @@ public abstract class GuiContainer extends GuiScreen
         this.mc.thePlayer.openContainer = this.inventorySlots;
         this.guiLeft = (this.width - this.xSize) / 2;
         this.guiTop = (this.height - this.ySize) / 2;
-        if(Lime.getInstance().getModuleManager().getModuleC(ChestStealer.class).isToggled()) {
-            ChestStealer chestStealer = (ChestStealer) Lime.getInstance().getModuleManager().getModuleC(ChestStealer.class);
-            if(chestStealer.silent.isEnabled() && this instanceof GuiChest && ChestStealer.isValidChest((ContainerChest) mc.thePlayer.openContainer)) {
-                if (Display.isActive())
-                {
-                    if (!mc.inGameHasFocus)
-                    {
-                        mc.inGameHasFocus = true;
-                        mc.mouseHelper.grabMouseCursor();
-                        mc.leftClickCounter = 10000;
-                    }
-                }
-                if(!chestStealer.showChest.isEnabled()) {
-                    mc.displayGuiScreen(null);
-                    return;
-                }
-            }
-        }
 
         this.buttonList.add(new GuiButton(3, 3, 3, 150, 20, "Disable Inventory Manager"));
         this.buttonList.add(new GuiButton(4, 3, 3 + 22, 150, 20, "Disable Chest Stealer"));

@@ -23,6 +23,7 @@ import lime.utils.render.ColorUtils;
 import lime.utils.render.RenderUtils;
 import lime.utils.time.DeltaTime;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.monster.EntityMob;
@@ -166,7 +167,7 @@ public class KillAura extends Module {
     }
 
     public void renderJello(EntityLivingBase e) {
-        time += .01 * (DeltaTime.getDeltaTime() * 0.25);
+        time += .015 * (DeltaTime.getDeltaTime() * .1);
         final double height = 0.5 * (1 + Math.sin(2 * Math.PI * (time * .3)));
 
         if (height > .995) {
@@ -175,9 +176,9 @@ public class KillAura extends Module {
             down = false;
         }
 
-        final double x = e.lastTickPosX + (e.posX - e.lastTickPosX) * mc.timer.renderPartialTicks - mc.getRenderManager().renderPosX;
-        final double y = e.lastTickPosY + (e.posY - e.lastTickPosY) * mc.timer.renderPartialTicks - mc.getRenderManager().renderPosY;
-        final double z = e.lastTickPosZ + (e.posZ - e.lastTickPosZ) * mc.timer.renderPartialTicks - mc.getRenderManager().renderPosZ;
+        final double x = e.posX + (e.posX - e.lastTickPosX) * mc.timer.renderPartialTicks - mc.getRenderManager().renderPosX;
+        final double y = e.posY + (e.posY - e.lastTickPosY) * mc.timer.renderPartialTicks - mc.getRenderManager().renderPosY;
+        final double z = e.posZ + (e.posZ - e.lastTickPosZ) * mc.timer.renderPartialTicks - mc.getRenderManager().renderPosZ;
 
         GlStateManager.enableBlend();
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
@@ -188,27 +189,22 @@ public class KillAura extends Module {
         GL11.glLineWidth(1.5F);
         GL11.glShadeModel(GL11.GL_SMOOTH);
         GL11.glDisable(GL11.GL_CULL_FACE);
-        final double size = e.width * 0.85;
-        final double yOffset =  2 * (height);
-
-        Color clientColor = HUD.getColor(0);
-
+        final double size = e.width;
+        final double yOffset = (e.height + .2) * height;
         GL11.glBegin(GL11.GL_TRIANGLE_STRIP);
         {
             for (int j = 0; j < 361; j++) {
-                RenderUtils.glColor(ColorUtils.setAlpha(clientColor, (int) (!down ? 255 * height : 255 * (1 - height))));
-                final double x1 = x + Math.cos(Math.toRadians(j)) * size;
-                final double z1 = z - Math.sin(Math.toRadians(j)) * size;
-                GL11.glVertex3d(x1, y + yOffset, z1);
-                RenderUtils.glColor(ColorUtils.setAlpha(clientColor, 0));
-                GL11.glVertex3d(x1, y + yOffset + ((!down ? -1 * (1 - height) : .5 * height)), z1);
+                RenderUtils.glColor(ColorUtils.setAlpha(HUD.getColor(0), (int) (!down ? 255 * height : 255 * (1 - height))));
+                GL11.glVertex3d(x + Math.cos(Math.toRadians(j)) * size, y + yOffset, z - Math.sin(Math.toRadians(j)) * size);
+                RenderUtils.glColor(ColorUtils.setAlpha(HUD.getColor(0), 0));
+                GL11.glVertex3d(x + Math.cos(Math.toRadians(j)) * size, y + yOffset + ((!down ? -.5 * (1 - height) : .5 * height)), z - Math.sin(Math.toRadians(j)) * size);
             }
         }
         GL11.glEnd();
         GL11.glBegin(GL11.GL_LINE_LOOP);
         {
             for (int j = 0; j < 361; j++) {
-                RenderUtils.glColor(clientColor);
+                RenderUtils.glColor(HUD.getColor(0));
                 GL11.glVertex3d(x + Math.cos(Math.toRadians(j)) * size, y + yOffset, z - Math.sin(Math.toRadians(j)) * size);
             }
         }

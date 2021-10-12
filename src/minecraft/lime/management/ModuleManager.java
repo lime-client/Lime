@@ -50,6 +50,7 @@ public class ModuleManager {
         registerModule(new Step());
 
         // PLAYER
+        registerModule(new InventoryManager2());
         registerModule(new InventoryManager());
         registerModule(new LagbackChecker());
         registerModule(new InventoryMove());

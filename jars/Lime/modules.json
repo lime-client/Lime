@@ -2,7 +2,7 @@
   "informations": [
     {
       "author": "Lime Auto Save",
-      "time": 1633683483
+      "time": 1633981978
     }
   ],
   "modules": [
@@ -43,7 +43,7 @@
     {
       "moduleName": "Criticals",
       "key": -1,
-      "toggled": false,
+      "toggled": true,
       "settings": [
         {
           "name": "Mode",
@@ -75,7 +75,7 @@
         {
           "name": "Mode",
           "type": "enum",
-          "value": "single"
+          "value": "multi"
         },
         {
           "name": "Priority",
@@ -120,12 +120,12 @@
         {
           "name": "Range",
           "type": "slider",
-          "value": 4.1000000000000005
+          "value": 5.5
         },
         {
           "name": "CPS",
           "type": "slider",
-          "value": 6.0
+          "value": 10.0
         },
         {
           "name": "Randomize CPS",
@@ -219,7 +219,7 @@
         {
           "name": "Mode",
           "type": "enum",
-          "value": "mineplex"
+          "value": "funcraft"
         },
         {
           "name": "Remove",
@@ -241,7 +241,7 @@
         {
           "name": "Health",
           "type": "slider",
-          "value": 10.0
+          "value": 4.0
         },
         {
           "name": "Delay",
@@ -278,7 +278,7 @@
         {
           "name": "CPS",
           "type": "slider",
-          "value": 2.0
+          "value": 5.0
         },
         {
           "name": "Targets",
@@ -380,7 +380,7 @@
         {
           "name": "Blink Delay",
           "type": "slider",
-          "value": 150.0
+          "value": 500.0
         },
         {
           "name": "Show",
@@ -409,7 +409,7 @@
     {
       "moduleName": "Target Strafe",
       "key": 45,
-      "toggled": false,
+      "toggled": true,
       "settings": [
         {
           "name": "Distance",
@@ -424,7 +424,7 @@
         {
           "name": "Speed Only",
           "type": "bool",
-          "value": false
+          "value": true
         },
         {
           "name": "Players Only",
@@ -552,22 +552,22 @@
         {
           "name": "Mode",
           "type": "enum",
-          "value": "vanilla"
+          "value": "funcraft2"
         },
         {
           "name": "Speed",
           "type": "slider",
-          "value": 2.0
+          "value": 9.0
         },
         {
           "name": "Funcraft Speed",
           "type": "slider",
-          "value": 0.75
+          "value": 1.6
         },
         {
           "name": "Funcraft Timer Speed",
           "type": "slider",
-          "value": 1.85
+          "value": 3.8000000000000003
         },
         {
           "name": "Bobbing",
@@ -606,12 +606,12 @@
     {
       "moduleName": "Speed",
       "key": 47,
-      "toggled": false,
+      "toggled": true,
       "settings": [
         {
           "name": "Mode",
           "type": "enum",
-          "value": "ncp"
+          "value": "funcraft"
         },
         {
           "name": "Speed",
@@ -680,6 +680,58 @@
       ]
     },
     {
+      "moduleName": "Inventory Manager 2",
+      "key": -1,
+      "toggled": true,
+      "settings": [
+        {
+          "name": "Delay",
+          "type": "slider",
+          "value": 485.0
+        },
+        {
+          "name": "Sword Slot",
+          "type": "slider",
+          "value": 1.0
+        },
+        {
+          "name": "Pickaxe Slot",
+          "type": "slider",
+          "value": 2.0
+        },
+        {
+          "name": "Axe Slot",
+          "type": "slider",
+          "value": 3.0
+        },
+        {
+          "name": "Filter Inventory",
+          "type": "bool",
+          "value": true
+        },
+        {
+          "name": "Open Inventory",
+          "type": "bool",
+          "value": false
+        },
+        {
+          "name": "Auto Armor",
+          "type": "bool",
+          "value": true
+        },
+        {
+          "name": "Drop Junk",
+          "type": "bool",
+          "value": true
+        },
+        {
+          "name": "Show",
+          "type": "bool",
+          "value": true
+        }
+      ]
+    },
+    {
       "moduleName": "Inventory Manager",
       "key": 48,
       "toggled": false,
@@ -692,7 +744,7 @@
         {
           "name": "Delay",
           "type": "slider",
-          "value": 60.0
+          "value": 25.0
         },
         {
           "name": "Drop Junk",
@@ -755,7 +807,7 @@
         {
           "name": "Delay",
           "type": "slider",
-          "value": 115.0
+          "value": 90.0
         },
         {
           "name": "Ignore Junk",
@@ -780,7 +832,7 @@
         {
           "name": "Aura",
           "type": "bool",
-          "value": false
+          "value": true
         },
         {
           "name": "Show",
@@ -884,7 +936,7 @@
         {
           "name": "Prefix",
           "type": "text",
-          "value": ""
+          "value": "@"
         },
         {
           "name": "Show",
@@ -896,7 +948,7 @@
     {
       "moduleName": "Anti Void",
       "key": -1,
-      "toggled": true,
+      "toggled": false,
       "settings": [
         {
           "name": "Mode",
@@ -969,7 +1021,7 @@
     {
       "moduleName": "No Fall",
       "key": -1,
-      "toggled": true,
+      "toggled": false,
       "settings": [
         {
           "name": "Mode",
@@ -1298,7 +1350,7 @@
         {
           "name": "Only Targets",
           "type": "bool",
-          "value": true
+          "value": false
         },
         {
           "name": "Disable Lightning",
@@ -1422,7 +1474,7 @@
         {
           "name": "Custom Font",
           "type": "bool",
-          "value": false
+          "value": true
         },
         {
           "name": "Suffix",
@@ -1491,7 +1543,7 @@
         {
           "name": "Rotations",
           "type": "enum",
-          "value": "legit"
+          "value": "hypixel"
         },
         {
           "name": "Item Spoof",
@@ -1516,7 +1568,7 @@
         {
           "name": "Delay",
           "type": "slider",
-          "value": 0.0
+          "value": 25.0
         },
         {
           "name": "Keep Rotations",
@@ -1536,12 +1588,12 @@
         {
           "name": "No Sprint",
           "type": "bool",
-          "value": true
+          "value": false
         },
         {
           "name": "Spoof Sprint",
           "type": "bool",
-          "value": true
+          "value": false
         },
         {
           "name": "Same Y",
@@ -1576,7 +1628,7 @@
         {
           "name": "Slow Speed",
           "type": "bool",
-          "value": true
+          "value": false
         },
         {
           "name": "Block Info",
