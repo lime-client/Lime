@@ -1,11 +1,12 @@
 package lime.utils.render.font2;
 
-import java.awt.Font;
-import java.util.ArrayList;
-import java.util.List;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.texture.DynamicTexture;
 import org.lwjgl.opengl.GL11;
+
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class CFontRenderer extends CFont {
 	protected CharData[] boldChars = new CharData[256];
@@ -50,6 +51,9 @@ public class CFontRenderer extends CFont {
 	}
 
 	public float drawString(String text, double x, double y, int color, boolean shadow) {
+		GlStateManager.color(1, 1, 1, 1);
+		GL11.glColor4f(1, 1, 1, 1);
+		GlStateManager.resetColor();
 		x -= 1.0;
 		if (text == null) {
 			return 0.0f;

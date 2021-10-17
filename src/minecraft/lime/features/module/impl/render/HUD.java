@@ -8,12 +8,12 @@ import lime.core.events.impl.EventWorldChange;
 import lime.features.module.Category;
 import lime.features.module.Module;
 import lime.features.setting.impl.*;
-import lime.utils.render.font2.FontManager;
 import lime.utils.movement.MovementUtils;
 import lime.utils.other.InventoryUtils;
 import lime.utils.render.ColorUtils;
 import lime.utils.render.animation.easings.Animate;
 import lime.utils.render.animation.easings.Easing;
+import lime.utils.render.font2.FontManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiChat;
@@ -32,9 +32,9 @@ public class HUD extends Module {
     }
 
     private final TextValue clientName = new TextValue("Client Name", this, "Lime");
-    public final EnumValue targetHud = new EnumValue("Target HUD", this, "Lime", "None", "Lime", "Astolfo");
-    public final SlideValue targetHudX = new SlideValue("TargetHUD X", this, 0, 100, 50, 1).onlyIf(targetHud.getSettingName(), "enum", "lime", "astolfo");
-    public final SlideValue targetHudY = new SlideValue("TargetHUD Y", this, 0, 100, 50, 1).onlyIf(targetHud.getSettingName(), "enum", "lime", "astolfo");
+    public final EnumValue targetHud = new EnumValue("Target HUD", this, "Lime", "None", "Lime", "Lime2", "Astolfo");
+    public final SlideValue targetHudX = new SlideValue("TargetHUD X", this, 0, 100, 50, 1).onlyIf(targetHud.getSettingName(), "enum", "lime", "lime2", "astolfo");
+    public final SlideValue targetHudY = new SlideValue("TargetHUD Y", this, 0, 100, 50, 1).onlyIf(targetHud.getSettingName(), "enum", "lime", "lime2", "astolfo");
     private final EnumValue sidebar = new EnumValue("Sidebar", this, "Right", "Left", "Right", "None");
     private final EnumValue color = new EnumValue("Color", this, "Lime", "Lime", "Astolfo", "Rainbow", "Fade");
     private final ColorValue fadeColor = new ColorValue("Fade Color", this, new Color(200, 0, 0).getRGB()).onlyIf(color.getSettingName(), "enum", "fade");

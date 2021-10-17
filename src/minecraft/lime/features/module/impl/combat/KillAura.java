@@ -17,13 +17,12 @@ import lime.features.setting.impl.SlideValue;
 import lime.ui.notifications.Notification;
 import lime.ui.targethud.impl.AstolfoTargetHUD;
 import lime.ui.targethud.impl.LimeTargetHUD;
-import lime.ui.targethud.impl.TestTargetHUD;
+import lime.ui.targethud.impl.Lime2TargetHUD;
 import lime.utils.combat.CombatUtils;
 import lime.utils.render.ColorUtils;
 import lime.utils.render.RenderUtils;
 import lime.utils.time.DeltaTime;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.monster.EntityMob;
@@ -49,7 +48,7 @@ public class KillAura extends Module {
     private final EnumValue priority = new EnumValue("Priority", this, "Distance", "Distance", "Health", "FOV");
     public final EnumValue rotations = new EnumValue("Rotations", this, "Basic", "None", "Basic", "Smooth");
     private final EnumValue targetEsp = new EnumValue("Target ESP", this, "Circle", "None", "Circle");
-    public final EnumValue autoBlock = new EnumValue("Auto Block", this, "Fake", "None", "Basic", "Fake");
+    public final EnumValue autoBlock = new EnumValue("Auto Block", this, "Fake", "None", "Basic", "Verus", "Fake");
     public final EnumValue autoBlockState = new EnumValue("Auto Block State", this, "POST", "PRE", "POST");
     public final SlideValue rotationsSpeedMin = new SlideValue("Rotations Min", this, 5, 100, 50, 1).onlyIf(rotations.getSettingName(), "enum", "smooth");
     public final SlideValue rotationsSpeedMax = new SlideValue("Rotations Max", this, 5, 100, 90, 1).onlyIf(rotations.getSettingName(), "enum", "smooth");
@@ -65,7 +64,7 @@ public class KillAura extends Module {
     public final BoolValue rayCast = new BoolValue("Ray Cast", this, false);
     private final BoolValue throughWalls = new BoolValue("Through Walls", this, true);
     public final BoolValue keepSprint = new BoolValue("Keep Sprint", this, true);
-    public final BoolValue gcd = new BoolValue("GCD", this, false).onlyIf(rotations.getSettingName(), "enum", "smooth");
+    public final BoolValue gcd = new BoolValue("GCD", this, false);
     private final BoolValue deathCheck = new BoolValue("Death Check", this, true);
     public final BoolValue particles = new BoolValue("Particles", this, false);
 
@@ -77,7 +76,7 @@ public class KillAura extends Module {
     // TargetHUD
     public final LimeTargetHUD limeTargetHUD = new LimeTargetHUD();
     public final AstolfoTargetHUD astolfoTargetHUD = new AstolfoTargetHUD();
-    public final TestTargetHUD testTargetHUD = new TestTargetHUD(150, 36);
+    public Lime2TargetHUD lime2TargetHUD = new Lime2TargetHUD();
 
     private final Single single = new Single(this);
     private final Multi multi = new Multi(this);
@@ -86,7 +85,6 @@ public class KillAura extends Module {
     public void onEnable() {
         limeTargetHUD.resetHealthAnimated();
         astolfoTargetHUD.resetHealthAnimated();
-        testTargetHUD.reset();
 
         if(mode.is("single")) {
             single.onEnable();
@@ -98,6 +96,7 @@ public class KillAura extends Module {
 
     @Override
     public void onDisable() {
+        lime2TargetHUD.reset();
         if(mode.is("single")) {
             single.onDisable();
         }
@@ -242,7 +241,7 @@ public class KillAura extends Module {
     }
 
     public boolean isValid(Entity entity) {
-        AntiBot antiBot = (AntiBot) Lime.getInstance().getModuleManager().getModuleC(AntiBot.class);
+        AntiBot antiBot = Lime.getInstance().getModuleManager().getModuleC(AntiBot.class);
         if(entity instanceof EntityPlayer && antiBot.checkBot((EntityPlayer) entity)) return false;
         if(Lime.getInstance().getFriendManager().isFriend(entity)) return false;
         if(teams.isEnabled() && entity instanceof EntityLivingBase && mc.thePlayer.isOnSameTeam((EntityLivingBase) entity)) return false;

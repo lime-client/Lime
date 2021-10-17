@@ -15,7 +15,9 @@ import lime.utils.other.InventoryUtils;
 import lime.utils.other.MathUtils;
 import lime.utils.other.PlayerUtils;
 import net.minecraft.block.BlockAir;
-import net.minecraft.item.*;
+import net.minecraft.item.ItemBow;
+import net.minecraft.item.ItemFishingRod;
+import net.minecraft.item.ItemStack;
 import net.minecraft.network.play.client.C07PacketPlayerDigging;
 import net.minecraft.network.play.client.C08PacketPlayerBlockPlacement;
 import net.minecraft.network.play.client.C09PacketHeldItemChange;
@@ -43,9 +45,6 @@ public class LongJump extends Module {
     public void onEnable() {
         receivedS12 = back = boosted = bowd = false;
         moveSpeed = y = 0;
-        if(mode.is("mineplex")) {
-            moveSpeed = 0.25;
-        }
         stage = ticks = 0;
         if(mode.is("verus") && (!mc.thePlayer.onGround || new BlockPos(mc.thePlayer.posX, mc.thePlayer.posY - 1, mc.thePlayer.posZ).getBlock() instanceof BlockAir)) {
             Lime.getInstance().getNotificationManager().addNotification("Error", "Can damage only on the ground!", Notification.Type.FAIL);
@@ -172,44 +171,6 @@ public class LongJump extends Module {
                         MovementUtils.setSpeed(e, Math.max(moveSpeed -= moveSpeed / 18, MovementUtils.getBaseMoveSpeed()));
                         e.setY(e.getY() * 0.7);
                     }
-                }
-            }
-        }
-
-        if(mode.is("mineplex")) {
-            if(stage == 0 && mc.thePlayer.isMoving()) {
-                if(mc.thePlayer.onGround) {
-                    e.setY(mc.thePlayer.motionY = 0.42 + y);
-                    MovementUtils.setSpeed(e, -0.07);
-                    moveSpeed += 0.45;
-                    ticks = 0;
-                    y += 0.04;
-                    return;
-                }
-
-                moveSpeed -= moveSpeed / 80;
-                MovementUtils.setSpeed(e, back ? -moveSpeed : moveSpeed);
-                back = !back;
-
-                if(moveSpeed > 1.25) {
-                    stage = 1;
-                    moveSpeed = 1.45;
-                    back = false;
-                }
-            }
-            if(stage == 1) {
-                mc.timer.timerSpeed = 1;
-                if(mc.thePlayer.onGround) {
-                    MovementUtils.setSpeed(e, -0.07);
-                    e.setY(mc.thePlayer.motionY = 0.42 + y);
-                    back = true;
-                } else {
-                    if(moveSpeed > 0.8) {
-                        e.setY(mc.thePlayer.motionY += 0.028888888888888 + MathUtils.random(0.00005, 0.00105));
-                    }
-                    MovementUtils.setSpeed(e, moveSpeed -= moveSpeed / 49);
-                    if(back && mc.thePlayer.onGround)
-                        this.toggle();
                 }
             }
         }

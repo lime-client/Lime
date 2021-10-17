@@ -27,7 +27,7 @@ public class Tracers extends Module {
                 GL11.glPushMatrix();
 
                 GL11.glLoadIdentity();
-                mc.entityRenderer.orientCamera(mc.timer.renderPartialTicks); // Lignes pas stable sinon (à cause du view bobbing sûrement)
+                mc.entityRenderer.orientCamera(mc.timer.renderPartialTicks);
                 GlStateManager.disableTexture2D();
                 GL11.glEnable(GL11.GL_LINE_SMOOTH);
                 GlStateManager.disableDepth();

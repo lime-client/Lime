@@ -19,6 +19,7 @@ public class Spammer extends Module {
 
     private final TextValue text = new TextValue("Text", this, "Lime best clarinet");
     private final SlideValue delay = new SlideValue("Delay", this, 0.5, 5, 1.5, 0.5);
+    private final SlideValue randomCharsLength = new SlideValue("Random Chars Length", this, 1, 25, 10, 1);
     private final BoolValue randomChars = new BoolValue("Random Chars", this, true);
 
     private final Timer timer = new Timer();

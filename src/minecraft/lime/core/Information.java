@@ -2,7 +2,7 @@ package lime.core;
 
 public class Information {
     private final static String build = "Release";
-    private final static String version = "b2";
+    private final static String version = "b3";
     private final static String author = "Wykt";
 
     public static String getBuild() {

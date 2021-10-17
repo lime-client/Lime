@@ -6,7 +6,6 @@ import lime.features.module.Category;
 import lime.features.module.Module;
 import lime.features.setting.impl.BoolValue;
 import lime.features.setting.impl.SlideValue;
-import lime.utils.other.ChatUtils;
 import lime.utils.other.InventoryUtils;
 import lime.utils.other.Timer;
 import net.minecraft.client.gui.inventory.GuiInventory;

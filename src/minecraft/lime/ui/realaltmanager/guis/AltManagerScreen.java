@@ -2,9 +2,9 @@ package lime.ui.realaltmanager.guis;
 
 import lime.core.Lime;
 import lime.management.FontManager;
-import lime.ui.realaltmanager.AltLoginThread;
 import lime.ui.fields.ButtonField;
 import lime.ui.realaltmanager.Alt;
+import lime.ui.realaltmanager.AltLoginThread;
 import lime.ui.realaltmanager.AltManager;
 import lime.utils.render.RenderUtils;
 import net.minecraft.client.gui.Gui;

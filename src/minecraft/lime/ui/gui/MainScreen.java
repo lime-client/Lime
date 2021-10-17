@@ -102,10 +102,10 @@ public class MainScreen extends GuiScreen {
             mc.displayGuiScreen(new ProxyManagerScreen(this));
         }));
 
-        this.customButtonList.add(new ButtonField(FontManager.ProductSans20.getFont(), "Options", width / 2F - 75, height / 2F + 22 + 22, 150, 20, color, !anim, () -> {
+        this.customButtonList.add(new ButtonField(FontManager.ProductSans20.getFont(), "Options", width / 2F - 75, height / 2F + 44, 150, 20, color, !anim, () -> {
             mc.displayGuiScreen(new GuiOptions(this, mc.gameSettings));
         }));
-        this.customButtonList.add(new ButtonField(FontManager.ProductSans20.getFont(), "Exit", width / 2F - 75, height / 2F + 44 + 22, 150, 20, color, !anim, () -> {
+        this.customButtonList.add(new ButtonField(FontManager.ProductSans20.getFont(), "Exit", width / 2F - 75, height / 2F + 66, 150, 20, color, !anim, () -> {
             mc.shutdown();
         }));
         anim = true;

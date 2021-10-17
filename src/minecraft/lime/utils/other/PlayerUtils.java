@@ -42,7 +42,6 @@ public class PlayerUtils implements IUtil {
             }
         }
 
-
         // Saying that we reached the ground
         mc.getNetHandler().sendPacketNoEvent(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY, mc.thePlayer.posZ, true));
 

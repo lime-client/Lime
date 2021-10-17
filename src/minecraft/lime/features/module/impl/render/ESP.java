@@ -9,7 +9,6 @@ import lime.features.setting.impl.BoolValue;
 import lime.features.setting.impl.EnumValue;
 import lime.features.setting.impl.SlideValue;
 import lime.utils.render.ColorUtils;
-import lime.utils.render.GLUProjection;
 import lime.utils.render.RenderUtils;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
@@ -29,23 +28,17 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.StringUtils;
 import net.minecraft.util.Vec3;
-import net.minecraft.util.Vector3d;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.glu.GLU;
-import org.lwjgl.util.vector.Vector4f;
 
 import javax.vecmath.Vector4d;
 import java.awt.*;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class ESP extends Module {
 
@@ -63,7 +56,6 @@ public class ESP extends Module {
 
     public final EnumValue boxMode = new EnumValue("Box Mode", this, "Box", "Box", "Corners");
     public final BoolValue healthBar = new BoolValue("Health bar", this, true);
-    public final BoolValue armorBar = new BoolValue("Armor bar", this,true);
     public final BoolValue you = new BoolValue("You", this,true);
     public final BoolValue players = new BoolValue("Players", this,true);
     public final BoolValue invisibles = new BoolValue("Invisibles", this,false);
@@ -94,7 +86,6 @@ public class ESP extends Module {
         GL11.glScaled(scaling, scaling, scaling);
         RenderManager renderMng = mc.getRenderManager();
         boolean health = this.healthBar.isEnabled();
-        boolean armor = this.armorBar.isEnabled();
         int i = 0;
 
         for(int collectedEntitiesSize = collectedEntities.size(); i < collectedEntitiesSize; ++i) {
@@ -183,27 +174,6 @@ public class ESP extends Module {
                                 if (tagY > 0.0F) {
                                     Gui.drawRect(posX - 3.0D, endPosY, posX - 2.0D, endPosY - (endPosY - posY) / 6.0D * (double)tagY / 2.0D, (new Color(Potion.absorption.getLiquidColor())).getRGB());
                                 }
-                            }
-                        }
-                    }
-
-                    if (armor) {
-                        if (living) {
-                            entityLivingBase = (EntityLivingBase)entity;
-                            armorValue = (float)entityLivingBase.getTotalArmorValue();
-                            double armorWidth = (endPosX - posX) * (double)armorValue / 20.0D;
-                            Gui.drawRect(posX - 0.5D, endPosY + 1.5D, posX - 0.5D + endPosX - posX + 1.0D, endPosY + 1.5D + 2.0D, backgroundColor);
-                            if (armorValue > 0.0F) {
-                                Gui.drawRect(posX, endPosY + 2.0D, posX + armorWidth, endPosY + 3.0D, 16777215);
-                            }
-                        } else if (entity instanceof EntityItem) {
-                            ItemStack itemStack = ((EntityItem)entity).getEntityItem();
-                            if (itemStack.isItemStackDamageable()) {
-                                int maxDamage = itemStack.getMaxDamage();
-                                itemDurability = (float)(maxDamage - itemStack.getItemDamage());
-                                durabilityWidth = (endPosX - posX) * (double)itemDurability / (double)maxDamage;
-                                Gui.drawRect(posX - 0.5D, endPosY + 1.5D, posX - 0.5D + endPosX - posX + 1.0D, endPosY + 1.5D + 2.0D, backgroundColor);
-                                Gui.drawRect(posX, endPosY + 2.0D, posX + durabilityWidth, endPosY + 3.0D, 16777215);
                             }
                         }
                     }

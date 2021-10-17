@@ -14,7 +14,6 @@ import lime.utils.other.Timer;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.item.ItemSword;
 import net.minecraft.network.play.client.C02PacketUseEntity;
 import net.minecraft.network.play.client.C07PacketPlayerDigging;
 import net.minecraft.network.play.client.C08PacketPlayerBlockPlacement;
@@ -85,6 +84,20 @@ public class Single extends KillAuraMode {
                 mc.gameSettings.keyBindSprint.pressed = false;
             }
 
+            if(killAura.autoBlockState.is(e.getState().name()) && killAura.hasSword() && killAura.autoBlock.is("basic") && !KillAura.isBlocking) {
+                mc.getNetHandler().addToSendQueue(new C08PacketPlayerBlockPlacement(new BlockPos(0, 0, 0), 255, mc.thePlayer.getHeldItem(), 0, 0, 0));
+                mc.thePlayer.setItemInUse(mc.thePlayer.getHeldItem(), 32767);
+                KillAura.isBlocking = true;
+            }
+
+            if(killAura.hasSword() && KillAura.isBlocking) {
+                mc.thePlayer.setItemInUse(mc.thePlayer.getHeldItem(), 32767);
+            }
+
+            if(!killAura.hasSword()) {
+                KillAura.isBlocking = false;
+            }
+
             // Rotations
             if(!killAura.rotations.is("none")) {
                 float[] rotations = null;
@@ -92,6 +105,13 @@ public class Single extends KillAuraMode {
                 switch(killAura.rotations.getSelected().toLowerCase()) {
                     case "basic":
                         rotations = CombatUtils.getEntityRotations(entity, true);
+                        if(killAura.gcd.isEnabled()) {
+                            float[] fixedGcd = CombatUtils.fixedSensitivity(rotations[0], rotations[1], currentYaw, currentPitch);
+                            rotations[0] = fixedGcd[0];
+                            rotations[1] = fixedGcd[1];
+                            currentYaw = rotations[0];
+                            currentPitch = rotations[1];
+                        }
                         break;
                     case "smooth":
                         rotations = CombatUtils.getEntityRotations(entity, false);
@@ -127,19 +147,6 @@ public class Single extends KillAuraMode {
 
             this.entity = entity;
 
-            if(killAura.autoBlockState.is(e.getState().name()) && killAura.hasSword() && killAura.autoBlock.is("basic") && !KillAura.isBlocking) {
-                mc.getNetHandler().addToSendQueue(new C08PacketPlayerBlockPlacement(mc.thePlayer.getHeldItem()));
-                mc.thePlayer.setItemInUse(mc.thePlayer.getHeldItem(), 32767);
-                KillAura.isBlocking = true;
-            }
-
-            if(killAura.hasSword() && KillAura.isBlocking) {
-                mc.thePlayer.setItemInUse(mc.thePlayer.getHeldItem(), 32767);
-            }
-
-            if(!killAura.hasSword()) {
-                KillAura.isBlocking = false;
-            }
             int cps = Math.max(killAura.cps.intValue() + (int) MathUtils.random(-killAura.randomizeCps.intValue(), killAura.randomizeCps.intValue()), 1);
             if(cpsTimer.hasReached(20 / cps * 50L) && mc.thePlayer.getDistanceToEntity(entity) <= killAura.range.getCurrent() && killAura.state.is(e.getState().name())) {
                 mc.thePlayer.swingItem();
@@ -156,6 +163,7 @@ public class Single extends KillAuraMode {
         } else {
             killAura.limeTargetHUD.resetArmorAnimated();
             killAura.astolfoTargetHUD.resetHealthAnimated();
+            killAura.lime2TargetHUD.reset();
             currentYaw = mc.thePlayer.rotationYaw;
             currentPitch = mc.thePlayer.rotationPitch;
             this.entity = null;
@@ -174,7 +182,9 @@ public class Single extends KillAuraMode {
             switch(hud.targetHud.getSelected().toLowerCase()) {
                 case "lime":
                     killAura.limeTargetHUD.draw(entity, (float) hud.targetHudX.getCurrent() / 100f * (e.getScaledResolution().getScaledWidth() - 174), (float) hud.targetHudY.getCurrent() / 100f * (e.getScaledResolution().getScaledHeight() - 70), killAura.getColor(Math.round(entity.getHealth())));
-                    //killAura.limeTargetHUD.draw(entity, (float) hud.targetHudX.getCurrent() / 100f * (e.getScaledResolution().getScaledWidth() - 174), (float) hud.targetHudY.getCurrent() / 100f * (e.getScaledResolution().getScaledHeight() - 70), killAura.getColor(Math.round(entity.getHealth())));
+                    break;
+                case "lime2":
+                    killAura.lime2TargetHUD.draw(entity, (float) hud.targetHudX.getCurrent() / 100f * (e.getScaledResolution().getScaledWidth() - 174), (float) hud.targetHudY.getCurrent() / 100f * (e.getScaledResolution().getScaledHeight() - 70), killAura.getColor(Math.round(entity.getHealth())));
                     break;
                 case "astolfo":
                     killAura.astolfoTargetHUD.draw(entity, (float) hud.targetHudX.getCurrent() / 100f * (e.getScaledResolution().getScaledWidth() - 174), (float) hud.targetHudY.getCurrent() / 100f * (e.getScaledResolution().getScaledHeight() - 70), killAura.getColor(Math.round(entity.getHealth())));

@@ -4,8 +4,6 @@ import lime.core.events.EventTarget;
 import lime.core.events.impl.EventMotion;
 import lime.features.module.Category;
 import lime.features.module.Module;
-import net.minecraft.item.ItemFood;
-import net.minecraft.item.ItemSword;
 import net.minecraft.network.play.client.C03PacketPlayer;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.MovingObjectPosition;
@@ -29,7 +27,7 @@ public class ClickTeleport extends Module {
     public void onMotion(EventMotion e) {
         if(mc.thePlayer.isSneaking()) {
             if(e.isPre()) {
-                if(delay == 0 && Mouse.isButtonDown(2)) {
+                if(delay == 0 && Mouse.isButtonDown(1)) {
                     teleportToBlockPos(getBlinkBlock().getBlockPos().add(0, 1, 0));
                     delay = 5;
                 }

@@ -65,6 +65,11 @@ public class AntiVoid extends Module {
                     mc.thePlayer.fallDistance = 0;
                 }
             }
+            if(mode.is("verus")) {
+                if(mc.thePlayer.fallDistance > 3.5) {
+                    mc.getNetHandler().addToSendQueue(new C03PacketPlayer(true));
+                }
+            }
         } else {
             timer.reset();
         }

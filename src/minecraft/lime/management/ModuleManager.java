@@ -30,6 +30,7 @@ public class ModuleManager {
 
         // EXPLOIT
         registerModule(new InfiniteChat());
+        registerModule(new PingSpoof());
         registerModule(new Disabler());
         registerModule(new FastBow());
         registerModule(new Crasher());
@@ -50,7 +51,7 @@ public class ModuleManager {
         registerModule(new Step());
 
         // PLAYER
-        registerModule(new InventoryManager2());
+        //registerModule(new InventoryManager2());
         registerModule(new InventoryManager());
         registerModule(new LagbackChecker());
         registerModule(new InventoryMove());
@@ -69,6 +70,7 @@ public class ModuleManager {
         registerModule(new FastEat());
         registerModule(new NoFall());
         registerModule(new Derp());
+        registerModule(new MCF());
 
         // RENDER
         registerModule(new BlockOverlay());

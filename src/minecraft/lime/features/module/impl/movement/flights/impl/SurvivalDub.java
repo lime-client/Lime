@@ -1,16 +1,10 @@
 package lime.features.module.impl.movement.flights.impl;
 
-import lime.core.Lime;
 import lime.core.events.impl.EventMotion;
 import lime.core.events.impl.EventMove;
 import lime.core.events.impl.EventPacket;
-import lime.features.module.impl.combat.KillAura;
-import lime.features.module.impl.movement.TargetStrafe;
 import lime.features.module.impl.movement.flights.FlightValue;
-import lime.features.module.impl.world.Timer;
 import lime.utils.movement.MovementUtils;
-import lime.utils.other.ChatUtils;
-import lime.utils.other.PlayerUtils;
 import net.minecraft.network.play.client.C03PacketPlayer;
 import net.minecraft.network.play.server.S08PacketPlayerPosLook;
 import net.minecraft.network.play.server.S12PacketEntityVelocity;

@@ -7,6 +7,7 @@ import lime.core.events.impl.Event2D;
 import lime.core.events.impl.EventLivingLabel;
 import lime.features.module.Category;
 import lime.features.module.Module;
+import lime.utils.other.MathUtils;
 import lime.utils.render.RenderUtils;
 import net.minecraft.client.entity.EntityOtherPlayerMP;
 import net.minecraft.client.gui.Gui;
@@ -81,13 +82,13 @@ public class Nametags extends Module {
                     mc.entityRenderer.setupOverlayRendering();
                     if (position != null) {
                         GL11.glPushMatrix();
-                        float size = .95f;
-                        drawArmor(ent, (int) (position.x + ((position.z - position.x) / 2)), (int) position.y - 4 - mc.fontRendererObj.FONT_HEIGHT * 3, size);
+                        float size = .5f;
+                        drawArmor(ent, (int) (position.x + ((position.z - position.x) / 2)), (int) position.y - 4 - mc.fontRendererObj.FONT_HEIGHT * 2, size);
                         GlStateManager.scale(size, size, size);
                         float x = (float) position.x / size;
                         float x2 = (float) position.z / size;
                         float y = (float) position.y / size;
-                        final String nametext = entity.getName();
+                        final String nametext = entity.getDisplayName().getFormattedText() + " §7(§fH: " + MathUtils.roundToPlace(((EntityPlayer) entity).getHealth(), 2) + " §c❤§7)";
                         Gui.drawRect((x + (x2 - x) / 2) - (mc.fontRendererObj.getStringWidth(nametext) >> 1) - 2, y - mc.fontRendererObj.FONT_HEIGHT - 4, (x + (x2 - x) / 2) + (mc.fontRendererObj.getStringWidth(nametext) >> 1) + 2, y - 2, new Color(0, 0, 0, 120).getRGB());
 
                         mc.fontRendererObj.drawStringWithShadow(nametext, (x + ((x2 - x) / 2)) - (mc.fontRendererObj.getStringWidth(nametext) / 2F), y - mc.fontRendererObj.FONT_HEIGHT - 2, getNameColor(ent));

@@ -10,13 +10,13 @@ bobView:true
 anaglyph3d:false
 maxFps:200
 fboEnable:true
-difficulty:1
+difficulty:3
 fancyGraphics:true
 ao:2
 renderClouds:false
-resourcePacks:["Shadows edit thing v2.zip"]
+resourcePacks:["!         §3Aqua 32x.zip"]
 incompatibleResourcePacks:[]
-lastServer:play.CelestialMC.nl
+lastServer:ac.glitch.gay
 lang:en_US
 chatVisibility:0
 chatColors:true
@@ -95,7 +95,7 @@ soundCategory_music:0.0
 soundCategory_record:0.0
 soundCategory_weather:0.0
 soundCategory_block:0.80985916
-soundCategory_hostile:0.45774648
+soundCategory_hostile:0.0
 soundCategory_neutral:0.44366196
 soundCategory_player:0.47887325
 soundCategory_ambient:0.4225352

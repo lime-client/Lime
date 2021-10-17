@@ -9,9 +9,7 @@ import lime.features.setting.impl.BoolValue;
 import lime.features.setting.impl.ColorValue;
 import lime.features.setting.impl.EnumValue;
 import lime.utils.render.RenderUtils;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
-import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.entity.player.EntityPlayer;
 import org.lwjgl.opengl.GL11;
 

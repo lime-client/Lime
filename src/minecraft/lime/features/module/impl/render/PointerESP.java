@@ -30,7 +30,7 @@ public class PointerESP extends Module {
         double playerOffsetX = mc.thePlayer.posX;
         double playerOffSetZ = mc.thePlayer.posZ;
 
-        AntiBot antiBot = (AntiBot) Lime.getInstance().getModuleManager().getModuleC(AntiBot.class);
+        AntiBot antiBot = Lime.getInstance().getModuleManager().getModuleC(AntiBot.class);
 
         for (Entity entity : mc.theWorld.loadedEntityList) {
             if(entity instanceof EntityPlayer && entity != mc.thePlayer && !antiBot.checkBot((EntityPlayer) entity)) {

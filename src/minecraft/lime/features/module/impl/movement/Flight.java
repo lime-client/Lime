@@ -19,12 +19,12 @@ public class Flight extends Module {
     private final Graph speedGraph = new Graph("Speed");
 
     //Settings
-    public final EnumValue mode = new EnumValue("Mode", this, "Vanilla", "Vanilla", "Funcraft", "Funcraft2", "AAC", "Verus", "Verus_No_Damage", "Verus_Fast", "Survival_Dub", "Astral", "KoksCraft");
+    public final EnumValue mode = new EnumValue("Mode", this, "Vanilla", "Vanilla", "Funcraft", "Funcraft2", "AAC", "Verus", "Verus_No_Damage", "Verus Float", "Verus_Fast", "Survival_Dub", "Astral", "KoksCraft");
     public final SlideValue speed = new SlideValue("Speed", this, 0.5, 10, 1.5, 0.5).onlyIf(mode.getSettingName(), "enum", "vanilla", "verus_fast");
     public final SlideValue funcraftSpeed = new SlideValue("Funcraft Speed", this, 0.2, 2, 1.6, 0.05).onlyIf(mode.getSettingName(), "enum", "funcraft");
     public final SlideValue funcraftTimerSpeed = new SlideValue("Funcraft Timer Speed", this, 1, 5, 3, 0.05).onlyIf(mode.getSettingName(), "enum", "funcraft");
     private final BoolValue bobbing = new BoolValue("Bobbing", this, true);
-    public final BoolValue verusGlide = new BoolValue("Verus Glide", this, false).onlyIf(mode.getSettingName(), "enum", "verus_fast");
+    public final BoolValue verusHeavy = new BoolValue("Verus Heavy", this, false).onlyIf(mode.getSettingName(), "enum", "verus_fast", "Verus Float");
 
     private int ticks;
 
@@ -40,6 +40,7 @@ public class Flight extends Module {
         this.flights.add(new Vanilla());
         this.flights.add(new Verus());
         this.flights.add(new VerusNoDamage());
+        this.flights.add(new VerusFloat());
         this.flights.add(new SurvivalDub());
         this.flights.add(new Astral());
         this.flights.add(new AAC());

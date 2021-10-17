@@ -48,7 +48,7 @@ public class InventoryUtils implements IUtil {
                     ItemStack itemStack = getSlot(i).getStack();
                     if(itemStack.getItem() instanceof ItemBlock) {
                         ItemBlock itemBlock = (ItemBlock) itemStack.getItem();
-                        if(!blacklistedBlocks.contains(itemBlock.getBlock()))
+                        if(!blacklistedBlocks.contains(itemBlock.getBlock()) && itemStack.stackSize > 0)
                             return i;
                     }
                 }
@@ -61,7 +61,7 @@ public class InventoryUtils implements IUtil {
                     ItemStack itemStack = getSlot(i).getStack();
                     if(itemStack.getItem() instanceof ItemBlock) {
                         ItemBlock itemBlock = (ItemBlock) itemStack.getItem();
-                        if(!blacklistedBlocks.contains(itemBlock.getBlock()))
+                        if(!blacklistedBlocks.contains(itemBlock.getBlock()) && itemStack.stackSize > 0)
                             return i;
                     }
                 }

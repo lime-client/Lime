@@ -17,7 +17,7 @@ public class Criticals extends Module {
         super("Criticals", Category.COMBAT);
     }
 
-    private final EnumValue mode = new EnumValue("Mode", this, "Packet", "Packet");
+    private final EnumValue mode = new EnumValue("Mode", this, "Packet", "Packet", "Visual");
     private final SlideValue delay = new SlideValue("Delay", this, 100, 1000, 750, 50);
 
     private final Timer timer = new Timer();
@@ -34,13 +34,15 @@ public class Criticals extends Module {
         this.setSuffix(mode.getSelected());
         if(e.getPacket() instanceof C02PacketUseEntity) {
             C02PacketUseEntity packet = (C02PacketUseEntity) e.getPacket();
-            if(packet.getAction() == C02PacketUseEntity.Action.ATTACK && mc.thePlayer.onGround && groundTicks > 1 && timer.hasReached(delay.intValue())) {
+            if(packet.getAction() == C02PacketUseEntity.Action.ATTACK && mc.thePlayer.onGround && groundTicks > 1 && timer.hasReached(delay.intValue()) && mode.is("packet")) {
                 double[] offsets = {0.06252f, 0.0f};
                 for (double offset : offsets) {
                     mc.getNetHandler().addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY + offset + (Math.random() * 0.0003F), mc.thePlayer.posZ, false));
                 }
                 mc.thePlayer.onCriticalHit(packet.getEntityFromWorld(mc.theWorld));
                 timer.reset();
+            } else if(mode.is("visual") && !mc.thePlayer.onGround && groundTicks > 1) {
+                mc.thePlayer.onCriticalHit(packet.getEntityFromWorld(mc.theWorld));
             }
         }
     }

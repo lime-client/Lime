@@ -7,20 +7,15 @@ import lime.core.events.impl.EventMove;
 import lime.core.events.impl.EventPacket;
 import lime.features.module.Category;
 import lime.features.module.Module;
-import lime.features.module.impl.combat.KillAura;
 import lime.features.setting.impl.BoolValue;
 import lime.features.setting.impl.EnumValue;
 import lime.features.setting.impl.SlideValue;
 import lime.utils.movement.MovementUtils;
 import net.minecraft.block.BlockStairs;
-import net.minecraft.network.play.client.C03PacketPlayer;
-import net.minecraft.network.play.client.C0FPacketConfirmTransaction;
+import net.minecraft.network.play.client.C0CPacketInput;
 import net.minecraft.network.play.server.S08PacketPlayerPosLook;
 import net.minecraft.potion.Potion;
-import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.BlockPos;
-
-import java.util.List;
 
 public class Speed extends Module {
 
@@ -28,11 +23,12 @@ public class Speed extends Module {
         super("Speed", Category.MOVE);
     }
 
-    private final EnumValue mode = new EnumValue("Mode", this, "Vanilla", "Vanilla", "Vanilla_BHOP", "Hypixel", "Verus", "Verus2", "Verus_LOWHOP", "NCP", "Funcraft", "Funcraft_YPORT");
+    public final EnumValue mode = new EnumValue("Mode", this, "Vanilla", "Vanilla", "Vanilla_BHOP", "Hypixel", "Verus", "Verus2", "Verus_LOWHOP", "NCP", "Funcraft", "Funcraft_YPORT");
     private final SlideValue speed = new SlideValue("Speed", this, 0.2, 5, 0.6, 0.1).onlyIf(mode.getSettingName(), "enum", "vanilla_bhop", "vanilla");
     private final BoolValue hypixelStrafe = new BoolValue("Hypixel Strafe", this, false).onlyIf(mode.getSettingName(), "enum", "hypixel");
     private double moveSpeed, lastDist;
     private int stage, ticks;
+    private boolean spoofGround, firstHop, nigger;
 
     @Override
     public void onEnable() {
@@ -43,6 +39,9 @@ public class Speed extends Module {
         this.moveSpeed = MovementUtils.getBaseMoveSpeed();
         stage = 0;
         ticks = 0;
+        spoofGround = false;
+        firstHop = true;
+        nigger = mc.thePlayer.onGround;
     }
 
     @Override
@@ -59,16 +58,6 @@ public class Speed extends Module {
             if(mc.thePlayer.isMoving()) {
                 MovementUtils.setSpeed(speed.getCurrent());
             }
-        }
-
-        if(mode.is("verus2") && e.isPre() && mc.thePlayer.isMoving()) {
-            if(mc.thePlayer.onGround) {
-                moveSpeed = MovementUtils.getBaseMoveSpeed() * 1.12;
-                mc.thePlayer.jump();
-                MovementUtils.setSpeed(moveSpeed);
-                return;
-            }
-            MovementUtils.setSpeed(Math.max(MovementUtils.getSpeed(), MovementUtils.getBaseMoveSpeed()));
         }
 
         if(mode.is("verus") || mode.is("verus_lowhop")) {
@@ -109,6 +98,11 @@ public class Speed extends Module {
 
             } else
                 MovementUtils.setSpeed(0);
+        }
+
+        if(mode.is("verus2")) {
+            if(Lime.getInstance().getModuleManager().getModuleC(Flight.class).isToggled()) return;
+            e.setGround(mc.thePlayer.onGround || spoofGround);
         }
 
         if(mode.is("hypixel")) {
@@ -210,6 +204,46 @@ public class Speed extends Module {
                 lastDist = 0;
                 stage = 0;
                 moveSpeed = 0;
+            }
+        }
+
+        if(mode.is("verus2")) {
+            if(Lime.getInstance().getModuleManager().getModuleC(Flight.class).isToggled()) return;
+            if(!nigger) {
+                nigger = mc.thePlayer.onGround;
+                return;
+            }
+            if(firstHop) {
+                if (mc.thePlayer.isMoving() && mc.thePlayer.onGround) {
+                    e.setY(0.41999998688697815);
+                    spoofGround = true;
+                    stage = 0;
+                } else if (this.stage <= 6) {
+                    e.setY(0);
+                    ++stage;
+                } else {
+                    spoofGround = false;
+                    firstHop = false;
+                }
+
+                mc.thePlayer.motionY = e.getY();
+            } else {
+                if (mc.thePlayer.isMoving() && mc.thePlayer.onGround) {
+                    moveSpeed = 0.5;
+                    e.setY(0.41999998688697815);
+                    spoofGround = true;
+                    stage = 0;
+                } else if (this.stage <= 7) {
+                    this.moveSpeed += 0.12;
+                    e.setY(0);
+                    ++stage;
+                } else {
+                    moveSpeed = 0.24;
+                    spoofGround = false;
+                }
+
+                mc.thePlayer.motionY = e.getY();
+                MovementUtils.setSpeed(e, this.moveSpeed - 1.0E-4D);
             }
         }
     }

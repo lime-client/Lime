@@ -165,6 +165,9 @@ public class RenderUtils implements IUtil {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        GlStateManager.color(1, 1, 1, 1);
+        GL11.glColor4f(1, 1, 1, 1);
+        GlStateManager.resetColor();
     }
 
     public static void drawFace(int x, int y, int width, int height, ResourceLocation resourceLocation) {

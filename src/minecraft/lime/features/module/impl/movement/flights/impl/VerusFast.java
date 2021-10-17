@@ -39,7 +39,7 @@ public class VerusFast extends FlightValue {
 
     @Override
     public void onMotion(EventMotion e) {
-        if(getFlight().verusGlide.isEnabled() && receivedVelocityPacket && mc.thePlayer.motionY < 0) {
+        if(getFlight().verusHeavy.isEnabled() && receivedVelocityPacket && mc.thePlayer.motionY < 0) {
             mc.thePlayer.motionY = -0.0784000015258789;
         }
 
@@ -77,7 +77,7 @@ public class VerusFast extends FlightValue {
 
     @Override
     public void onBoundingBox(EventBoundingBox e) {
-        if(receivedVelocityPacket && !getFlight().verusGlide.isEnabled()) {
+        if(receivedVelocityPacket && !getFlight().verusHeavy.isEnabled()) {
             if(e.getBlock() instanceof BlockAir && e.getBlockPos().getY() < mc.thePlayer.posY && !mc.theWorld.checkBlockCollision(mc.thePlayer.getEntityBoundingBox())) {
                 e.setBoundingBox(new AxisAlignedBB(e.getBlockPos().getX(), e.getBlockPos().getY(), e.getBlockPos().getZ(), e.getBlockPos().getX() + 1, mc.thePlayer.posY, e.getBlockPos().getZ() + 1));
             }

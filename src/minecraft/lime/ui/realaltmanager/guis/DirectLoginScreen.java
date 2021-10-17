@@ -2,18 +2,15 @@ package lime.ui.realaltmanager.guis;
 
 import com.thealtening.auth.TheAlteningAuthentication;
 import lime.core.Lime;
-import lime.ui.realaltmanager.AltLoginThread;
 import lime.ui.fields.PasswordField;
 import lime.ui.notifications.Notification;
+import lime.ui.realaltmanager.AltLoginThread;
 import lime.utils.other.WebUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
-import net.minecraft.client.renderer.GlStateManager;
 import org.lwjgl.input.Keyboard;
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL20;
 
 import java.awt.*;
 import java.awt.datatransfer.DataFlavor;

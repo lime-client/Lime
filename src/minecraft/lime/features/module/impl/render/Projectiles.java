@@ -42,9 +42,6 @@ public class Projectiles extends Module {
                 size = 0.3f;
                 float power = mc.thePlayer.getItemInUseCount() / 20.0f;
                 power = (power * power + power * 2.0f) / 3.0f;
-                /*if (main.instance.moduleManager.getModuleByName("Fastbow").isToggle()) {
-                    power = 1.0f;
-                }*/
                 if (power < 0.1) {
                     return;
                 }

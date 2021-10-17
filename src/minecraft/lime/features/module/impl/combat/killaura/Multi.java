@@ -15,6 +15,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemSword;
 import net.minecraft.network.play.client.C02PacketUseEntity;
 import net.minecraft.network.play.client.C08PacketPlayerBlockPlacement;
+import net.minecraft.util.BlockPos;
 
 import java.util.ArrayList;
 
@@ -63,6 +64,20 @@ public class Multi extends KillAuraMode {
                 mc.gameSettings.keyBindSprint.pressed = false;
             }
 
+            if(killAura.autoBlockState.is(e.getState().name()) && killAura.hasSword() && killAura.autoBlock.is("basic") && !KillAura.isBlocking) {
+                mc.getNetHandler().addToSendQueue(new C08PacketPlayerBlockPlacement(new BlockPos(0, 0, 0), 255, mc.thePlayer.getHeldItem(), 0, 0, 0));
+                mc.thePlayer.setItemInUse(mc.thePlayer.getHeldItem(), 32767);
+                KillAura.isBlocking = true;
+            }
+
+            if(killAura.hasSword() && KillAura.isBlocking) {
+                mc.thePlayer.setItemInUse(mc.thePlayer.getHeldItem(), 32767);
+            }
+
+            if(!killAura.hasSword()) {
+                KillAura.isBlocking = false;
+            }
+
             // Rotations
             if(!killAura.rotations.is("none")) {
                 float[] rotations = null;
@@ -86,19 +101,6 @@ public class Multi extends KillAuraMode {
                     if(entity1 == null) return;
                     //entity = (EntityLivingBase) entity1;
                 }
-            }
-
-            if(killAura.autoBlockState.is(e.getState().name()) && killAura.hasSword() && killAura.autoBlock.is("basic") && !KillAura.isBlocking) {
-                mc.getNetHandler().addToSendQueue(new C08PacketPlayerBlockPlacement(mc.thePlayer.getHeldItem()));
-                mc.thePlayer.setItemInUse(mc.thePlayer.getHeldItem(), 32767);
-                KillAura.isBlocking = true;
-            }
-            if(KillAura.isBlocking) {
-                mc.thePlayer.setItemInUse(mc.thePlayer.getHeldItem(), 32767);
-            }
-
-            if(!killAura.hasSword() || (mc.thePlayer.getHeldItem() == null || !(mc.thePlayer.getHeldItem().getItem() instanceof ItemSword))) {
-                KillAura.isBlocking = false;
             }
 
             if(!killAura.state.is(e.getState().name())) return;

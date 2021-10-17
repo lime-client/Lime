@@ -9,7 +9,6 @@ import lime.features.module.impl.movement.TargetStrafe;
 import lime.features.module.impl.movement.flights.FlightValue;
 import lime.features.module.impl.world.Timer;
 import lime.utils.movement.MovementUtils;
-import lime.utils.other.ChatUtils;
 import net.minecraft.network.play.server.S08PacketPlayerPosLook;
 
 public class Funcraft extends FlightValue {
