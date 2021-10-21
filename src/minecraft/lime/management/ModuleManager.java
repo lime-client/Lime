@@ -75,6 +75,7 @@ public class ModuleManager {
         // RENDER
         registerModule(new BlockOverlay());
         registerModule(new NoScoreboard());
+        registerModule(new ItemPhysics());
         registerModule(new Projectiles());
         registerModule(new Animations());
         registerModule(new FullBright());

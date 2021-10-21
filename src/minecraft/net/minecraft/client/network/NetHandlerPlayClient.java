@@ -1734,7 +1734,7 @@ public class NetHandlerPlayClient implements INetHandlerPlayClient
                 EntityPlayerSP player = Minecraft.getMinecraft().thePlayer;
 
                 if (player != null) {
-                    Lime.getInstance().getNotificationManager().addNotification("Resource Pack Exploit Fix", "A server tried to use Resource Pack Exploit, blocked it.", Notification.Type.INFORMATION);
+                    Lime.getInstance().getNotificationManager().addNotification("A server tried to use Resource Pack Exploit, blocked it.", Notification.Type.INFORMATION);
                 }
 
                 throw new URISyntaxException(url, "Invalid levelstorage resourcepack path");

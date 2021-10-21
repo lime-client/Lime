@@ -127,7 +127,7 @@ public class KillAura extends Module {
     {
         this.disableModule();
         KillAura.entity = null;
-        Lime.getInstance().getNotificationManager().addNotification("Kill Aura", "Disabled Kill Aura because you changed world!", Notification.Type.WARNING);
+        Lime.getInstance().getNotificationManager().addNotification("Disabled Kill Aura because you changed world!", Notification.Type.WARNING);
     }
 
     @EventTarget

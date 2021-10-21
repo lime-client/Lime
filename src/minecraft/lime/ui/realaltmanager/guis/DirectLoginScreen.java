@@ -98,9 +98,9 @@ public class DirectLoginScreen extends GuiScreen {
     protected void actionPerformed(GuiButton button) throws IOException {
         if(button.id == 69) {
             if(WebUtils.getSource("https://www.funcraft.net/fr/joueurs?q=" + Minecraft.getMinecraft().getSession().getUsername()).toLowerCase().contains("ce joueur est banni")) {
-                Lime.getInstance().getNotificationManager().addNotification("Alt", "Alt is banned on funcraft", Notification.Type.WARNING);
+                Lime.getInstance().getNotificationManager().addNotification("Alt is banned on funcraft", Notification.Type.WARNING);
             } else {
-                Lime.getInstance().getNotificationManager().addNotification("Alt", "Alt is unbanned on funcraft", Notification.Type.SUCCESS);
+                Lime.getInstance().getNotificationManager().addNotification("Alt is unbanned on funcraft", Notification.Type.SUCCESS);
             }
         }
         if(button.id == 3) mc.displayGuiScreen(parentScreen);

@@ -150,7 +150,7 @@ public class Scaffold extends Module {
     public void onMotion(EventMotion e)
     {
         if(InventoryUtils.hasBlock(blacklistedBlocks, true, true) == -1 && !safeWalk.isEnabled()) {
-            Lime.getInstance().getNotificationManager().addNotification("Scaffold", "Disabled scaffold because you have no blocks!", Notification.Type.FAIL);
+            Lime.getInstance().getNotificationManager().addNotification("Disabled scaffold because you have no blocks!", Notification.Type.FAIL);
             this.toggle();
             return;
         }

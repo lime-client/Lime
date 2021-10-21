@@ -23,7 +23,7 @@ public class VerusFloat extends FlightValue {
     @Override
     public void onEnable() {
         if(!mc.thePlayer.onGround) {
-            Lime.getInstance().getNotificationManager().addNotification("Flight", "You need to be on ground at the start of flight.", Notification.Type.FAIL);
+            Lime.getInstance().getNotificationManager().addNotification("You need to be on ground at the start of flight.", Notification.Type.FAIL);
             this.getFlight().toggle();
             return;
         }

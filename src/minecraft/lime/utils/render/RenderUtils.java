@@ -411,7 +411,7 @@ public class RenderUtils implements IUtil {
         GL11.glScissor((int)(x2 * (float)factor), (int)(((float)scale.getScaledHeight() - y22) * (float)factor), (int)((x22 - x2) * (float)factor), (int)((y22 - y2) * (float)factor));
     }
 
-    public static void drawImage(ResourceLocation image, int x, int y, int width, int height) {
+    public static void drawImage(ResourceLocation image, double x, double y, int width, int height) {
         GL11.glPushMatrix();
         glEnable(GL_BLEND);
         glDepthMask(false);

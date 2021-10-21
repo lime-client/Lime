@@ -38,6 +38,7 @@ public class HUD extends Module {
     private final EnumValue sidebar = new EnumValue("Sidebar", this, "Right", "Left", "Right", "None");
     private final EnumValue color = new EnumValue("Color", this, "Lime", "Lime", "Astolfo", "Rainbow", "Fade");
     private final ColorValue fadeColor = new ColorValue("Fade Color", this, new Color(200, 0, 0).getRGB()).onlyIf(color.getSettingName(), "enum", "fade");
+    private final SlideValue rectOpacity = new SlideValue("Rect Opacity", this, 0, 255, 0, 5);
     private final BoolValue customFont = new BoolValue("Custom Font", this, true);
     private final BoolValue suffix = new BoolValue("Suffix", this, true);
     private final BoolValue armorHud = new BoolValue("Armor HUD", this, true);
@@ -123,14 +124,14 @@ public class HUD extends Module {
 
             if(module.hudAnimation.getValue() > module.hudAnimation.getMin()) {
                 Color color = getColor(yCount / increment);
-
+                Gui.drawRect(e.getScaledResolution().getScaledWidth() - module.hudAnimation.getValue() - 2, yCount, e.getScaledResolution().getScaledWidth(), yCount + increment, new Color(0, 0, 0, rectOpacity.intValue()).getRGB());
                 if(sidebar.is("right")) {
                     Gui.drawRect(e.getScaledResolution().getScaledWidth() - 1, yCount, e.getScaledResolution().getScaledWidth(), yCount + increment, color.getRGB());
                 } else if(sidebar.is("left")) {
                     Gui.drawRect(e.getScaledResolution().getScaledWidth() - module.hudAnimation.getValue() - 1, yCount, e.getScaledResolution().getScaledWidth()  - module.hudAnimation.getValue(), yCount + increment, color.getRGB());
                 }
                 if(customFont.isEnabled())
-                    FontManager.SfUiArray.drawStringWithShadow(moduleName, (e.getScaledResolution().getScaledWidth() - module.hudAnimation.getValue()) + 2, 2 + yCount, color.getRGB());
+                    FontManager.SfUiArray.drawStringWithShadow(moduleName, (e.getScaledResolution().getScaledWidth() - module.hudAnimation.getValue()) + (sidebar.is("right") ? 0 : 2), 1 + yCount, color.getRGB());
                 else
                     mc.fontRendererObj.drawString(moduleName, (e.getScaledResolution().getScaledWidth() - module.hudAnimation.getValue() + (sidebar.is("right") ? 0 : 3)), yCount + 1, color.getRGB(), true);
 
@@ -157,7 +158,7 @@ public class HUD extends Module {
     }
 
     public static Color getColor(int index) {
-        HUD hud = (HUD) Lime.getInstance().getModuleManager().getModuleC(HUD.class);
+        HUD hud = Lime.getInstance().getModuleManager().getModuleC(HUD.class);
         if(hud.color.is("lime")) {
             return ColorUtils.blend2colors(new Color(75, 75, 75), new Color(200, 200, 200).darker(), (System.nanoTime() + (index + index * 100000000L * 2)) / 1.0E09F % 2.0F);
         }

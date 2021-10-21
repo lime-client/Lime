@@ -1,6 +1,10 @@
 package net.minecraft.client.renderer.entity;
 
 import java.util.Random;
+
+import lime.core.Lime;
+import lime.features.module.impl.render.ItemPhysics;
+import lime.utils.render.ItemUtils;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.texture.TextureMap;
@@ -93,6 +97,10 @@ public class RenderEntityItem extends Render<EntityItem>
      */
     public void doRender(EntityItem entity, double x, double y, double z, float entityYaw, float partialTicks)
     {
+        if(Lime.getInstance().getModuleManager().getModuleC(ItemPhysics.class).isToggled()) {
+            ItemUtils.doRenderItemPhysic(entity, x, y, z, entityYaw, partialTicks);
+            return;
+        }
         ItemStack itemstack = entity.getEntityItem();
         this.field_177079_e.setSeed(187L);
         boolean flag = false;

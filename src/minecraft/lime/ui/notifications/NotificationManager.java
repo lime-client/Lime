@@ -11,12 +11,12 @@ public class NotificationManager {
         this.notifications = new ArrayList<>();
     }
 
-    public void addNotification(String title, String description, Notification.Type type) {
-        this.notifications.add(new Notification(title, description, type));
+    public void addNotification(String title, Notification.Type type) {
+        this.notifications.add(new Notification(title, type));
     }
 
-    public void addNotification(String title, String description, int time, Notification.Type type) {
-        this.notifications.add(new Notification(title, description, time, type));
+    public void addNotification(String title, int time, Notification.Type type) {
+        this.notifications.add(new Notification(title, time, type));
     }
 
     public void drawNotifications(Event2D e) {

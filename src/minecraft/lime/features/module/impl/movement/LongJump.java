@@ -47,7 +47,7 @@ public class LongJump extends Module {
         moveSpeed = y = 0;
         stage = ticks = 0;
         if(mode.is("verus") && (!mc.thePlayer.onGround || new BlockPos(mc.thePlayer.posX, mc.thePlayer.posY - 1, mc.thePlayer.posZ).getBlock() instanceof BlockAir)) {
-            Lime.getInstance().getNotificationManager().addNotification("Error", "Can damage only on the ground!", Notification.Type.FAIL);
+            Lime.getInstance().getNotificationManager().addNotification("Can damage only on the ground!", Notification.Type.FAIL);
             this.toggle();
             return;
         }

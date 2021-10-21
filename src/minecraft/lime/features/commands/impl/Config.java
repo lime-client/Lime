@@ -20,7 +20,7 @@ public class Config extends Command {
 
     @Override
     public String[] getPrefixes() {
-        return new String[] { "config", "cfg" };
+        return new String[] { "cfg" };
     }
 
     @Override
@@ -37,13 +37,13 @@ public class Config extends Command {
                     Lime.getInstance().getFileSaver().saveModules("Lime" + File.separator + "configs" + File.separator + args[2] + ".json", "unknown", false);
                 }
                 //ChatUtils.sendMessage("Saved config to §aLime" + File.separator + "configs" + File.separator + args[2] + ".json");
-                Lime.getInstance().getNotificationManager().addNotification("Config", "Saved config to §aLime" + File.separator + "configs" + File.separator + args[2] + ".json", Notification.Type.SUCCESS);
+                Lime.getInstance().getNotificationManager().addNotification("Saved config to §aLime" + File.separator + "configs" + File.separator + args[2] + ".json", Notification.Type.SUCCESS);
                 break;
             case "load":
                 if(Lime.getInstance().getFileSaver().applyJson("Lime" + File.separator + "configs" + File.separator + args[2] + ".json", false)) {
-                    Lime.getInstance().getNotificationManager().addNotification("Config", "Loaded §a" + args[2] + " §fconfig", Notification.Type.SUCCESS);
+                    Lime.getInstance().getNotificationManager().addNotification("Loaded §a" + args[2] + " §fconfig", Notification.Type.SUCCESS);
                 } else {
-                    Lime.getInstance().getNotificationManager().addNotification("Config", "Failed to load §c" + args[2] + " §fconfig", Notification.Type.FAIL);
+                    Lime.getInstance().getNotificationManager().addNotification("Failed to load §c" + args[2] + " §fconfig", Notification.Type.FAIL);
                 }
                 break;
             case "delete":
@@ -53,12 +53,12 @@ public class Config extends Command {
                         File configFile = new File("Lime" + File.separator + "configs" + File.separator + s);
                         configFile.delete();
                     }
-                    Lime.getInstance().getNotificationManager().addNotification("Config", "Deleted §a all§f configs", Notification.Type.SUCCESS);
+                    Lime.getInstance().getNotificationManager().addNotification("Deleted §a all§f configs", Notification.Type.SUCCESS);
                 } else {
                     File configFile = new File("Lime" + File.separator + "configs" + File.separator + args[2] + ".json");
                     if(configFile.exists()) {
                         configFile.delete();
-                        Lime.getInstance().getNotificationManager().addNotification("Config", "Deleted §a" + args[2] + " §fconfig", Notification.Type.SUCCESS);
+                        Lime.getInstance().getNotificationManager().addNotification("Deleted §a" + args[2] + " §fconfig", Notification.Type.SUCCESS);
                         return;
                     }
                 }

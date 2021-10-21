@@ -5,6 +5,7 @@ import lime.core.events.impl.EventMove;
 import lime.core.events.impl.EventPacket;
 import lime.features.module.impl.movement.flights.FlightValue;
 import lime.utils.movement.MovementUtils;
+import net.minecraft.network.play.server.S08PacketPlayerPosLook;
 import net.minecraft.network.play.server.S12PacketEntityVelocity;
 
 public class Funcraft2 extends FlightValue {
@@ -40,6 +41,8 @@ public class Funcraft2 extends FlightValue {
             if(stage > 0 || lostBoost) {
                 e.setGround(true);
                 mc.thePlayer.motionY = 0;
+                if(MovementUtils.isOnGround(0.01))
+                    MovementUtils.vClip(0.24);
                 if(!MovementUtils.isOnGround(3.33315597345063e-11)) {
                     MovementUtils.vClip(-(3.33315597345063e-11));
                 }
@@ -49,11 +52,8 @@ public class Funcraft2 extends FlightValue {
 
     @Override
     public void onPacket(EventPacket e) {
-        if(e.getPacket() instanceof S12PacketEntityVelocity) {
-            S12PacketEntityVelocity packet = (S12PacketEntityVelocity) e.getPacket();
-            if(packet.getEntityID() == mc.thePlayer.getEntityId()) {
-                damage = true;
-            }
+        if(e.getPacket() instanceof S08PacketPlayerPosLook) {
+            lostBoost = true;
         }
     }
 

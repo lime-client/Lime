@@ -1,17 +1,19 @@
 package lime.management;
 
 import lime.utils.render.fontRenderer.GlyphPageFontRenderer;
+import net.minecraft.client.Minecraft;
+import net.minecraft.util.ResourceLocation;
 
 public enum FontManager {
-    ProductSans18("/assets/minecraft/lime/fonts/productsans.ttf", 18),
-    ProductSans20("/assets/minecraft/lime/fonts/productsans.ttf", 20),
-    ProductSans24("/assets/minecraft/lime/fonts/productsans.ttf", 24),
-    ProductSans76("/assets/minecraft/lime/fonts/productsans.ttf", 76);
+    ProductSans18("lime/fonts/productsans.ttf", 18),
+    ProductSans20("lime/fonts/productsans.ttf", 20),
+    ProductSans24("lime/fonts/productsans.ttf", 24),
+    ProductSans76("lime/fonts/productsans.ttf", 76);
 
     private GlyphPageFontRenderer font;
     FontManager(String path, int size, boolean bold, boolean italic, boolean boldItalic) {
         try {
-            this.font = GlyphPageFontRenderer.create(this.getClass().getResourceAsStream(path), size, bold, italic, boldItalic);
+            this.font = GlyphPageFontRenderer.create(Minecraft.getMinecraft().getResourceManager().getResource(new ResourceLocation(path)).getInputStream(), size, bold, italic, boldItalic);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -19,7 +21,7 @@ public enum FontManager {
 
     FontManager(String path, int size) {
         try {
-            this.font = GlyphPageFontRenderer.create(this.getClass().getResourceAsStream(path), size, false, false, false);
+            this.font = GlyphPageFontRenderer.create(Minecraft.getMinecraft().getResourceManager().getResource(new ResourceLocation(path)).getInputStream(), size, false, false, false);
         } catch (Exception e) {
             e.printStackTrace();
         }
