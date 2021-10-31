@@ -1,7 +1,7 @@
 package lime.ui.clickgui.frame.components.settings;
 
-import lime.features.setting.SettingValue;
-import lime.features.setting.impl.EnumValue;
+import lime.features.setting.Setting;
+import lime.features.setting.impl.EnumProperty;
 import lime.management.FontManager;
 import lime.ui.clickgui.frame.components.Component;
 import net.minecraft.client.gui.Gui;
@@ -12,7 +12,7 @@ import java.awt.*;
 public class EnumSetting extends Component {
 
 
-    public EnumSetting(int x, int y, int width, int height, SettingValue setting) {
+    public EnumSetting(int x, int y, int width, int height, Setting setting) {
         super(x, y, width, height, setting);
     }
 
@@ -28,13 +28,13 @@ public class EnumSetting extends Component {
         }
         FontManager.ProductSans20.getFont().drawString(this.setting.getSettingName(), this.x + 2, this.y + 4f, -1);
 
-        EnumValue enumValue = (EnumValue) setting;
+        EnumProperty enumValue = (EnumProperty) setting;
         FontManager.ProductSans20.getFont().drawString(enumValue.getSelected().replaceAll("_", " "), this.x + (width - 8) - FontManager.ProductSans20.getFont().getStringWidth(enumValue.getSelected().replaceAll("_", " ")), this.y + 4, -1);
     }
 
     @Override
     public void mouseClicked(int mouseX, int mouseY, int mouseButton) {
-        EnumValue enumValue = (EnumValue) setting;
+        EnumProperty enumValue = (EnumProperty) setting;
 
         int enumIndex = 0;
         for(String str : enumValue.getModes()) {

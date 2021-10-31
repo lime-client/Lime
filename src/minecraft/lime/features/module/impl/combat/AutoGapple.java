@@ -4,7 +4,7 @@ import lime.core.events.EventTarget;
 import lime.core.events.impl.EventUpdate;
 import lime.features.module.Category;
 import lime.features.module.Module;
-import lime.features.setting.impl.SlideValue;
+import lime.features.setting.impl.NumberProperty;
 import lime.utils.other.InventoryUtils;
 import lime.utils.other.Timer;
 import net.minecraft.init.Items;
@@ -19,8 +19,8 @@ public class AutoGapple extends Module {
         super("Auto Gapple", Category.COMBAT);
     }
 
-    private final SlideValue delay = new SlideValue("Delay", this, 50, 1000, 100, 50);
-    private final SlideValue health = new SlideValue("Health", this, 1, 20, 10, 0.5);
+    private final NumberProperty delay = new NumberProperty("Delay", this, 50, 1000, 100, 50);
+    private final NumberProperty health = new NumberProperty("Health", this, 1, 20, 10, 0.5);
 
     private final Timer timer = new Timer();
 

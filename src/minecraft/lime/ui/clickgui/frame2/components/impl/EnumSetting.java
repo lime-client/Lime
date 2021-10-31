@@ -1,7 +1,7 @@
 package lime.ui.clickgui.frame2.components.impl;
 
-import lime.features.setting.SettingValue;
-import lime.features.setting.impl.EnumValue;
+import lime.features.setting.Setting;
+import lime.features.setting.impl.EnumProperty;
 import lime.management.FontManager;
 import lime.ui.clickgui.frame2.components.Component;
 import lime.ui.clickgui.frame2.components.FrameModule;
@@ -10,7 +10,7 @@ import net.minecraft.client.gui.GuiScreen;
 import static lime.ui.clickgui.frame2.Priority.defaultWidth;
 
 public class EnumSetting extends Component {
-    public EnumSetting(int x, int y, FrameModule owner, SettingValue setting) {
+    public EnumSetting(int x, int y, FrameModule owner, Setting setting) {
         super(x, y, owner, setting);
     }
 
@@ -22,14 +22,14 @@ public class EnumSetting extends Component {
     @Override
     public void drawScreen(int mouseX, int mouseY) {
         FontManager.ProductSans20.getFont().drawString(getSetting().getSettingName(), x + 5, y + (getOffset() / 2F - (FontManager.ProductSans20.getFont().getFontHeight() / 2F)), -1, true);
-        FontManager.ProductSans20.getFont().drawString(((EnumValue) getSetting()).getSelected().toUpperCase(), x + defaultWidth - FontManager.ProductSans20.getFont().getStringWidth(((EnumValue) getSetting()).getSelected().toUpperCase()) - 5, y + (getOffset() / 2F - (FontManager.ProductSans20.getFont().getFontHeight() / 2F)), -1, true);
+        FontManager.ProductSans20.getFont().drawString(((EnumProperty) getSetting()).getSelected().toUpperCase(), x + defaultWidth - FontManager.ProductSans20.getFont().getStringWidth(((EnumProperty) getSetting()).getSelected().toUpperCase()) - 5, y + (getOffset() / 2F - (FontManager.ProductSans20.getFont().getFontHeight() / 2F)), -1, true);
     }
 
     @Override
     public boolean mouseClicked(int mouseX, int mouseY, int mouseButton) {
         if(GuiScreen.hover(x, y, mouseX, mouseY, defaultWidth, getOffset()))
         {
-            EnumValue enumValue = (EnumValue) getSetting();
+            EnumProperty enumValue = (EnumProperty) getSetting();
 
             int enumIndex = 0;
             for(String str : enumValue.getModes()) {

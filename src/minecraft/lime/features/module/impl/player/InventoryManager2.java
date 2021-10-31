@@ -4,8 +4,8 @@ import lime.core.events.EventTarget;
 import lime.core.events.impl.EventUpdate;
 import lime.features.module.Category;
 import lime.features.module.Module;
-import lime.features.setting.impl.BoolValue;
-import lime.features.setting.impl.SlideValue;
+import lime.features.setting.impl.BooleanProperty;
+import lime.features.setting.impl.NumberProperty;
 import lime.utils.other.InventoryUtils;
 import lime.utils.other.Timer;
 import net.minecraft.client.gui.inventory.GuiInventory;
@@ -22,14 +22,14 @@ public class InventoryManager2 extends Module {
         super("Inventory Manager 2", Category.PLAYER);
     }
 
-    private final SlideValue delay = new SlideValue("Delay", this, 10, 500, 50, 5);
-    private final SlideValue swordSlot = new SlideValue("Sword Slot", this, 1, 9, 1, 1);
-    private final SlideValue pickaxeSlot = new SlideValue("Pickaxe Slot", this, 1, 9, 2, 1);
-    private final SlideValue axeSlot = new SlideValue("Axe Slot", this, 1, 9, 3, 1);
-    private final BoolValue filterInventory = new BoolValue("Filter Inventory", this, true);
-    private final BoolValue openInventory = new BoolValue("Open Inventory", this, false);
-    private final BoolValue autoArmor = new BoolValue("Auto Armor", this, true);
-    private final BoolValue dropJunk = new BoolValue("Drop Junk", this, true);
+    private final NumberProperty delay = new NumberProperty("Delay", this, 10, 500, 50, 5);
+    private final NumberProperty swordSlot = new NumberProperty("Sword Slot", this, 1, 9, 1, 1);
+    private final NumberProperty pickaxeSlot = new NumberProperty("Pickaxe Slot", this, 1, 9, 2, 1);
+    private final NumberProperty axeSlot = new NumberProperty("Axe Slot", this, 1, 9, 3, 1);
+    private final BooleanProperty filterInventory = new BooleanProperty("Filter Inventory", this, true);
+    private final BooleanProperty openInventory = new BooleanProperty("Open Inventory", this, false);
+    private final BooleanProperty autoArmor = new BooleanProperty("Auto Armor", this, true);
+    private final BooleanProperty dropJunk = new BooleanProperty("Drop Junk", this, true);
 
     private final Timer timer = new Timer();
 

@@ -1,13 +1,15 @@
 package lime.features.module.impl.render;
 
+import lime.core.Lime;
 import lime.core.events.EventTarget;
 import lime.core.events.impl.Event2D;
 import lime.core.events.impl.Event3D;
 import lime.features.module.Category;
 import lime.features.module.Module;
-import lime.features.setting.impl.BoolValue;
-import lime.features.setting.impl.EnumValue;
-import lime.features.setting.impl.SlideValue;
+import lime.features.module.impl.combat.AntiBot;
+import lime.features.setting.impl.BooleanProperty;
+import lime.features.setting.impl.EnumProperty;
+import lime.features.setting.impl.NumberProperty;
 import lime.utils.render.ColorUtils;
 import lime.utils.render.RenderUtils;
 import net.minecraft.client.gui.Gui;
@@ -25,7 +27,6 @@ import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.monster.EntitySlime;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.Vec3;
@@ -54,14 +55,14 @@ public class ESP extends Module {
         this.black = Color.BLACK.getRGB();
     }
 
-    public final EnumValue boxMode = new EnumValue("Box Mode", this, "Box", "Box", "Corners");
-    public final BoolValue healthBar = new BoolValue("Health bar", this, true);
-    public final BoolValue you = new BoolValue("You", this,true);
-    public final BoolValue players = new BoolValue("Players", this,true);
-    public final BoolValue invisibles = new BoolValue("Invisibles", this,false);
-    public final BoolValue mobs = new BoolValue("Mobs", this,true);
-    public final BoolValue animals = new BoolValue("Animals", this,false);
-    public final BoolValue items = new BoolValue("Items", this,false);
+    public final EnumProperty boxMode = new EnumProperty("Box Mode", this, "Box", "Box", "Corners");
+    public final BooleanProperty healthBar = new BooleanProperty("Health bar", this, true);
+    public final BooleanProperty you = new BooleanProperty("You", this,true);
+    public final BooleanProperty players = new BooleanProperty("Players", this,true);
+    public final BooleanProperty invisibles = new BooleanProperty("Invisibles", this,false);
+    public final BooleanProperty mobs = new BooleanProperty("Mobs", this,true);
+    public final BooleanProperty animals = new BooleanProperty("Animals", this,false);
+    public final BooleanProperty items = new BooleanProperty("Items", this,false);
     public final java.util.List<Entity> collectedEntities;
     private final IntBuffer viewport;
     private final FloatBuffer modelview;
@@ -70,10 +71,10 @@ public class ESP extends Module {
     private final int color;
     private final int backgroundColor;
     private final int black;
-    private final BoolValue skeleton = new BoolValue("Skeleton", this, false);
+    private final BooleanProperty skeleton = new BooleanProperty("Skeleton", this, false);
 
     private static final Map<EntityPlayer, float[][]> entities = new HashMap<>();
-    private final SlideValue width = new SlideValue("Width", this, 0.5, 10, 1, 0.1).onlyIf(skeleton.getSettingName(), "bool", "true");
+    private final NumberProperty width = new NumberProperty("Width", this, 0.5, 10, 1, 0.1).onlyIf(skeleton.getSettingName(), "bool", "true");
 
     @EventTarget
     public void onRender(Event2D event) {
@@ -206,6 +207,9 @@ public class ESP extends Module {
     }
 
     private boolean isValid(Entity entity) {
+        if(entity instanceof EntityPlayer && Lime.getInstance().getModuleManager().getModuleC(AntiBot.class).isToggled()  && ((AntiBot) Lime.getInstance().getModuleManager().getModuleC(AntiBot.class)).checkBot((EntityPlayer) entity)) {
+            return false;
+        }
         if (entity != mc.thePlayer || this.you.isEnabled() && mc.gameSettings.thirdPersonView != 0) {
             if (entity.isDead) {
                 return false;
@@ -243,7 +247,7 @@ public class ESP extends Module {
         final Color color = new Color(e.getName().equalsIgnoreCase(mc.thePlayer.getName()) ? 0xFF99ff99 : new Color(255, 255, 255).getRGB());
         if (!e.isInvisible()) {
             float[][] entPos = entities.get(e);
-            if (entPos != null && e.getEntityId() != -1488 && RenderUtils.isInViewFrustrum(e.getEntityBoundingBox()) && !e.isDead && e != mc.thePlayer && !e.isPlayerSleeping()) {
+            if (entPos != null && e.getEntityId() != -1488 && RenderUtils.isInViewFrustrum(e.getEntityBoundingBox()) && !e.isDead && e != mc.thePlayer && !e.isPlayerSleeping() && isValid(e)) {
                 GL11.glPushMatrix();
                 GL11.glEnable(GL11.GL_LINE_SMOOTH);
                 GL11.glLineWidth((float) width.getCurrent());

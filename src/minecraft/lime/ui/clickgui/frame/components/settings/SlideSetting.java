@@ -1,7 +1,7 @@
 package lime.ui.clickgui.frame.components.settings;
 
-import lime.features.setting.SettingValue;
-import lime.features.setting.impl.SlideValue;
+import lime.features.setting.Setting;
+import lime.features.setting.impl.NumberProperty;
 import lime.management.FontManager;
 import lime.ui.clickgui.frame.components.Component;
 import lime.utils.other.MathUtils;
@@ -12,7 +12,7 @@ import net.minecraft.util.MathHelper;
 import java.awt.*;
 
 public class SlideSetting extends Component {
-    public SlideSetting(int x, int y, int width, int height, SettingValue setting) {
+    public SlideSetting(int x, int y, int width, int height, Setting setting) {
         super(x, y, width, height, setting);
     }
     private boolean dragging;
@@ -24,7 +24,7 @@ public class SlideSetting extends Component {
         else
             dragging = false;
 
-        SlideValue slide = (SlideValue) setting;
+        NumberProperty slide = (NumberProperty) setting;
         double diff = Math.min(width + 5, Math.max(0, mouseX - (this.x - 3)));
         double min = slide.getMin();
         double max = slide.getMax();
@@ -51,7 +51,7 @@ public class SlideSetting extends Component {
     }
 
     private void setValue(double value) {
-        final SlideValue set = (SlideValue) setting;
+        final NumberProperty set = (NumberProperty) setting;
         set.setCurrentValue(MathHelper.clamp_double(snapToStep(value, set.getIncrement()), set.getMin(), set.getMax()));
     }
 

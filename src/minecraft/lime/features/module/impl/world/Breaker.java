@@ -3,15 +3,18 @@ package lime.features.module.impl.world;
 import lime.core.events.EventTarget;
 import lime.core.events.impl.Event3D;
 import lime.core.events.impl.EventMotion;
+import lime.core.events.impl.EventPacket;
+import lime.features.commands.impl.BlackListBed;
 import lime.features.module.Category;
 import lime.features.module.Module;
-import lime.features.setting.impl.BoolValue;
-import lime.features.setting.impl.SlideValue;
+import lime.features.setting.impl.BooleanProperty;
+import lime.features.setting.impl.NumberProperty;
 import lime.utils.combat.CombatUtils;
 import lime.utils.combat.Rotation;
 import lime.utils.render.RenderUtils;
 import net.minecraft.init.Blocks;
 import net.minecraft.network.play.client.C0APacketAnimation;
+import net.minecraft.network.play.server.S01PacketJoinGame;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.MathHelper;
@@ -26,9 +29,9 @@ public class Breaker extends Module {
         super("Breaker", Category.WORLD);
     }
 
-    private final SlideValue range = new SlideValue("Range", this, 1, 6, 4, 0.5);
-    private final BoolValue rotations = new BoolValue("Rotations", this, true);
-    private final BoolValue noSwing = new BoolValue("No Swing", this, true);
+    private final NumberProperty range = new NumberProperty("Range", this, 1, 6, 4, 0.5);
+    private final BooleanProperty rotations = new BooleanProperty("Rotations", this, true);
+    private final BooleanProperty noSwing = new BooleanProperty("No Swing", this, true);
 
     private final ArrayList<BlockPos> bedPos = new ArrayList<>();
     private BlockPos attackingBed;
@@ -37,6 +40,13 @@ public class Breaker extends Module {
     public void onEnable() {
         bedPos.clear();
         attackingBed = null;
+    }
+
+    @EventTarget
+    public void onPacket(EventPacket e) {
+        if(e.getPacket() instanceof S01PacketJoinGame) {
+            BlackListBed.beds.clear();
+        }
     }
 
     @EventTarget

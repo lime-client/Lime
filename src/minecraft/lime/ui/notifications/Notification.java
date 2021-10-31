@@ -63,7 +63,7 @@ public class Notification {
 
         Gui.drawRect(x, y, x+getWidth(), y+getHeight(), new Color(0, 0, 0, 150).getRGB());
         RenderUtils.drawImage(new ResourceLocation("lime/images/" + type.name().toLowerCase() + ".png"), x + 4, y + (getHeight() / 2F) - (16 / 2F), 16, 16);
-        Gui.drawRect(x, y + getHeight() - 2, x + MathUtils.scale(Math.min(timer.getTimeElapsed(), time), 0, time, 0, getWidth()), y + getHeight(), -1);
+        Gui.drawRect(x, y + getHeight() - 2, x + Math.min(MathUtils.scale(timer.getTimeElapsed(), 0, time, 0, getWidth()), getWidth()), y + getHeight(), -1);
         FontManager.ProductSans20.getFont().drawStringWithShadow(getName(), x + 20, y + 8, -1);
     }
 

@@ -1,11 +1,11 @@
 package lime.ui.clickgui.frame.components;
 
-import lime.features.setting.SettingValue;
+import lime.features.setting.Setting;
 
 public abstract class Component {
     protected int x, y, width, height;
-    protected SettingValue setting;
-    public Component(int x, int y, int width, int height, SettingValue setting) {
+    protected Setting setting;
+    public Component(int x, int y, int width, int height, Setting setting) {
         this.x = x;
         this.y = y;
         this.width = width;

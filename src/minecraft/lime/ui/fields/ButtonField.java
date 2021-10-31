@@ -16,10 +16,11 @@ public class ButtonField {
     private String buttonName;
 
     private final Color bgColor;
+    private Color outlineColor;
     private boolean hovered;
 
     private final Animate animation;
-    private boolean doAnimation;
+    private boolean doAnimation, outline, bg;
 
     private final IButtonAction iButtonAction;
 
@@ -32,6 +33,8 @@ public class ButtonField {
         this.bgColor = bgColor;
         this.iButtonAction = iButtonAction;
         this.hovered = false;
+        this.bg = true;
+        this.outlineColor = new Color(0, 0, 0, 0);
 
         this.animation = new Animate();
         animation.setMin(0);
@@ -40,9 +43,18 @@ public class ButtonField {
         animation.setSpeed(275);
         this.doAnimation = true;
     }
+
     public ButtonField(GlyphPageFontRenderer fontRenderer, String buttonName, double x, double y, double width, double height, Color bgColor, boolean doAnimation, IButtonAction iButtonAction) {
         this(fontRenderer, buttonName, x, y, width, height, bgColor, iButtonAction);
         this.doAnimation = doAnimation;
+    }
+
+
+    public ButtonField(GlyphPageFontRenderer fontRenderer, String buttonName, double x, double y, double width, double height, boolean bg, Color bgColor, boolean outline, Color outlineColor, boolean doAnimation, IButtonAction iButtonAction) {
+        this(fontRenderer, buttonName, x, y, width, height, bgColor, doAnimation, iButtonAction);
+        this.bg = bg;
+        this.outline = outline;
+        this.outlineColor = outlineColor;
     }
 
 
@@ -53,9 +65,13 @@ public class ButtonField {
             animation.setValue(animation.getMax());
         }
         hovered = GuiScreen.hover((int) x, (int) animation.getValue(), mouseX, mouseY, (int) width, (int) height);
-        Gui.drawRect(x, animation.getValue(), x + width, animation.getValue() + height, isHovered() ? bgColor.darker().getRGB() : bgColor.getRGB());
+        if(bg) {
+            Gui.drawRect(x, animation.getValue(), x + width, animation.getValue() + height, isHovered() ? bgColor.darker().getRGB() : bgColor.getRGB());
+        }
         if(isHovered()) {
-            RenderUtils.drawHollowBox((float)x, animation.getValue(), (float)x + (float)width, animation.getValue() + (float)height, 0.5f, new Color(0, 255, 0, 100).getRGB());
+            if(outline) {
+                RenderUtils.drawHollowBox(x, animation.getValue(), x + width, animation.getValue() + height, 0.5f, outlineColor.getRGB());
+            }
         }
         fontRenderer.drawStringWithShadow(buttonName, (float)(x + (width / 2) - (fontRenderer.getStringWidth(buttonName) / 2)), (float) (this.animation.getValue() + (this.height - 8) / 2) - 3, -1);
     }

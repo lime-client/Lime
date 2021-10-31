@@ -1,15 +1,16 @@
 package lime.ui.clickgui.frame2.components;
 
-import lime.features.setting.SettingValue;
+import lime.features.setting.Setting;
 
 public abstract class Component
 {
     private final FrameModule owner;
-    private final SettingValue setting;
+    private final Setting setting;
     protected int x, y;
+    private boolean subList;
 
 
-    public Component(int x, int y, FrameModule owner, SettingValue setting)  {
+    public Component(int x, int y, FrameModule owner, Setting setting)  {
         this.owner = owner;
         this.setting = setting;
         this.x = x;
@@ -32,7 +33,16 @@ public abstract class Component
         this.y = y;
     }
 
-    public SettingValue getSetting() {
+
+    public boolean isSubList() {
+        return subList;
+    }
+
+    public void setSubList(boolean subList) {
+        this.subList = subList;
+    }
+
+    public Setting getSetting() {
         return setting;
     }
 }

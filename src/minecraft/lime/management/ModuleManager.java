@@ -19,6 +19,7 @@ public class ModuleManager {
         modules = new ArrayList<>();
 
         // COMBAT
+        registerModule(new TeleportAura());
         registerModule(new AutoGapple());
         registerModule(new AutoSword());
         registerModule(new Criticals());
@@ -26,7 +27,6 @@ public class ModuleManager {
         registerModule(new Velocity());
         registerModule(new AntiBot());
         registerModule(new AutoPot());
-        registerModule(new TeleportAura());
 
         // EXPLOIT
         registerModule(new InfiniteChat());
@@ -40,12 +40,13 @@ public class ModuleManager {
 
         // MOVEMENT
         registerModule(new TargetStrafe());
-        registerModule(new CustomFlight());
+        registerModule(new HighJump());
         registerModule(new LongJump());
         registerModule(new NoSlow());
         registerModule(new Flight());
         ((Flight) this.getModuleC(Flight.class)).init();
         registerModule(new Sprint());
+        registerModule(new Spider());
         registerModule(new Speed());
         registerModule(new Glide());
         registerModule(new Step());

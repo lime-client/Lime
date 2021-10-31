@@ -183,12 +183,13 @@ public class RenderItem implements IResourceManagerReloadListener
             }
             else
             {
+                GlStateManager.translate(-0.5F, -0.5F, -0.5F);
+
                 if (Config.isCustomItems())
                 {
                     model = CustomItems.getCustomItemModel(stack, model, this.modelLocation);
                 }
 
-                GlStateManager.translate(-0.5F, -0.5F, -0.5F);
                 this.renderModel(model, stack);
 
                 if (stack.hasEffect() && (!Config.isCustomItems() || !CustomItems.renderCustomEffect(this, stack, model)))
@@ -427,6 +428,7 @@ public class RenderItem implements IResourceManagerReloadListener
         this.textureManager.bindTexture(TextureMap.locationBlocksTexture);
         this.textureManager.getTexture(TextureMap.locationBlocksTexture).restoreLastBlurMipmap();
     }
+
 
     private boolean func_183005_a(ItemTransformVec3f p_183005_1_)
     {

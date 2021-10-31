@@ -5,8 +5,8 @@ import lime.features.module.impl.combat.KillAura;
 import lime.features.module.impl.exploit.NoClip;
 import lime.features.module.impl.render.Animations;
 import lime.features.module.impl.render.Camera;
-import lime.features.setting.impl.BoolValue;
-import lime.features.setting.impl.EnumValue;
+import lime.features.setting.impl.BooleanProperty;
+import lime.features.setting.impl.EnumProperty;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -362,7 +362,7 @@ public class ItemRenderer
             {
                 this.renderItemMap(entityplayersp, f2, f, f1);
             }
-            else if (entityplayersp.getItemInUseCount() > 0 || (Lime.getInstance().getModuleManager().getModule("Kill Aura").isToggled() && KillAura.getEntity() != null && ((EnumValue) Lime.getInstance().getSettingsManager().getSetting("Auto Block", Lime.getInstance().getModuleManager().getModule("Kill Aura"))).is("fake") && Minecraft.getMinecraft().thePlayer.getCurrentEquippedItem() != null && Minecraft.getMinecraft().thePlayer.getCurrentEquippedItem().getItem() instanceof ItemSword))            {
+            else if (entityplayersp.getItemInUseCount() > 0 || (Lime.getInstance().getModuleManager().getModule("Kill Aura").isToggled() && KillAura.getEntity() != null && ((EnumProperty) Lime.getInstance().getSettingsManager().getSetting("Auto Block", Lime.getInstance().getModuleManager().getModule("Kill Aura"))).is("fake") && Minecraft.getMinecraft().thePlayer.getCurrentEquippedItem() != null && Minecraft.getMinecraft().thePlayer.getCurrentEquippedItem().getItem() instanceof ItemSword)) {
                 EnumAction enumaction = this.itemToRender.getItemUseAction();
 
                 switch (enumaction)
@@ -619,7 +619,7 @@ public class ItemRenderer
     private void renderFireInFirstPerson(float p_78442_1_)
     {
         // No Fire
-        if(((BoolValue) Lime.getInstance().getSettingsManager().getSetting("No Fire", Lime.getInstance().getModuleManager().getModuleC(Camera.class))).isEnabled() && Lime.getInstance().getModuleManager().getModuleC(Camera.class).isToggled()) {
+        if(((BooleanProperty) Lime.getInstance().getSettingsManager().getSetting("No Fire", Lime.getInstance().getModuleManager().getModuleC(Camera.class))).isEnabled() && Lime.getInstance().getModuleManager().getModuleC(Camera.class).isToggled()) {
             return;
         }
         Tessellator tessellator = Tessellator.getInstance();

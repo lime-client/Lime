@@ -1,35 +1,39 @@
 package lime.features.module.impl.combat;
 
 import lime.core.Lime;
+import lime.core.events.EventBus;
 import lime.core.events.EventTarget;
 import lime.core.events.impl.Event2D;
 import lime.core.events.impl.Event3D;
+import lime.core.events.impl.EventAttack;
 import lime.core.events.impl.EventMotion;
-import lime.core.events.impl.EventWorldChange;
 import lime.features.module.Category;
 import lime.features.module.Module;
-import lime.features.module.impl.combat.killaura.Multi;
-import lime.features.module.impl.combat.killaura.Single;
 import lime.features.module.impl.render.HUD;
-import lime.features.setting.impl.BoolValue;
-import lime.features.setting.impl.EnumValue;
-import lime.features.setting.impl.SlideValue;
-import lime.ui.notifications.Notification;
+import lime.features.setting.impl.BooleanProperty;
+import lime.features.setting.impl.EnumProperty;
+import lime.features.setting.impl.NumberProperty;
+import lime.features.setting.impl.SubOptionProperty;
 import lime.ui.targethud.impl.AstolfoTargetHUD;
-import lime.ui.targethud.impl.LimeTargetHUD;
 import lime.ui.targethud.impl.Lime2TargetHUD;
+import lime.ui.targethud.impl.LimeTargetHUD;
 import lime.utils.combat.CombatUtils;
+import lime.utils.combat.Rotation;
+import lime.utils.other.ChatUtils;
+import lime.utils.other.Timer;
 import lime.utils.render.ColorUtils;
 import lime.utils.render.RenderUtils;
 import lime.utils.time.DeltaTime;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.passive.EntityAnimal;
-import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemSword;
+import net.minecraft.network.play.client.C02PacketUseEntity;
+import net.minecraft.network.play.client.C07PacketPlayerDigging;
+import net.minecraft.network.play.client.C08PacketPlayerBlockPlacement;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
@@ -37,110 +41,215 @@ import java.util.ArrayList;
 import java.util.Comparator;
 
 public class KillAura extends Module {
-
     public KillAura() {
         super("Kill Aura", Category.COMBAT);
     }
 
-    // Settings
-    public final EnumValue state = new EnumValue("State", this, "PRE", "PRE", "POST");
-    private final EnumValue mode = new EnumValue("Mode", this, "Single", "Single", "Multi");
-    private final EnumValue priority = new EnumValue("Priority", this, "Distance", "Distance", "Health", "FOV");
-    public final EnumValue rotations = new EnumValue("Rotations", this, "Basic", "None", "Basic", "Smooth");
-    private final EnumValue targetEsp = new EnumValue("Target ESP", this, "Circle", "None", "Circle");
-    public final EnumValue autoBlock = new EnumValue("Auto Block", this, "Fake", "None", "Basic", "Verus", "Fake");
-    public final EnumValue autoBlockState = new EnumValue("Auto Block State", this, "POST", "PRE", "POST");
-    public final SlideValue rotationsSpeedMin = new SlideValue("Rotations Min", this, 5, 100, 50, 1).onlyIf(rotations.getSettingName(), "enum", "smooth");
-    public final SlideValue rotationsSpeedMax = new SlideValue("Rotations Max", this, 5, 100, 90, 1).onlyIf(rotations.getSettingName(), "enum", "smooth");
-    private final SlideValue autoBlockRange = new SlideValue("Auto Block Range", this, 2.8, 12, 8, 0.05).onlyIf(autoBlock.getSettingName(), "enum", "basic", "fake");
-    public final SlideValue range = new SlideValue("Range", this, 2.8, 6, 4.2, 0.05);
-    public final SlideValue cps = new SlideValue("CPS", this, 1, 20, 8, 1);
-    public final SlideValue randomizeCps = new SlideValue("Randomize CPS", this, 0, 5, 3, 1);
-    public final SlideValue randomizeYaw = new SlideValue("Randomize Yaw", this, 0, 5, 3, 1).onlyIf(rotations.getSettingName(), "enum", "Smooth", "Basic");
-    private final BoolValue players = new BoolValue("Players", this, true);
-    private final BoolValue passives = new BoolValue("Passives", this, false);
-    private final BoolValue mobs = new BoolValue("Mobs", this, true);
-    private final BoolValue teams = new BoolValue("Teams", this, true);
-    public final BoolValue rayCast = new BoolValue("Ray Cast", this, false);
-    private final BoolValue throughWalls = new BoolValue("Through Walls", this, true);
-    public final BoolValue keepSprint = new BoolValue("Keep Sprint", this, true);
-    public final BoolValue gcd = new BoolValue("GCD", this, false);
-    private final BoolValue deathCheck = new BoolValue("Death Check", this, true);
-    public final BoolValue particles = new BoolValue("Particles", this, false);
+    // Attack
+    private final EnumProperty mode = new EnumProperty("Mode", this, "Single", "Single", "Switch");
+    private final EnumProperty state = new EnumProperty("State", this, "PRE", "PRE", "POST");
+    private final EnumProperty autoBlock = new EnumProperty("Auto Block", this, "NCP", "None", "NCP", "Verus", "Fake");
+    private final NumberProperty switchDelay = new NumberProperty("Switch Delay", this, 0, 1000, 100, 50).onlyIf(mode.getSettingName(), "enum", "switch");
+    private final NumberProperty autoBlockRange = new NumberProperty("Auto Block Range", this, 2.7, 12, 6, .5);
+    private final NumberProperty range = new NumberProperty("Range", this, 2.7, 6, 4.2, .05);
+    private final NumberProperty cps = new NumberProperty("CPS", this, 1, 20, 8, 1);
+    private final BooleanProperty keepSprint = new BooleanProperty("Keep Sprint", this, false);
+    private final BooleanProperty rayCast = new BooleanProperty("Ray Cast", this, false);
+
+    // Rotations
+    private final EnumProperty rotations = new EnumProperty("Rotations", this, "NCP", "None", "NCP", "Smooth");
+    private final NumberProperty turnSpeed = new NumberProperty("Turn Speed", this, 0, 180, 90, 10).onlyIf(rotations.getSettingName(), "enum", "smooth");
+    public final NumberProperty randomizeYaw = new NumberProperty("Randomize Yaw", this, 0, 10, 3, 1);
+    public final BooleanProperty movementFix = new BooleanProperty("Movement Fix", this, false).onlyIf(rotations.getSettingName(), "enum", "NCP", "Smooth");
+    private final BooleanProperty gcd = new BooleanProperty("GCD", this, false).onlyIf(rotations.getSettingName(), "enum", "NCP", "Smooth");
+
+    // Targets
+    private final EnumProperty sortBy = new EnumProperty("Sort by", this, "Range", "Range", "Health", "FOV");
+    private final BooleanProperty players = new BooleanProperty("Players", this, true);
+    private final BooleanProperty mobs = new BooleanProperty("Mobs", this, true);
+    private final BooleanProperty passives = new BooleanProperty("Passives", this, false);
+    private final BooleanProperty teams = new BooleanProperty("Teams", this, false);
+    private final BooleanProperty dead = new BooleanProperty("Dead", this, false);
+    private final BooleanProperty throughWalls = new BooleanProperty("Through Walls", this, true);
+
+    // Render
+    private final BooleanProperty jelloEsp = new BooleanProperty("Jello ESP", this, true);
+
+    private final SubOptionProperty targetsSub = new SubOptionProperty("Targets", this, sortBy, players, mobs, passives, teams, dead, throughWalls);
+    private final SubOptionProperty attackSub = new SubOptionProperty("Attack", this, mode, state, autoBlock, switchDelay, autoBlockRange, range, cps, keepSprint, rayCast);
+    private final SubOptionProperty rotationsSub = new SubOptionProperty("Rotations", this, rotations, turnSpeed, randomizeYaw, movementFix, gcd);
+    private final SubOptionProperty renderSub = new SubOptionProperty("Renders", this, jelloEsp);
 
     public static EntityLivingBase entity;
+    public static final float[] currentRotations = new float[2];
+    public static boolean isBlocking;
 
-    // AutoBlock
-    public static boolean isBlocking = false;
-
-    // TargetHUD
     public final LimeTargetHUD limeTargetHUD = new LimeTargetHUD();
     public final AstolfoTargetHUD astolfoTargetHUD = new AstolfoTargetHUD();
     public Lime2TargetHUD lime2TargetHUD = new Lime2TargetHUD();
-
-    private final Single single = new Single(this);
-    private final Multi multi = new Multi(this);
+    private final Timer cpsTimer = new Timer(), switchTimer = new Timer();
+    private int ticks, index;
 
     @Override
     public void onEnable() {
+        if(mc.thePlayer == null) {
+            toggle();
+            return;
+        }
         limeTargetHUD.resetHealthAnimated();
         astolfoTargetHUD.resetHealthAnimated();
-
-        if(mode.is("single")) {
-            single.onEnable();
-        }
-        if(mode.is("multi")) {
-            multi.onEnable();
-        }
+        currentRotations[0] = mc.thePlayer.rotationYaw;
+        currentRotations[1] = mc.thePlayer.rotationPitch;
+        isBlocking = false;
+        ticks = index = 0;
+        switchTimer.reset();
     }
 
     @Override
     public void onDisable() {
-        lime2TargetHUD.reset();
-        if(mode.is("single")) {
-            single.onDisable();
-        }
-        if(mode.is("multi")) {
-            multi.onDisable();
-        }
-    }
-
-    public static EntityLivingBase getEntity() {
-        return entity;
+        unblock();
+        entity = null;
     }
 
     @EventTarget
     public void onMotion(EventMotion e) {
-        this.setSuffix(mode.getSelected());
-        if(mode.is("single")) {
-            single.onMotion(e);
-            entity = single.getTargetedEntity();
+        setSuffix(mode.getSelected());
+        if(!CombatUtils.hasSword()) {
+            isBlocking = false;
         }
-        if(mode.is("multi")) {
-            multi.onMotion(e);
-            entity = multi.getTargetedEntity();
+
+        ArrayList<EntityLivingBase> entities = getEntities();
+
+        if(!entities.isEmpty()) {
+            if(index > entities.size() - 1) index = 0;
+            EntityLivingBase ent = entities.get(mode.is("switch") ? Math.min(index, entities.size() - 1) : 0);
+
+            float[] rotations = getRotations(ent);
+            if(rayCast.isEnabled() && CombatUtils.raycastEntity(range.getCurrent(), rotations) == null) {
+                entity = null;
+                return;
+            }
+            e.setYaw(rotations[0]);
+            e.setPitch(rotations[1]);
+            mc.thePlayer.setRotationsTP(e);
+            entity = ent;
+
+            if(autoBlock.is("ncp") && !e.isPre()) {
+                block();
+            }
+
+            if(isBlocking && CombatUtils.hasSword()) {
+                mc.thePlayer.setItemInUse(mc.thePlayer.getHeldItem(), 32767);
+            }
+
+            if(e.isPre()) {
+                ++ticks;
+            }
+
+            if(autoBlock.is("verus") && e.isPre() && mc.thePlayer.getDistanceToEntity(ent) <= range.getCurrent() && ticks <= 2) {
+                unblock();
+                return;
+            }
+
+            if(mc.thePlayer.getDistanceToEntity(ent) <= range.getCurrent()) {
+                attack(e, ent);
+            }
+        } else {
+            index = 0;
+            limeTargetHUD.resetArmorAnimated();
+            limeTargetHUD.resetHealthAnimated();
+            astolfoTargetHUD.resetHealthAnimated();
+            lime2TargetHUD.reset();
+            if(mode.is("verus") || mode.is("ncp")) {
+                unblock();
+            }
+            switchTimer.reset();
+            entity = null;
+            currentRotations[0] = mc.thePlayer.rotationYaw;
+            currentRotations[1] = mc.thePlayer.rotationPitch;
         }
     }
 
-    @EventTarget
-    public void onWorldLoaded(EventWorldChange e)
-    {
-        this.disableModule();
-        KillAura.entity = null;
-        Lime.getInstance().getNotificationManager().addNotification("Disabled Kill Aura because you changed world!", Notification.Type.WARNING);
+    public void attack(EventMotion e, EntityLivingBase entity) {
+        if(cpsTimer.hasReached(20 / cps.intValue() * 50)) {
+            if(state.is(e.getState().name())) {
+                if(autoBlock.is("verus")) {
+                    unblock();
+                }
+
+                EventBus.INSTANCE.call(new EventAttack(entity));
+
+                mc.thePlayer.swingItem();
+                mc.getNetHandler().sendPacketNoEvent(new C02PacketUseEntity(entity, C02PacketUseEntity.Action.ATTACK));
+                cpsTimer.reset();
+                if(!keepSprint.isEnabled()) {
+                    mc.thePlayer.setSprinting(false);
+                    if(e.isPre()) {
+                        e.setSprint(false);
+                    }
+                }
+
+                if(autoBlock.is("verus")) {
+                    block();
+                    ticks = 0;
+                }
+
+                if(switchTimer.hasReached(switchDelay.intValue())) {
+                    index++;
+                    switchTimer.reset();
+                }
+            }
+        }
     }
 
-    @EventTarget
-    public void on2D(Event2D e)
-    {
-        if(autoBlockRange.getCurrent() < range.getCurrent()) {
-            autoBlockRange.setCurrentValue(range.getCurrent());
+    public void block() {
+        if(CombatUtils.hasSword() && !isBlocking) {
+            mc.getNetHandler().sendPacketNoEvent(new C08PacketPlayerBlockPlacement(new BlockPos(-1, -1, -1), 255, mc.thePlayer.getHeldItem(), 0, 0, 0));
+            isBlocking = true;
         }
-        if(mode.is("single")) {
-            single.on2D(e);
-        } else if(mode.is("multi")) {
-            multi.on2D(e);
+    }
+
+    public void unblock() {
+        if(isBlocking) {
+            mc.thePlayer.sendQueue.addToSendQueue(new C07PacketPlayerDigging(C07PacketPlayerDigging.Action.RELEASE_USE_ITEM, BlockPos.ORIGIN, EnumFacing.DOWN));
+            isBlocking = false;
         }
+    }
+
+    public ArrayList<EntityLivingBase> getEntities() {
+        ArrayList<EntityLivingBase> entities = new ArrayList<>();
+
+        mc.theWorld.loadedEntityList.forEach(entity -> {
+            if(entity instanceof EntityLivingBase && isValid((EntityLivingBase) entity)) {
+                entities.add((EntityLivingBase) entity);
+            }
+        });
+
+        entities.sort(Comparator.comparingDouble(entity -> mc.thePlayer.getDistanceToEntity(entity)));
+        if(!entities.isEmpty() && mc.thePlayer.getDistanceToEntity(entities.get(0)) <= range.getCurrent()) {
+            entities.removeIf(entity -> mc.thePlayer.getDistanceToEntity(entity) > range.getCurrent());
+        }
+        entities.sort(Comparator.comparingDouble(e -> mc.thePlayer.getDistanceToEntity(e)));
+
+        return entities;
+    }
+
+    public float[] getRotations(EntityLivingBase e) {
+        float[] rots = CombatUtils.getEntityRotations(e, true);
+        if(rotations.is("smooth")) {
+            Rotation rotation = CombatUtils.smoothAngle(rots, currentRotations, turnSpeed.intValue(), turnSpeed.intValue());
+            rots[0] = rotation.getYaw();
+            rots[1] = rotation.getPitch();
+        }
+        if(gcd.isEnabled()) {
+            rots = CombatUtils.fixedSensitivity(rots[0], rots[1], currentRotations[0], currentRotations[1]);
+        }
+
+        currentRotations[0] = rots[0];
+        currentRotations[1] = rots[1];
+
+
+        return rots;
     }
 
     public int getColor(int count) {
@@ -149,21 +258,37 @@ public class KillAura extends Module {
         return Color.HSBtoRGB(f2 / 3.0F, 1.0F, 1.0F) | 0xFF000000;
     }
 
-
-    private double time;
-    public boolean down;
+    public static EntityLivingBase getEntity() {
+        return entity;
+    }
 
     @EventTarget
-    public void on3D(Event3D e) {
-        if(targetEsp.is("circle")) {
-            if(mode.is("single")) {
-                single.on3D(e);
-            }
-            if(mode.is("multi")) {
-                multi.on3D(e);
+    public void on2D(Event2D e) {
+        HUD hud = (HUD) Lime.getInstance().getModuleManager().getModule("HUD");
+        if(entity != null && isValid(entity)) {
+            switch(hud.targetHud.getSelected().toLowerCase()) {
+                case "lime":
+                    limeTargetHUD.draw(entity, (float) hud.targetHudX.getCurrent() / 100f * (e.getScaledResolution().getScaledWidth() - 174), (float) hud.targetHudY.getCurrent() / 100f * (e.getScaledResolution().getScaledHeight() - 70), getColor(Math.round(entity.getHealth())));
+                    break;
+                case "lime2":
+                    lime2TargetHUD.draw(entity, (float) hud.targetHudX.getCurrent() / 100f * (e.getScaledResolution().getScaledWidth() - 174), (float) hud.targetHudY.getCurrent() / 100f * (e.getScaledResolution().getScaledHeight() - 70), getColor(Math.round(entity.getHealth())));
+                    break;
+                case "astolfo":
+                    astolfoTargetHUD.draw(entity, (float) hud.targetHudX.getCurrent() / 100f * (e.getScaledResolution().getScaledWidth() - 174), (float) hud.targetHudY.getCurrent() / 100f * (e.getScaledResolution().getScaledHeight() - 70), getColor(Math.round(entity.getHealth())));
+                    break;
             }
         }
     }
+
+    @EventTarget
+    public void on3D(Event3D e) {
+        if(entity != null && isValid(entity)) {
+            renderJello(entity);
+        }
+    }
+
+    private double time;
+    public boolean down;
 
     public void renderJello(EntityLivingBase e) {
         time += .015 * (DeltaTime.getDeltaTime() * .1);
@@ -218,37 +343,12 @@ public class KillAura extends Module {
         GlStateManager.resetColor();
     }
 
-    public boolean hasSword() {
-        return mc.thePlayer.getHeldItem() != null && mc.thePlayer.getHeldItem().getItem() instanceof ItemSword;
-    }
-
-    public void sortEntities(ArrayList<EntityLivingBase> entities, boolean distance) {
-        switch(priority.getSelected().toLowerCase()) {
-            case "health":
-                entities.sort(Comparator.comparingDouble(EntityLivingBase::getHealth));
-                break;
-            case "distance":
-                entities.sort(Comparator.comparingDouble(entity -> mc.thePlayer.getDistanceToEntity(entity)));
-                break;
-            case "fov":
-                entities.sort(Comparator.comparingDouble(CombatUtils::getRotationDifference));
-                break;
-        }
-
-        if(distance) {
-            entities.sort(Comparator.comparingDouble(entity -> mc.thePlayer.getDistanceToEntity(entity)));
-        }
-    }
-
-    public boolean isValid(Entity entity) {
+    public boolean isValid(EntityLivingBase e) {
         AntiBot antiBot = Lime.getInstance().getModuleManager().getModuleC(AntiBot.class);
-        if(entity instanceof EntityPlayer && antiBot.checkBot((EntityPlayer) entity)) return false;
-        if(Lime.getInstance().getFriendManager().isFriend(entity)) return false;
-        if(teams.isEnabled() && entity instanceof EntityLivingBase && mc.thePlayer.isOnSameTeam((EntityLivingBase) entity)) return false;
-        if((deathCheck.isEnabled() && !entity.isEntityAlive()) || (!mc.thePlayer.canEntityBeSeen(entity) && !throughWalls.isEnabled())) return false;
-        if(autoBlock.is("none") && mc.thePlayer.getDistanceToEntity(entity) >= this.range.getCurrent()) return false;
-        if((!autoBlock.is("none") && mc.thePlayer.getDistanceToEntity(entity) >= this.autoBlockRange.getCurrent())) return false;
-        if(!autoBlock.is("none") && mc.thePlayer.getDistanceToEntity(entity) <= this.autoBlockRange.getCurrent() && !hasSword() && mc.thePlayer.getDistanceToEntity(entity) >= this.range.getCurrent()) return false;
-        return (entity instanceof EntityPlayer && this.players.isEnabled()) || ((entity instanceof EntityVillager || entity instanceof EntityAnimal) && this.passives.isEnabled()) || (entity instanceof EntityMob && this.mobs.isEnabled());
+        if(antiBot.isToggled() && e instanceof EntityPlayer && antiBot.checkBot((EntityPlayer) e)) return false;
+        if(!e.isEntityAlive() && !dead.isEnabled()) return false;
+        if(range.getCurrent() < mc.thePlayer.getDistanceToEntity(e) && autoBlockRange.getCurrent() < mc.thePlayer.getDistanceToEntity(e)) return false;
+        if(autoBlockRange.getCurrent() < mc.thePlayer.getDistanceToEntity(e) && range.getCurrent() > mc.thePlayer.getDistanceToEntity(e) && !CombatUtils.hasSword()) return false;
+        return ((e instanceof EntityPlayer && players.isEnabled() && e != mc.thePlayer) || (e instanceof EntityMob && mobs.isEnabled()) || (e instanceof EntityAnimal && passives.isEnabled()) && (mc.thePlayer.canEntityBeSeen(e) || throughWalls.isEnabled()));
     }
 }

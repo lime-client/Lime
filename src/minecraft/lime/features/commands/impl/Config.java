@@ -20,7 +20,7 @@ public class Config extends Command {
 
     @Override
     public String[] getPrefixes() {
-        return new String[] { "cfg" };
+        return new String[] { "config", "cfg" };
     }
 
     @Override

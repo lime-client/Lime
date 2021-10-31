@@ -7,6 +7,7 @@ import lime.utils.IUtil;
 import lime.utils.other.MathUtils;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.item.ItemSword;
 import net.minecraft.util.*;
 
 import java.util.List;
@@ -105,7 +106,9 @@ public class CombatUtils implements IUtil {
         return new float[] { yaw + (random ? MathUtils.random(-killAura.randomizeYaw.getCurrent(), killAura.randomizeYaw.getCurrent()) : 0), pitch + (random ? MathUtils.random(-killAura.randomizeYaw.getCurrent(), killAura.randomizeYaw.getCurrent()) : 0) };
     }
 
-
+    public static boolean hasSword() {
+        return mc.thePlayer.getHeldItem() != null && mc.thePlayer.getHeldItem().getItem() instanceof ItemSword;
+    }
 
     public static Rotation smoothAngle(float[] dst, float[] src, float randMin, float randMax) {
         float[] smoothedAngle = new float[]{src[0] - dst[0], src[1] - dst[1]};

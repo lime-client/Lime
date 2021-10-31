@@ -2,7 +2,7 @@ package lime.features.module.impl.player;
 
 import lime.features.module.Category;
 import lime.features.module.Module;
-import lime.features.setting.impl.TextValue;
+import lime.features.setting.impl.TextProperty;
 
 public class Streamer extends Module {
 
@@ -10,5 +10,5 @@ public class Streamer extends Module {
         super("Streamer", Category.PLAYER);
     }
 
-    public final TextValue playerName = new TextValue("Name", this, "slt");
+    public final TextProperty playerName = new TextProperty("Name", this, "slt");
 }

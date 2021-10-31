@@ -8,8 +8,8 @@ import lime.core.events.impl.EventUpdate;
 import lime.features.module.Category;
 import lime.features.module.Module;
 import lime.features.module.impl.render.HUD;
-import lime.features.setting.impl.BoolValue;
-import lime.features.setting.impl.SlideValue;
+import lime.features.setting.impl.BooleanProperty;
+import lime.features.setting.impl.NumberProperty;
 import lime.ui.targethud.impl.AstolfoTargetHUD;
 import lime.ui.targethud.impl.LimeTargetHUD;
 import lime.utils.movement.pathfinder.CustomVec;
@@ -32,10 +32,10 @@ public class TeleportAura extends Module {
         super("Teleport Aura", Category.COMBAT);
     }
 
-    private final SlideValue cps = new SlideValue("CPS", this, 1, 20, 5, 1);
-    private final SlideValue _targets = new SlideValue("Targets", this, 1, 10, 1, 1);
-    private final SlideValue range = new SlideValue("Range", this, 5, 100, 50, 5);
-    private final BoolValue noSwing = new BoolValue("No Swing", this, false);
+    private final NumberProperty cps = new NumberProperty("CPS", this, 1, 20, 5, 1);
+    private final NumberProperty _targets = new NumberProperty("Targets", this, 1, 10, 1, 1);
+    private final NumberProperty range = new NumberProperty("Range", this, 5, 100, 50, 5);
+    private final BooleanProperty noSwing = new BooleanProperty("No Swing", this, false);
 
     private final Timer cpsTimer = new Timer();
     private ArrayList<CustomVec>[] paths = new ArrayList[50];
@@ -158,7 +158,8 @@ public class TeleportAura extends Module {
     private ArrayList<Entity> getTargets() {
         ArrayList<Entity> entities = new ArrayList<>();
         for(Entity entity : mc.theWorld.getLoadedEntityList()) {
-            if(entity instanceof EntityPlayer && entity != mc.thePlayer && mc.thePlayer.getDistanceToEntity(entity) <= range.getCurrent() && !Lime.getInstance().getFriendManager().isFriend(entity)) {
+            AntiBot antiBot = Lime.getInstance().getModuleManager().getModuleC(AntiBot.class);
+            if(entity instanceof EntityPlayer && entity != mc.thePlayer && mc.thePlayer.getDistanceToEntity(entity) <= range.getCurrent() && !Lime.getInstance().getFriendManager().isFriend(entity) && !antiBot.checkBot((EntityPlayer) entity)) {
                 entities.add(entity);
             }
         }

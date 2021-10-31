@@ -2,17 +2,24 @@ package lime.features.module.impl.player;
 
 import lime.core.Lime;
 import lime.core.events.EventTarget;
+import lime.core.events.impl.Event2D;
 import lime.core.events.impl.EventMotion;
+import lime.core.events.impl.EventMove;
 import lime.core.events.impl.EventPacket;
 import lime.features.module.Category;
 import lime.features.module.Module;
 import lime.features.module.impl.movement.Flight;
-import lime.features.setting.impl.EnumValue;
-import lime.features.setting.impl.SlideValue;
+import lime.features.module.impl.movement.Spider;
+import lime.features.setting.impl.EnumProperty;
+import lime.features.setting.impl.NumberProperty;
+import lime.ui.gui.ProcessBar;
 import lime.utils.movement.MovementUtils;
+import lime.utils.other.PlayerUtils;
 import lime.utils.other.Timer;
+import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.network.play.client.C03PacketPlayer;
 import net.minecraft.network.play.server.S08PacketPlayerPosLook;
+import net.minecraft.network.play.server.S12PacketEntityVelocity;
 
 public class AntiVoid extends Module {
 
@@ -20,34 +27,30 @@ public class AntiVoid extends Module {
         super("Anti Void", Category.PLAYER);
     }
 
-    private final EnumValue mode = new EnumValue("Mode", this, "Motion", "Motion", "Blink", "Funcraft", "Hypixel");
-    private final SlideValue pullBack = new SlideValue("Pullback", this, 500, 3000, 500, 500);
+    private final EnumProperty mode = new EnumProperty("Mode", this, "Motion", "Motion", "Funcraft", "Hypixel", "Verus");
+    private final NumberProperty pullBack = new NumberProperty("Pullback", this, 500, 3000, 500, 500);
+    private ProcessBar processBar;
 
     private final Timer timer = new Timer(), timer1 = new Timer();
     private boolean waitingForPacket;
+    private boolean received, waiting;
+
 
     @Override
     public void onEnable() {
+        ScaledResolution sr = new ScaledResolution(mc);
+        processBar = new ProcessBar((sr.getScaledWidth() / 2) - 25, (sr.getScaledHeight() / 2) + 20, 500);
         waitingForPacket = false;
     }
 
     @EventTarget
     public void onMotion(EventMotion e) {
         this.setSuffix(mode.getSelected());
-        if(!mc.thePlayer.onGround && mc.thePlayer.isEntityAlive() && MovementUtils.isVoidUnder()) {
+        if(!mc.thePlayer.onGround && mc.thePlayer.isEntityAlive() && ((mc.thePlayer.fallDistance > 3 && !mode.is("verus")) || (mc.thePlayer.fallDistance > 4 && !Lime.getInstance().getModuleManager().getModuleC(Flight.class).isToggled() && (!mc.thePlayer.isCollidedHorizontally || Lime.getInstance().getModuleManager().getModuleC(Spider.class).isToggled()))) && MovementUtils.isVoidUnder()) {
             if(mode.is("motion")) {
                 if(timer.hasReached((int) pullBack.getCurrent())) {
                     timer.reset();
                     mc.thePlayer.motionY = 1;
-                }
-            }
-            if(mode.is("blink")) {
-                if(mc.thePlayer.fallDistance > 1 && !Lime.getInstance().getModuleManager().getModuleC(Flight.class).isToggled()) {
-                    e.setCanceled(true);
-                    if(timer1.hasReached(500)) {
-                        e.setCanceled(false);
-                        timer1.reset();
-                    }
                 }
             }
             if(mode.is("funcraft")) {
@@ -65,15 +68,39 @@ public class AntiVoid extends Module {
                     mc.thePlayer.fallDistance = 0;
                 }
             }
-            if(mode.is("verus")) {
-                if(mc.thePlayer.fallDistance > 3.5) {
-                    mc.getNetHandler().addToSendQueue(new C03PacketPlayer(true));
+            if(mode.is("verus") && e.isPre() && mc.thePlayer.fallDistance > 4) {
+                if(!waiting) {
+                    e.setGround(true);
+                    MovementUtils.vClip(0.42);
+                    received = false;
+                    waiting = true;
+                }
+
+                if(received) {
+                    mc.thePlayer.motionY = 1;
+                    if(timer.hasReached(1250)) {
+                        waiting = false;
+                        mc.thePlayer.fallDistance = 0;
+                        timer.reset();
+                    }
                 }
             }
         } else {
             timer.reset();
+            ScaledResolution sr = new ScaledResolution(mc);
+            processBar = new ProcessBar((sr.getScaledWidth() / 2) - 25, (sr.getScaledHeight() / 2) + 20, 500);
+            waiting = false;
+            received = false;
         }
     }
+
+    @EventTarget
+    public void onMove(EventMove e) {
+        if(mode.is("verus") && mc.thePlayer.fallDistance > 4 && MovementUtils.isVoidUnder() && !timer.hasReached(500)) {
+            e.setCanceled(true);
+        }
+    }
+
     @EventTarget
     public void onPacket(EventPacket e) {
         if(e.getPacket() instanceof S08PacketPlayerPosLook) {
@@ -86,6 +113,10 @@ public class AntiVoid extends Module {
                 waitingForPacket = false;
                 timer.reset();
             }
+        }
+
+        if(e.getPacket() instanceof S12PacketEntityVelocity && ((S12PacketEntityVelocity) e.getPacket()).getEntityID() == mc.thePlayer.getEntityId()) {
+            received = true;
         }
     }
 }

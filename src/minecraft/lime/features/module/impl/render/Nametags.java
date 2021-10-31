@@ -180,6 +180,6 @@ public class Nametags extends Module {
                 (entity.getHealth() != 0 && (!(entity instanceof EntityAnimal || entity instanceof EntityMob || entity instanceof EntityIronGolem ||
                         entity instanceof EntitySquid || entity instanceof EntityBat) || creatures) && (!(entity instanceof EntityVillager) || villagers) &&
                         (!(entity instanceof EntityOtherPlayerMP) || (players
-                                && !entity.getName().equalsIgnoreCase("[NPC]") && !entity.getName().equals("")))));
+                                && !entity.getDisplayName().getUnformattedText().contains("NPC ") && !entity.getName().equalsIgnoreCase("[NPC]") && !entity.getDisplayName().getUnformattedText().contains("CIT-") && !entity.getName().equals("")))));
     }
 }

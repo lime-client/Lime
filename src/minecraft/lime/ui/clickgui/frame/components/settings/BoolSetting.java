@@ -1,7 +1,7 @@
 package lime.ui.clickgui.frame.components.settings;
 
-import lime.features.setting.SettingValue;
-import lime.features.setting.impl.BoolValue;
+import lime.features.setting.Setting;
+import lime.features.setting.impl.BooleanProperty;
 import lime.management.FontManager;
 import lime.ui.clickgui.frame.components.Component;
 import net.minecraft.client.gui.Gui;
@@ -12,7 +12,7 @@ import org.lwjgl.opengl.GL11;
 import java.awt.*;
 
 public class BoolSetting extends Component {
-    public BoolSetting(int x, int y, int width, int height, SettingValue setting) {
+    public BoolSetting(int x, int y, int width, int height, Setting setting) {
         super(x, y, width, height, setting);
     }
 
@@ -29,7 +29,7 @@ public class BoolSetting extends Component {
         FontManager.ProductSans20.getFont().drawString(setting.getSettingName(), x + 2, y + 4, -1);
         //FontManager.ProductSans20.getFont().drawString(((BoolValue) setting).isEnabled() + "", this.x + 127 - FontManager.ProductSans20.getFont().getStringWidth(((BoolValue) setting).isEnabled() + ""), this.y + 4, -1);
         Gui.drawRect(this.x + width - 15, this.y + 6, this.x + width - 5, this.y + 16, new Color(25, 25, 25).getRGB());
-        if(((BoolValue) setting).isEnabled()) {
+        if(((BooleanProperty) setting).isEnabled()) {
             GL11.glPushMatrix();
             GlStateManager.enableTexture2D();
             GL11.glEnable(GL11.GL_LINE_SMOOTH);
@@ -48,7 +48,7 @@ public class BoolSetting extends Component {
 
     @Override
     public void mouseClicked(int mouseX, int mouseY, int mouseButton) {
-        ((BoolValue) setting).setEnabled(!((BoolValue) setting).isEnabled());
+        ((BooleanProperty) setting).setEnabled(!((BooleanProperty) setting).isEnabled());
     }
 
     @Override

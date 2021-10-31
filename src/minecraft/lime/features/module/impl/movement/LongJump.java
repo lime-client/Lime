@@ -7,25 +7,22 @@ import lime.core.events.impl.EventMove;
 import lime.core.events.impl.EventPacket;
 import lime.features.module.Category;
 import lime.features.module.Module;
-import lime.features.setting.impl.EnumValue;
-import lime.features.setting.impl.SlideValue;
+import lime.features.setting.impl.EnumProperty;
+import lime.features.setting.impl.NumberProperty;
 import lime.ui.notifications.Notification;
 import lime.utils.movement.MovementUtils;
 import lime.utils.other.InventoryUtils;
-import lime.utils.other.MathUtils;
 import lime.utils.other.PlayerUtils;
 import net.minecraft.block.BlockAir;
 import net.minecraft.item.ItemBow;
 import net.minecraft.item.ItemFishingRod;
 import net.minecraft.item.ItemStack;
-import net.minecraft.network.play.client.C07PacketPlayerDigging;
-import net.minecraft.network.play.client.C08PacketPlayerBlockPlacement;
-import net.minecraft.network.play.client.C09PacketHeldItemChange;
-import net.minecraft.network.play.client.C0FPacketConfirmTransaction;
+import net.minecraft.network.play.client.*;
 import net.minecraft.network.play.server.S12PacketEntityVelocity;
 import net.minecraft.potion.Potion;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.MathHelper;
 
 public class LongJump extends Module {
 
@@ -33,8 +30,8 @@ public class LongJump extends Module {
         super("Long Jump", Category.MOVE);
     }
 
-    private final EnumValue mode = new EnumValue("Mode", this, "Vanilla", "Vanilla", "Funcraft", "Hypixel", "Verus", "Verus_Bow", "Kokscraft");
-    private final SlideValue speed = new SlideValue("Speed", this, 1, 9, 5, 0.5).onlyIf(mode.getSettingName(), "enum", "verus_bow", "verus");
+    private final EnumProperty mode = new EnumProperty("Mode", this, "Vanilla", "Vanilla", "Funcraft", "Hypixel", "Verus", "Verus_Bow", "Kokscraft");
+    private final NumberProperty speed = new NumberProperty("Speed", this, 1, 9, 5, 0.5).onlyIf(mode.getSettingName(), "enum", "verus_bow", "verus");
 
     private double moveSpeed = 0, y;
 
@@ -43,6 +40,11 @@ public class LongJump extends Module {
 
     @Override
     public void onEnable() {
+        if(mode.is("vanilla")) {
+            mc.getNetHandler().sendPacketNoEvent(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY + 3.05, mc.thePlayer.posZ, false));
+            mc.getNetHandler().sendPacketNoEvent(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY, mc.thePlayer.posZ, false));
+            mc.getNetHandler().sendPacketNoEvent(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY, mc.thePlayer.posZ, true));
+        }
         receivedS12 = back = boosted = bowd = false;
         moveSpeed = y = 0;
         stage = ticks = 0;
@@ -51,7 +53,7 @@ public class LongJump extends Module {
             this.toggle();
             return;
         }
-        if(mode.is("hypixel") || mode.is("verus_bow")) {
+        if(mode.is("verus_bow")) {
             ItemStack bow = null;
             int slot = -1;
             for(int i = 36; i < 45; ++i) {
@@ -72,6 +74,10 @@ public class LongJump extends Module {
             }
         }
 
+        if(mode.is("hypixel")) {
+            PlayerUtils.hypixelDamage();
+        }
+
         if(mode.is("verus")) {
             PlayerUtils.verusDamage();
             mc.thePlayer.jump();
@@ -87,7 +93,7 @@ public class LongJump extends Module {
         this.setSuffix(mode.getSelected());
 
         // Auto Bow
-        if((mode.is("verus_bow") || mode.is("hypixel")) && !bowd && !back) {
+        if((mode.is("verus_bow")) && !bowd && !back) {
             MovementUtils.setSpeed(0);
             e.setPitch(-90);
             if(ticks >= 3 && !bowd) {
@@ -157,19 +163,20 @@ public class LongJump extends Module {
                     }
                 }
             } else {
+                if(mc.thePlayer.hurtTime != 0) receivedS12 =true;
                 if(receivedS12) {
                     if(mc.thePlayer.onGround) {
                         if(moveSpeed == 0) {
                             e.setY(mc.thePlayer.motionY = MovementUtils.getJumpBoostModifier(0.6));
                             int amplifier = mc.thePlayer.isPotionActive(Potion.moveSpeed) ? mc.thePlayer.getActivePotionEffect(Potion.moveSpeed).getAmplifier() : -1;
-                            MovementUtils.setSpeed(e, moveSpeed = (amplifier == -1 ? .7 : amplifier == 0 ? .8 : .85));
+                            MovementUtils.setSpeed(e, moveSpeed = (amplifier == -1 ? .55 : amplifier == 0 ? .6 : .65));
                             ticks = 0;
-                        } else {
+                        } else if(ticks > 3){
                             this.toggle();
                         }
                     } else {
-                        MovementUtils.setSpeed(e, Math.max(moveSpeed -= moveSpeed / 18, MovementUtils.getBaseMoveSpeed()));
-                        e.setY(e.getY() * 0.7);
+                        MovementUtils.setSpeed(e, moveSpeed -= moveSpeed / 18);
+                        e.setY(e.getY() * 0.85);
                     }
                 }
             }

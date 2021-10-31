@@ -4,9 +4,9 @@ import lime.core.events.EventTarget;
 import lime.core.events.impl.EventCrosshair;
 import lime.features.module.Category;
 import lime.features.module.Module;
-import lime.features.setting.impl.BoolValue;
-import lime.features.setting.impl.ColorValue;
-import lime.features.setting.impl.SlideValue;
+import lime.features.setting.impl.BooleanProperty;
+import lime.features.setting.impl.ColorProperty;
+import lime.features.setting.impl.NumberProperty;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
@@ -19,13 +19,13 @@ public class Crosshair extends Module {
         super("Crosshair", Category.VISUALS);
     }
 
-    private final SlideValue thickness = new SlideValue("Thickness", this, 0.5, 4, 1, 0.5);
-    private final SlideValue length = new SlideValue("Length", this, 0.5, 10, 3, 0.5);
-    private final SlideValue gap = new SlideValue("Gap", this, 0.5, 4, 3, 0.5);
-    private final BoolValue outline = new BoolValue("Outline", this, true);
-    private final SlideValue outlineThickness = new SlideValue("Outline Thickness", this, 0.5, 4, 0.5, 0.5);
-    private final BoolValue dot = new BoolValue("Dot", this, true);
-    private final ColorValue color = new ColorValue("Color", this, new Color(255, 255, 255).getRGB());
+    private final NumberProperty thickness = new NumberProperty("Thickness", this, 0.5, 4, 1, 0.5);
+    private final NumberProperty length = new NumberProperty("Length", this, 0.5, 10, 3, 0.5);
+    private final NumberProperty gap = new NumberProperty("Gap", this, 0.5, 4, 3, 0.5);
+    private final BooleanProperty outline = new BooleanProperty("Outline", this, true);
+    private final NumberProperty outlineThickness = new NumberProperty("Outline Thickness", this, 0.5, 4, 0.5, 0.5);
+    private final BooleanProperty dot = new BooleanProperty("Dot", this, true);
+    private final ColorProperty color = new ColorProperty("Color", this, new Color(255, 255, 255).getRGB());
 
     @EventTarget
     public void onCrosshairEvent(EventCrosshair e) {

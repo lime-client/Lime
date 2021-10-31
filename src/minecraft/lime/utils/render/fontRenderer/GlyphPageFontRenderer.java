@@ -166,7 +166,7 @@ public class GlyphPageFontRenderer {
      */
     public int drawString(String text, float x, float y, int color, boolean dropShadow) {
         if(text != null)
-            text = text.replace("ı", "");
+            text = text.replace("ı", "").replace("ğ", "").replace("ü", "").replace("ş", "").replace("ö", "");
 
         GlStateManager.enableAlpha();
         this.resetStyles();

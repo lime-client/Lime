@@ -5,8 +5,8 @@ import lime.core.events.impl.EventMotion;
 import lime.core.events.impl.EventPacket;
 import lime.features.module.Category;
 import lime.features.module.Module;
-import lime.features.setting.impl.BoolValue;
-import lime.features.setting.impl.EnumValue;
+import lime.features.setting.impl.BooleanProperty;
+import lime.features.setting.impl.EnumProperty;
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -22,8 +22,8 @@ public class AntiBot extends Module {
         super("Anti Bot", Category.COMBAT);
     }
 
-    private final EnumValue mode = new EnumValue("Mode", this, "Funcraft", "Funcraft", "Hypixel", "Mineplex");
-    private final BoolValue remove = new BoolValue("Remove", this, false);
+    private final EnumProperty mode = new EnumProperty("Mode", this, "Funcraft", "Funcraft", "Hypixel", "Mineplex", "NPC");
+    private final BooleanProperty remove = new BooleanProperty("Remove", this, false);
     private final Map<Integer, Double> distanceMap = new HashMap<>();
 
     private final ArrayList<Integer> bots = new ArrayList<>();
@@ -48,6 +48,10 @@ public class AntiBot extends Module {
 
         if(mode.is("mineplex")) {
             return bots.contains(ent.getEntityId());
+        }
+
+        if(mode.is("npc")) {
+            return ent.getDisplayName().getUnformattedText().contains("NPC") || ent.getDisplayName().getUnformattedText().contains("CIT-");
         }
         return false;
     }

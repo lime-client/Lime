@@ -2,16 +2,10 @@ package lime.ui.clickgui.frame2.components;
 
 import lime.core.Lime;
 import lime.features.module.Module;
-import lime.features.setting.impl.BoolValue;
-import lime.features.setting.impl.EnumValue;
-import lime.features.setting.impl.SlideValue;
-import lime.features.setting.impl.TextValue;
+import lime.features.setting.impl.*;
 import lime.management.FontManager;
 import lime.ui.clickgui.frame2.Priority;
-import lime.ui.clickgui.frame2.components.impl.BoolSetting;
-import lime.ui.clickgui.frame2.components.impl.EnumSetting;
-import lime.ui.clickgui.frame2.components.impl.SlideSetting;
-import lime.ui.clickgui.frame2.components.impl.TextSetting;
+import lime.ui.clickgui.frame2.components.impl.*;
 import lime.utils.render.ColorUtils;
 import lime.utils.render.RenderUtils;
 import lime.utils.render.animation.easings.Animate;
@@ -56,21 +50,29 @@ public class FrameModule {
         {
             Lime.getInstance().getSettingsManager().getSettingsFromModule(module).forEach(setting ->
             {
-                if(setting instanceof BoolValue)
-                {
-                    this.components.add(new BoolSetting(0, 0, this, setting));
+                if(setting instanceof SubOptionProperty) {
+                    this.components.add(new SubOptionSetting(0, 0, this, setting));
                 }
-                if(setting instanceof EnumValue)
-                {
-                    this.components.add(new EnumSetting(0, 0, this, setting));
-                }
-                if(setting instanceof SlideValue)
-                {
-                    this.components.add(new SlideSetting(0, 0, this, setting));
-                }
-                if(setting instanceof TextValue)
-                {
-                    this.components.add(new TextSetting(0, 0, this, setting));
+            });
+            Lime.getInstance().getSettingsManager().getSettingsFromModule(module).forEach(setting ->
+            {
+                if(!setting.isOwned()) {
+                    if(setting instanceof BooleanProperty)
+                    {
+                        this.components.add(new BoolSetting(0, 0, this, setting));
+                    }
+                    if(setting instanceof EnumProperty)
+                    {
+                        this.components.add(new EnumSetting(0, 0, this, setting));
+                    }
+                    if(setting instanceof NumberProperty)
+                    {
+                        this.components.add(new NumberSetting(0, 0, this, setting));
+                    }
+                    if(setting instanceof TextProperty)
+                    {
+                        this.components.add(new TextSetting(0, 0, this, setting));
+                    }
                 }
             });
         }
@@ -108,15 +110,17 @@ public class FrameModule {
 
         if(opened) {
             for (Component component : this.components) { // using for loop because continue isn't supported on foreach
-                component.getSetting().constantCheck();
-                if(component.getSetting().isHide()) continue;
+                if(!component.isSubList()) {
+                    component.getSetting().constantCheck();
+                    if(component.getSetting().isHide()) continue;
 
-                component.setX(x);
-                component.setY(y + moduleHeight + offset);
+                    component.setX(x);
+                    component.setY(y + moduleHeight + offset);
 
-                component.drawScreen(mouseX, mouseY);
+                    component.drawScreen(mouseX, mouseY);
 
-                offset += component.getOffset();
+                    offset += component.getOffset();
+                }
             }
         }
 
@@ -146,8 +150,10 @@ public class FrameModule {
 
         if(opened) {
             for (Component component : this.components) {
-                if((GuiScreen.hover(owner.getX(), owner.getY(), mouseX, mouseY, defaultWidth, owner.getHeight()) || component instanceof TextSetting) && !component.getSetting().isHide() && component.mouseClicked(mouseX, mouseY, mouseButton))
-                    return true;
+                if(!component.isSubList()) {
+                    if((GuiScreen.hover(owner.getX(), owner.getY(), mouseX, mouseY, defaultWidth, owner.getHeight()) || component instanceof TextSetting) && !component.getSetting().isHide() && component.mouseClicked(mouseX, mouseY, mouseButton))
+                        return true;
+                }
             }
         }
 
@@ -164,9 +170,11 @@ public class FrameModule {
         offset = 0;
         if(opened) {
             for (Component component : this.components) { // using for loop because continue isn't supported on foreach
-                component.getSetting().constantCheck();
-                if(component.getSetting().isHide()) continue;
-                offset += component.getOffset();
+                if(!component.isSubList()) {
+                    component.getSetting().constantCheck();
+                    if(component.getSetting().isHide()) continue;
+                    offset += component.getOffset();
+                }
             }
         }
 

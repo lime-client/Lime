@@ -1,22 +1,23 @@
 package lime.core;
 
 import lime.features.module.Module;
-import lime.features.setting.SettingsManager;
-import lime.features.setting.impl.BoolValue;
+import lime.features.setting.impl.BooleanProperty;
 import lime.management.CommandManager;
 import lime.management.FriendManager;
 import lime.management.ModuleManager;
+import lime.management.SettingManager;
 import lime.scripting.ScriptManager;
+import lime.ui.altmanager.AltManager;
 import lime.ui.clickgui.frame.ClickGUI;
 import lime.ui.gui.MainScreen;
 import lime.ui.notifications.NotificationManager;
-import lime.ui.realaltmanager.AltManager;
 import lime.utils.other.file.FileSaver;
 import lime.utils.other.security.CipherEncryption;
 import lime.utils.other.security.User;
 import net.minecraft.client.Minecraft;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.lwjgl.opengl.Display;
 import viamcp.ViaMCP;
 
 import java.io.File;
@@ -25,7 +26,7 @@ import java.net.Proxy;
 public class Lime {
     private final static Lime instance = new Lime();
 
-    private SettingsManager settingsManager;
+    private SettingManager settingsManager;
     private ModuleManager moduleManager;
     private ScriptManager scriptManager;
     private CommandManager commandManager;
@@ -44,9 +45,10 @@ public class Lime {
 
     public void initClient() {
         if(!CipherEncryption.passCheck) {
-            System.out.println("e");
             return;
         }
+
+        Display.setTitle("Lime");
 
         Logger logger = LogManager.getLogger("Lime");
 
@@ -68,7 +70,7 @@ public class Lime {
             limeScriptsFile.mkdir();
 
 
-        settingsManager = new SettingsManager();
+        settingsManager = new SettingManager();
         moduleManager = new ModuleManager();
         commandManager = new CommandManager();
         notificationManager = new NotificationManager();
@@ -77,7 +79,7 @@ public class Lime {
         altManager = new AltManager();
 
         for (Module module : moduleManager.getModules()) {
-            new BoolValue("Show", module, true);
+            new BooleanProperty("Show", module, true);
         }
 
         if((new File("Lime" + java.io.File.separator + "modules.json").exists()))
@@ -119,7 +121,7 @@ public class Lime {
         return clickGUI2;
     }
 
-    public SettingsManager getSettingsManager() {
+    public SettingManager getSettingsManager() {
         return settingsManager;
     }
 

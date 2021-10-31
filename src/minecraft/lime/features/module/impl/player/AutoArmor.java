@@ -4,8 +4,8 @@ import lime.core.events.EventTarget;
 import lime.core.events.impl.EventUpdate;
 import lime.features.module.Category;
 import lime.features.module.Module;
-import lime.features.setting.impl.EnumValue;
-import lime.features.setting.impl.SlideValue;
+import lime.features.setting.impl.EnumProperty;
+import lime.features.setting.impl.NumberProperty;
 import lime.utils.other.InventoryUtils;
 import net.minecraft.client.gui.inventory.GuiInventory;
 import net.minecraft.enchantment.Enchantment;
@@ -20,8 +20,8 @@ public class AutoArmor extends Module {
         super("Auto Armor", Category.PLAYER);
     }
 
-    private final EnumValue mode = new EnumValue("Mode", this, "Normal", "Normal", "OpenInv");
-    private final SlideValue delay = new SlideValue("Delay", this, 0, 100, 50, 5);
+    private final EnumProperty mode = new EnumProperty("Mode", this, "Normal", "Normal", "OpenInv");
+    private final NumberProperty delay = new NumberProperty("Delay", this, 0, 100, 50, 5);
 
     @EventTarget
     public void onTick(EventUpdate event) {

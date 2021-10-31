@@ -166,6 +166,10 @@ public class BlockCrops extends BlockBush implements IGrowable
         }
     }
 
+    public boolean isMaxAge(IBlockState state) {
+        return ((Integer)state.getValue(AGE)).intValue() == 7;
+    }
+
     /**
      * Get the Item that this Block should drop when harvested.
      */

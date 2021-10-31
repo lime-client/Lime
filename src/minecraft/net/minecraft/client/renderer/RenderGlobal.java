@@ -62,6 +62,7 @@ import net.minecraft.crash.CrashReport;
 import net.minecraft.crash.CrashReportCategory;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.item.EntityEnderPearl;
 import net.minecraft.entity.item.EntityItemFrame;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityWitherSkull;
@@ -688,6 +689,7 @@ public class RenderGlobal implements IWorldAccess, IResourceManagerReloadListene
 
                     if (entity1.isInRangeToRender3d(d0, d1, d2))
                     {
+
                         this.renderManager.renderEntitySimple(entity1, partialTicks);
                     }
                 }

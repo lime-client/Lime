@@ -1,5 +1,7 @@
 package lime.utils.other;
 
+import lime.core.Lime;
+import lime.features.module.impl.world.Scaffold;
 import lime.utils.IUtil;
 import net.minecraft.block.*;
 import net.minecraft.util.BlockPos;
@@ -45,6 +47,12 @@ public class BlockUtils implements IUtil {
         }
         if (isPosSolid(pos.add(0, 0, -1))) {
             return new BlockData(pos.add(0, 0, -1), EnumFacing.SOUTH);
+        }
+
+        Scaffold scaffold = Lime.getInstance().getModuleManager().getModuleC(Scaffold.class);
+
+        if(scaffold.search.is("basic")) {
+            return null;
         }
 
         EnumFacing[] enumFacings = EnumFacing.VALUES;

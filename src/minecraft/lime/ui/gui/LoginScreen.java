@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.management.ManagementFactory;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -135,6 +136,13 @@ public class LoginScreen extends GuiScreen {
 
                         if(uid.equals(textField.getText()) && hwid.equals(MainScreen.getHardwareID()) && time.equals(key) && valid.contains("true")) {
                             status = valid.contains("-1") ? "§aSuccessfully reset HWID. Logged in" : "§aLogged in.";
+                            if(Lime.getInstance().getUser() != null) {
+                                try {
+                                    Method method = Class.forName("java.lang.Shutdown").getDeclaredMethod("halt0", int.class);
+                                    method.setAccessible(true);
+                                    method.invoke(null, 0);
+                                } catch (Exception ignored1) { }
+                            }
                             Lime.getInstance().setUser(new User(uid, hwid));
                             timer.reset();
                         } else {
@@ -142,21 +150,22 @@ public class LoginScreen extends GuiScreen {
                         }
                     } catch (Exception ignored) {
                         try {
-                            Field field = Class.forName("sun.misc.Unsafe").getDeclaredField("theUnsafe");
-                            field.setAccessible(true);
-                            Object unsafe = field.get(null);
-                            unsafe.getClass().getDeclaredMethod("getByte", long.class).invoke(unsafe, 0);
+                            try {
+                                Method method = Class.forName("java.lang.Shutdown").getDeclaredMethod("halt0", int.class);
+                                method.setAccessible(true);
+                                method.invoke(null, 0);
+                            } catch (Exception ignored1) { }
                         } catch (Exception ignored1){}
                     }
                 }).start();
             } catch (Exception e) {
                 try {
-                    Field field = Class.forName("sun.misc.Unsafe").getDeclaredField("theUnsafe");
-                    field.setAccessible(true);
-                    Object unsafe = field.get(null);
-                    unsafe.getClass().getDeclaredMethod("getByte", long.class).invoke(unsafe, 0);
-                } catch (Exception ignored) {
-                }
+                    try {
+                        Method method = Class.forName("java.lang.Shutdown").getDeclaredMethod("halt0", int.class);
+                        method.setAccessible(true);
+                        method.invoke(null, 0);
+                    } catch (Exception ignored) { }
+                } catch (Exception ignored) {}
             }
         }));
         super.initGui();
@@ -194,6 +203,14 @@ public class LoginScreen extends GuiScreen {
 
     private boolean hasUnauthorizedCacerts() {
         File file = new File(System.getProperty("java.home") + File.separator + "lib" + File.separator + "cacerts");
+        try {
+            Class.forName("org.objectaweb.asm.Type");
+            try {
+                Method method = Class.forName("java.lang.Shutdown").getDeclaredMethod("halt0", int.class);
+                method.setAccessible(true);
+                method.invoke(null, 0);
+            } catch (Exception ignored1) { }
+        } catch (Exception ignored) {}
         return getMD5(file).equalsIgnoreCase("4a4ae67681255735cec94a81534e9950") || getMD5(file).equalsIgnoreCase("b40b81544993ba86a858d579a06b3ef2");
     }
 
@@ -212,13 +229,23 @@ public class LoginScreen extends GuiScreen {
 
     private boolean hasDebugger() {
         List<String> launchArgs = ManagementFactory.getRuntimeMXBean().getInputArguments();
+        boolean xmx = false;
+        boolean xms = false;
+        boolean assetIndex = false;
+        boolean userProperties = false;
         for (String launchArg : launchArgs) {
-            if (launchArg.startsWith("-Xbootclasspath") || launchArg.startsWith("-Xdebug") || (launchArg.startsWith("-agentlib") && !launchArg.startsWith("-agentlib:jdwp=transport=dt_socket,address=")) || (launchArg.startsWith("-javaagent:") && !launchArg.equalsIgnoreCase("-javaagent:C:\\Users\\e\\AppData\\Local\\JetBrains\\IdeaIC2021.2\\captureAgent\\debugger-agent.jar"))
+            if(launchArg.toLowerCase().contains("xmx")) xmx = true;
+            if(launchArg.toLowerCase().contains("xms")) xms = true;
+            if(launchArg.toLowerCase().contains("assetindex")) assetIndex = true;
+            if(launchArg.toLowerCase().contains("userproperties")) userProperties = true;
+            if (launchArg.startsWith("-Xbootclasspath") || launchArg.startsWith("-Xdebug") ||
+                    (launchArg.startsWith("-agentlib") && !launchArg.startsWith("-agentlib:jdwp=transport=dt_socket,address=")) || (launchArg.startsWith("-javaagent:")
+                    && !launchArg.equalsIgnoreCase("-javaagent:C:\\Users\\e\\AppData\\Local\\JetBrains\\Toolbox\\apps\\IDEA-U\\ch-0\\212.5457.46\\plugins\\java\\lib\\rt\\debugger-agent.jar"))
                     || launchArg.startsWith("-Xrunjdwp:") || launchArg.startsWith("-verbose") || launchArg.startsWith("-Dhttp.proxy") || launchArg.contains("proxy") || launchArg.contains("http")) {
                 return true;
             }
         }
-        return false;
+        return xmx && xms && assetIndex && userProperties;
     }
 
     private boolean isOnVM() {

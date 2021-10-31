@@ -161,6 +161,10 @@ public class MovementUtils implements IUtil {
         return baseSpeed;
     }
 
+    public static boolean hasSpeed() {
+        return mc.thePlayer.isPotionActive(Potion.moveSpeed);
+    }
+
     public static double getBaseMoveSpeed(double base) {
         double baseSpeed = base;
         if (mc.thePlayer.isPotionActive(Potion.moveSpeed)) {

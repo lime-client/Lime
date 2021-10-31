@@ -23,6 +23,7 @@ public class CommandManager {
         registerCommand(new Friend());
         registerCommand(new Help());
         registerCommand(new Toggle());
+        registerCommand(new BlackListBed());
     }
 
     private void registerCommand(Command command) {

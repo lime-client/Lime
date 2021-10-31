@@ -6,9 +6,12 @@ import lime.core.events.impl.EventMotion;
 import lime.core.events.impl.EventPacket;
 import lime.features.module.Category;
 import lime.features.module.Module;
+import lime.features.module.impl.movement.HighJump;
 import lime.features.module.impl.movement.LongJump;
 import lime.features.module.impl.movement.Speed;
-import lime.features.setting.impl.EnumValue;
+import lime.features.setting.impl.BooleanProperty;
+import lime.features.setting.impl.EnumProperty;
+import lime.utils.movement.MovementUtils;
 import net.minecraft.network.play.client.C03PacketPlayer;
 
 public class NoFall extends Module {
@@ -17,10 +20,28 @@ public class NoFall extends Module {
         super("No Fall", Category.PLAYER);
     }
 
-    private final EnumValue mode = new EnumValue("Mode", this, "Vanilla", "Vanilla", "Verus", "Verus2");
+    private final EnumProperty mode = new EnumProperty("Mode", this, "Vanilla", "Vanilla", "Verus", "Verus2");
+    private final BooleanProperty voidCheck = new BooleanProperty("Void Check", this, true);
+    private int ticks;
+
+    @Override
+    public void onEnable() {
+        ticks = 0;
+    }
 
     @EventTarget
     public void onUpdate(EventMotion e) {
+        if(e.isPre()) {
+            if(MovementUtils.isVoidUnder()) {
+                ++ticks;
+            } else {
+                ticks = 0;
+            }
+        }
+
+        if(ticks > 10 && voidCheck.isEnabled() && !Lime.getInstance().getModuleManager().getModuleC(HighJump.class).isToggled()) {
+            return;
+        }
         this.setSuffix(mode.getSelected());
         if(e.isPre()) {
             if(mc.thePlayer.fallDistance > 2.5) {
@@ -28,7 +49,7 @@ public class NoFall extends Module {
                     e.setGround(true);
                     mc.thePlayer.fallDistance = 0;
                 } else if(mode.is("verus2")) {
-                    if(Lime.getInstance().getModuleManager().getModuleC(LongJump.class).isToggled() && ((EnumValue) Lime.getInstance().getSettingsManager().getSetting("Mode", Lime.getInstance().getModuleManager().getModuleC(LongJump.class))).is("verus_bow")) return;
+                    if(Lime.getInstance().getModuleManager().getModuleC(LongJump.class).isToggled() && ((EnumProperty) Lime.getInstance().getSettingsManager().getSetting("Mode", Lime.getInstance().getModuleManager().getModuleC(LongJump.class))).is("verus_bow")) return;
                     e.setGround(true);
                     mc.thePlayer.motionY = -0.0784000015258789;
                     mc.thePlayer.fallDistance = 0;

@@ -31,20 +31,20 @@ public class HUD extends Module {
         super("HUD", Category.VISUALS);
     }
 
-    private final TextValue clientName = new TextValue("Client Name", this, "Lime");
-    public final EnumValue targetHud = new EnumValue("Target HUD", this, "Lime", "None", "Lime", "Lime2", "Astolfo");
-    public final SlideValue targetHudX = new SlideValue("TargetHUD X", this, 0, 100, 50, 1).onlyIf(targetHud.getSettingName(), "enum", "lime", "lime2", "astolfo");
-    public final SlideValue targetHudY = new SlideValue("TargetHUD Y", this, 0, 100, 50, 1).onlyIf(targetHud.getSettingName(), "enum", "lime", "lime2", "astolfo");
-    private final EnumValue sidebar = new EnumValue("Sidebar", this, "Right", "Left", "Right", "None");
-    private final EnumValue color = new EnumValue("Color", this, "Lime", "Lime", "Astolfo", "Rainbow", "Fade");
-    private final ColorValue fadeColor = new ColorValue("Fade Color", this, new Color(200, 0, 0).getRGB()).onlyIf(color.getSettingName(), "enum", "fade");
-    private final SlideValue rectOpacity = new SlideValue("Rect Opacity", this, 0, 255, 0, 5);
-    private final BoolValue customFont = new BoolValue("Custom Font", this, true);
-    private final BoolValue suffix = new BoolValue("Suffix", this, true);
-    private final BoolValue armorHud = new BoolValue("Armor HUD", this, true);
-    private final BoolValue uid = new BoolValue("UID", this, true);
-    private final BoolValue bps = new BoolValue("BP/S", this, true);
-    private final BoolValue fps = new BoolValue("FPS", this, true);
+    private final TextProperty clientName = new TextProperty("Client Name", this, "Lime");
+    public final EnumProperty targetHud = new EnumProperty("Target HUD", this, "Lime", "None", "Lime", "Lime2", "Astolfo");
+    public final NumberProperty targetHudX = new NumberProperty("TargetHUD X", this, 0, 100, 50, 1).onlyIf(targetHud.getSettingName(), "enum", "lime", "lime2", "astolfo");
+    public final NumberProperty targetHudY = new NumberProperty("TargetHUD Y", this, 0, 100, 50, 1).onlyIf(targetHud.getSettingName(), "enum", "lime", "lime2", "astolfo");
+    private final EnumProperty sidebar = new EnumProperty("Sidebar", this, "Right", "Left", "Right", "None");
+    private final EnumProperty color = new EnumProperty("Color", this, "Lime", "Lime", "Astolfo", "Rainbow", "Fade");
+    private final ColorProperty fadeColor = new ColorProperty("Fade Color", this, new Color(200, 0, 0).getRGB()).onlyIf(color.getSettingName(), "enum", "fade");
+    private final NumberProperty rectOpacity = new NumberProperty("Rect Opacity", this, 0, 255, 0, 5);
+    private final BooleanProperty customFont = new BooleanProperty("Custom Font", this, true);
+    private final BooleanProperty suffix = new BooleanProperty("Suffix", this, true);
+    private final BooleanProperty armorHud = new BooleanProperty("Armor HUD", this, true);
+    private final BooleanProperty uid = new BooleanProperty("UID", this, true);
+    private final BooleanProperty bps = new BooleanProperty("BP/S", this, true);
+    private final BooleanProperty fps = new BooleanProperty("FPS", this, true);
 
     private final Animate scoreboardAnimation = new Animate();
 
@@ -110,10 +110,10 @@ public class HUD extends Module {
                     return 1;
             }
         });
-        int increment = customFont.isEnabled() ? FontManager.SfUiArray.getHeight() : mc.fontRendererObj.FONT_HEIGHT;
-        int yCount = 0;
+        int increment = customFont.isEnabled() ? FontManager.SfUiArray.getHeight()+2 : mc.fontRendererObj.FONT_HEIGHT;
+        int yCount = 1;
         for (Module module : modules) {
-            if(module.hasSettings() && !((BoolValue) Lime.getInstance().getSettingsManager().getSetting("Show", module)).isEnabled()) continue;
+            if(module.hasSettings() && !((BooleanProperty) Lime.getInstance().getSettingsManager().getSetting("Show", module)).isEnabled()) continue;
             String moduleName = module.getName() + (suffix.isEnabled() && module.getSuffix() != null && !module.getSuffix().isEmpty() ? "§7 " + module.getSuffix().replace("_", " ") : "");
 
             // HUD Animation
@@ -131,7 +131,7 @@ public class HUD extends Module {
                     Gui.drawRect(e.getScaledResolution().getScaledWidth() - module.hudAnimation.getValue() - 1, yCount, e.getScaledResolution().getScaledWidth()  - module.hudAnimation.getValue(), yCount + increment, color.getRGB());
                 }
                 if(customFont.isEnabled())
-                    FontManager.SfUiArray.drawStringWithShadow(moduleName, (e.getScaledResolution().getScaledWidth() - module.hudAnimation.getValue()) + (sidebar.is("right") ? 0 : 2), 1 + yCount, color.getRGB());
+                    FontManager.SfUiArray.drawStringWithShadow(moduleName, (e.getScaledResolution().getScaledWidth() - module.hudAnimation.getValue()) + (sidebar.is("right") ? 0 : 2), 1.5f + yCount, color.getRGB());
                 else
                     mc.fontRendererObj.drawString(moduleName, (e.getScaledResolution().getScaledWidth() - module.hudAnimation.getValue() + (sidebar.is("right") ? 0 : 3)), yCount + 1, color.getRGB(), true);
 
@@ -147,7 +147,7 @@ public class HUD extends Module {
 
     @EventTarget
     public void onScoreboard(EventScoreboard e) {
-        int size = (int) Lime.getInstance().getModuleManager().getModules().stream().filter(module -> module.isToggled() && ((BoolValue) Lime.getInstance().getSettingsManager().getSetting("Show", module)).isEnabled()).count();
+        int size = (int) Lime.getInstance().getModuleManager().getModules().stream().filter(module -> module.isToggled() && ((BooleanProperty) Lime.getInstance().getSettingsManager().getSetting("Show", module)).isEnabled()).count();
         if(scoreboardAnimation.getValue() > size * FontManager.SfUiArray.getHeight()) {
             scoreboardAnimation.setMin(size * FontManager.SfUiArray.getHeight());
             scoreboardAnimation.setReversed(true);
@@ -159,26 +159,36 @@ public class HUD extends Module {
 
     public static Color getColor(int index) {
         HUD hud = Lime.getInstance().getModuleManager().getModuleC(HUD.class);
+        switch(hud.color.getSelected().toLowerCase()) {
+            case "lime":
+                return ColorUtils.blend2colors(new Color(75, 75, 75), new Color(200, 200, 200).darker(), (System.nanoTime() + (index + index * 100000000L * 2)) / 1.0E09F % 2.0F);
+            case "astolfo":
+                return new Color(ColorUtils.getAstolfo(3000, index * (17 * 4)));
+            case "rainbow":
+                return ColorUtils.rainbow(index + index * 70000000L, 0.7F, 1);
+            case "fade":
+                AtomicInteger count = new AtomicInteger();
+                Lime.getInstance().getModuleManager().getModules().forEach(module ->
+                {
+                    if(module.hudAnimation.getValue() > 0)
+                        count.incrementAndGet();
+                });
+                return ColorUtils.fade(new Color(hud.fadeColor.getColor()), index, count.get());
+        }
         if(hud.color.is("lime")) {
-            return ColorUtils.blend2colors(new Color(75, 75, 75), new Color(200, 200, 200).darker(), (System.nanoTime() + (index + index * 100000000L * 2)) / 1.0E09F % 2.0F);
+
         }
         if(hud.color.is("astolfo")) {
-            return new Color(ColorUtils.getAstolfo(3000, index * (17 * 4)));
+
         }
 
         if(hud.color.is("rainbow")) {
-            return ColorUtils.rainbow(index + index * 70000000L, 0.7F, 1);
+
         }
 
         if(hud.color.is("fade"))
         {
-            AtomicInteger count = new AtomicInteger();
-            Lime.getInstance().getModuleManager().getModules().forEach(module ->
-            {
-                if(module.hudAnimation.getValue() > 0)
-                    count.incrementAndGet();
-            });
-            return ColorUtils.fade(new Color(hud.fadeColor.getColor()), index, count.get());
+
         }
 
         // wtf ?

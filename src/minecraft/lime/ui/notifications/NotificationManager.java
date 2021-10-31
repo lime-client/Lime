@@ -19,6 +19,10 @@ public class NotificationManager {
         this.notifications.add(new Notification(title, time, type));
     }
 
+    public ArrayList<Notification> getNotifications() {
+        return notifications;
+    }
+
     public void drawNotifications(Event2D e) {
         int i = 0;
         for (Notification notification : notifications) {

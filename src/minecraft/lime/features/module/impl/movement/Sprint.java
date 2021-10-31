@@ -4,7 +4,7 @@ import lime.core.events.EventTarget;
 import lime.core.events.impl.EventMotion;
 import lime.features.module.Category;
 import lime.features.module.Module;
-import lime.features.setting.impl.BoolValue;
+import lime.features.setting.impl.BooleanProperty;
 import net.minecraft.potion.Potion;
 
 public class Sprint extends Module {
@@ -13,7 +13,7 @@ public class Sprint extends Module {
         super("Sprint", Category.MOVE);
     }
 
-    private final BoolValue omni = new BoolValue("Omni", this, false);
+    private final BooleanProperty omni = new BooleanProperty("Omni", this, false);
 
     @EventTarget
     public void onMotion(EventMotion e) {

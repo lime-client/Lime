@@ -183,15 +183,15 @@ public class RenderUtils implements IUtil {
         }
     }
 
-    public static void drawHorizontalLine(float x, float y, float x1, float thickness, int color) {
+    public static void drawHorizontalLine(double x, double y, double x1, float thickness, int color) {
         Gui.drawRect(x, y, x1, y + thickness, color);
     }
 
-    public static void drawVerticalLine(float x, float y, float y1, float thickness, int color) {
+    public static void drawVerticalLine(double x, double y, double y1, double thickness, int color) {
         Gui.drawRect(x, y, x + thickness, y1, color);
     }
 
-    public static void drawHollowBox(float x, float y, float x1, float y1, float thickness, int color) {
+    public static void drawHollowBox(double x, float y, double x1, double y1, float thickness, int color) {
         /* Top */
         drawHorizontalLine(x, y, x1, thickness, color);
         /* Bottom */

@@ -3,7 +3,7 @@ package lime.ui.clickgui.frame.components;
 import lime.core.Lime;
 import lime.features.module.Category;
 import lime.features.module.Module;
-import lime.features.setting.SettingValue;
+import lime.features.setting.Setting;
 import lime.features.setting.impl.*;
 import lime.management.FontManager;
 import lime.ui.clickgui.frame.components.settings.*;
@@ -57,21 +57,21 @@ public class FrameCategory {
             return s1.compareToIgnoreCase(s2);
         });
 
-        for(SettingValue set : Lime.getInstance().getSettingsManager().getSettings()) {
-            if(set instanceof EnumValue) {
+        for(Setting set : Lime.getInstance().getSettingsManager().getSettings()) {
+            if(set instanceof EnumProperty) {
                 this.components.add(new EnumSetting(0, 0, 0, 0, set));
             }
-            if(set instanceof BoolValue) {
+            if(set instanceof BooleanProperty) {
                 this.components.add(new BoolSetting(0, 0, 0, 0, set));
             }
-            if(set instanceof SlideValue) {
+            if(set instanceof NumberProperty) {
                 this.components.add(new SlideSetting(0, 0, 0, 0, set));
             }
-            if(set instanceof TextValue) {
-                this.components.add(new TextSetting(0, 0, 0, 0, ((TextValue) set).getText(), set));
+            if(set instanceof TextProperty) {
+                this.components.add(new TextSetting(0, 0, 0, 0, ((TextProperty) set).getText(), set));
             }
-            if(set instanceof ColorValue) {
-                this.components.add(new ColorSetting(0, 0, 0, 0, ((ColorValue) set).getColor(), set));
+            if(set instanceof ColorProperty) {
+                this.components.add(new ColorSetting(0, 0, 0, 0, ((ColorProperty) set).getColor(), set));
             }
         }
         isOpened = false;
@@ -239,7 +239,7 @@ public class FrameCategory {
             if(!openedModules.isEmpty()) {
                 int settingIndex = 0;
                 for(Module openedModule : openedModules) {
-                    for(SettingValue setting : Lime.getInstance().getSettingsManager().getSettingsFromModule(openedModule)) {
+                    for(Setting setting : Lime.getInstance().getSettingsManager().getSettingsFromModule(openedModule)) {
                         if(setting.isHide()) continue;
                         settingIndex++;
                         // Getting I;
@@ -254,7 +254,7 @@ public class FrameCategory {
 
                         moduleIndex = y + 16 + moduleIndex * 16;
 
-                        if(hover(x, moduleIndex + (settingIndex * 16), mouseX, mouseY, width, setting instanceof ColorValue ? 125  : 13)) {
+                        if(hover(x, moduleIndex + (settingIndex * 16), mouseX, mouseY, width, setting instanceof ColorProperty ? 125  : 13)) {
                             dragFrame = false;
                             for(Component component : this.components.stream().filter(component -> component.setting == setting).collect(Collectors.toCollection(ArrayList::new))) {
                                 component.mouseClicked(mouseX, mouseY, mouseButton);
@@ -262,7 +262,7 @@ public class FrameCategory {
                             }
                         }
 
-                        if(setting instanceof ColorValue) settingIndex += 7;
+                        if(setting instanceof ColorProperty) settingIndex += 7;
                     }
                 }
             }

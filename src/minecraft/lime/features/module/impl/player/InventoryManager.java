@@ -4,9 +4,9 @@ import lime.core.events.EventTarget;
 import lime.core.events.impl.EventMotion;
 import lime.features.module.Category;
 import lime.features.module.Module;
-import lime.features.setting.impl.BoolValue;
-import lime.features.setting.impl.EnumValue;
-import lime.features.setting.impl.SlideValue;
+import lime.features.setting.impl.BooleanProperty;
+import lime.features.setting.impl.EnumProperty;
+import lime.features.setting.impl.NumberProperty;
 import lime.utils.other.InventoryUtils;
 import lime.utils.other.Timer;
 import net.minecraft.client.gui.inventory.GuiInventory;
@@ -25,9 +25,9 @@ public class InventoryManager extends Module {
         super("Inventory Manager", Category.PLAYER);
     }
 
-    private final EnumValue mode = new EnumValue("Mode", this, "Normal", "Normal", "OpenInv");
-    private final SlideValue delay = new SlideValue("Delay", this, 5, 100, 80, 5);
-    private final BoolValue dropJunk = new BoolValue("Drop Junk", this, true);
+    private final EnumProperty mode = new EnumProperty("Mode", this, "Normal", "Normal", "OpenInv");
+    private final NumberProperty delay = new NumberProperty("Delay", this, 5, 100, 80, 5);
+    private final BooleanProperty dropJunk = new BooleanProperty("Drop Junk", this, true);
 
     private static final Timer timer = new Timer();
 

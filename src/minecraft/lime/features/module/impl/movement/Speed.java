@@ -7,12 +7,11 @@ import lime.core.events.impl.EventMove;
 import lime.core.events.impl.EventPacket;
 import lime.features.module.Category;
 import lime.features.module.Module;
-import lime.features.setting.impl.BoolValue;
-import lime.features.setting.impl.EnumValue;
-import lime.features.setting.impl.SlideValue;
+import lime.features.setting.impl.BooleanProperty;
+import lime.features.setting.impl.EnumProperty;
+import lime.features.setting.impl.NumberProperty;
 import lime.utils.movement.MovementUtils;
 import net.minecraft.block.BlockStairs;
-import net.minecraft.network.play.client.C0CPacketInput;
 import net.minecraft.network.play.server.S08PacketPlayerPosLook;
 import net.minecraft.potion.Potion;
 import net.minecraft.util.BlockPos;
@@ -23,9 +22,9 @@ public class Speed extends Module {
         super("Speed", Category.MOVE);
     }
 
-    public final EnumValue mode = new EnumValue("Mode", this, "Vanilla", "Vanilla", "Vanilla_BHOP", "Hypixel", "Verus", "Verus2", "Verus_LOWHOP", "NCP", "Funcraft", "Funcraft_YPORT");
-    private final SlideValue speed = new SlideValue("Speed", this, 0.2, 5, 0.6, 0.1).onlyIf(mode.getSettingName(), "enum", "vanilla_bhop", "vanilla");
-    private final BoolValue hypixelStrafe = new BoolValue("Hypixel Strafe", this, false).onlyIf(mode.getSettingName(), "enum", "hypixel");
+    public final EnumProperty mode = new EnumProperty("Mode", this, "Vanilla", "Vanilla", "Vanilla_BHOP", "Hypixel", "HypixelNew", "Verus", "Verus2", "Verus3", "Verus_LOWHOP", "NCP", "Funcraft", "Funcraft_YPORT");
+    private final NumberProperty speed = new NumberProperty("Speed", this, 0.2, 5, 0.6, 0.1).onlyIf(mode.getSettingName(), "enum", "vanilla_bhop", "vanilla");
+    private final BooleanProperty hypixelStrafe = new BooleanProperty("Hypixel Strafe", this, false).onlyIf(mode.getSettingName(), "enum", "hypixel");
     private double moveSpeed, lastDist;
     private int stage, ticks;
     private boolean spoofGround, firstHop, nigger;
@@ -102,6 +101,12 @@ public class Speed extends Module {
 
         if(mode.is("verus2")) {
             if(Lime.getInstance().getModuleManager().getModuleC(Flight.class).isToggled()) return;
+            if(!mc.thePlayer.isMoving()) {
+                firstHop = true;
+                stage = 0;
+                spoofGround = false;
+                return;
+            }
             e.setGround(mc.thePlayer.onGround || spoofGround);
         }
 
@@ -116,13 +121,9 @@ public class Speed extends Module {
 
                 if(mc.thePlayer.onGround) {
                     mc.thePlayer.motionY = MovementUtils.getJumpBoostModifier(0.39999998);
-                    double sped = 0.47;
-                    if(!hypixelStrafe.isEnabled()) {
-                        sped = MovementUtils.getBaseMoveSpeed(0.47);
-                    }
+                    double sped = .47;
                     MovementUtils.setSpeed(moveSpeed = sped);
                 } else {
-                    //mc.timer.timerSpeed = 1.2f;
                     if(hypixelStrafe.isEnabled()) {
                         MovementUtils.setSpeed(MovementUtils.getSpeed());
                     }
@@ -148,6 +149,18 @@ public class Speed extends Module {
 
     @EventTarget
     public void onMove(EventMove e) {
+        if(mode.is("verus3")) {
+            if(mc.thePlayer.isMoving()) {
+                if(mc.thePlayer.onGround) {
+                    e.setY(mc.thePlayer.motionY = 0.41999998688697815);
+                    moveSpeed = 0.6;
+                } else {
+                    moveSpeed = MovementUtils.getBaseMoveSpeed() * ((mc.thePlayer.moveForward == 0 && mc.thePlayer.moveStrafing != 0) || mc.gameSettings.keyBindBack.isKeyDown() ? 1.12 : MovementUtils.hasSpeed() ? mc.thePlayer.getActivePotionEffect(Potion.moveSpeed).getAmplifier() == 1 ? 0.982 : 1.12 : 1.253);
+                }
+
+                MovementUtils.setSpeed(e, moveSpeed);
+            }
+        }
         if(mode.is("mineplex")) {
             if(mc.thePlayer.isMoving()) {
                 if(mc.thePlayer.onGround) {
@@ -173,7 +186,36 @@ public class Speed extends Module {
             }
         }
 
+        if(mode.is("hypixelnew") && !MovementUtils.isVoidUnder()) {
+            if(mc.thePlayer.onGround) {
+                stage = 0;
+            }
+
+            if(mc.thePlayer.isMoving()) {
+                switch(stage) {
+                    case 0:
+                        e.setY(mc.thePlayer.motionY = .3999);
+                        moveSpeed = MovementUtils.getBaseMoveSpeed() *1.64;
+                        break;
+                    case 1:
+                        double difference = .86 * (this.lastDist - MovementUtils.getBaseMoveSpeed());
+                        moveSpeed = lastDist - difference;
+                        System.out.println(moveSpeed);
+                        break;
+                    default:
+                        moveSpeed = lastDist - lastDist / 70;
+                        break;
+                }
+
+                ++stage;
+                MovementUtils.setSpeed(e, Math.max(moveSpeed, MovementUtils.getBaseMoveSpeed()));
+            }
+        }
+
         if(mode.is("ncp") || mode.is("funcraft") || mode.is("funcraft_yport") || mode.is("vanilla_bhop")) {
+            if(mode.is("vanilla_bhop") && Lime.getInstance().getModuleManager().getModuleC(Flight.class).isToggled()) {
+                return;
+            }
             mc.timer.timerSpeed = 1.0866f;
             if(mc.thePlayer.isMoving()) {
                 if(mc.thePlayer.onGround) {
@@ -186,7 +228,7 @@ public class Speed extends Module {
                             if(!mode.is("funcraft_yport")) {
                                 mc.thePlayer.motionY = 0.399399995803833;
                             }
-                            moveSpeed *= 2.149;
+                            moveSpeed *= 2.1499999;
                             stage++;
                         }
                         break;
@@ -209,6 +251,11 @@ public class Speed extends Module {
 
         if(mode.is("verus2")) {
             if(Lime.getInstance().getModuleManager().getModuleC(Flight.class).isToggled()) return;
+            if(!mc.thePlayer.isMoving()) {
+                firstHop = true;
+                stage = 0;
+                return;
+            }
             if(!nigger) {
                 nigger = mc.thePlayer.onGround;
                 return;
@@ -218,7 +265,7 @@ public class Speed extends Module {
                     e.setY(0.41999998688697815);
                     spoofGround = true;
                     stage = 0;
-                } else if (this.stage <= 6) {
+                } else if (this.stage <= 7) {
                     e.setY(0);
                     ++stage;
                 } else {

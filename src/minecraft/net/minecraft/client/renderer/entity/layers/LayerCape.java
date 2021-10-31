@@ -21,11 +21,8 @@ public class LayerCape implements LayerRenderer
 
     public void doRenderLayer(AbstractClientPlayer entitylivingbaseIn, float p_177141_2_, float p_177141_3_, float partialTicks, float p_177141_5_, float p_177141_6_, float p_177141_7_, float scale)
     {
-        if (entitylivingbaseIn.hasPlayerInfo() && !entitylivingbaseIn.isInvisible() && ((entitylivingbaseIn.isWearing(EnumPlayerModelParts.CAPE) && entitylivingbaseIn.getLocationCape() != null) || entitylivingbaseIn == Minecraft.getMinecraft().thePlayer))
+        if (entitylivingbaseIn.hasPlayerInfo() && !entitylivingbaseIn.isInvisible() && ((entitylivingbaseIn.isWearing(EnumPlayerModelParts.CAPE) && entitylivingbaseIn.getLocationCape() != null)))
         {
-            if(entitylivingbaseIn == Minecraft.getMinecraft().thePlayer) {
-                entitylivingbaseIn.setLocationOfCape(new ResourceLocation("lime/images/cape/lime.png"));
-            }
             GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
             this.playerRenderer.bindTexture(entitylivingbaseIn.getLocationCape());
             GlStateManager.pushMatrix();

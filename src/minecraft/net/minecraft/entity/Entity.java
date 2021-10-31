@@ -9,6 +9,7 @@ import lime.core.Lime;
 import lime.core.events.EventBus;
 import lime.core.events.impl.EventSafeWalk;
 import lime.core.events.impl.EventStep;
+import lime.features.module.impl.combat.KillAura;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFence;
 import net.minecraft.block.BlockFenceGate;
@@ -721,7 +722,7 @@ public abstract class Entity implements ICommandSender
                 EventBus.INSTANCE.call(e);
             }
 
-            if (this.stepHeight > 0.0F && flag1 && (d3 != x || d5 != z) && !e.isCanceled() && e.getStepHeight() > 0)
+            if (e.getStepHeight() > 0.0F && flag1 && (d3 != x || d5 != z))
             {
                 double d11 = x;
                 double d7 = y;
@@ -799,8 +800,6 @@ public abstract class Entity implements ICommandSender
                     this.setEntityBoundingBox(axisalignedbb14);
                 }
 
-                y = (-e.getStepHeight());
-
                 for (AxisAlignedBB axisalignedbb12 : list)
                 {
                     y = axisalignedbb12.calculateYOffset(this.getEntityBoundingBox(), y);
@@ -815,7 +814,7 @@ public abstract class Entity implements ICommandSender
                     z = d8;
                     this.setEntityBoundingBox(axisalignedbb3);
                 } else if(this == Minecraft.getMinecraft().thePlayer) {
-                    EventBus.INSTANCE.call(new EventStep(false, stepHeight));
+                    EventBus.INSTANCE.call(new EventStep(false, stepHeight, 1 + y));
                 }
             }
 
@@ -1245,8 +1244,13 @@ public abstract class Entity implements ICommandSender
             f = friction / f;
             strafe = strafe * f;
             forward = forward * f;
-            float f1 = MathHelper.sin(this.rotationYaw * (float)Math.PI / 180.0F);
-            float f2 = MathHelper.cos(this.rotationYaw * (float)Math.PI / 180.0F);
+            KillAura killAura = Lime.getInstance().getModuleManager().getModuleC(KillAura.class);
+            float yaw = this.rotationYaw;
+            if(killAura.movementFix.isEnabled() && killAura.isToggled() && KillAura.entity != null) {
+                yaw = KillAura.currentRotations[0];
+            }
+            float f1 = MathHelper.sin(yaw * (float)Math.PI / 180.0F);
+            float f2 = MathHelper.cos(yaw * (float)Math.PI / 180.0F);
             this.motionX += (double)(strafe * f2 - forward * f1);
             this.motionZ += (double)(forward * f2 + strafe * f1);
         }

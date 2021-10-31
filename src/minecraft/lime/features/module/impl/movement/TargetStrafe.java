@@ -10,8 +10,8 @@ import lime.features.module.Category;
 import lime.features.module.Module;
 import lime.features.module.impl.combat.KillAura;
 import lime.features.module.impl.render.HUD;
-import lime.features.setting.impl.BoolValue;
-import lime.features.setting.impl.SlideValue;
+import lime.features.setting.impl.BooleanProperty;
+import lime.features.setting.impl.NumberProperty;
 import lime.utils.combat.CombatUtils;
 import lime.utils.movement.MovementUtils;
 import lime.utils.render.RenderUtils;
@@ -35,13 +35,13 @@ public class TargetStrafe extends Module {
         super("Target Strafe", Category.MOVE);
     }
 
-    private final SlideValue distance = new SlideValue("Distance", this, 0.5, 6, 2.5, 0.1);
-    private final SlideValue sides = new SlideValue("Sides", this, 1, 20, 8, 1);
-    private final BoolValue speedOnly = new BoolValue("Speed Only", this, true);
-    private final BoolValue playersOnly = new BoolValue("Players Only", this, true);
-    public final BoolValue spaceOnly = new BoolValue("Space Only", this, false);
-    public final BoolValue stopJump = new BoolValue("Stop Jump", this, true).onlyIf(spaceOnly.getSettingName(), "bool", "true");
-    private final BoolValue thirdPerson = new BoolValue("Third Person", this, false);
+    private final NumberProperty distance = new NumberProperty("Distance", this, 0.5, 6, 2.5, 0.1);
+    private final NumberProperty sides = new NumberProperty("Sides", this, 1, 20, 8, 1);
+    private final BooleanProperty speedOnly = new BooleanProperty("Speed Only", this, true);
+    private final BooleanProperty playersOnly = new BooleanProperty("Players Only", this, true);
+    public final BooleanProperty spaceOnly = new BooleanProperty("Space Only", this, false);
+    public final BooleanProperty stopJump = new BooleanProperty("Stop Jump", this, true).onlyIf(spaceOnly.getSettingName(), "bool", "true");
+    private final BooleanProperty thirdPerson = new BooleanProperty("Third Person", this, false);
 
     private static int direction;
     public static Vec3 indexPos;

@@ -5,8 +5,9 @@ import java.io.IOException;
 import java.util.List;
 
 import lime.core.Lime;
-import lime.ui.realaltmanager.Alt;
-import lime.ui.realaltmanager.AltLoginThread;
+import lime.ui.altmanager.Alt;
+import lime.ui.altmanager.AltLoginThread;
+import lime.ui.altmanager.guis.AltManagerScreen;
 import net.minecraft.client.multiplayer.GuiConnecting;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.IChatComponent;
@@ -47,7 +48,8 @@ public class GuiDisconnected extends GuiScreen
         this.buttonList.add(new GuiButton(0, this.width / 2 - 100, this.height / 2 + this.field_175353_i / 2 + this.fontRendererObj.FONT_HEIGHT, I18n.format("gui.toMenu", new Object[0])));
         this.buttonList.add(new GuiButton(1, this.width / 2 - 100, this.height / 2 + this.field_175353_i / 2 + this.fontRendererObj.FONT_HEIGHT + 22, "Reconnect"));
         this.buttonList.add(new GuiButton(2, this.width / 2 - 100, this.height / 2 + this.field_175353_i / 2 + this.fontRendererObj.FONT_HEIGHT + 44, "Alt Manager"));
-        this.buttonList.add(new GuiButton(3, this.width / 2 - 100, this.height / 2 + this.field_175353_i / 2 + this.fontRendererObj.FONT_HEIGHT + 66, "Random Alt"));
+        this.buttonList.add(new GuiButton(3, this.width / 2 - 100, this.height / 2 + this.field_175353_i / 2 + this.fontRendererObj.FONT_HEIGHT + 66, 100, 20, "Random Alt"));
+        this.buttonList.add(new GuiButton(4, this.width / 2, this.height / 2 + this.field_175353_i / 2 + this.fontRendererObj.FONT_HEIGHT + 66, 100, 20, "Random Cracked Alt"));
     }
 
     /**
@@ -70,7 +72,14 @@ public class GuiDisconnected extends GuiScreen
         if(button.id == 3)
         {
             Alt alt = Lime.getInstance().getAltManager().getRandomAlt();
-            altLoginThread = new AltLoginThread(alt.getMail(), alt.getPassword());
+            try {
+                altLoginThread = new AltLoginThread(alt.getMail(), alt.getPassword(), false);
+                altLoginThread.start();
+            } catch (Exception ignored) { }
+        }
+        if(button.id == 4)
+        {
+            altLoginThread = new AltLoginThread(AltManagerScreen.generateRandomString(), "", false);
             altLoginThread.start();
         }
     }

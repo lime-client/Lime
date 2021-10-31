@@ -5,8 +5,8 @@ import lime.core.events.impl.EventMotion;
 import lime.core.events.impl.EventSlow;
 import lime.features.module.Category;
 import lime.features.module.Module;
-import lime.features.setting.impl.BoolValue;
-import lime.features.setting.impl.EnumValue;
+import lime.features.setting.impl.BooleanProperty;
+import lime.features.setting.impl.EnumProperty;
 import net.minecraft.item.*;
 import net.minecraft.network.play.client.C07PacketPlayerDigging;
 import net.minecraft.network.play.client.C08PacketPlayerBlockPlacement;
@@ -19,11 +19,11 @@ public class NoSlow extends Module {
         super("No Slow", Category.MOVE);
     }
 
-    private final EnumValue mode = new EnumValue("Mode", this, "Vanilla", "Vanilla", "NCP");
-    private final BoolValue swords = new BoolValue("Swords", this, true);
-    private final BoolValue consumables = new BoolValue("Consumables", this, true);
-    private final BoolValue potions = new BoolValue("Potions", this, true);
-    private final BoolValue bow = new BoolValue("Bow", this, true);
+    private final EnumProperty mode = new EnumProperty("Mode", this, "Vanilla", "Vanilla", "NCP");
+    private final BooleanProperty swords = new BooleanProperty("Swords", this, true);
+    private final BooleanProperty consumables = new BooleanProperty("Consumables", this, true);
+    private final BooleanProperty potions = new BooleanProperty("Potions", this, true);
+    private final BooleanProperty bow = new BooleanProperty("Bow", this, true);
 
     @EventTarget
     public void onMotion(EventMotion e) {

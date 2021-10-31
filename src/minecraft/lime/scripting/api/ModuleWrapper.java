@@ -2,10 +2,10 @@ package lime.scripting.api;
 
 import jdk.nashorn.api.scripting.AbstractJSObject;
 import lime.core.Lime;
-import lime.features.setting.impl.BoolValue;
-import lime.features.setting.impl.ColorValue;
-import lime.features.setting.impl.SlideValue;
-import lime.features.setting.impl.TextValue;
+import lime.features.setting.impl.BooleanProperty;
+import lime.features.setting.impl.ColorProperty;
+import lime.features.setting.impl.NumberProperty;
+import lime.features.setting.impl.TextProperty;
 import lime.scripting.ScriptModule;
 public class ModuleWrapper extends AbstractJSObject {
     private final ScriptModule module;
@@ -45,7 +45,7 @@ public class ModuleWrapper extends AbstractJSObject {
             return new AbstractJSObject() {
                 @Override
                 public Object call(Object thiz, Object... args) {
-                    new SlideValue((String) args[0], module, Double.parseDouble(args[1] + ""), Double.parseDouble(args[2] + ""), Double.parseDouble(args[3] + ""), Double.parseDouble(args[4] + ""));
+                    new NumberProperty((String) args[0], module, Double.parseDouble(args[1] + ""), Double.parseDouble(args[2] + ""), Double.parseDouble(args[3] + ""), Double.parseDouble(args[4] + ""));
                     return null;
                 }
             };
@@ -54,7 +54,7 @@ public class ModuleWrapper extends AbstractJSObject {
             return new AbstractJSObject() {
                 @Override
                 public Object call(Object thiz, Object... args) {
-                    new BoolValue((String) args[0], module, Boolean.parseBoolean(args[1] + ""));
+                    new BooleanProperty((String) args[0], module, Boolean.parseBoolean(args[1] + ""));
                     return null;
                 }
             };
@@ -63,7 +63,7 @@ public class ModuleWrapper extends AbstractJSObject {
             return new AbstractJSObject() {
                 @Override
                 public Object call(Object thiz, Object... args) {
-                    new TextValue((String) args[0], module, (String) args[1]);
+                    new TextProperty((String) args[0], module, (String) args[1]);
                     return null;
                 }
             };
@@ -72,7 +72,7 @@ public class ModuleWrapper extends AbstractJSObject {
             return new AbstractJSObject() {
                 @Override
                 public Object call(Object thiz, Object... args) {
-                    new ColorValue((String) args[0], module, (Integer) args[1]);
+                    new ColorProperty((String) args[0], module, (Integer) args[1]);
                     return null;
                 }
             };
@@ -81,7 +81,7 @@ public class ModuleWrapper extends AbstractJSObject {
             return new AbstractJSObject() {
                 @Override
                 public Object call(Object thiz, Object... args) {
-                    return ((BoolValue) Lime.getInstance().getSettingsManager().getSetting((String) args[0], module)).isEnabled();
+                    return ((BooleanProperty) Lime.getInstance().getSettingsManager().getSetting((String) args[0], module)).isEnabled();
                 }
             };
         }
@@ -89,7 +89,7 @@ public class ModuleWrapper extends AbstractJSObject {
             return new AbstractJSObject() {
                 @Override
                 public Object call(Object thiz, Object... args) {
-                    return ((SlideValue) Lime.getInstance().getSettingsManager().getSetting((String) args[0], module)).getCurrent();
+                    return ((NumberProperty) Lime.getInstance().getSettingsManager().getSetting((String) args[0], module)).getCurrent();
                 }
             };
         }
@@ -97,7 +97,7 @@ public class ModuleWrapper extends AbstractJSObject {
             return new AbstractJSObject() {
                 @Override
                 public Object call(Object thiz, Object... args) {
-                    return ((TextValue) Lime.getInstance().getSettingsManager().getSetting((String) args[0], module)).getText();
+                    return ((TextProperty) Lime.getInstance().getSettingsManager().getSetting((String) args[0], module)).getText();
                 }
             };
         }
@@ -105,7 +105,7 @@ public class ModuleWrapper extends AbstractJSObject {
             return new AbstractJSObject() {
                 @Override
                 public Object call(Object thiz, Object... args) {
-                    return ((ColorValue) Lime.getInstance().getSettingsManager().getSetting((String) args[0], module)).getColor();
+                    return ((ColorProperty) Lime.getInstance().getSettingsManager().getSetting((String) args[0], module)).getColor();
                 }
             };
         }

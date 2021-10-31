@@ -1,7 +1,7 @@
 package lime.ui.clickgui.frame.components.settings;
 
-import lime.features.setting.SettingValue;
-import lime.features.setting.impl.ColorValue;
+import lime.features.setting.Setting;
+import lime.features.setting.impl.ColorProperty;
 import lime.management.FontManager;
 import lime.ui.clickgui.frame.components.Component;
 import lime.utils.render.RenderUtils;
@@ -17,7 +17,7 @@ import java.nio.IntBuffer;
 
 public class ColorSetting extends Component {
 
-    public ColorSetting(int x, int y, int width, int height, int color, SettingValue settingValue) {
+    public ColorSetting(int x, int y, int width, int height, int color, Setting settingValue) {
         super(x, y, width, height, settingValue);
         this.currentRGB = new Color(color);
         try {
@@ -47,7 +47,7 @@ public class ColorSetting extends Component {
         if(GuiScreen.hover(x + 2, y + 4, mouseX, mouseY, 110, 100) && Mouse.isButtonDown(0)) {
             minecraftColorPoint = new Point(mouseX, mouseY);
             this.color = new Color(getColorUnderMouse());
-            ((ColorValue) setting).setColor(color.getRGB());
+            ((ColorProperty) setting).setColor(color.getRGB());
         }
 
         if(minecraftRGBPoint != null) {

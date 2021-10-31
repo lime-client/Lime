@@ -1,9 +1,6 @@
 package lime.features.module.impl.movement.flights;
 
-import lime.core.events.impl.EventBoundingBox;
-import lime.core.events.impl.EventMotion;
-import lime.core.events.impl.EventMove;
-import lime.core.events.impl.EventPacket;
+import lime.core.events.impl.*;
 import lime.features.module.impl.movement.Flight;
 import net.minecraft.client.Minecraft;
 
@@ -43,6 +40,10 @@ public class FlightValue
     }
 
     public void onUpdate() {
+
+    }
+
+    public void on2D(Event2D e) {
 
     }
 

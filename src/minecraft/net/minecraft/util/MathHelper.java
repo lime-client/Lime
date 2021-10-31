@@ -55,6 +55,10 @@ public class MathHelper
         return value;
     }
 
+    public static int floor(double value) {
+        return (int) Math.floor(value);
+    }
+
     /**
      * sin looked up in a table
      */

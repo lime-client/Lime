@@ -4,7 +4,7 @@ import lime.core.events.EventTarget;
 import lime.core.events.impl.EventPacket;
 import lime.features.module.Category;
 import lime.features.module.Module;
-import lime.features.setting.impl.TextValue;
+import lime.features.setting.impl.TextProperty;
 import lime.utils.other.ChatUtils;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.play.server.S02PacketChat;
@@ -20,7 +20,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public class KillSult extends Module {
 
-    private final TextValue prefix = new TextValue("Prefix", this, "@");
+    private final TextProperty prefix = new TextProperty("Prefix", this, "@");
     public static ArrayList<String> killsults = new ArrayList<>();
 
     public KillSult() {

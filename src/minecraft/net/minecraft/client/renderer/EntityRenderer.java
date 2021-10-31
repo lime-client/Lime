@@ -6,7 +6,6 @@ import com.google.gson.JsonSyntaxException;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.nio.FloatBuffer;
-import java.nio.IntBuffer;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -17,8 +16,7 @@ import lime.core.Lime;
 import lime.core.events.EventBus;
 import lime.core.events.impl.Event3D;
 import lime.features.module.impl.render.Camera;
-import lime.features.setting.impl.BoolValue;
-import lime.utils.render.GLUProjection;
+import lime.features.setting.impl.BooleanProperty;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockBed;
 import net.minecraft.block.material.Material;
@@ -26,7 +24,6 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.gui.GuiDownloadTerrain;
-import net.minecraft.client.gui.GuiMainMenu;
 import net.minecraft.client.gui.MapItemRenderer;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.multiplayer.WorldClient;
@@ -695,7 +692,7 @@ public class EntityRenderer implements IResourceManagerReloadListener
         // No Hurt Cam
         if (this.mc.getRenderViewEntity() instanceof EntityLivingBase)
         {
-            if(((BoolValue) Lime.getInstance().getSettingsManager().getSetting("No Hurt Cam", Lime.getInstance().getModuleManager().getModuleC(Camera.class))).isEnabled() && Lime.getInstance().getModuleManager().getModuleC(Camera.class).isToggled()) {
+            if(((BooleanProperty) Lime.getInstance().getSettingsManager().getSetting("No Hurt Cam", Lime.getInstance().getModuleManager().getModuleC(Camera.class))).isEnabled() && Lime.getInstance().getModuleManager().getModuleC(Camera.class).isToggled()) {
                 return;
             }
             EntityLivingBase entitylivingbase = (EntityLivingBase)this.mc.getRenderViewEntity();
@@ -1459,12 +1456,6 @@ public class EntityRenderer implements IResourceManagerReloadListener
         }
     }
 
-    public void renderStreamIndicator(float partialTicks)
-    {
-        this.setupOverlayRendering();
-        this.mc.ingameGUI.renderStreamIndicator(new ScaledResolution(this.mc));
-    }
-
     private boolean isDrawBlockOutline()
     {
         if (!this.drawBlockOutline)
@@ -1909,18 +1900,6 @@ public class EntityRenderer implements IResourceManagerReloadListener
             this.mc.mcProfiler.endStartSection("forge_render_last");
             Reflector.callVoid(Reflector.ForgeHooksClient_dispatchRenderLast, new Object[] {renderglobal, Float.valueOf(partialTicks)});
         }
-
-        GLUProjection projection = GLUProjection.getInstance();
-        final IntBuffer viewPort = GLAllocation.createDirectIntBuffer(16);
-        final FloatBuffer modelView = GLAllocation.createDirectFloatBuffer(16);
-        final FloatBuffer projectionPort = GLAllocation.createDirectFloatBuffer(16);
-
-        GL11.glGetFloat(GL11.GL_MODELVIEW_MATRIX, modelView);
-        GL11.glGetFloat(GL11.GL_PROJECTION_MATRIX, projectionPort);
-        GL11.glGetInteger(GL11.GL_VIEWPORT, viewPort);
-        ScaledResolution scaledResolution = new ScaledResolution(Minecraft.getMinecraft());
-        projection.updateMatrices(viewPort, modelView, projectionPort, scaledResolution.getScaledWidth() / (double) Minecraft.getMinecraft().displayWidth,
-                scaledResolution.getScaledHeight() / (double) Minecraft.getMinecraft().displayHeight);
 
         EventBus.INSTANCE.call(new Event3D(partialTicks));
         this.mc.mcProfiler.endStartSection("hand");
@@ -2754,11 +2733,6 @@ public class EntityRenderer implements IResourceManagerReloadListener
             }
         }
 
-        if (this.mc.currentScreen instanceof GuiMainMenu)
-        {
-            this.updateMainMenu((GuiMainMenu)this.mc.currentScreen);
-        }
-
         if (this.updatedWorld != world)
         {
             RandomMobs.worldChanged(this.updatedWorld, world);
@@ -2792,49 +2766,6 @@ public class EntityRenderer implements IResourceManagerReloadListener
                     this.mc.ingameGUI.getChatGUI().printChatMessage(chatcomponenttext);
                 }
             }
-        }
-    }
-
-    private void updateMainMenu(GuiMainMenu p_updateMainMenu_1_)
-    {
-        try
-        {
-            String s = null;
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTime(new Date());
-            int i = calendar.get(5);
-            int j = calendar.get(2) + 1;
-
-            if (i == 8 && j == 4)
-            {
-                s = "Happy birthday, OptiFine!";
-            }
-
-            if (i == 14 && j == 8)
-            {
-                s = "Happy birthday, sp614x!";
-            }
-
-            if (s == null)
-            {
-                return;
-            }
-
-            Field[] afield = GuiMainMenu.class.getDeclaredFields();
-
-            for (int k = 0; k < afield.length; ++k)
-            {
-                if (afield[k].getType() == String.class)
-                {
-                    afield[k].setAccessible(true);
-                    afield[k].set(p_updateMainMenu_1_, s);
-                    break;
-                }
-            }
-        }
-        catch (Throwable var8)
-        {
-            ;
         }
     }
 

@@ -1,7 +1,7 @@
 package lime.ui.clickgui.frame.components.settings;
 
-import lime.features.setting.SettingValue;
-import lime.features.setting.impl.TextValue;
+import lime.features.setting.Setting;
+import lime.features.setting.impl.TextProperty;
 import lime.management.FontManager;
 import lime.ui.clickgui.frame.components.Component;
 import net.minecraft.client.gui.Gui;
@@ -14,7 +14,7 @@ import java.awt.*;
 
 public class TextSetting extends Component {
 
-    public TextSetting(int x, int y, int width, int height, String text, SettingValue setting) {
+    public TextSetting(int x, int y, int width, int height, String text, Setting setting) {
         super(x, y, width, height, setting);
         this.text = text;
     }
@@ -32,7 +32,7 @@ public class TextSetting extends Component {
         else if(hovered && Mouse.isButtonDown(0))
             isFocused = true;
 
-        text = ((TextValue) setting).getText();
+        text = ((TextProperty) setting).getText();
 
         Gui.drawRect(x, y + 16, x + width - 6, y + 17, -1);
         FontManager.ProductSans20.getFont().drawString(text + (System.currentTimeMillis() / 500 % 2 == 0 && isFocused ? "_" : ""), this.x + 1, this.y + 4f, -1);
@@ -68,7 +68,7 @@ public class TextSetting extends Component {
                 if((typedChar < 128 || typedChar == '§') && typedChar != '\u001B')
                     this.text += typedChar;
             }
-            ((TextValue) setting).setText(text);
+            ((TextProperty) setting).setText(text);
         }
     }
 

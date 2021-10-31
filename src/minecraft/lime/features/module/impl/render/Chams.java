@@ -5,9 +5,9 @@ import lime.core.events.impl.EventRendererEntity;
 import lime.features.module.Category;
 import lime.features.module.Module;
 import lime.features.module.impl.combat.KillAura;
-import lime.features.setting.impl.BoolValue;
-import lime.features.setting.impl.ColorValue;
-import lime.features.setting.impl.EnumValue;
+import lime.features.setting.impl.BooleanProperty;
+import lime.features.setting.impl.ColorProperty;
+import lime.features.setting.impl.EnumProperty;
 import lime.utils.render.RenderUtils;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.entity.player.EntityPlayer;
@@ -21,10 +21,10 @@ public class Chams extends Module {
         super("Chams", Category.VISUALS);
     }
 
-    private final EnumValue mode = new EnumValue("Mode", this, "Colored", "Colored");
-    private final ColorValue color = new ColorValue("Color", this, new Color(200, 0, 0).getRGB());
-    private final BoolValue onlyTargets = new BoolValue("Only Targets", this, false);
-    private final BoolValue disableLightning = new BoolValue("Disable Lightning", this, false);
+    private final EnumProperty mode = new EnumProperty("Mode", this, "Colored", "Colored");
+    private final ColorProperty color = new ColorProperty("Color", this, new Color(200, 0, 0).getRGB());
+    private final BooleanProperty onlyTargets = new BooleanProperty("Only Targets", this, false);
+    private final BooleanProperty disableLightning = new BooleanProperty("Disable Lightning", this, false);
 
     @EventTarget
     public void onRendererLivingEntity(EventRendererEntity e) {

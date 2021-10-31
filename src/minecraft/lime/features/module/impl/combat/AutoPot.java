@@ -1,26 +1,28 @@
 package lime.features.module.impl.combat;
 
+import lime.core.Lime;
 import lime.core.events.EventTarget;
 import lime.core.events.Priority;
 import lime.core.events.impl.EventMotion;
 import lime.features.module.Category;
 import lime.features.module.Module;
-import lime.features.setting.impl.BoolValue;
-import lime.features.setting.impl.SlideValue;
+import lime.features.module.impl.exploit.Disabler;
+import lime.features.setting.impl.BooleanProperty;
+import lime.features.setting.impl.NumberProperty;
 import lime.utils.movement.MovementUtils;
 import lime.utils.other.InventoryUtils;
 import lime.utils.other.Timer;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.item.ItemPotion;
+import net.minecraft.item.ItemSkull;
 import net.minecraft.item.ItemSoup;
 import net.minecraft.item.ItemStack;
-import net.minecraft.network.play.client.C07PacketPlayerDigging;
+import net.minecraft.network.play.client.C03PacketPlayer;
 import net.minecraft.network.play.client.C08PacketPlayerBlockPlacement;
 import net.minecraft.network.play.client.C09PacketHeldItemChange;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.EnumFacing;
 
 public class AutoPot extends Module {
 
@@ -56,11 +58,11 @@ public class AutoPot extends Module {
         }
     }
 
-    private final SlideValue health = new SlideValue("Health", this, 1, 20, 10, 0.5);
-    private final SlideValue delay = new SlideValue("Delay", this, 100, 1000, 500, 100);
-    private final BoolValue heal = new BoolValue("Heal", this, true);
-    private final BoolValue speed = new BoolValue("Speed", this, true);
-    private final BoolValue soup = new BoolValue("Soup", this, false);
+    private final NumberProperty health = new NumberProperty("Health", this, 1, 20, 10, 0.5);
+    private final NumberProperty delay = new NumberProperty("Delay", this, 100, 1000, 500, 100);
+    private final BooleanProperty heal = new BooleanProperty("Heal", this, true);
+    private final BooleanProperty speed = new BooleanProperty("Speed", this, true);
+    private final BooleanProperty soup = new BooleanProperty("Soup", this, false);
 
     private final Timer timer = new Timer();
 
@@ -71,7 +73,11 @@ public class AutoPot extends Module {
         if(e.isPre() && !mc.thePlayer.capabilities.allowFlying) {
             if(healthPotion == null || !timer.hasReached(delay.intValue()))
                 return;
-            e.setPitch(90);
+            if(Lime.getInstance().getModuleManager().getModuleC(Disabler.class).isToggled() && mc.getCurrentServerData() != null && mc.getCurrentServerData().serverIP.toLowerCase().contains("hypixel")) {
+                mc.getNetHandler().sendPacketNoEvent(new C03PacketPlayer.C05PacketPlayerLook(e.getYaw(), 90, e.isGround()));
+            } else {
+                e.setPitch(90);
+            }
         }
         if(!e.isPre() && !mc.thePlayer.capabilities.allowFlying) {
             if(healthPotion == null || !timer.hasReached(delay.intValue()))
@@ -84,15 +90,16 @@ public class AutoPot extends Module {
 
             mc.getNetHandler().addToSendQueue(new C09PacketHeldItemChange(healthPotion.getSlot() - 36));
             mc.getNetHandler().addToSendQueue(new C08PacketPlayerBlockPlacement(mc.thePlayer.getCurrentEquippedItem()));
-            if(healthPotion.isSoup())
-                mc.getNetHandler().addToSendQueue(new C07PacketPlayerDigging(C07PacketPlayerDigging.Action.DROP_ITEM, BlockPos.ORIGIN, EnumFacing.DOWN));
+            //if(healthPotion.isSoup())
+                //mc.getNetHandler().addToSendQueue(new C07PacketPlayerDigging(C07PacketPlayerDigging.Action.DROP_ITEM, BlockPos.ORIGIN, EnumFacing.DOWN));
             mc.getNetHandler().addToSendQueue(new C09PacketHeldItemChange(mc.thePlayer.inventory.currentItem));
             timer.reset();
         }
     }
 
 
-    private ItemPot getHealingPotion() {
+    public static ItemPot getHealingPotion() {
+        Minecraft mc = Minecraft.getMinecraft();
         GlStateManager.resetColor();
         for(int i = 9; i < 45; ++i) {
             if(InventoryUtils.getSlot(i).getHasStack()) {
@@ -110,12 +117,18 @@ public class AutoPot extends Module {
                     }
                 }
 
-                if(itemStack.getItem() instanceof ItemSoup && soup.isEnabled()) {
+                BooleanProperty b = ((AutoPot) Lime.getInstance().getModuleManager().getModuleC(AutoPot.class)).soup;
+
+                if((itemStack.getItem() instanceof ItemSoup || itemStack.getItem() instanceof ItemSkull) && b.isEnabled()) {
                     return new ItemPot(itemStack, i, true);
                 }
             }
         }
         return null;
+    }
+
+    public boolean shouldPot() {
+        return health.getCurrent() >= mc.thePlayer.getHealth() && (!mc.thePlayer.isPotionActive(Potion.moveSpeed) && speed.isEnabled());
     }
 
     private ItemPot getSpeedPotion() {

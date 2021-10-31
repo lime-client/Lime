@@ -67,6 +67,10 @@ public class IntegratedServer extends MinecraftServer
         this.theWorldSettings = this.isDemo() ? DemoWorldServer.demoWorldSettings : settings;
     }
 
+    public WorldServer getWorld(int dimension) {
+        return this.worldServers[dimension];
+    }
+
     protected ServerCommandManager createNewCommandManager()
     {
         return new IntegratedServerCommandManager();

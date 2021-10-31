@@ -1,7 +1,7 @@
 package lime.ui.clickgui.frame2.components.impl;
 
-import lime.features.setting.SettingValue;
-import lime.features.setting.impl.TextValue;
+import lime.features.setting.Setting;
+import lime.features.setting.impl.TextProperty;
 import lime.management.FontManager;
 import lime.ui.clickgui.frame2.components.Component;
 import lime.ui.clickgui.frame2.components.FrameModule;
@@ -13,7 +13,7 @@ import org.lwjgl.opengl.GL11;
 import static lime.ui.clickgui.frame2.Priority.defaultWidth;
 
 public class TextSetting extends Component {
-    public TextSetting(int x, int y, FrameModule owner, SettingValue setting) {
+    public TextSetting(int x, int y, FrameModule owner, Setting setting) {
         super(x, y, owner, setting);
         text = "";
     }
@@ -28,7 +28,7 @@ public class TextSetting extends Component {
 
     @Override
     public void drawScreen(int mouseX, int mouseY) {
-        text = ((TextValue) getSetting()).getText();
+        text = ((TextProperty) getSetting()).getText();
         GL11.glPushMatrix();
         GL11.glScalef(0.9f, 0.9f, 0);
         FontManager.ProductSans18.getFont().drawStringWithShadow(getSetting().getSettingName(), (x + 5) / 0.9f, y / 0.9F, -1);
@@ -61,7 +61,7 @@ public class TextSetting extends Component {
             text = StringUtils.chop(text);
         }
 
-        ((TextValue) getSetting()).setText(text);
+        ((TextProperty) getSetting()).setText(text);
     }
 
     @Override

@@ -4,7 +4,7 @@ import lime.core.events.EventTarget;
 import lime.core.events.impl.EventUpdate;
 import lime.features.module.Category;
 import lime.features.module.Module;
-import lime.features.setting.impl.EnumValue;
+import lime.features.setting.impl.EnumProperty;
 import lime.utils.movement.MovementUtils;
 
 public class Glide extends Module {
@@ -13,7 +13,7 @@ public class Glide extends Module {
         super("Glide", Category.MOVE);
     }
 
-    private final EnumValue mode = new EnumValue("Mode", this, "Chunk", "Chunk");
+    private final EnumProperty mode = new EnumProperty("Mode", this, "Chunk", "Chunk");
 
     @EventTarget
     public void onUpdate(EventUpdate e) {

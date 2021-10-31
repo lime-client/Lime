@@ -6,7 +6,7 @@ import com.google.gson.JsonParser;
 import com.google.gson.stream.JsonWriter;
 import lime.core.Lime;
 import lime.features.module.Module;
-import lime.features.setting.SettingValue;
+import lime.features.setting.Setting;
 import lime.features.setting.impl.*;
 
 import java.io.FileReader;
@@ -46,7 +46,8 @@ public class FileSaver {
                 if(Lime.getInstance().getSettingsManager().getSettingsFromModule(module) != null && !Lime.getInstance().getSettingsManager().getSettingsFromModule(module).isEmpty()) {
                     jsonWriter.name("settings");
                     jsonWriter.beginArray();
-                    for(SettingValue settingValue : Lime.getInstance().getSettingsManager().getSettingsFromModule(module)) {
+                    for(Setting settingValue : Lime.getInstance().getSettingsManager().getSettingsFromModule(module)) {
+                        if(settingValue instanceof SubOptionProperty) continue;
                         jsonWriter.beginObject();
                         jsonWriter.name("name");
                         jsonWriter.value(settingValue.getSettingName());
@@ -54,15 +55,15 @@ public class FileSaver {
                         jsonWriter.value(this.getSettingType(settingValue).name().toLowerCase());
                         jsonWriter.name("value");
                         if(this.getSettingType(settingValue) == SettingType.ENUM) {
-                            jsonWriter.value(((EnumValue) settingValue).getSelected().toLowerCase());
+                            jsonWriter.value(((EnumProperty) settingValue).getSelected().toLowerCase());
                         } else if(this.getSettingType(settingValue) == SettingType.SLIDER) {
-                            jsonWriter.value(((SlideValue) settingValue).getCurrent());
+                            jsonWriter.value(((NumberProperty) settingValue).getCurrent());
                         } else if(this.getSettingType(settingValue) == SettingType.BOOL) {
-                            jsonWriter.value(((BoolValue) settingValue).isEnabled());
+                            jsonWriter.value(((BooleanProperty) settingValue).isEnabled());
                         } else if(this.getSettingType(settingValue) == SettingType.TEXT) {
-                            jsonWriter.value(((TextValue) settingValue).getText());
+                            jsonWriter.value(((TextProperty) settingValue).getText());
                         } else if(this.getSettingType(settingValue) == SettingType.COLOR) {
-                            jsonWriter.value(((ColorValue) settingValue).getColor());
+                            jsonWriter.value(((ColorProperty) settingValue).getColor());
                         }
                         jsonWriter.endObject();
                     }
@@ -103,30 +104,30 @@ public class FileSaver {
                             Enum type = SettingType.valueOf(setting.getAsJsonObject().get("type").getAsString().toUpperCase());
 
                             if(type == SettingType.TEXT) {
-                                TextValue textValue = (TextValue) Lime.getInstance().getSettingsManager().getSetting(setting.getAsJsonObject().get("name").getAsString(), m);
+                                TextProperty textValue = (TextProperty) Lime.getInstance().getSettingsManager().getSetting(setting.getAsJsonObject().get("name").getAsString(), m);
                                 textValue.setText(setting.getAsJsonObject().get("value").getAsString());
                             }
 
                             if(type == SettingType.COLOR) {
-                                ColorValue colorValue = (ColorValue) Lime.getInstance().getSettingsManager().getSetting(setting.getAsJsonObject().get("name").getAsString(), m);
+                                ColorProperty colorValue = (ColorProperty) Lime.getInstance().getSettingsManager().getSetting(setting.getAsJsonObject().get("name").getAsString(), m);
                                 colorValue.setColor(setting.getAsJsonObject().get("value").getAsInt());
                             }
 
                             // Bool Setting
                             if(type == SettingType.BOOL) {
-                                BoolValue boolSetting = (BoolValue) Lime.getInstance().getSettingsManager().getSetting(setting.getAsJsonObject().get("name").getAsString(), m);
+                                BooleanProperty boolSetting = (BooleanProperty) Lime.getInstance().getSettingsManager().getSetting(setting.getAsJsonObject().get("name").getAsString(), m);
                                 boolSetting.setEnabled(setting.getAsJsonObject().get("value").getAsBoolean());
                             }
 
                             // Slider Setting
                             if(type == SettingType.SLIDER) {
-                                SlideValue slideSetting = (SlideValue) Lime.getInstance().getSettingsManager().getSetting(setting.getAsJsonObject().get("name").getAsString(), m);
+                                NumberProperty slideSetting = (NumberProperty) Lime.getInstance().getSettingsManager().getSetting(setting.getAsJsonObject().get("name").getAsString(), m);
                                 slideSetting.setCurrentValue(setting.getAsJsonObject().get("value").getAsDouble());
                             }
 
                             // Enum Setting
                             if(type == SettingType.ENUM) {
-                                EnumValue enumSetting = (EnumValue) Lime.getInstance().getSettingsManager().getSetting(setting.getAsJsonObject().get("name").getAsString(), m);
+                                EnumProperty enumSetting = (EnumProperty) Lime.getInstance().getSettingsManager().getSetting(setting.getAsJsonObject().get("name").getAsString(), m);
                                 String selected = null;
                                 for(String str : enumSetting.getModes()) {
                                     if(str.equalsIgnoreCase(setting.getAsJsonObject().get("value").getAsString())) selected = str;
@@ -150,16 +151,16 @@ public class FileSaver {
     }
 
 
-    public Enum getSettingType(SettingValue setting) {
-        if(setting instanceof EnumValue)
+    public Enum getSettingType(Setting setting) {
+        if(setting instanceof EnumProperty)
             return SettingType.ENUM;
-        if(setting instanceof SlideValue)
+        if(setting instanceof NumberProperty)
             return SettingType.SLIDER;
-        if(setting instanceof BoolValue)
+        if(setting instanceof BooleanProperty)
             return SettingType.BOOL;
-        if(setting instanceof TextValue)
+        if(setting instanceof TextProperty)
             return SettingType.TEXT;
-        if(setting instanceof ColorValue)
+        if(setting instanceof ColorProperty)
             return SettingType.COLOR;
 
         // wtf?

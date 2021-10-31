@@ -6,7 +6,6 @@ import lime.core.events.impl.EventPacket;
 import lime.features.module.impl.movement.flights.FlightValue;
 import lime.utils.movement.MovementUtils;
 import net.minecraft.network.play.server.S08PacketPlayerPosLook;
-import net.minecraft.network.play.server.S12PacketEntityVelocity;
 
 public class Funcraft2 extends FlightValue {
     public Funcraft2()

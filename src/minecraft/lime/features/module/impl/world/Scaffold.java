@@ -6,9 +6,10 @@ import lime.core.events.impl.*;
 import lime.features.module.Category;
 import lime.features.module.Module;
 import lime.features.module.impl.combat.KillAura;
-import lime.features.setting.impl.BoolValue;
-import lime.features.setting.impl.EnumValue;
-import lime.features.setting.impl.SlideValue;
+import lime.features.module.impl.exploit.Disabler;
+import lime.features.setting.impl.BooleanProperty;
+import lime.features.setting.impl.EnumProperty;
+import lime.features.setting.impl.NumberProperty;
 import lime.management.FontManager;
 import lime.ui.notifications.Notification;
 import lime.utils.combat.CombatUtils;
@@ -24,14 +25,17 @@ import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.play.client.C03PacketPlayer;
 import net.minecraft.network.play.client.C0APacketAnimation;
 import net.minecraft.potion.Potion;
 import net.minecraft.util.*;
+import org.apache.commons.lang3.RandomUtils;
 import org.lwjgl.input.Keyboard;
 
 import java.awt.*;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 
 
 public class Scaffold extends Module {
@@ -52,27 +56,28 @@ public class Scaffold extends Module {
             Blocks.sand, Blocks.cactus, Blocks.dispenser, Blocks.noteblock, Blocks.dropper, Blocks.crafting_table, Blocks.web, Blocks.pumpkin, Blocks.sapling, Blocks.cobblestone_wall, Blocks.oak_fence,
             Blocks.yellow_flower, Blocks.red_flower, Blocks.flower_pot, Blocks.dragon_egg, Blocks.monster_egg);
 
-    private final EnumValue state = new EnumValue("State", this, "POST", "PRE", "POST");
-    private final EnumValue rotations = new EnumValue("Rotations", this, "Basic", "None", "Basic", "Hypixel", "Legit", "Legit2");
-    private final EnumValue itemSpoof = new EnumValue("Item Spoof", this, "Spoof", "Spoof", "KeepSpoof", "Pick");
-    private final EnumValue tower = new EnumValue("Tower", this, "NCP", "None", "NCP");
-    private final SlideValue speedModifier = new SlideValue("Speed Modifier", this, 0.1, 5, 1, 0.1);
-    private final SlideValue expand = new SlideValue("Expand", this, 0, 5, 0, 0.05);
-    private final SlideValue delay = new SlideValue("Delay", this, 0, 300, 0, 25);
-    private final BoolValue keepRotations = new BoolValue("Keep Rotations", this, true);
-    private final BoolValue towerMove = new BoolValue("Tower Move", this, true).onlyIf(tower.getSettingName(), "enum", "ncp");
-    private final BoolValue safeWalk = new BoolValue("Safewalk", this, false);
-    private final BoolValue noSprint = new BoolValue("No Sprint", this, false);
-    private final BoolValue spoofSprint = new BoolValue("Spoof Sprint", this, false).onlyIf(noSprint.getSettingName(), "bool", "false");
-    private final BoolValue sameY = new BoolValue("Same Y", this, false);
-    private final BoolValue noSwing = new BoolValue("No Swing", this, false);
-    private final BoolValue swapper = new BoolValue("Swapper", this, true);
-    private final BoolValue downwards = new BoolValue("Downwards", this, false);
-    private final BoolValue randomVec = new BoolValue("Random Vec", this, false);
-    private final BoolValue rayCast = new BoolValue("RayCast", this, false);
-    private final BoolValue slowSpeed = new BoolValue("Slow Speed", this, false);
-    private final BoolValue blockInfo = new BoolValue("Block Info", this, false);
-    private final BoolValue blockEsp = new BoolValue("Block ESP", this, false);
+    private final EnumProperty state = new EnumProperty("State", this, "POST", "PRE", "POST");
+    private final EnumProperty rotations = new EnumProperty("Rotations", this, "Basic", "None", "Basic", "Hypixel", "Legit", "Legit2");
+    private final EnumProperty itemSpoof = new EnumProperty("Item Spoof", this, "Spoof", "Spoof", "KeepSpoof", "Pick");
+    private final EnumProperty tower = new EnumProperty("Tower", this, "NCP", "None", "NCP");
+    public final EnumProperty search = new EnumProperty("Search", this, "Basic", "Basic", "Advanced");
+    private final NumberProperty speedModifier = new NumberProperty("Speed Modifier", this, 0.1, 5, 1, 0.1);
+    private final NumberProperty expand = new NumberProperty("Expand", this, 0, 5, 0, 0.05);
+    private final NumberProperty delay = new NumberProperty("Delay", this, 0, 300, 0, 25);
+    private final BooleanProperty keepRotations = new BooleanProperty("Keep Rotations", this, true);
+    private final BooleanProperty towerMove = new BooleanProperty("Tower Move", this, true).onlyIf(tower.getSettingName(), "enum", "ncp");
+    private final BooleanProperty safeWalk = new BooleanProperty("Safewalk", this, false);
+    private final BooleanProperty noSprint = new BooleanProperty("No Sprint", this, false);
+    private final BooleanProperty spoofSprint = new BooleanProperty("Spoof Sprint", this, false).onlyIf(noSprint.getSettingName(), "bool", "false");
+    private final BooleanProperty sameY = new BooleanProperty("Same Y", this, false);
+    private final BooleanProperty noSwing = new BooleanProperty("No Swing", this, false);
+    private final BooleanProperty swapper = new BooleanProperty("Swapper", this, true);
+    private final BooleanProperty downwards = new BooleanProperty("Downwards", this, false);
+    private final BooleanProperty randomVec = new BooleanProperty("Random Vec", this, false);
+    private final BooleanProperty rayCast = new BooleanProperty("RayCast", this, false);
+    private final BooleanProperty slowSpeed = new BooleanProperty("Slow Speed", this, false);
+    private final BooleanProperty blockInfo = new BooleanProperty("Block Info", this, false);
+    private final BooleanProperty blockEsp = new BooleanProperty("Block ESP", this, false);
 
     //ToDo : KeepSpoof
 
@@ -228,6 +233,9 @@ public class Scaffold extends Module {
                 assert rotations != null;
                 e.setYaw(yaw = rotations[0]);
                 e.setPitch(pitch = rotations[1]);
+                if(Lime.getInstance().getModuleManager().getModuleC(Disabler.class).isToggled() && mc.getCurrentServerData() != null && mc.getCurrentServerData().serverIP.toLowerCase(Locale.ROOT).contains("hypixel")) {
+                    mc.getNetHandler().sendPacketNoEvent(new C03PacketPlayer.C05PacketPlayerLook(yaw, pitch, mc.thePlayer.onGround));
+                }
                 if(rayTrace(yaw, pitch, blockData) && rayCast.isEnabled()) {
                     return;
                 }

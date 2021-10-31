@@ -4,7 +4,7 @@ import lime.core.events.EventTarget;
 import lime.core.events.impl.EventUpdate;
 import lime.features.module.Category;
 import lime.features.module.Module;
-import lime.features.setting.impl.BoolValue;
+import lime.features.setting.impl.BooleanProperty;
 import net.minecraft.client.gui.GuiChat;
 import net.minecraft.client.settings.KeyBinding;
 import org.lwjgl.input.Keyboard;
@@ -13,7 +13,7 @@ public class InventoryMove extends Module {
     public InventoryMove() {
         super("Inventory Move", Category.PLAYER);
     }
-    private final BoolValue sneak = new BoolValue("Sneak", this, false);
+    private final BooleanProperty sneak = new BooleanProperty("Sneak", this, false);
 
     private final KeyBinding[] keyBindings = new KeyBinding[] {
             mc.gameSettings.keyBindJump,
@@ -29,7 +29,9 @@ public class InventoryMove extends Module {
     public void onDisable() {
         if(mc.currentScreen != null) {
             for (KeyBinding keyBinding : keyBindings) {
-                KeyBinding.setKeyBindState(keyBinding.getKeyCode(), false);
+                if(keyBinding != null) {
+                    KeyBinding.setKeyBindState(keyBinding.getKeyCode(), false);
+                }
             }
         }
     }

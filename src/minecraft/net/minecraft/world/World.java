@@ -1073,9 +1073,8 @@ public abstract class World implements IBlockAccess
      */
     public void playSoundAtEntity(Entity entityIn, String name, float volume, float pitch)
     {
-        for (int i = 0; i < this.worldAccesses.size(); ++i)
-        {
-            ((IWorldAccess)this.worldAccesses.get(i)).playSound(name, entityIn.posX, entityIn.posY, entityIn.posZ, volume, pitch);
+        for (IWorldAccess worldAccess : this.worldAccesses) {
+            ((IWorldAccess) worldAccess).playSound(name, entityIn.posX, entityIn.posY, entityIn.posZ, volume, pitch);
         }
     }
 
@@ -1084,9 +1083,8 @@ public abstract class World implements IBlockAccess
      */
     public void playSoundToNearExcept(EntityPlayer player, String name, float volume, float pitch)
     {
-        for (int i = 0; i < this.worldAccesses.size(); ++i)
-        {
-            ((IWorldAccess)this.worldAccesses.get(i)).playSoundToNearExcept(player, name, player.posX, player.posY, player.posZ, volume, pitch);
+        for (IWorldAccess worldAccess : this.worldAccesses) {
+            ((IWorldAccess) worldAccess).playSoundToNearExcept(player, name, player.posX, player.posY, player.posZ, volume, pitch);
         }
     }
 
@@ -1100,9 +1098,8 @@ public abstract class World implements IBlockAccess
         if (ViaMCP.getInstance().getVersion() >= 110 && this instanceof WorldClient && !soundName.toLowerCase().contains("random.chest")) {
             ((WorldClient) this).playSoundAtPos(new BlockPos(x,y,z),soundName, volume,pitch,false);
         }
-        for (int i = 0; i < this.worldAccesses.size(); ++i)
-        {
-            ((IWorldAccess)this.worldAccesses.get(i)).playSound(soundName, x, y, z, volume, pitch);
+        for (IWorldAccess worldAccess : this.worldAccesses) {
+            ((IWorldAccess) worldAccess).playSound(soundName, x, y, z, volume, pitch);
         }
     }
 
@@ -1115,9 +1112,8 @@ public abstract class World implements IBlockAccess
 
     public void playRecord(BlockPos pos, String name)
     {
-        for (int i = 0; i < this.worldAccesses.size(); ++i)
-        {
-            ((IWorldAccess)this.worldAccesses.get(i)).playRecord(name, pos);
+        for (IWorldAccess worldAccess : this.worldAccesses) {
+            ((IWorldAccess) worldAccess).playRecord(name, pos);
         }
     }
 
@@ -1133,9 +1129,8 @@ public abstract class World implements IBlockAccess
 
     private void spawnParticle(int particleID, boolean p_175720_2_, double xCood, double yCoord, double zCoord, double xOffset, double yOffset, double zOffset, int... p_175720_15_)
     {
-        for (int i = 0; i < this.worldAccesses.size(); ++i)
-        {
-            ((IWorldAccess)this.worldAccesses.get(i)).spawnParticle(particleID, p_175720_2_, xCood, yCoord, zCoord, xOffset, yOffset, zOffset, p_175720_15_);
+        for (IWorldAccess worldAccess : this.worldAccesses) {
+            ((IWorldAccess) worldAccess).spawnParticle(particleID, p_175720_2_, xCood, yCoord, zCoord, xOffset, yOffset, zOffset, p_175720_15_);
         }
     }
 
@@ -1184,17 +1179,15 @@ public abstract class World implements IBlockAccess
 
     protected void onEntityAdded(Entity entityIn)
     {
-        for (int i = 0; i < this.worldAccesses.size(); ++i)
-        {
-            ((IWorldAccess)this.worldAccesses.get(i)).onEntityAdded(entityIn);
+        for (IWorldAccess worldAccess : this.worldAccesses) {
+            ((IWorldAccess) worldAccess).onEntityAdded(entityIn);
         }
     }
 
     protected void onEntityRemoved(Entity entityIn)
     {
-        for (int i = 0; i < this.worldAccesses.size(); ++i)
-        {
-            ((IWorldAccess)this.worldAccesses.get(i)).onEntityRemoved(entityIn);
+        for (IWorldAccess worldAccess : this.worldAccesses) {
+            ((IWorldAccess) worldAccess).onEntityRemoved(entityIn);
         }
     }
 

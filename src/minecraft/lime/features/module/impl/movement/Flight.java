@@ -6,9 +6,9 @@ import lime.features.module.Category;
 import lime.features.module.Module;
 import lime.features.module.impl.movement.flights.FlightValue;
 import lime.features.module.impl.movement.flights.impl.*;
-import lime.features.setting.impl.BoolValue;
-import lime.features.setting.impl.EnumValue;
-import lime.features.setting.impl.SlideValue;
+import lime.features.setting.impl.BooleanProperty;
+import lime.features.setting.impl.EnumProperty;
+import lime.features.setting.impl.NumberProperty;
 import lime.utils.movement.MovementUtils;
 import lime.utils.render.Graph;
 
@@ -19,12 +19,14 @@ public class Flight extends Module {
     private final Graph speedGraph = new Graph("Speed");
 
     //Settings
-    public final EnumValue mode = new EnumValue("Mode", this, "Vanilla", "Vanilla", "Funcraft", "Funcraft2", "AAC", "Verus", "Verus_No_Damage", "Verus Float", "Verus_Fast", "Survival_Dub", "Astral", "KoksCraft");
-    public final SlideValue speed = new SlideValue("Speed", this, 0.5, 10, 1.5, 0.5).onlyIf(mode.getSettingName(), "enum", "vanilla", "verus_fast");
-    public final SlideValue funcraftSpeed = new SlideValue("Funcraft Speed", this, 0.2, 2, 1.6, 0.05).onlyIf(mode.getSettingName(), "enum", "funcraft");
-    public final SlideValue funcraftTimerSpeed = new SlideValue("Funcraft Timer Speed", this, 1, 5, 3, 0.05).onlyIf(mode.getSettingName(), "enum", "funcraft");
-    private final BoolValue bobbing = new BoolValue("Bobbing", this, true);
-    public final BoolValue verusHeavy = new BoolValue("Verus Heavy", this, false).onlyIf(mode.getSettingName(), "enum", "verus_fast", "Verus Float");
+    public final EnumProperty mode = new EnumProperty("Mode", this, "Vanilla", "Vanilla", "Funcraft", "Funcraft2", "AAC", "Verus", "Verus_No_Damage", "Verus Float", "Verus Fast", "Survival_Dub", "Astral", "KoksCraft");
+    public final NumberProperty speed = new NumberProperty("Speed", this, 0.5, 10, 1.5, 0.5).onlyIf(mode.getSettingName(), "enum", "vanilla", "Verus Fast");
+    public final NumberProperty vClip = new NumberProperty("V Clip", this, 1, 5, 2, 0.5).onlyIf(mode.getSettingName(), "enum", "Verus Fast");
+    public final NumberProperty funcraftSpeed = new NumberProperty("Funcraft Speed", this, 0.2, 2, 1.6, 0.05).onlyIf(mode.getSettingName(), "enum", "funcraft");
+    public final NumberProperty funcraftTimerSpeed = new NumberProperty("Funcraft Timer Speed", this, 1, 5, 3, 0.05).onlyIf(mode.getSettingName(), "enum", "funcraft");
+    private final BooleanProperty bobbing = new BooleanProperty("Bobbing", this, true);
+    public final BooleanProperty timerBypass = new BooleanProperty("Timer Bypass", this, true).onlyIf(mode.getSettingName(), "enum", "Verus Fast");
+    public final BooleanProperty verusHeavy = new BooleanProperty("Verus Heavy", this, false).onlyIf(mode.getSettingName(), "enum", "verus fast", "Verus Float");
 
     private int ticks;
 
@@ -35,10 +37,10 @@ public class Flight extends Module {
         super("Flight", Category.MOVE);
 
         this.flights.add(new Funcraft2());
-        this.flights.add(new VerusFast());
         this.flights.add(new Funcraft());
         this.flights.add(new Vanilla());
         this.flights.add(new Verus());
+        this.flights.add(new VerusFast());
         this.flights.add(new VerusNoDamage());
         this.flights.add(new VerusFloat());
         this.flights.add(new SurvivalDub());
@@ -83,6 +85,8 @@ public class Flight extends Module {
     public void on2D(Event2D e) {
         speedGraph.drawGraph(3, 30, 200, 100);
         speedGraph.update((float) MovementUtils.getBPS());
+
+        flights.stream().filter(flight -> flight.getName().equalsIgnoreCase(mode.getSelected())).findFirst().ifPresent(f -> f.on2D(e));
     }
 
     @EventTarget

@@ -4,9 +4,9 @@ import lime.core.events.EventTarget;
 import lime.core.events.impl.EventUpdate;
 import lime.features.module.Category;
 import lime.features.module.Module;
-import lime.features.setting.impl.BoolValue;
-import lime.features.setting.impl.SlideValue;
-import lime.features.setting.impl.TextValue;
+import lime.features.setting.impl.BooleanProperty;
+import lime.features.setting.impl.NumberProperty;
+import lime.features.setting.impl.TextProperty;
 import lime.utils.other.Timer;
 import net.minecraft.network.play.client.C01PacketChatMessage;
 
@@ -17,10 +17,10 @@ public class Spammer extends Module {
         super("Spammer", Category.PLAYER);
     }
 
-    private final TextValue text = new TextValue("Text", this, "Lime best clarinet");
-    private final SlideValue delay = new SlideValue("Delay", this, 0.5, 5, 1.5, 0.5);
-    private final SlideValue randomCharsLength = new SlideValue("Random Chars Length", this, 1, 25, 10, 1);
-    private final BoolValue randomChars = new BoolValue("Random Chars", this, true);
+    private final TextProperty text = new TextProperty("Text", this, "Lime best clarinet");
+    private final NumberProperty delay = new NumberProperty("Delay", this, 0.5, 5, 1.5, 0.5);
+    private final NumberProperty randomCharsLength = new NumberProperty("Random Chars Length", this, 1, 25, 10, 1);
+    private final BooleanProperty randomChars = new BooleanProperty("Random Chars", this, true);
 
     private final Timer timer = new Timer();
 
