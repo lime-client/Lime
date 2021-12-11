@@ -1,12 +1,5 @@
 package net.optifine;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.EnumSet;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockDoublePlant;
 import net.minecraft.block.properties.IProperty;
@@ -14,6 +7,8 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.biome.BiomeGenBase;
+
+import java.util.*;
 
 public class ConnectedParser
 {
@@ -395,7 +390,9 @@ public class ConnectedParser
 
     public static Comparable parseValue(String p_parseValue_0_, Class p_parseValue_1_)
     {
-        return (Comparable)(p_parseValue_1_ == String.class ? p_parseValue_0_ : (p_parseValue_1_ == Boolean.class ? Boolean.valueOf(p_parseValue_0_) : (p_parseValue_1_ == Float.class ? Float.valueOf(p_parseValue_0_) : (p_parseValue_1_ == Double.class ? Double.valueOf(p_parseValue_0_) : (p_parseValue_1_ == Integer.class ? Integer.valueOf(p_parseValue_0_) : (p_parseValue_1_ == Long.class ? Long.valueOf(p_parseValue_0_) : null))))));
+        try {
+            return (Comparable)(p_parseValue_1_ == String.class ? p_parseValue_0_ : (p_parseValue_1_ == Boolean.class ? Boolean.valueOf(p_parseValue_0_) : (p_parseValue_1_ == Float.class ? Float.valueOf(p_parseValue_0_) : (p_parseValue_1_ == Double.class ? Double.valueOf(p_parseValue_0_) : (p_parseValue_1_ == Integer.class ? Integer.valueOf(p_parseValue_0_) : (p_parseValue_1_ == Long.class ? Long.valueOf(p_parseValue_0_) : null))))));
+        } catch (Exception ignored) {return null;}
     }
 
     public boolean matchState(IBlockState p_matchState_1_, Map<IProperty, List<Comparable>> p_matchState_2_)

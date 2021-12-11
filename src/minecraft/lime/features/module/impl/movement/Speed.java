@@ -22,10 +22,10 @@ public class Speed extends Module {
         super("Speed", Category.MOVE);
     }
 
-    public final EnumProperty mode = new EnumProperty("Mode", this, "Vanilla", "Vanilla", "Vanilla_BHOP", "Hypixel", "HypixelNew", "Verus", "Verus2", "Verus3", "Verus_LOWHOP", "NCP", "Funcraft", "Funcraft_YPORT");
+    public final EnumProperty mode = new EnumProperty("Mode", this, "Vanilla", "Vanilla", "Vanilla_BHOP", "Hypixel", "HypixelNew", "Cubecraft", "Verus", "Verus Float", "Verus_LOWHOP", "NCP", "Funcraft", "Funcraft_YPORT");
     private final NumberProperty speed = new NumberProperty("Speed", this, 0.2, 5, 0.6, 0.1).onlyIf(mode.getSettingName(), "enum", "vanilla_bhop", "vanilla");
     private final BooleanProperty hypixelStrafe = new BooleanProperty("Hypixel Strafe", this, false).onlyIf(mode.getSettingName(), "enum", "hypixel");
-    private double moveSpeed, lastDist;
+    private double moveSpeed, lastDist, jumpY;
     private int stage, ticks;
     private boolean spoofGround, firstHop, nigger;
 
@@ -59,23 +59,12 @@ public class Speed extends Module {
             }
         }
 
-        if(mode.is("verus") || mode.is("verus_lowhop")) {
-            if(!MovementUtils.isOnGround(0.4)) {
-                if(mode.is("verus")) {
-                    mc.thePlayer.motionY -= 0.0000000075;
-                }
-                mc.timer.timerSpeed = 1;
-            } else {
-                if(mc.thePlayer.isMoving())
-                    mc.timer.timerSpeed = 1.005f;
-            }
-
-            if(mc.thePlayer.motionY > 0.2 && mode.is("verus_lowhop")) {
+        if(mode.is("verus_lowhop")) {
+            if(mc.thePlayer.motionY > 0.2) {
                 mc.thePlayer.motionY = -0.0784000015258789;
             }
 
             if (mc.thePlayer.isMoving()) {
-                double tickBoost = mc.thePlayer.ticksExisted % 20 == 0 ? 0.1 : 0;
                 double amplifier = mc.thePlayer.isPotionActive(Potion.moveSpeed) ? mc.thePlayer.getActivePotionEffect(Potion.moveSpeed).getAmplifier() : 0;
                 double speedBoost = mc.thePlayer.isPotionActive(Potion.moveSpeed) ? amplifier == 1 ? 0.035 : amplifier > 1 ? 0.035 * (amplifier / 2) : 0.035 / 2 : 0;
                 double motionBoost = MovementUtils.isOnGround(0.15) && !mc.thePlayer.onGround ? 0.045 : 0;
@@ -91,15 +80,15 @@ public class Speed extends Module {
                 }
 
                 if(mc.thePlayer.moveStrafing == 0)
-                    MovementUtils.setSpeed(0.3345 + speedBoost + tickBoost + motionBoost + boost);
+                    MovementUtils.setSpeed(0.3345 + speedBoost + motionBoost + boost);
                 else
-                    MovementUtils.setSpeed(0.333 + speedBoost + tickBoost + motionBoost + boost);
+                    MovementUtils.setSpeed(0.333 + speedBoost + motionBoost + boost);
 
             } else
                 MovementUtils.setSpeed(0);
         }
 
-        if(mode.is("verus2")) {
+        if(mode.is("verus float")) {
             if(Lime.getInstance().getModuleManager().getModuleC(Flight.class).isToggled()) return;
             if(!mc.thePlayer.isMoving()) {
                 firstHop = true;
@@ -124,7 +113,7 @@ public class Speed extends Module {
                     double sped = .47;
                     MovementUtils.setSpeed(moveSpeed = sped);
                 } else {
-                    if(hypixelStrafe.isEnabled()) {
+                    if(hypixelStrafe.isEnabled() && mc.thePlayer.fallDistance < 1.25) {
                         MovementUtils.setSpeed(MovementUtils.getSpeed());
                     }
                 }
@@ -149,13 +138,18 @@ public class Speed extends Module {
 
     @EventTarget
     public void onMove(EventMove e) {
-        if(mode.is("verus3")) {
+        if(mode.is("verus")) {
             if(mc.thePlayer.isMoving()) {
                 if(mc.thePlayer.onGround) {
                     e.setY(mc.thePlayer.motionY = 0.41999998688697815);
                     moveSpeed = 0.6;
+                    jumpY = mc.thePlayer.posY;
                 } else {
-                    moveSpeed = MovementUtils.getBaseMoveSpeed() * ((mc.thePlayer.moveForward == 0 && mc.thePlayer.moveStrafing != 0) || mc.gameSettings.keyBindBack.isKeyDown() ? 1.12 : MovementUtils.hasSpeed() ? mc.thePlayer.getActivePotionEffect(Potion.moveSpeed).getAmplifier() == 1 ? 0.982 : 1.12 : 1.253);
+                    moveSpeed = MovementUtils.getBaseMoveSpeed() * (MovementUtils.hasSpeed() ? mc.thePlayer.getActivePotionEffect(Potion.moveSpeed).getAmplifier() == 1 ? 0.982 : 1.12 : 1.253);
+
+                    /*if(mc.thePlayer.posY - jumpY < 0.35) {
+                        moveSpeed = 0.4 + MovementUtils.getBaseMoveSpeed(0);
+                    }*/
                 }
 
                 MovementUtils.setSpeed(e, moveSpeed);
@@ -169,7 +163,7 @@ public class Speed extends Module {
                 switch(stage) {
                     case 0:
                         if(mc.thePlayer.onGround) {
-                            e.setY(mc.thePlayer.motionY = 0.42);
+                            e.setY(mc.thePlayer.motionY = 0.41999998688697815);
                             moveSpeed *= 2.149;
                         }
                         break;
@@ -187,6 +181,38 @@ public class Speed extends Module {
         }
 
         if(mode.is("hypixelnew") && !MovementUtils.isVoidUnder()) {
+            mc.timer.timerSpeed = 1.0866f;
+            if(mc.thePlayer.isMoving()) {
+                if(mc.thePlayer.onGround) {
+                    stage = 0;
+                }
+                switch(stage) {
+                    case 0:
+                        if(mc.thePlayer.onGround) {
+                            e.setY(mc.thePlayer.motionY = 0.3999998);
+                            moveSpeed *= 1.64;
+                            stage++;
+                        }
+                        break;
+                    case 1:
+                        double difference = .8 * (this.lastDist - MovementUtils.getBaseMoveSpeed());
+                        this.moveSpeed = this.lastDist - difference;
+                        ++stage;
+                        break;
+                    default:
+                        this.moveSpeed = lastDist - lastDist / 72;
+                        break;
+                }
+                MovementUtils.setSpeed(e, Math.max(moveSpeed, MovementUtils.getBaseMoveSpeed()));
+            } else {
+                lastDist = 0;
+                stage = 0;
+                moveSpeed = 0;
+            }
+        }
+
+        if(mode.is("cubecraft")) {
+            mc.timer.timerSpeed = 1.2f;
             if(mc.thePlayer.onGround) {
                 stage = 0;
             }
@@ -195,20 +221,19 @@ public class Speed extends Module {
                 switch(stage) {
                     case 0:
                         e.setY(mc.thePlayer.motionY = .3999);
-                        moveSpeed = MovementUtils.getBaseMoveSpeed() *1.64;
+                        moveSpeed = MovementUtils.getBaseMoveSpeed(0.25) * 1.64;
                         break;
                     case 1:
-                        double difference = .86 * (this.lastDist - MovementUtils.getBaseMoveSpeed());
+                        double difference = .86 * (this.lastDist - MovementUtils.getBaseMoveSpeed(0.25));
                         moveSpeed = lastDist - difference;
-                        System.out.println(moveSpeed);
                         break;
                     default:
-                        moveSpeed = lastDist - lastDist / 70;
+                        moveSpeed = lastDist - lastDist / 72;
                         break;
                 }
 
                 ++stage;
-                MovementUtils.setSpeed(e, Math.max(moveSpeed, MovementUtils.getBaseMoveSpeed()));
+                MovementUtils.setSpeed(e, Math.max(moveSpeed, MovementUtils.getBaseMoveSpeed(0.25)));
             }
         }
 
@@ -249,7 +274,7 @@ public class Speed extends Module {
             }
         }
 
-        if(mode.is("verus2")) {
+        if(mode.is("verus float")) {
             if(Lime.getInstance().getModuleManager().getModuleC(Flight.class).isToggled()) return;
             if(!mc.thePlayer.isMoving()) {
                 firstHop = true;

@@ -1,11 +1,12 @@
 package net.optifine;
 
-import java.util.HashMap;
-import java.util.Map;
 import net.minecraft.client.settings.GameSettings;
 import net.minecraft.crash.CrashReport;
 import net.minecraft.crash.CrashReportCategory;
 import net.optifine.shadersmod.client.Shaders;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class CrashReporter
 {

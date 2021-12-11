@@ -21,9 +21,8 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.optifine.Config;
-
-import org.lwjgl.opengl.GL11;
 import net.optifine.shadersmod.client.Shaders;
+import org.lwjgl.opengl.GL11;
 
 public abstract class Render<T extends Entity>
 {

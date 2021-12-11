@@ -14,6 +14,7 @@ import net.minecraft.block.BlockAir;
 import net.minecraft.block.BlockLeaves;
 import net.minecraft.block.BlockSlab;
 import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.network.play.client.C03PacketPlayer;
 import net.minecraft.network.play.server.S12PacketEntityVelocity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.BlockPos;
@@ -30,61 +31,94 @@ public class VerusFast extends FlightValue {
     @Override
     public void onEnable() {
         ScaledResolution sr = new ScaledResolution(mc);
-        processBar = new ProcessBar((sr.getScaledWidth() / 2) - 25, (sr.getScaledHeight() / 2) + 20, getFlight().timerBypass.isEnabled() ? 1500 : 0);
         received = sent = false;
         Block block = new BlockPos(mc.thePlayer.posX, mc.thePlayer.posY - 1, mc.thePlayer.posZ).getBlock();
-        System.out.println(block.getClass());
         sus = block instanceof BlockSlab || block instanceof BlockLeaves || block instanceof BlockAir;
-        ticks = 0;
-
-        if(!getFlight().timerBypass.isEnabled()) {
-            sent = true;
-            PlayerUtils.verusDamage();
-            MovementUtils.vClip(.42);
+        if(!sus) {
+            processBar = new ProcessBar((sr.getScaledWidth() / 2) - 25, (sr.getScaledHeight() / 2) + 20, getFlight().timerBypass.isEnabled() ? getFlight().damage.is("basic") ? 200 : 1500 : 0);
+            if(!getFlight().timerBypass.isEnabled()) {
+                sent = true;
+                if(getFlight().damage.is("basic")) {
+                    damage();
+                } else {
+                    PlayerUtils.verusDamage(!getFlight().latestVerus.isEnabled());
+                }
+                MovementUtils.vClip(.42);
+            }
         }
+        ticks = 0;
+    }
+
+    public void damage() {
+        mc.getNetHandler().sendPacketNoEvent(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY + 3.05, mc.thePlayer.posZ, false));
+        mc.getNetHandler().sendPacketNoEvent(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY, mc.thePlayer.posZ, false));
+        mc.getNetHandler().sendPacketNoEvent(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY+0.41999998688697815, mc.thePlayer.posZ, true));
     }
 
     @Override
     public void onMotion(EventMotion e) {
+        boolean b = Lime.getInstance().getModuleManager().getModuleC(Disabler.class).isToggled() && ((Disabler) Lime.getInstance().getModuleManager().getModuleC(Disabler.class)).mode.is("Verus Transaction");
+        int defTicks = b ? 180 : 15;
         if(!sus) {
-            if(!processBar.getTimer().hasReached(1500) && getFlight().timerBypass.isEnabled()) {
+            if(!processBar.getTimer().hasReached(getFlight().damage.is("basic") ? 200 : 1500) && getFlight().timerBypass.isEnabled()) {
                 e.setCanceled(true);
                 return;
             }
             if(!sent && mc.thePlayer.onGround && e.isPre()) {
                 sent = true;
-                PlayerUtils.verusDamage();
+                if(getFlight().damage.is("basic")) {
+                    damage();
+                } else {
+                    PlayerUtils.verusDamage(!getFlight().latestVerus.isEnabled());
+                }
             }
 
             if(received && mc.thePlayer.isMoving() && e.isPre()) {
-                if(mc.thePlayer.isCollidedHorizontally && ticks < 20) {
-                    ticks = 21;
+                if(mc.thePlayer.isCollidedHorizontally && ticks < defTicks) {
+                    ticks = defTicks+1;
                     Lime.getInstance().getNotificationManager().addNotification("Disabled boost for safety.", Notification.Type.WARNING);
                 }
-                if(ticks == 21) {
+                if(ticks == defTicks+1) {
                     MovementUtils.setSpeed(0);
-                } else if(ticks < 21) {
+                } else if(ticks < defTicks) {
                     MovementUtils.setSpeed(getFlight().speed.getCurrent());
                 }
-                ticks++;
 
-                boolean b = Lime.getInstance().getModuleManager().getModuleC(Disabler.class).isToggled() && ((Disabler) Lime.getInstance().getModuleManager().getModuleC(Disabler.class)).mode.is("Verus Transaction");
-
-                if(getFlight().verusHeavy.isEnabled() && !((ticks <= 20 || b) && mc.gameSettings.keyBindJump.isKeyDown())) {
-                    mc.thePlayer.motionY = -0.0784000015258789;
+                if(!mc.gameSettings.keyBindJump.isKeyDown() || !b) {
+                    if(defTicks > ticks && b) {
+                        e.setGround(!getFlight().verusHeavy.isEnabled());
+                        mc.thePlayer.motionY = 0;
+                        mc.thePlayer.setPosition(mc.thePlayer.posX, mc.thePlayer.prevPosY, mc.thePlayer.posZ);
+                        if(getFlight().verusHeavy.isEnabled())
+                            e.setY(mc.thePlayer.ticksExisted % 2 == 0 ? mc.thePlayer.posY : mc.thePlayer.posY + 0.01);
+                    } else {
+                        if(getFlight().verusHeavy.isEnabled()) {
+                            mc.thePlayer.motionY = -0.0784000015258789;
+                        } else {
+                            e.setGround(true);
+                            mc.thePlayer.motionY = 0;
+                            mc.thePlayer.setPosition(mc.thePlayer.posX, mc.thePlayer.prevPosY, mc.thePlayer.posZ);
+                        }
+                    }
                 }
+
+                ticks++;
 
                 if(b) {
                     if(ticks <= 20) {
-                        mc.thePlayer.motionY = mc.gameSettings.keyBindJump.isKeyDown() ?mc.thePlayer.motionY + .42 : getFlight().verusHeavy.isEnabled() ? -0.0784000015258789 : mc.thePlayer.motionY;
+                        mc.thePlayer.motionY = mc.gameSettings.keyBindJump.isKeyDown() ?mc.thePlayer.motionY + .42 : mc.thePlayer.motionY;
                     } else {
-                        mc.thePlayer.motionY = mc.gameSettings.keyBindJump.isKeyDown() ? mc.thePlayer.ticksExisted % 2 == 0 ? 0.41999998688697815 : 0.33319999363422426 : getFlight().verusHeavy.isEnabled() ? -0.0784000015258789 : mc.thePlayer.motionY;
+                        mc.thePlayer.motionY = mc.gameSettings.keyBindJump.isKeyDown() ? mc.thePlayer.ticksExisted % 2 == 0 ? 0.41999998688697815 : 0.33319999363422426 : mc.thePlayer.motionY;
                     }
                 }
             }
         } else {
             if(getFlight().verusHeavy.isEnabled()) {
                 mc.thePlayer.motionY = -0.0784000015258789;
+            } else {
+                e.setGround(true);
+                mc.thePlayer.motionY = 0;
+                mc.thePlayer.setPosition(mc.thePlayer.posX, mc.thePlayer.prevPosY, mc.thePlayer.posZ);
             }
         }
     }
@@ -106,16 +140,7 @@ public class VerusFast extends FlightValue {
             S12PacketEntityVelocity p = (S12PacketEntityVelocity) e.getPacket();
             if(p.getEntityID() == mc.thePlayer.getEntityId() && !sus) {
                 received = true;
-                MovementUtils.vClip(getFlight().vClip.getCurrent());
-            }
-        }
-    }
-
-    @Override
-    public void onBoundingBox(EventBoundingBox e) {
-        if((received || sus) && !getFlight().verusHeavy.isEnabled()) {
-            if(e.getBlock() instanceof BlockAir && e.getBlockPos().getY() < mc.thePlayer.posY && !mc.gameSettings.keyBindSneak.isKeyDown() && !mc.theWorld.checkBlockCollision(mc.thePlayer.getEntityBoundingBox())) {
-                e.setBoundingBox(new AxisAlignedBB(e.getBlockPos().getX(), e.getBlockPos().getY(), e.getBlockPos().getZ(), e.getBlockPos().getX() + 1, mc.thePlayer.posY, e.getBlockPos().getZ() + 1));
+                MovementUtils.vClip(.25);
             }
         }
     }

@@ -1,8 +1,9 @@
 package net.minecraft.client.renderer.chunk;
 
+import net.minecraft.util.EnumFacing;
+
 import java.util.BitSet;
 import java.util.Set;
-import net.minecraft.util.EnumFacing;
 
 public class SetVisibility
 {

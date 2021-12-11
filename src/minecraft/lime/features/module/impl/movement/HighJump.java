@@ -9,6 +9,7 @@ import lime.core.events.impl.EventPacket;
 import lime.features.module.Category;
 import lime.features.module.Module;
 import lime.features.module.impl.exploit.Disabler;
+import lime.features.setting.impl.BooleanProperty;
 import lime.features.setting.impl.EnumProperty;
 import lime.ui.gui.ProcessBar;
 import lime.utils.movement.MovementUtils;
@@ -22,6 +23,7 @@ public class HighJump extends Module {
     }
 
     private final EnumProperty mode = new EnumProperty("Mode", this, "Verus", "Verus");
+    private final BooleanProperty latestVerus = new BooleanProperty("Latest Verus", this, false).onlyIf(mode.getSettingName(), "enum", "Verus");
     private ProcessBar processBar;
     private int ticks;
     private boolean waiting, received;
@@ -36,19 +38,20 @@ public class HighJump extends Module {
 
     @EventTarget
     public void onMotion(EventMotion e) {
+        setSuffix(mode.getSelected());
         if(mode.is("verus")) {
             if(!processBar.getTimer().hasReached(1500)) {
                 e.setCanceled(true);
             } else {
                 if(!waiting) {
-                    PlayerUtils.verusDamage();
+                    PlayerUtils.verusDamage(!latestVerus.isEnabled());
                     MovementUtils.vClip(.42);
                     waiting = true;
                 }
 
                 if(received && e.isPre()) {
                     boolean b = Lime.getInstance().getModuleManager().getModuleC(Disabler.class).isToggled() && ((Disabler) Lime.getInstance().getModuleManager().getModuleC(Disabler.class)).mode.is("Verus Transaction");
-                    mc.thePlayer.motionY = b ? 3 : 0.84;
+                    mc.thePlayer.motionY = b ? 5 : 0.84;
                     this.toggle();
                 }
             }

@@ -1,6 +1,6 @@
-package lime.features.commands.impl;
+package lime.features.command.impl;
 
-import lime.features.commands.Command;
+import lime.features.command.Command;
 import lime.utils.other.ChatUtils;
 
 public class Account extends Command {

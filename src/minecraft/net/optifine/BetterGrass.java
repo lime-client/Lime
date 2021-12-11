@@ -1,7 +1,5 @@
 package net.optifine;
 
-import java.util.ArrayList;
-import java.util.List;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockGrass;
 import net.minecraft.block.BlockMycelium;
@@ -13,6 +11,9 @@ import net.minecraft.init.Blocks;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class BetterGrass
 {

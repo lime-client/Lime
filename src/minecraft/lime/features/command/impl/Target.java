@@ -1,11 +1,10 @@
-package lime.features.commands.impl;
+package lime.features.command.impl;
 
 import lime.core.Lime;
-import lime.features.commands.Command;
+import lime.features.command.Command;
 import lime.utils.other.ChatUtils;
 
-public class Friend extends Command {
-
+public class Target extends Command {
     @Override
     public String getUsage() {
         return "friend <add/remove/clear> <name>";
@@ -13,7 +12,7 @@ public class Friend extends Command {
 
     @Override
     public String[] getPrefixes() {
-        return new String[] {"friend", "f", "friends"};
+        return new String[] {"target"};
     }
 
     @Override
@@ -22,15 +21,15 @@ public class Friend extends Command {
 
         switch(type.toLowerCase()) {
             case "add":
-                Lime.getInstance().getFriendManager().addFriend(args[2]);
+                Lime.getInstance().getTargetManager().addTarget(args[2]);
                 ChatUtils.sendMessage("Added §a" + args[2]);
                 break;
             case "clear":
-                Lime.getInstance().getFriendManager().getFriends().clear();
-                ChatUtils.sendMessage("Removed all friends!");
+                Lime.getInstance().getTargetManager().getEntitiesName().clear();
+                ChatUtils.sendMessage("Removed all targets!");
                 break;
             case "remove":
-                Lime.getInstance().getFriendManager().removeFriend(args[2]);
+                Lime.getInstance().getTargetManager().getEntitiesName().remove(args[2]);
                 ChatUtils.sendMessage("Removed §a" + args[2]);
                 break;
         }

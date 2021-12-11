@@ -44,6 +44,7 @@ public class KillSult extends Module {
             String message = ((S02PacketChat) e.getPacket()).getChatComponent().getUnformattedText();
 
             if(killedSomeone(mc.session.getUsername(), ChatUtils.removeColors(message))) {
+                System.out.println("cc");
                 // Get Entity name
                 String killedEntity = getKilledEntity(message);
 
@@ -59,7 +60,7 @@ public class KillSult extends Module {
         if(mc.getCurrentServerData() != null) {
             String serverIp = mc.getCurrentServerData().serverIP;
             if(serverIp.contains("funcraft")) {
-                return message.contains("a été tué par " + username);
+                return message.contains("a été tué par " + username) || message.contains("à été tué par le vide et " + username);
             }
             if(serverIp.contains("survivaldub")) {
                 return message.contains("se cayó a un agujero negro por " + username) || message.contains("fue destrozado a manos de " + username);

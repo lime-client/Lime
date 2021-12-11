@@ -2,10 +2,27 @@
   "informations": [
     {
       "author": "Lime Auto Save",
-      "time": 1635646939
+      "time": 1639240556
     }
   ],
   "modules": [
+    {
+      "moduleName": "Teleport",
+      "key": 40,
+      "toggled": false,
+      "settings": [
+        {
+          "name": "Latest Verus",
+          "type": "bool",
+          "value": false
+        },
+        {
+          "name": "Show",
+          "type": "bool",
+          "value": true
+        }
+      ]
+    },
     {
       "moduleName": "Teleport Aura",
       "key": 21,
@@ -39,6 +56,18 @@
       ]
     },
     {
+      "moduleName": "Auto Damage",
+      "key": -1,
+      "toggled": true,
+      "settings": [
+        {
+          "name": "Show",
+          "type": "bool",
+          "value": true
+        }
+      ]
+    },
+    {
       "moduleName": "Auto Gapple",
       "key": -1,
       "toggled": false,
@@ -63,19 +92,19 @@
     {
       "moduleName": "Auto Sword",
       "key": -1,
-      "toggled": false,
+      "toggled": true,
       "settings": [
         {
           "name": "Show",
           "type": "bool",
-          "value": true
+          "value": false
         }
       ]
     },
     {
       "moduleName": "Criticals",
       "key": -1,
-      "toggled": false,
+      "toggled": true,
       "settings": [
         {
           "name": "Mode",
@@ -97,7 +126,7 @@
     {
       "moduleName": "Kill Aura",
       "key": 19,
-      "toggled": false,
+      "toggled": true,
       "settings": [
         {
           "name": "Mode",
@@ -127,17 +156,17 @@
         {
           "name": "Range",
           "type": "slider",
-          "value": 6.0
+          "value": 4.800000000000001
         },
         {
           "name": "CPS",
           "type": "slider",
-          "value": 8.0
+          "value": 12.0
         },
         {
           "name": "Keep Sprint",
           "type": "bool",
-          "value": false
+          "value": true
         },
         {
           "name": "Ray Cast",
@@ -145,19 +174,34 @@
           "value": false
         },
         {
+          "name": "1.9+",
+          "type": "bool",
+          "value": false
+        },
+        {
+          "name": "Blink First Hit",
+          "type": "bool",
+          "value": false
+        },
+        {
+          "name": "Attack with scaffold on",
+          "type": "bool",
+          "value": true
+        },
+        {
           "name": "Rotations",
           "type": "enum",
-          "value": "ncp"
+          "value": "none"
         },
         {
           "name": "Turn Speed",
           "type": "slider",
-          "value": 90.0
+          "value": 70.0
         },
         {
           "name": "Randomize Yaw",
           "type": "slider",
-          "value": 5.0
+          "value": 3.0
         },
         {
           "name": "Movement Fix",
@@ -167,7 +211,7 @@
         {
           "name": "GCD",
           "type": "bool",
-          "value": false
+          "value": true
         },
         {
           "name": "Sort by",
@@ -182,7 +226,7 @@
         {
           "name": "Mobs",
           "type": "bool",
-          "value": false
+          "value": true
         },
         {
           "name": "Passives",
@@ -192,7 +236,7 @@
         {
           "name": "Teams",
           "type": "bool",
-          "value": true
+          "value": false
         },
         {
           "name": "Dead",
@@ -239,7 +283,7 @@
         {
           "name": "Show",
           "type": "bool",
-          "value": true
+          "value": false
         }
       ]
     },
@@ -251,7 +295,7 @@
         {
           "name": "Mode",
           "type": "enum",
-          "value": "npc"
+          "value": "funcraft"
         },
         {
           "name": "Remove",
@@ -273,17 +317,17 @@
         {
           "name": "Health",
           "type": "slider",
-          "value": 12.0
+          "value": 7.5
         },
         {
           "name": "Delay",
           "type": "slider",
-          "value": 500.0
+          "value": 300.0
         },
         {
           "name": "Heal",
           "type": "bool",
-          "value": false
+          "value": true
         },
         {
           "name": "Speed",
@@ -305,12 +349,12 @@
     {
       "moduleName": "Infinite Chat",
       "key": -1,
-      "toggled": false,
+      "toggled": true,
       "settings": [
         {
           "name": "Show",
           "type": "bool",
-          "value": true
+          "value": false
         }
       ]
     },
@@ -322,7 +366,7 @@
         {
           "name": "Delay",
           "type": "slider",
-          "value": 9900.0
+          "value": 1900.0
         },
         {
           "name": "Show",
@@ -333,13 +377,18 @@
     },
     {
       "moduleName": "Disabler",
-      "key": -1,
-      "toggled": true,
+      "key": 50,
+      "toggled": false,
       "settings": [
         {
           "name": "Mode",
           "type": "enum",
-          "value": "blocksmc"
+          "value": "erisium"
+        },
+        {
+          "name": "BlocksMC mode",
+          "type": "enum",
+          "value": "1"
         },
         {
           "name": "Show",
@@ -391,7 +440,7 @@
     },
     {
       "moduleName": "Blink",
-      "key": -1,
+      "key": 0,
       "toggled": false,
       "settings": [
         {
@@ -414,8 +463,20 @@
         {
           "name": "Mode",
           "type": "enum",
-          "value": "hypixel"
+          "value": "clip"
         },
+        {
+          "name": "Show",
+          "type": "bool",
+          "value": true
+        }
+      ]
+    },
+    {
+      "moduleName": "Wot Sped",
+      "key": 0,
+      "toggled": false,
+      "settings": [
         {
           "name": "Show",
           "type": "bool",
@@ -431,35 +492,42 @@
         {
           "name": "Distance",
           "type": "slider",
-          "value": 1.2000000000000002
+          "value": 1.6
         },
         {
-          "name": "Sides",
-          "type": "slider",
-          "value": 20.0
-        },
-        {
-          "name": "Speed Only",
+          "name": "Hold Space",
           "type": "bool",
           "value": true
         },
         {
-          "name": "Players Only",
+          "name": "Fall Check",
           "type": "bool",
           "value": true
         },
         {
-          "name": "Space Only",
+          "name": "Wall Check",
           "type": "bool",
           "value": true
         },
         {
-          "name": "Stop Jump",
+          "name": "Show",
           "type": "bool",
-          "value": true
+          "value": false
+        }
+      ]
+    },
+    {
+      "moduleName": "High Jump",
+      "key": 38,
+      "toggled": false,
+      "settings": [
+        {
+          "name": "Mode",
+          "type": "enum",
+          "value": "verus"
         },
         {
-          "name": "Third Person",
+          "name": "Latest Verus",
           "type": "bool",
           "value": false
         },
@@ -471,36 +539,19 @@
       ]
     },
     {
-      "moduleName": "High Jump",
-      "key": 40,
-      "toggled": false,
-      "settings": [
-        {
-          "name": "Mode",
-          "type": "enum",
-          "value": "verus"
-        },
-        {
-          "name": "Show",
-          "type": "bool",
-          "value": true
-        }
-      ]
-    },
-    {
       "moduleName": "Long Jump",
-      "key": -1,
+      "key": 0,
       "toggled": false,
       "settings": [
         {
           "name": "Mode",
           "type": "enum",
-          "value": "vanilla"
+          "value": "funcraft"
         },
         {
           "name": "Speed",
           "type": "slider",
-          "value": 7.5
+          "value": 5.0
         },
         {
           "name": "Show",
@@ -554,12 +605,17 @@
         {
           "name": "Mode",
           "type": "enum",
-          "value": "vanilla"
+          "value": "funcraft2"
+        },
+        {
+          "name": "Damage",
+          "type": "enum",
+          "value": "bypass"
         },
         {
           "name": "Speed",
           "type": "slider",
-          "value": 4.5
+          "value": 2.0
         },
         {
           "name": "V Clip",
@@ -569,17 +625,17 @@
         {
           "name": "Funcraft Speed",
           "type": "slider",
-          "value": 1.9500000000000002
+          "value": 1.6
         },
         {
           "name": "Funcraft Timer Speed",
           "type": "slider",
-          "value": 4.95
+          "value": 3.8000000000000003
         },
         {
           "name": "Bobbing",
           "type": "bool",
-          "value": false
+          "value": true
         },
         {
           "name": "Timer Bypass",
@@ -590,6 +646,11 @@
           "name": "Verus Heavy",
           "type": "bool",
           "value": true
+        },
+        {
+          "name": "Latest Verus",
+          "type": "bool",
+          "value": false
         },
         {
           "name": "Show",
@@ -635,17 +696,17 @@
     {
       "moduleName": "Speed",
       "key": 47,
-      "toggled": true,
+      "toggled": false,
       "settings": [
         {
           "name": "Mode",
           "type": "enum",
-          "value": "vanilla"
+          "value": "funcraft_yport"
         },
         {
           "name": "Speed",
           "type": "slider",
-          "value": 0.6
+          "value": 2.9000000000000004
         },
         {
           "name": "Hypixel Strafe",
@@ -679,7 +740,7 @@
     {
       "moduleName": "Step",
       "key": -1,
-      "toggled": false,
+      "toggled": true,
       "settings": [
         {
           "name": "Mode",
@@ -689,17 +750,17 @@
         {
           "name": "Height",
           "type": "slider",
-          "value": 1.0
+          "value": 2.5
         },
         {
           "name": "Timer",
           "type": "slider",
-          "value": 0.2
+          "value": 1.0
         },
         {
           "name": "Delay",
           "type": "slider",
-          "value": 0.0
+          "value": 0.1
         },
         {
           "name": "Show",
@@ -721,7 +782,7 @@
         {
           "name": "Delay",
           "type": "slider",
-          "value": 80.0
+          "value": 25.0
         },
         {
           "name": "Drop Junk",
@@ -743,7 +804,7 @@
         {
           "name": "Show",
           "type": "bool",
-          "value": true
+          "value": false
         }
       ]
     },
@@ -767,7 +828,7 @@
     {
       "moduleName": "Click Teleport",
       "key": -1,
-      "toggled": true,
+      "toggled": false,
       "settings": [
         {
           "name": "Show",
@@ -784,7 +845,7 @@
         {
           "name": "Delay",
           "type": "slider",
-          "value": 80.0
+          "value": 150.0
         },
         {
           "name": "Ignore Junk",
@@ -793,6 +854,16 @@
         },
         {
           "name": "Randomize",
+          "type": "bool",
+          "value": true
+        },
+        {
+          "name": "Silent",
+          "type": "bool",
+          "value": true
+        },
+        {
+          "name": "Render GUI",
           "type": "bool",
           "value": true
         },
@@ -823,7 +894,7 @@
     {
       "moduleName": "Auto Armor",
       "key": 37,
-      "toggled": false,
+      "toggled": true,
       "settings": [
         {
           "name": "Mode",
@@ -833,12 +904,12 @@
         {
           "name": "Delay",
           "type": "slider",
-          "value": 50.0
+          "value": 65.0
         },
         {
           "name": "Show",
           "type": "bool",
-          "value": true
+          "value": false
         }
       ]
     },
@@ -874,7 +945,7 @@
         {
           "name": "Name",
           "type": "text",
-          "value": "slt"
+          "value": "nigger"
         },
         {
           "name": "Show",
@@ -886,7 +957,7 @@
     {
       "moduleName": "Auto Tool",
       "key": -1,
-      "toggled": true,
+      "toggled": false,
       "settings": [
         {
           "name": "Show",
@@ -898,7 +969,7 @@
     {
       "moduleName": "KillSult",
       "key": -1,
-      "toggled": false,
+      "toggled": true,
       "settings": [
         {
           "name": "Prefix",
@@ -908,7 +979,7 @@
         {
           "name": "Show",
           "type": "bool",
-          "value": true
+          "value": false
         }
       ]
     },
@@ -920,7 +991,7 @@
         {
           "name": "Mode",
           "type": "enum",
-          "value": "verus"
+          "value": "funcraft"
         },
         {
           "name": "Pullback",
@@ -942,7 +1013,7 @@
         {
           "name": "Text",
           "type": "text",
-          "value": "buy nigger client now"
+          "value": "noggerqsz"
         },
         {
           "name": "Delay",
@@ -993,12 +1064,12 @@
     {
       "moduleName": "No Fall",
       "key": -1,
-      "toggled": true,
+      "toggled": false,
       "settings": [
         {
           "name": "Mode",
           "type": "enum",
-          "value": "verus2"
+          "value": "vanilla"
         },
         {
           "name": "Void Check",
@@ -1042,7 +1113,7 @@
     {
       "moduleName": "MCF",
       "key": -1,
-      "toggled": false,
+      "toggled": true,
       "settings": [
         {
           "name": "Show",
@@ -1054,7 +1125,7 @@
     {
       "moduleName": "Block Overlay",
       "key": -1,
-      "toggled": true,
+      "toggled": false,
       "settings": [
         {
           "name": "Show",
@@ -1107,12 +1178,12 @@
         {
           "name": "Mode",
           "type": "enum",
-          "value": "ohare"
+          "value": "swank"
         },
         {
           "name": "Swing Slowdown",
           "type": "slider",
-          "value": 1.4000000000000001
+          "value": 1.0
         },
         {
           "name": "X",
@@ -1122,7 +1193,7 @@
         {
           "name": "Y",
           "type": "slider",
-          "value": -0.05
+          "value": 0.0
         },
         {
           "name": "Z",
@@ -1139,12 +1210,12 @@
     {
       "moduleName": "Full Bright",
       "key": -1,
-      "toggled": true,
+      "toggled": false,
       "settings": [
         {
           "name": "Show",
           "type": "bool",
-          "value": false
+          "value": true
         }
       ]
     },
@@ -1163,7 +1234,7 @@
     {
       "moduleName": "Crosshair",
       "key": -1,
-      "toggled": false,
+      "toggled": true,
       "settings": [
         {
           "name": "Thickness",
@@ -1178,17 +1249,17 @@
         {
           "name": "Gap",
           "type": "slider",
-          "value": 3.5
+          "value": 1.0
         },
         {
           "name": "Outline",
           "type": "bool",
-          "value": true
+          "value": false
         },
         {
           "name": "Outline Thickness",
           "type": "slider",
-          "value": 0.5
+          "value": 1.0
         },
         {
           "name": "Dot",
@@ -1198,7 +1269,7 @@
         {
           "name": "Color",
           "type": "color",
-          "value": -10197916
+          "value": -3595485
         },
         {
           "name": "Show",
@@ -1249,6 +1320,11 @@
       "toggled": false,
       "settings": [
         {
+          "name": "Mode",
+          "type": "enum",
+          "value": "frame"
+        },
+        {
           "name": "Show",
           "type": "bool",
           "value": true
@@ -1270,7 +1346,7 @@
     {
       "moduleName": "No Render",
       "key": -1,
-      "toggled": false,
+      "toggled": true,
       "settings": [
         {
           "name": "TNT",
@@ -1285,7 +1361,7 @@
         {
           "name": "Show",
           "type": "bool",
-          "value": true
+          "value": false
         }
       ]
     },
@@ -1319,7 +1395,7 @@
         {
           "name": "No FOV",
           "type": "bool",
-          "value": false
+          "value": true
         },
         {
           "name": "Show",
@@ -1331,7 +1407,7 @@
     {
       "moduleName": "Chams",
       "key": -1,
-      "toggled": true,
+      "toggled": false,
       "settings": [
         {
           "name": "Mode",
@@ -1341,12 +1417,12 @@
         {
           "name": "Color",
           "type": "color",
-          "value": -3670016
+          "value": -10087688
         },
         {
           "name": "Only Targets",
           "type": "bool",
-          "value": true
+          "value": false
         },
         {
           "name": "Disable Lightning",
@@ -1368,7 +1444,7 @@
         {
           "name": "Box Mode",
           "type": "enum",
-          "value": "box"
+          "value": "none"
         },
         {
           "name": "Health bar",
@@ -1378,7 +1454,7 @@
         {
           "name": "You",
           "type": "bool",
-          "value": false
+          "value": true
         },
         {
           "name": "Players",
@@ -1450,22 +1526,22 @@
         {
           "name": "Sidebar",
           "type": "enum",
-          "value": "none"
+          "value": "right"
         },
         {
           "name": "Color",
           "type": "enum",
-          "value": "astolfo"
+          "value": "moon"
         },
         {
           "name": "Fade Color",
           "type": "color",
-          "value": -7666170
+          "value": -7924772
         },
         {
           "name": "Rect Opacity",
           "type": "slider",
-          "value": 0.0
+          "value": 185.0
         },
         {
           "name": "Custom Font",
@@ -1534,17 +1610,17 @@
         {
           "name": "State",
           "type": "enum",
-          "value": "pre"
+          "value": "post"
         },
         {
           "name": "Rotations",
           "type": "enum",
-          "value": "none"
+          "value": "hypixel"
         },
         {
           "name": "Item Spoof",
           "type": "enum",
-          "value": "pick"
+          "value": "spoof"
         },
         {
           "name": "Tower",
@@ -1599,12 +1675,12 @@
         {
           "name": "Same Y",
           "type": "bool",
-          "value": false
+          "value": true
         },
         {
           "name": "No Swing",
           "type": "bool",
-          "value": false
+          "value": true
         },
         {
           "name": "Swapper",
@@ -1614,7 +1690,7 @@
         {
           "name": "Downwards",
           "type": "bool",
-          "value": true
+          "value": false
         },
         {
           "name": "Random Vec",
@@ -1651,12 +1727,12 @@
     {
       "moduleName": "No Rotate",
       "key": -1,
-      "toggled": false,
+      "toggled": true,
       "settings": [
         {
           "name": "Client Side",
           "type": "bool",
-          "value": false
+          "value": true
         },
         {
           "name": "Show",
@@ -1668,7 +1744,7 @@
     {
       "moduleName": "Breaker",
       "key": 49,
-      "toggled": true,
+      "toggled": false,
       "settings": [
         {
           "name": "Range",
@@ -1706,7 +1782,7 @@
     },
     {
       "moduleName": "Timer",
-      "key": -1,
+      "key": 0,
       "toggled": false,
       "settings": [
         {
@@ -1732,11 +1808,6 @@
           "value": true
         }
       ]
-    },
-    {
-      "moduleName": "cock",
-      "key": 0,
-      "toggled": false
     }
   ]
 }

@@ -34,16 +34,7 @@ public class AntiBot extends Module {
 
     public boolean checkBot(EntityPlayer ent) {
         if(mode.is("funcraft")) {
-            if(ent instanceof AbstractClientPlayer && ent != mc.thePlayer && ent.ticksExisted < 30) {
-                if(!((AbstractClientPlayer) ent).hasSkin() && ent.ticksExisted < 25) {
-                    AbstractClientPlayer player = (AbstractClientPlayer) ent;
-                    if(mc.thePlayer.getDistanceToEntity(player) <= 5 && player.motionY == 0 && !player.onGround && player.rotationYaw != -180 && player.rotationPitch != 0) {
-                        if(remove.isEnabled())
-                            mc.theWorld.removeEntity(ent);
-                        return true;
-                    }
-                }
-            }
+            return !ent.getDisplayName().getUnformattedText().contains("§");
         }
 
         if(mode.is("mineplex")) {
@@ -56,29 +47,9 @@ public class AntiBot extends Module {
         return false;
     }
 
-    public boolean checkBots() {
-        if(mode.is("funcraft")) {
-            for (Entity ent : mc.theWorld.getLoadedEntityList()) {
-                if(ent instanceof AbstractClientPlayer && ent != mc.thePlayer && ent.ticksExisted < 30) {
-                    if(!((AbstractClientPlayer) ent).hasSkin() && ent.ticksExisted < 25) {
-                        AbstractClientPlayer player = (AbstractClientPlayer) ent;
-                        if(mc.thePlayer.getDistanceToEntity(player) <= 5 && player.motionY == 0 && !player.onGround && player.rotationYaw != -180 && player.rotationPitch != 0) {
-                            if(remove.isEnabled())
-                                mc.theWorld.removeEntity(ent);
-                            return true;
-                        }
-                    }
-                }
-            }
-        }
-        return false;
-    }
-
     @EventTarget
     public void onMotion(EventMotion e) {
         this.setSuffix(mode.getSelected());
-        if(remove.isEnabled() && e.isPre())
-            checkBots();
 
         if(mode.is("hypixel")) {
             for(Entity entity : mc.theWorld.getLoadedEntityList()) {
@@ -111,15 +82,13 @@ public class AntiBot extends Module {
 
             if(mode.is("mineplex")) {
                 if(p.func_148944_c().size() < 3) {
-                    this.bots.add(p.getEntityID());
+                    bots.add(p.getEntityID());
                 }
             }
         }
     }
 
     private boolean isOnTab(Entity entity){
-        return mc.getNetHandler().getPlayerInfoMap()
-                .stream()
-                .anyMatch(info -> info.getGameProfile().getName().equals(entity.getName()));
+        return mc.getNetHandler().getPlayerInfoMap().stream().anyMatch(info -> info.getGameProfile().getName().equals(entity.getName()));
     }
 }

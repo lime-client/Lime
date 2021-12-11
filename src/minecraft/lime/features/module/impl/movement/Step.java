@@ -25,7 +25,7 @@ public class Step extends Module {
     Timer time = new Timer();
     public static Timer lastStep = new Timer();
 
-    private final EnumProperty mode = new EnumProperty("Mode", this, "NCP", "Vanilla", "NCP", "Verus");
+    private final EnumProperty mode = new EnumProperty("Mode", this, "NCP", "Vanilla", "NCP");
     private final NumberProperty height = new NumberProperty("Height", this, 0.6, 5, 2.5, 0.1);
     private final NumberProperty timer = new NumberProperty("Timer", this, .01, 1, 0.4, 0.01);
     private final NumberProperty delay = new NumberProperty("Delay", this, 0, 2, 0.1, 0.1);
@@ -53,7 +53,7 @@ public class Step extends Module {
         stepValue = height.getCurrent();
 
         if(resetTimer){
-            resetTimer = !resetTimer;
+            resetTimer = false;
             mc.timer.timerSpeed = 1;
         }
         Block block = mc.theWorld.getBlockState(new BlockPos(mc.thePlayer.posX, mc.thePlayer.posY, mc.thePlayer.posZ)).getBlock();
@@ -74,7 +74,6 @@ public class Step extends Module {
                 }
                 switch(mode.getSelected()){
                     case "NCP":
-                    case "Verus":
                         if(canStep){
                             mc.timer.timerSpeed = timer - (rheight >= 1 ? Math.abs(1-(float)rheight)*((float)timer*0.55f) : 0);
                             if(mc.timer.timerSpeed <= 0.05f){
@@ -84,9 +83,6 @@ public class Step extends Module {
                             ncpStep(rheight);
                         }
                         break;
-                    case "Vanilla":
-
-                        return;
                 }
 
 
@@ -118,11 +114,6 @@ public class Step extends Module {
                 mc.thePlayer.sendQueue.addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(posX, y + first, posZ, false));
                 if(y+second < y + height)
                     mc.thePlayer.sendQueue.addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(posX, y + second, posZ, false));
-            } else if(mode.is("verus")) {
-                double[] heights = {0.41999998688697815, 0.33319999363422426, 0.24813599859093927, 0.1647732818260721};
-                for(double off : heights){
-                    mc.thePlayer.sendQueue.addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(posX, y += off, posZ, false));
-                }
             }
         }else if(height <1.6){
             if(mode.is("ncp")) {
@@ -130,25 +121,12 @@ public class Step extends Module {
                     y += off;
                     mc.thePlayer.sendQueue.addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(posX, y, posZ, false));
                 }
-            } else if(mode.is("verus")) {
-                double[] heights = {0.41999998688697815, 0.33319999363422426, 0.24813599859093927, 0.1647732818260721};
-                for(double off : heights){
-                    mc.thePlayer.sendQueue.addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(posX, y += off, posZ, false));
-                }
             }
         }else if(height < 2.1){
             if(mode.is("ncp")) {
                 double[] heights = {0.425,0.821,0.699,0.599,1.022,1.372,1.652,1.869};
                 for(double off : heights){
                     mc.thePlayer.sendQueue.addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(posX, y + off, posZ, false));
-                }
-            } else if(mode.is("verus")) {
-                double[] heights = {0.41999998688697815, 0.33319999363422426, 0.24813599859093927, 0.1647732818260721, 0.33319999363422426, 0.24813599859093927, 0.1647732818260721};
-                for(double off : heights){
-                    mc.thePlayer.sendQueue.addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(posX, y += off, posZ, false));
-                }
-                for(double off : heights){
-                    mc.thePlayer.sendQueue.addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(posX, y += off, posZ, false));
                 }
             }
         }else{

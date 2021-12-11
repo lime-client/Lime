@@ -1,10 +1,10 @@
-package lime.features.commands.impl;
+package lime.features.command.impl;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import lime.core.Lime;
-import lime.features.commands.Command;
+import lime.features.command.Command;
 import lime.ui.notifications.Notification;
 import lime.utils.other.ChatUtils;
 

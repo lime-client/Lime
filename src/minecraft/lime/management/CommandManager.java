@@ -1,7 +1,7 @@
 package lime.management;
 
-import lime.features.commands.Command;
-import lime.features.commands.impl.*;
+import lime.features.command.Command;
+import lime.features.command.impl.*;
 import lime.utils.other.ChatUtils;
 
 import java.util.ArrayList;
@@ -24,6 +24,7 @@ public class CommandManager {
         registerCommand(new Help());
         registerCommand(new Toggle());
         registerCommand(new BlackListBed());
+        registerCommand(new Target());
     }
 
     private void registerCommand(Command command) {

@@ -1,9 +1,10 @@
 package net.optifine;
 
+import net.minecraft.world.chunk.Chunk;
+
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
-import net.minecraft.world.chunk.Chunk;
 
 public class ChunkUtils
 {

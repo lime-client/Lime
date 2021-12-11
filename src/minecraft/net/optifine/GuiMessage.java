@@ -1,12 +1,13 @@
 package net.optifine;
 
 import com.google.common.collect.Lists;
-import java.io.IOException;
-import java.util.List;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiOptionButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
+
+import java.io.IOException;
+import java.util.List;
 
 public class GuiMessage extends GuiScreen
 {

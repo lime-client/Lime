@@ -56,7 +56,7 @@ public class BlockUtils implements IUtil {
         }
 
         EnumFacing[] enumFacings = EnumFacing.VALUES;
-        int radius = 6;
+        int radius = 4;
         for(int r = 1; r < radius; ++r) {
             for (EnumFacing enumFacing : enumFacings) {
                 BlockPos pos1 = pos.offset(enumFacing);

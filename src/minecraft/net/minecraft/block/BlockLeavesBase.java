@@ -1,12 +1,13 @@
 package net.minecraft.block;
 
-import java.util.IdentityHashMap;
-import java.util.Map;
 import net.minecraft.block.material.Material;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
 import net.optifine.Config;
+
+import java.util.IdentityHashMap;
+import java.util.Map;
 
 public class BlockLeavesBase extends Block
 {

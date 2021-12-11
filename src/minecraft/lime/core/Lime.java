@@ -2,11 +2,7 @@ package lime.core;
 
 import lime.features.module.Module;
 import lime.features.setting.impl.BooleanProperty;
-import lime.management.CommandManager;
-import lime.management.FriendManager;
-import lime.management.ModuleManager;
-import lime.management.SettingManager;
-import lime.scripting.ScriptManager;
+import lime.management.*;
 import lime.ui.altmanager.AltManager;
 import lime.ui.clickgui.frame.ClickGUI;
 import lime.ui.gui.MainScreen;
@@ -21,15 +17,14 @@ import org.lwjgl.opengl.Display;
 import viamcp.ViaMCP;
 
 import java.io.File;
-import java.net.Proxy;
 
 public class Lime {
     private final static Lime instance = new Lime();
 
     private SettingManager settingsManager;
     private ModuleManager moduleManager;
-    private ScriptManager scriptManager;
     private CommandManager commandManager;
+    private TargetManager targetManager;
     private FriendManager friendManager;
     private NotificationManager notificationManager;
     private ClickGUI clickGUI;
@@ -38,8 +33,6 @@ public class Lime {
     private User user;
 
     private FileSaver fileSaver;
-
-    private Proxy proxy = Proxy.NO_PROXY;
 
     public boolean theAltening;
 
@@ -74,6 +67,7 @@ public class Lime {
         moduleManager = new ModuleManager();
         commandManager = new CommandManager();
         notificationManager = new NotificationManager();
+        targetManager = new TargetManager();
         friendManager = new FriendManager();
         fileSaver = new FileSaver();
         altManager = new AltManager();
@@ -88,13 +82,11 @@ public class Lime {
         clickGUI = new ClickGUI();
         clickGUI2 = new lime.ui.clickgui.frame2.ClickGUI();
 
-        this.scriptManager = new ScriptManager().loadScripts();
-
         new EventListener();
 
         Minecraft.getMinecraft().displayGuiScreen(new MainScreen());
 
-        logger.info("[LIME] Client initialised.");
+        logger.info("[LIME] Started.");
     }
 
     public User getUser() {
@@ -137,8 +129,8 @@ public class Lime {
         return friendManager;
     }
 
-    public ScriptManager getScriptManager() {
-        return scriptManager;
+    public TargetManager getTargetManager() {
+        return targetManager;
     }
 
     public static Lime getInstance() {
@@ -147,21 +139,5 @@ public class Lime {
 
     public FileSaver getFileSaver() {
         return fileSaver;
-    }
-
-    public Proxy getProxy() {
-        return proxy;
-    }
-
-    public void setProxy(Proxy proxy) {
-        this.proxy = proxy;
-    }
-
-    public void setClickGUI(ClickGUI clickGUI) {
-        this.clickGUI = clickGUI;
-    }
-
-    public void setClickGUI2(lime.ui.clickgui.frame2.ClickGUI clickGUI2) {
-        this.clickGUI2 = clickGUI2;
     }
 }

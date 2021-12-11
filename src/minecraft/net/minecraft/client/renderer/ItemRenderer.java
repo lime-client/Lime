@@ -32,9 +32,8 @@ import net.minecraft.world.storage.MapData;
 import net.optifine.Config;
 import net.optifine.DynamicLights;
 import net.optifine.Reflector;
-
-import org.lwjgl.opengl.GL11;
 import net.optifine.shadersmod.client.Shaders;
+import org.lwjgl.opengl.GL11;
 
 public class ItemRenderer
 {
@@ -362,7 +361,7 @@ public class ItemRenderer
             {
                 this.renderItemMap(entityplayersp, f2, f, f1);
             }
-            else if (entityplayersp.getItemInUseCount() > 0 || (Lime.getInstance().getModuleManager().getModule("Kill Aura").isToggled() && KillAura.getEntity() != null && ((EnumProperty) Lime.getInstance().getSettingsManager().getSetting("Auto Block", Lime.getInstance().getModuleManager().getModule("Kill Aura"))).is("fake") && Minecraft.getMinecraft().thePlayer.getCurrentEquippedItem() != null && Minecraft.getMinecraft().thePlayer.getCurrentEquippedItem().getItem() instanceof ItemSword)) {
+            else if (entityplayersp.getItemInUseCount() > 0 || (Lime.getInstance().getModuleManager().getModule("Kill Aura").isToggled() && KillAura.getEntity() != null && !((EnumProperty) Lime.getInstance().getSettingsManager().getSetting("Auto Block", Lime.getInstance().getModuleManager().getModule("Kill Aura"))).is("none") && Minecraft.getMinecraft().thePlayer.getCurrentEquippedItem() != null && Minecraft.getMinecraft().thePlayer.getCurrentEquippedItem().getItem() instanceof ItemSword)) {
                 EnumAction enumaction = this.itemToRender.getItemUseAction();
 
                 switch (enumaction)

@@ -1,12 +1,11 @@
 package net.minecraft.client.renderer;
 
-import java.nio.FloatBuffer;
-import java.nio.IntBuffer;
-
+import net.optifine.Config;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
 
-import net.optifine.Config;
+import java.nio.FloatBuffer;
+import java.nio.IntBuffer;
 
 public class GlStateManager
 {

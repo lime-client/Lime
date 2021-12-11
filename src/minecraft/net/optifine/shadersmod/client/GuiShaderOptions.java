@@ -1,8 +1,5 @@
 package net.optifine.shadersmod.client;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
@@ -12,6 +9,10 @@ import net.optifine.Config;
 import net.optifine.GuiScreenOF;
 import net.optifine.Lang;
 import net.optifine.StrUtils;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class GuiShaderOptions extends GuiScreenOF
 {

@@ -44,7 +44,7 @@ public class AutoGapple extends Module {
         mc.getNetHandler().addToSendQueue(new C09PacketHeldItemChange(gappleSlot - 36));
         mc.getNetHandler().addToSendQueue(new C08PacketPlayerBlockPlacement(BlockPos.ORIGIN, 255, mc.thePlayer.inventory.mainInventory[gappleSlot - 36], 0, 0, 0));
         for(int i = 0; i < 35; i++) {
-            mc.getNetHandler().addToSendQueue(new C03PacketPlayer(mc.thePlayer.onGround));
+            mc.getNetHandler().addToSendQueue(new C03PacketPlayer(false));
         }
         mc.getNetHandler().addToSendQueue(new C09PacketHeldItemChange(mc.thePlayer.inventory.currentItem));
         if(mc.thePlayer.isBlocking()) {

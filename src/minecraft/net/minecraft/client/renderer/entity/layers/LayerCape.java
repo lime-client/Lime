@@ -1,13 +1,11 @@
 package net.minecraft.client.renderer.entity.layers;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.RenderPlayer;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EnumPlayerModelParts;
 import net.minecraft.util.MathHelper;
-import net.minecraft.util.ResourceLocation;
 
 public class LayerCape implements LayerRenderer
 {

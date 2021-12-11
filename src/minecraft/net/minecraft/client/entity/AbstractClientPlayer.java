@@ -1,8 +1,6 @@
 package net.minecraft.client.entity;
 
 import com.mojang.authlib.GameProfile;
-import java.io.File;
-
 import lime.core.Lime;
 import lime.features.module.impl.render.Camera;
 import net.minecraft.client.Minecraft;
@@ -24,6 +22,8 @@ import net.optifine.CapeUtils;
 import net.optifine.Config;
 import net.optifine.PlayerConfigurations;
 import net.optifine.Reflector;
+
+import java.io.File;
 
 public abstract class AbstractClientPlayer extends EntityPlayer
 {

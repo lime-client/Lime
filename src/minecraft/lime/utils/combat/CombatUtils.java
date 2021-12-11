@@ -65,31 +65,6 @@ public class CombatUtils implements IUtil {
     }
 
     public static float[] getEntityRotations(EntityLivingBase e, boolean random) {
-        /*return random ? getRotations(e.posX,
-                e.posY + (double)e.getEyeHeight() - 0.4D,
-                e.posZ) :
-                getRotations(e.posX, e.posY + (double)e.getEyeHeight() - 0.4D, e.posZ);*/
-
-        /*double lastTickPosX = e.ticksExisted > 5 ? e.lastTickPosX : 0;
-        double lastTickPosZ = e.ticksExisted > 5 ? e.lastTickPosZ : 0;
-
-
-        double deltaX = e.posX + (e.posX - lastTickPosX) - mc.thePlayer.posX,
-                deltaY = e.posY -3.5 + e.getEyeHeight() - mc.thePlayer.posY + mc.thePlayer.getEyeHeight(),
-                deltaZ = e.posZ + (e.posZ - lastTickPosZ) - mc.thePlayer.posZ,
-                distance = Math.sqrt(Math.pow(deltaX, 2) + Math.pow(deltaZ, 2));
-
-        float yaw = (float) Math.toDegrees(-Math.atan(deltaX / deltaZ)),
-                pitch = (float) -Math.toDegrees(Math.atan(deltaY / distance));
-
-        if(deltaX < 0 && deltaZ < 0) {
-            yaw = (float) (90 +Math.toDegrees(Math.atan(deltaZ / deltaX)));
-        }else if(deltaX > 0 && deltaZ < 0) {
-            yaw = (float) (-90 +Math.toDegrees(Math.atan(deltaZ / deltaX)));
-        }*/
-
-
-
         double x = e.posX + (e.ticksExisted > 2 ? (e.posX - e.lastTickPosX) : 0) - mc.thePlayer.posX;
         double z = e.posZ + (e.ticksExisted > 2 ? (e.posZ - e.lastTickPosZ) : 0) - mc.thePlayer.posZ;
         double y = e.posY + e.getEyeHeight() * 0.75D - (mc.thePlayer.posY + mc.thePlayer.getEyeHeight());
@@ -99,11 +74,9 @@ public class CombatUtils implements IUtil {
         float yaw = (float) (Math.atan2(z, x) * 180.0D / Math.PI) - 90.0F;
         float pitch = (float) -((Math.atan2(y, distance) * 180.0D / Math.PI));
 
-        //Rotation rotation = getEntityRotations(e.posX, e.posY, e.posZ);
+        KillAura killAura = Lime.getInstance().getModuleManager().getModuleC(KillAura.class);
 
-        KillAura killAura = (KillAura) Lime.getInstance().getModuleManager().getModuleC(KillAura.class);
-
-        return new float[] { yaw + (random ? MathUtils.random(-killAura.randomizeYaw.getCurrent(), killAura.randomizeYaw.getCurrent()) : 0), pitch + (random ? MathUtils.random(-killAura.randomizeYaw.getCurrent(), killAura.randomizeYaw.getCurrent()) : 0) };
+        return new float[] { yaw + (random ? MathUtils.random(-killAura.randomizeYaw.getCurrent(), killAura.randomizeYaw.getCurrent()) : 0) + (random ? (float)Math.random() : 0), Math.max(Math.min(pitch + (random ? (float) Math.random() : 0) + (random ? MathUtils.random(-killAura.randomizeYaw.getCurrent(), killAura.randomizeYaw.getCurrent()) : 0), 90), -90) };
     }
 
     public static boolean hasSword() {

@@ -1,8 +1,9 @@
 package net.minecraft.client.renderer.block.model;
 
-import java.util.Arrays;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.EnumFacing;
+
+import java.util.Arrays;
 
 public class BreakingFour extends BakedQuad
 {

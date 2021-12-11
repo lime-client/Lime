@@ -1,10 +1,11 @@
 package net.minecraft.network.play.client;
 
-import java.io.IOException;
 import net.minecraft.entity.Entity;
 import net.minecraft.network.Packet;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.network.play.INetHandlerPlayServer;
+
+import java.io.IOException;
 
 public class C0BPacketEntityAction implements Packet<INetHandlerPlayServer>
 {
@@ -74,6 +75,7 @@ public class C0BPacketEntityAction implements Packet<INetHandlerPlayServer>
         START_SPRINTING,
         STOP_SPRINTING,
         RIDING_JUMP,
-        OPEN_INVENTORY;
+        OPEN_INVENTORY,
+        START_FALL_FLYING;
     }
 }

@@ -3,7 +3,6 @@ package net.minecraft.client.renderer.entity;
 import net.minecraft.client.model.ModelWitch;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.layers.LayerHeldItemWitch;
-import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.monster.EntityWitch;
 import net.minecraft.util.ResourceLocation;
 

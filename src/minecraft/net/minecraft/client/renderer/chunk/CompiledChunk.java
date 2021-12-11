@@ -1,11 +1,12 @@
 package net.minecraft.client.renderer.chunk;
 
 import com.google.common.collect.Lists;
-import java.util.List;
 import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumWorldBlockLayer;
+
+import java.util.List;
 
 public class CompiledChunk
 {

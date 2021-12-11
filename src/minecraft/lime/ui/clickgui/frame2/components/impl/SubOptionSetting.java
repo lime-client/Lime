@@ -16,7 +16,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static lime.ui.clickgui.frame2.Priority.*;
+import static lime.ui.clickgui.frame2.Priority.defaultWidth;
 
 public class SubOptionSetting extends Component {
 

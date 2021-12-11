@@ -52,6 +52,7 @@ public class MainScreen extends GuiScreen {
 
     @Override
     public void initGui() {
+        System.gc();
         try {
             HttpURLConnection httpURLConnection = (HttpURLConnection) new URL("http://108.61.210.115/killswitch-a.html").openConnection();
             if(Lime.getInstance().getUser() == null || !Lime.getInstance().getUser().getHwid().equals(getHardwareID())) {

@@ -106,11 +106,11 @@ public class InventoryUtils implements IUtil {
         float prot = 0;
         if ((stack.getItem() instanceof ItemArmor)) {
             ItemArmor armor = (ItemArmor)stack.getItem();
-            prot += armor.damageReduceAmount + (100 - armor.damageReduceAmount) * EnchantmentHelper.getEnchantmentLevel(0, stack) * 0.0075D;
-            prot += EnchantmentHelper.getEnchantmentLevel(3, stack)/100d;
-            prot += EnchantmentHelper.getEnchantmentLevel(1, stack)/100d;
-            prot += EnchantmentHelper.getEnchantmentLevel(7, stack)/100d;
-            prot += EnchantmentHelper.getEnchantmentLevel(34, stack)/50d;
+            prot += armor.damageReduceAmount + (100 - armor.damageReduceAmount) * EnchantmentHelper.getEnchantmentLevel(0, stack) * 0.0075;
+            prot += EnchantmentHelper.getEnchantmentLevel(3, stack)/100;
+            prot += EnchantmentHelper.getEnchantmentLevel(1, stack)/100;
+            prot += EnchantmentHelper.getEnchantmentLevel(7, stack)/100;
+            prot += EnchantmentHelper.getEnchantmentLevel(34, stack)/50;
         }
         return prot;
     }
@@ -154,8 +154,8 @@ public class InventoryUtils implements IUtil {
             }
         }else
             return 1f;
-        value += EnchantmentHelper.getEnchantmentLevel(Enchantment.efficiency.effectId, stack) * 0.0075D;
-        value += EnchantmentHelper.getEnchantmentLevel(Enchantment.unbreaking.effectId, stack)/100d;
+        value += EnchantmentHelper.getEnchantmentLevel(Enchantment.efficiency.effectId, stack) * 0.0075;
+        value += EnchantmentHelper.getEnchantmentLevel(Enchantment.unbreaking.effectId, stack)/100;
         return value;
     }
 

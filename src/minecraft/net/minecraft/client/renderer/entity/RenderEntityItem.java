@@ -1,7 +1,5 @@
 package net.minecraft.client.renderer.entity;
 
-import java.util.Random;
-
 import lime.core.Lime;
 import lime.features.module.impl.render.ItemPhysics;
 import lime.utils.render.ItemUtils;
@@ -14,6 +12,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
+
+import java.util.Random;
 
 public class RenderEntityItem extends Render<EntityItem>
 {

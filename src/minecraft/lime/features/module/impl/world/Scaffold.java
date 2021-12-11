@@ -54,10 +54,10 @@ public class Scaffold extends Module {
             Blocks.stone_button, Blocks.wooden_button, Blocks.lever, Blocks.tallgrass, Blocks.tripwire, Blocks.tripwire_hook, Blocks.rail, Blocks.waterlily,
             Blocks.red_flower, Blocks.red_mushroom, Blocks.brown_mushroom, Blocks.vine, Blocks.trapdoor, Blocks.yellow_flower, Blocks.ladder, Blocks.furnace,
             Blocks.sand, Blocks.cactus, Blocks.dispenser, Blocks.noteblock, Blocks.dropper, Blocks.crafting_table, Blocks.web, Blocks.pumpkin, Blocks.sapling, Blocks.cobblestone_wall, Blocks.oak_fence,
-            Blocks.yellow_flower, Blocks.red_flower, Blocks.flower_pot, Blocks.dragon_egg, Blocks.monster_egg);
+            Blocks.yellow_flower, Blocks.red_flower, Blocks.flower_pot, Blocks.dragon_egg, Blocks.monster_egg, Blocks.standing_banner, Blocks.wall_banner);
 
     private final EnumProperty state = new EnumProperty("State", this, "POST", "PRE", "POST");
-    private final EnumProperty rotations = new EnumProperty("Rotations", this, "Basic", "None", "Basic", "Hypixel", "Legit", "Legit2");
+    private final EnumProperty rotations = new EnumProperty("Rotations", this, "Basic", "None", "Basic", "Hypixel", "Cubecraft", "Legit", "Legit2");
     private final EnumProperty itemSpoof = new EnumProperty("Item Spoof", this, "Spoof", "Spoof", "KeepSpoof", "Pick");
     private final EnumProperty tower = new EnumProperty("Tower", this, "NCP", "None", "NCP");
     public final EnumProperty search = new EnumProperty("Search", this, "Basic", "Basic", "Advanced");
@@ -161,8 +161,8 @@ public class Scaffold extends Module {
         }
 
         if(slowSpeed.isEnabled() && e.isPre() && mc.thePlayer.isPotionActive(Potion.moveSpeed)) {
-            mc.thePlayer.motionX *= .75;
-            mc.thePlayer.motionZ *= .75;
+            mc.thePlayer.motionX *= .81;
+            mc.thePlayer.motionZ *= .81;
         }
 
         if(keepRotations.isEnabled() && !rotations.is("none"))
@@ -175,7 +175,7 @@ public class Scaffold extends Module {
             }
         }
 
-        if(!isAirBlock(new BlockPos(mc.thePlayer.posX, mc.thePlayer.posY - 1, mc.thePlayer.posZ).getBlock()) && e.isPre()) {
+        if(!isAirBlock(new BlockPos(mc.thePlayer.posX, mc.thePlayer.posY - 0.5, mc.thePlayer.posZ).getBlock()) && e.isPre()) {
             mc.thePlayer.motionX *= speedModifier.getCurrent();
             mc.thePlayer.motionZ *= speedModifier.getCurrent();
         }
@@ -188,7 +188,7 @@ public class Scaffold extends Module {
 
         if(!timer.hasReached((long)delay.getCurrent())) { return; }
 
-        boolean downFlag = downwards.isEnabled() && Keyboard.isKeyDown(mc.gameSettings.keyBindSneak.getKeyCode()) && isAirBlock(new BlockPos(mc.thePlayer.posX, mc.thePlayer.posY - 1, mc.thePlayer.posZ).getBlock());
+        boolean downFlag = downwards.isEnabled() && Keyboard.isKeyDown(mc.gameSettings.keyBindSneak.getKeyCode()) && isAirBlock(new BlockPos(mc.thePlayer.posX, mc.thePlayer.posY - 0.5, mc.thePlayer.posZ).getBlock());
 
         double x = Double.MAX_VALUE;
         double z = Double.MAX_VALUE;
@@ -198,7 +198,7 @@ public class Scaffold extends Module {
             z = coords[1];
         }
 
-        boolean isAirUnderPos = isAirBlock(mc.theWorld.getBlockState(new BlockPos(mc.thePlayer.posX, mc.thePlayer.posY - 1, mc.thePlayer.posZ)).getBlock());
+        boolean isAirUnderPos = isAirBlock(mc.theWorld.getBlockState(new BlockPos(mc.thePlayer.posX, mc.thePlayer.posY - 0.5, mc.thePlayer.posZ)).getBlock());
 
         if(isAirUnderPos || (downwards.isEnabled() && Keyboard.isKeyDown(mc.gameSettings.keyBindSneak.getKeyCode()))) {
             x = mc.thePlayer.posX;
@@ -219,11 +219,11 @@ public class Scaffold extends Module {
 
         tower(e);
 
-        BlockPos underPosition = new BlockPos(x, this.y - 1 - (isAirBlock(new BlockPos(x, y - 1, z).getBlock()) ? BlockUtils.getBlockData(new BlockPos(x, this.y - 2, z)) == null ? 0 : downFlag ? 1 : 0 : 0), z);
+        BlockPos underPosition = new BlockPos(x, this.y - 1 - (isAirBlock(new BlockPos(x, y - 0.5, z).getBlock()) ? BlockUtils.getBlockData(new BlockPos(x, this.y - 2, z)) == null ? 0 : downFlag ? 1 : 0 : 0), z);
         BlockUtils.BlockData blockData = BlockUtils.getBlockData(underPosition);
 
         if(blockData != null) {
-            this.blockData = new BlockUtils.BlockData(new BlockPos(x, this.y-1, z), null);
+            this.blockData = new BlockUtils.BlockData(new BlockPos(x, this.y-0.5, z), null);
         }
 
         if((blockData != null && isAirBlock(underPosition.getBlock())) || downwards.isEnabled())
@@ -231,11 +231,12 @@ public class Scaffold extends Module {
             if(blockData != null && !rotations.is("none")) {
                 float[] rotations = getRotations(blockData.getBlockPos(), blockData.getEnumFacing());
                 assert rotations != null;
-                e.setYaw(yaw = rotations[0]);
-                e.setPitch(pitch = rotations[1]);
-                if(Lime.getInstance().getModuleManager().getModuleC(Disabler.class).isToggled() && mc.getCurrentServerData() != null && mc.getCurrentServerData().serverIP.toLowerCase(Locale.ROOT).contains("hypixel")) {
-                    mc.getNetHandler().sendPacketNoEvent(new C03PacketPlayer.C05PacketPlayerLook(yaw, pitch, mc.thePlayer.onGround));
+                if(Lime.getInstance().getModuleManager().getModuleC(Disabler.class).isToggled() && ((Disabler) Lime.getInstance().getModuleManager().getModuleC(Disabler.class)).mode.is("watchdog") && mc.thePlayer.ticksExisted % 2 != 0) {
+                    mc.getNetHandler().sendPacketNoEvent(new C03PacketPlayer.C05PacketPlayerLook(rotations[0], rotations[1], e.isGround()));
                 }
+                e.setYaw(yaw = rotations[0]);
+                e.setPitch(pitch = this.rotations.is("cubecraft") ? 81 + (RandomUtils.nextFloat(0, 1) - 0.5f) : rotations[1]);
+
                 if(rayTrace(yaw, pitch, blockData) && rayCast.isEnabled()) {
                     return;
                 }
@@ -386,7 +387,7 @@ public class Scaffold extends Module {
         } else if(rotations.is("legit2"))
         {
             yaw = (float) MathHelper.wrapDegrees(Math.toDegrees(MovementUtils.getDirection(mc.thePlayer)) - (180 - mc.theWorld.rand.nextFloat() / 100));
-        } else if(rotations.is("hypixel"))  {
+        } else if(rotations.is("hypixel") || rotations.is("cubecraft"))  {
             Vec3 positionEyes = this.mc.thePlayer.getPositionEyes(2.0F);
             Vec3 add = (new Vec3((double)block.getX() + 0.5D, (double)block.getY() + 0.5D, (double)block.getZ() + 0.5D)).add(new Vec3(face.getDirectionVec()).scale(0.49000000953674316D));
             double n = add.xCoord - positionEyes.xCoord;
@@ -395,7 +396,7 @@ public class Scaffold extends Module {
             return new float[]{(float)(Math.atan2(n3, n) * 180.0D / 3.141592653589793D - 90.0D), -((float)(Math.atan2(n2, (double)((float)Math.hypot(n, n3))) * 180.0D / 3.141592653589793D))};
         }
 
-        return new float[]{yaw, 85};
+        return new float[]{yaw, 81.5f};
     }
 
     private Vec3 getVec3(BlockUtils.BlockData blockData)

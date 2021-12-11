@@ -1,11 +1,12 @@
 package net.optifine;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Properties;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.BiomeGenBase;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Properties;
 
 public class RandomMobsProperties
 {

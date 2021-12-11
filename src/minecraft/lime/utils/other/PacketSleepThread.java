@@ -15,10 +15,11 @@ public class PacketSleepThread extends Thread {
     public void run() {
         try {
             Thread.sleep(sleep);
+            if(Minecraft.getMinecraft().thePlayer == null) {
+                return;
+            }
             Minecraft.getMinecraft().getNetHandler().sendPacketNoEvent(packet);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        } catch (Exception ignored) {}
         super.run();
     }
 }

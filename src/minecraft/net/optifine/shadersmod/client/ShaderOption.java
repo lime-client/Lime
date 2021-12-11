@@ -1,10 +1,10 @@
 package net.optifine.shadersmod.client;
 
-import java.util.Arrays;
-import java.util.List;
-
 import net.optifine.Config;
 import net.optifine.StrUtils;
+
+import java.util.Arrays;
+import java.util.List;
 
 public abstract class ShaderOption
 {

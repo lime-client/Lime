@@ -3,14 +3,6 @@ package net.minecraft.client.gui;
 import com.ibm.icu.text.ArabicShaping;
 import com.ibm.icu.text.ArabicShapingException;
 import com.ibm.icu.text.Bidi;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Properties;
-import java.util.Random;
-
 import lime.core.Lime;
 import lime.features.module.impl.player.Streamer;
 import net.minecraft.client.Minecraft;
@@ -28,9 +20,16 @@ import net.minecraft.util.ResourceLocation;
 import net.optifine.Config;
 import net.optifine.CustomColors;
 import net.optifine.FontUtils;
-
 import org.apache.commons.io.IOUtils;
 import org.lwjgl.opengl.GL11;
+
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Properties;
+import java.util.Random;
 
 public class FontRenderer implements IResourceManagerReloadListener
 {

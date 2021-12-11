@@ -1,9 +1,5 @@
 package net.minecraft.client.gui;
 
-import java.awt.*;
-import java.io.IOException;
-import java.util.List;
-
 import lime.core.Lime;
 import lime.ui.altmanager.Alt;
 import lime.ui.altmanager.AltLoginThread;
@@ -11,6 +7,10 @@ import lime.ui.altmanager.guis.AltManagerScreen;
 import net.minecraft.client.multiplayer.GuiConnecting;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.IChatComponent;
+
+import java.awt.*;
+import java.io.IOException;
+import java.util.List;
 
 public class GuiDisconnected extends GuiScreen
 {
@@ -50,6 +50,7 @@ public class GuiDisconnected extends GuiScreen
         this.buttonList.add(new GuiButton(2, this.width / 2 - 100, this.height / 2 + this.field_175353_i / 2 + this.fontRendererObj.FONT_HEIGHT + 44, "Alt Manager"));
         this.buttonList.add(new GuiButton(3, this.width / 2 - 100, this.height / 2 + this.field_175353_i / 2 + this.fontRendererObj.FONT_HEIGHT + 66, 100, 20, "Random Alt"));
         this.buttonList.add(new GuiButton(4, this.width / 2, this.height / 2 + this.field_175353_i / 2 + this.fontRendererObj.FONT_HEIGHT + 66, 100, 20, "Random Cracked Alt"));
+        this.buttonList.add(new GuiButton(5, this.width / 2 - 100, this.height / 2 + this.field_175353_i / 2 + this.fontRendererObj.FONT_HEIGHT + 88, "Clipboard"));
     }
 
     /**
@@ -63,7 +64,7 @@ public class GuiDisconnected extends GuiScreen
         }
         if(button.id == 1)
         {
-            mc.displayGuiScreen(new GuiConnecting(this, mc, GuiConnecting.lastKnownServerAddress.getIP(), GuiConnecting.lastKnownServerAddress.getPort()));
+            mc.displayGuiScreen(new GuiConnecting(parentScreen, mc, GuiConnecting.lastKnownServerAddress.getIP(), GuiConnecting.lastKnownServerAddress.getPort()));
         }
         if(button.id == 2)
         {
@@ -81,6 +82,13 @@ public class GuiDisconnected extends GuiScreen
         {
             altLoginThread = new AltLoginThread(AltManagerScreen.generateRandomString(), "", false);
             altLoginThread.start();
+        }
+        if(button.id == 5) {
+            String s = GuiScreen.getClipboardString();
+            if(s.contains("@") && s.contains(":")) {
+                altLoginThread = new AltLoginThread(s.split(":")[0], s.split(":")[1], false);
+                altLoginThread.start();
+            }
         }
     }
 

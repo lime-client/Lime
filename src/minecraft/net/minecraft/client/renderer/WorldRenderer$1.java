@@ -1,6 +1,7 @@
 package net.minecraft.client.renderer;
 
 import com.google.common.primitives.Floats;
+
 import java.util.Comparator;
 
 class WorldRenderer$1 implements Comparator

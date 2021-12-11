@@ -132,19 +132,20 @@ public class TeleportAura extends Module {
                         this.paths[i] = path;
 
                         for (CustomVec customVec : path) {
-                            mc.getNetHandler().addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(customVec.getX(), customVec.getY(), customVec.getZ(), true));
+                            mc.getNetHandler().sendPacketNoEvent(new C03PacketPlayer.C04PacketPlayerPosition(customVec.getX(), customVec.getY(), customVec.getZ(), false));
                         }
 
-                        mc.playerController.attackEntity(mc.thePlayer, entity);
                         if(!noSwing.isEnabled()) {
                             mc.thePlayer.swingItem();
                         }
+
+                        mc.playerController.attackEntity(mc.thePlayer, entity);
 
                         ArrayList<CustomVec> pathReversed = new ArrayList<>(path);
                         Collections.reverse(pathReversed);
 
                         for (CustomVec customVec : pathReversed) {
-                            mc.getNetHandler().addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(customVec.getX(), customVec.getY(), customVec.getZ(), true));
+                            mc.getNetHandler().sendPacketNoEvent(new C03PacketPlayer.C04PacketPlayerPosition(customVec.getX(), customVec.getY(), customVec.getZ(), false));
                         }
                         cpsTimer.reset();
                     } else
@@ -159,7 +160,7 @@ public class TeleportAura extends Module {
         ArrayList<Entity> entities = new ArrayList<>();
         for(Entity entity : mc.theWorld.getLoadedEntityList()) {
             AntiBot antiBot = Lime.getInstance().getModuleManager().getModuleC(AntiBot.class);
-            if(entity instanceof EntityPlayer && entity != mc.thePlayer && mc.thePlayer.getDistanceToEntity(entity) <= range.getCurrent() && !Lime.getInstance().getFriendManager().isFriend(entity) && !antiBot.checkBot((EntityPlayer) entity)) {
+            if(entity instanceof EntityPlayer && entity != mc.thePlayer && mc.thePlayer.getDistanceToEntity(entity) <= range.getCurrent() && !Lime.getInstance().getFriendManager().isFriend(entity) && (!antiBot.checkBot((EntityPlayer) entity) || !Lime.getInstance().getModuleManager().getModuleC(AntiBot.class).isToggled())) {
                 entities.add(entity);
             }
         }

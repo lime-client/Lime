@@ -36,7 +36,7 @@ public class HUD extends Module {
     public final NumberProperty targetHudX = new NumberProperty("TargetHUD X", this, 0, 100, 50, 1).onlyIf(targetHud.getSettingName(), "enum", "lime", "lime2", "astolfo");
     public final NumberProperty targetHudY = new NumberProperty("TargetHUD Y", this, 0, 100, 50, 1).onlyIf(targetHud.getSettingName(), "enum", "lime", "lime2", "astolfo");
     private final EnumProperty sidebar = new EnumProperty("Sidebar", this, "Right", "Left", "Right", "None");
-    private final EnumProperty color = new EnumProperty("Color", this, "Lime", "Lime", "Astolfo", "Rainbow", "Fade");
+    private final EnumProperty color = new EnumProperty("Color", this, "Fade", "Astolfo", "Rainbow", "Fade", "Moon");
     private final ColorProperty fadeColor = new ColorProperty("Fade Color", this, new Color(200, 0, 0).getRGB()).onlyIf(color.getSettingName(), "enum", "fade");
     private final NumberProperty rectOpacity = new NumberProperty("Rect Opacity", this, 0, 255, 0, 5);
     private final BooleanProperty customFont = new BooleanProperty("Custom Font", this, true);
@@ -111,7 +111,7 @@ public class HUD extends Module {
             }
         });
         int increment = customFont.isEnabled() ? FontManager.SfUiArray.getHeight()+2 : mc.fontRendererObj.FONT_HEIGHT;
-        int yCount = 1;
+        int yCount = 0;
         for (Module module : modules) {
             if(module.hasSettings() && !((BooleanProperty) Lime.getInstance().getSettingsManager().getSetting("Show", module)).isEnabled()) continue;
             String moduleName = module.getName() + (suffix.isEnabled() && module.getSuffix() != null && !module.getSuffix().isEmpty() ? "§7 " + module.getSuffix().replace("_", " ") : "");
@@ -174,21 +174,8 @@ public class HUD extends Module {
                         count.incrementAndGet();
                 });
                 return ColorUtils.fade(new Color(hud.fadeColor.getColor()), index, count.get());
-        }
-        if(hud.color.is("lime")) {
-
-        }
-        if(hud.color.is("astolfo")) {
-
-        }
-
-        if(hud.color.is("rainbow")) {
-
-        }
-
-        if(hud.color.is("fade"))
-        {
-
+            case "moon":
+                return ColorUtils.blend2colors(new Color(25, 60, 224), new Color(51, 13, 196), (System.nanoTime() + (index + index * 100000000L * 2)) / 1.0E09F % 2.0F);
         }
 
         // wtf ?

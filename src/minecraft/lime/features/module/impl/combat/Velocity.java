@@ -38,12 +38,14 @@ public class Velocity extends Module {
                     packet.setMotionZ((int) (packet.getMotionZ() * (h.intValue() / 100f)));
                     packet.setMotionY((int) (packet.getMotionY() * (v.intValue() / 100f)));
                 }
+
                 if(e.getPacket() instanceof S27PacketExplosion) {
                     S27PacketExplosion packet = (S27PacketExplosion) e.getPacket();
                     packet.setField_149152_f((int) (packet.func_149149_c() * (h.intValue() / 100f)));
                     packet.setField_149159_h((int) (packet.func_149144_d() * (h.intValue() / 100f)));
                     packet.setField_149153_g((int) (packet.func_149147_e() * (v.intValue() / 100f)));
                 }
+
                 if(h.intValue() == 0 && v.intValue() == 0) {
                     e.setCanceled(true);
                 }

@@ -15,13 +15,12 @@ public class Funcraft2 extends FlightValue {
 
     private double moveSpeed, lastDist;
     private int stage;
-    private boolean damage, lostBoost;
+    private boolean lostBoost;
 
     @Override
     public void onEnable() {
         moveSpeed = lastDist = 0;
         stage = 0;
-        damage = false;
         lostBoost = false;
     }
 

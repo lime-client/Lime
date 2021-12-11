@@ -3,23 +3,21 @@ package lime.features.module.impl.combat;
 import lime.core.Lime;
 import lime.core.events.EventBus;
 import lime.core.events.EventTarget;
-import lime.core.events.impl.Event2D;
-import lime.core.events.impl.Event3D;
-import lime.core.events.impl.EventAttack;
-import lime.core.events.impl.EventMotion;
+import lime.core.events.impl.*;
 import lime.features.module.Category;
 import lime.features.module.Module;
 import lime.features.module.impl.render.HUD;
+import lime.features.module.impl.world.Scaffold;
 import lime.features.setting.impl.BooleanProperty;
 import lime.features.setting.impl.EnumProperty;
 import lime.features.setting.impl.NumberProperty;
 import lime.features.setting.impl.SubOptionProperty;
+import lime.management.CommandManager;
 import lime.ui.targethud.impl.AstolfoTargetHUD;
 import lime.ui.targethud.impl.Lime2TargetHUD;
 import lime.ui.targethud.impl.LimeTargetHUD;
 import lime.utils.combat.CombatUtils;
 import lime.utils.combat.Rotation;
-import lime.utils.other.ChatUtils;
 import lime.utils.other.Timer;
 import lime.utils.render.ColorUtils;
 import lime.utils.render.RenderUtils;
@@ -28,8 +26,10 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.passive.EntityAnimal;
+import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.play.client.C02PacketUseEntity;
+import net.minecraft.network.play.client.C03PacketPlayer;
 import net.minecraft.network.play.client.C07PacketPlayerDigging;
 import net.minecraft.network.play.client.C08PacketPlayerBlockPlacement;
 import net.minecraft.util.BlockPos;
@@ -37,8 +37,10 @@ import net.minecraft.util.EnumFacing;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.List;
 
 public class KillAura extends Module {
     public KillAura() {
@@ -55,6 +57,9 @@ public class KillAura extends Module {
     private final NumberProperty cps = new NumberProperty("CPS", this, 1, 20, 8, 1);
     private final BooleanProperty keepSprint = new BooleanProperty("Keep Sprint", this, false);
     private final BooleanProperty rayCast = new BooleanProperty("Ray Cast", this, false);
+    private final BooleanProperty ver19plus = new BooleanProperty("1.9+", this, false);
+    private final BooleanProperty blinkFirstHit = new BooleanProperty("Blink First Hit", this, false);
+    private final BooleanProperty attackWithScaffold = new BooleanProperty("Attack with scaffold on", this, false);
 
     // Rotations
     private final EnumProperty rotations = new EnumProperty("Rotations", this, "NCP", "None", "NCP", "Smooth");
@@ -76,7 +81,7 @@ public class KillAura extends Module {
     private final BooleanProperty jelloEsp = new BooleanProperty("Jello ESP", this, true);
 
     private final SubOptionProperty targetsSub = new SubOptionProperty("Targets", this, sortBy, players, mobs, passives, teams, dead, throughWalls);
-    private final SubOptionProperty attackSub = new SubOptionProperty("Attack", this, mode, state, autoBlock, switchDelay, autoBlockRange, range, cps, keepSprint, rayCast);
+    private final SubOptionProperty attackSub = new SubOptionProperty("Attack", this, mode, state, autoBlock, switchDelay, autoBlockRange, range, cps, keepSprint, rayCast, ver19plus, blinkFirstHit, ver19plus);
     private final SubOptionProperty rotationsSub = new SubOptionProperty("Rotations", this, rotations, turnSpeed, randomizeYaw, movementFix, gcd);
     private final SubOptionProperty renderSub = new SubOptionProperty("Renders", this, jelloEsp);
 
@@ -84,11 +89,13 @@ public class KillAura extends Module {
     public static final float[] currentRotations = new float[2];
     public static boolean isBlocking;
 
+    private final List<C03PacketPlayer> packets = new ArrayList<>();
     public final LimeTargetHUD limeTargetHUD = new LimeTargetHUD();
     public final AstolfoTargetHUD astolfoTargetHUD = new AstolfoTargetHUD();
     public Lime2TargetHUD lime2TargetHUD = new Lime2TargetHUD();
     private final Timer cpsTimer = new Timer(), switchTimer = new Timer();
     private int ticks, index;
+    private boolean blink;
 
     @Override
     public void onEnable() {
@@ -102,6 +109,7 @@ public class KillAura extends Module {
         currentRotations[1] = mc.thePlayer.rotationPitch;
         isBlocking = false;
         ticks = index = 0;
+        blink = false;
         switchTimer.reset();
     }
 
@@ -109,6 +117,22 @@ public class KillAura extends Module {
     public void onDisable() {
         unblock();
         entity = null;
+
+        if(!blink && blinkFirstHit.isEnabled()) {
+            for (C03PacketPlayer packet : packets) {
+                mc.getNetHandler().sendPacketNoEvent(packet);
+            }
+            packets.clear();
+            blink = true;
+        }
+    }
+
+    @EventTarget
+    public void onPacket(EventPacket e) {
+        if(e.getPacket() instanceof C03PacketPlayer && blinkFirstHit.isEnabled() && !blink) {
+            e.setCanceled(true);
+            packets.add((C03PacketPlayer) e.getPacket());
+        }
     }
 
     @EventTarget
@@ -118,28 +142,29 @@ public class KillAura extends Module {
             isBlocking = false;
         }
 
+        if(!attackWithScaffold.isEnabled() && Lime.getInstance().getModuleManager().getModuleC(Scaffold.class).isToggled())
+            return;
+
         ArrayList<EntityLivingBase> entities = getEntities();
 
         if(!entities.isEmpty()) {
             if(index > entities.size() - 1) index = 0;
             EntityLivingBase ent = entities.get(mode.is("switch") ? Math.min(index, entities.size() - 1) : 0);
 
-            float[] rotations = getRotations(ent);
-            if(rayCast.isEnabled() && CombatUtils.raycastEntity(range.getCurrent(), rotations) == null) {
-                entity = null;
-                return;
+            if(!rotations.is("none")) {
+                float[] rotations = getRotations(ent);
+                if(rayCast.isEnabled() && CombatUtils.raycastEntity(range.getCurrent(), rotations) == null) {
+                    entity = null;
+                    return;
+                }
+                e.setYaw(rotations[0]);
+                e.setPitch(rotations[1]);
+                mc.thePlayer.setRotationsTP(e);
             }
-            e.setYaw(rotations[0]);
-            e.setPitch(rotations[1]);
-            mc.thePlayer.setRotationsTP(e);
             entity = ent;
 
             if(autoBlock.is("ncp") && !e.isPre()) {
                 block();
-            }
-
-            if(isBlocking && CombatUtils.hasSword()) {
-                mc.thePlayer.setItemInUse(mc.thePlayer.getHeldItem(), 32767);
             }
 
             if(e.isPre()) {
@@ -171,7 +196,14 @@ public class KillAura extends Module {
     }
 
     public void attack(EventMotion e, EntityLivingBase entity) {
-        if(cpsTimer.hasReached(20 / cps.intValue() * 50)) {
+        if(cpsTimer.hasReached(ver19plus.isEnabled() ? 825 : (1000 / cps.intValue()))) {
+            if(!blink && blinkFirstHit.isEnabled()) {
+                for (C03PacketPlayer packet : packets) {
+                    mc.getNetHandler().sendPacketNoEvent(packet);
+                }
+                packets.clear();
+                blink = true;
+            }
             if(state.is(e.getState().name())) {
                 if(autoBlock.is("verus")) {
                     unblock();
@@ -179,8 +211,14 @@ public class KillAura extends Module {
 
                 EventBus.INSTANCE.call(new EventAttack(entity));
 
-                mc.thePlayer.swingItem();
-                mc.getNetHandler().sendPacketNoEvent(new C02PacketUseEntity(entity, C02PacketUseEntity.Action.ATTACK));
+                if(ver19plus.isEnabled()) {
+                    mc.getNetHandler().addToSendQueue(new C02PacketUseEntity(entity, C02PacketUseEntity.Action.ATTACK));
+                    mc.thePlayer.swingItem();
+                } else {
+                    mc.thePlayer.swingItem();
+                    mc.getNetHandler().addToSendQueue(new C02PacketUseEntity(entity, C02PacketUseEntity.Action.ATTACK));
+                }
+
                 cpsTimer.reset();
                 if(!keepSprint.isEnabled()) {
                     mc.thePlayer.setSprinting(false);
@@ -211,7 +249,7 @@ public class KillAura extends Module {
 
     public void unblock() {
         if(isBlocking) {
-            mc.thePlayer.sendQueue.addToSendQueue(new C07PacketPlayerDigging(C07PacketPlayerDigging.Action.RELEASE_USE_ITEM, BlockPos.ORIGIN, EnumFacing.DOWN));
+            mc.getNetHandler().sendPacketNoEvent(new C07PacketPlayerDigging(C07PacketPlayerDigging.Action.RELEASE_USE_ITEM, BlockPos.ORIGIN, EnumFacing.DOWN));
             isBlocking = false;
         }
     }
@@ -230,6 +268,9 @@ public class KillAura extends Module {
             entities.removeIf(entity -> mc.thePlayer.getDistanceToEntity(entity) > range.getCurrent());
         }
         entities.sort(Comparator.comparingDouble(e -> mc.thePlayer.getDistanceToEntity(e)));
+        try {
+            entities.sort(Comparator.comparingDouble(e -> Lime.getInstance().getTargetManager().shouldTarget(e) && mc.thePlayer.getDistanceToEntity(entity) <= range.getCurrent() ? 0 : 1));
+        } catch (Exception ignored){}
 
         return entities;
     }
@@ -265,7 +306,7 @@ public class KillAura extends Module {
     @EventTarget
     public void on2D(Event2D e) {
         HUD hud = (HUD) Lime.getInstance().getModuleManager().getModule("HUD");
-        if(entity != null && isValid(entity)) {
+        if(entity != null && isValid(entity) && mc.thePlayer.getDistanceToEntity(entity) <= range.getCurrent()) {
             switch(hud.targetHud.getSelected().toLowerCase()) {
                 case "lime":
                     limeTargetHUD.draw(entity, (float) hud.targetHudX.getCurrent() / 100f * (e.getScaledResolution().getScaledWidth() - 174), (float) hud.targetHudY.getCurrent() / 100f * (e.getScaledResolution().getScaledHeight() - 70), getColor(Math.round(entity.getHealth())));
@@ -282,7 +323,7 @@ public class KillAura extends Module {
 
     @EventTarget
     public void on3D(Event3D e) {
-        if(entity != null && isValid(entity)) {
+        if(entity != null && isValid(entity) && mc.thePlayer.getDistanceToEntity(entity) <= range.getCurrent()) {
             renderJello(entity);
         }
     }
@@ -348,7 +389,11 @@ public class KillAura extends Module {
         if(antiBot.isToggled() && e instanceof EntityPlayer && antiBot.checkBot((EntityPlayer) e)) return false;
         if(!e.isEntityAlive() && !dead.isEnabled()) return false;
         if(range.getCurrent() < mc.thePlayer.getDistanceToEntity(e) && autoBlockRange.getCurrent() < mc.thePlayer.getDistanceToEntity(e)) return false;
-        if(autoBlockRange.getCurrent() < mc.thePlayer.getDistanceToEntity(e) && range.getCurrent() > mc.thePlayer.getDistanceToEntity(e) && !CombatUtils.hasSword()) return false;
-        return ((e instanceof EntityPlayer && players.isEnabled() && e != mc.thePlayer) || (e instanceof EntityMob && mobs.isEnabled()) || (e instanceof EntityAnimal && passives.isEnabled()) && (mc.thePlayer.canEntityBeSeen(e) || throughWalls.isEnabled()));
+        if(Lime.getInstance().getFriendManager().isFriend(e)) return false;
+        if(mc.thePlayer.getDistanceToEntity(e) <= autoBlockRange.getCurrent() && mc.thePlayer.getDistanceToEntity(e) > range.getCurrent() && !CombatUtils.hasSword()) {
+            return false;
+        }
+        if(teams.isEnabled() && mc.thePlayer.isOnSameTeam(e)) return false;
+        return ((e instanceof EntityPlayer && players.isEnabled() && e != mc.thePlayer) || (e instanceof EntityMob && mobs.isEnabled()) || ((e instanceof EntityAnimal || e instanceof EntityVillager) && passives.isEnabled()) && (mc.thePlayer.canEntityBeSeen(e) || throughWalls.isEnabled()));
     }
 }

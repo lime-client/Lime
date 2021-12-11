@@ -17,9 +17,11 @@ public class ModuleManager {
 
     public ModuleManager() {
         modules = new ArrayList<>();
+        registerModule(new Teleport());
 
         // COMBAT
         registerModule(new TeleportAura());
+        registerModule(new AutoDamage());
         registerModule(new AutoGapple());
         registerModule(new AutoSword());
         registerModule(new Criticals());
@@ -37,6 +39,9 @@ public class ModuleManager {
         registerModule(new NoClip());
         registerModule(new Blink());
         registerModule(new Phase());
+
+
+        registerModule(new WotSped());
 
         // MOVEMENT
         registerModule(new TargetStrafe());

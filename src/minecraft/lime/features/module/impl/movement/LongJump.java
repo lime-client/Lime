@@ -22,7 +22,6 @@ import net.minecraft.network.play.server.S12PacketEntityVelocity;
 import net.minecraft.potion.Potion;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.MathHelper;
 
 public class LongJump extends Module {
 
@@ -79,7 +78,7 @@ public class LongJump extends Module {
         }
 
         if(mode.is("verus")) {
-            PlayerUtils.verusDamage();
+            PlayerUtils.verusDamage(true);
             mc.thePlayer.jump();
         }
 

@@ -6,13 +6,10 @@ import com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService;
 import com.mojang.authlib.yggdrasil.YggdrasilUserAuthentication;
 import fr.litarvan.openauth.microsoft.MicrosoftAuthResult;
 import fr.litarvan.openauth.microsoft.MicrosoftAuthenticator;
-import lime.utils.other.WebUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.Session;
 
-import java.net.HttpURLConnection;
 import java.net.Proxy;
-import java.net.URL;
 
 public class AltLoginThread extends Thread {
 

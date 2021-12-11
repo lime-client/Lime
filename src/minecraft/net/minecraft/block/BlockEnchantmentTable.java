@@ -1,7 +1,5 @@
 package net.minecraft.block;
 
-import java.util.Random;
-
 import lime.core.Lime;
 import lime.features.module.impl.render.NoRender;
 import net.minecraft.block.material.MapColor;
@@ -18,6 +16,8 @@ import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.world.World;
+
+import java.util.Random;
 
 public class BlockEnchantmentTable extends BlockContainer
 {

@@ -2,7 +2,6 @@ package lime.features.module.impl.player;
 
 import lime.core.Lime;
 import lime.core.events.EventTarget;
-import lime.core.events.impl.Event2D;
 import lime.core.events.impl.EventMotion;
 import lime.core.events.impl.EventMove;
 import lime.core.events.impl.EventPacket;
@@ -14,7 +13,6 @@ import lime.features.setting.impl.EnumProperty;
 import lime.features.setting.impl.NumberProperty;
 import lime.ui.gui.ProcessBar;
 import lime.utils.movement.MovementUtils;
-import lime.utils.other.PlayerUtils;
 import lime.utils.other.Timer;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.network.play.client.C03PacketPlayer;

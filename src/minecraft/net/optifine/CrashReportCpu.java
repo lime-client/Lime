@@ -1,7 +1,8 @@
 package net.optifine;
 
-import java.util.concurrent.Callable;
 import net.minecraft.client.renderer.OpenGlHelper;
+
+import java.util.concurrent.Callable;
 
 public class CrashReportCpu implements Callable
 {

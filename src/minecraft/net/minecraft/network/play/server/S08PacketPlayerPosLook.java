@@ -1,11 +1,13 @@
 package net.minecraft.network.play.server;
 
-import java.io.IOException;
-import java.util.EnumSet;
-import java.util.Set;
 import net.minecraft.network.Packet;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.network.play.INetHandlerPlayClient;
+import viamcp.ViaMCP;
+
+import java.io.IOException;
+import java.util.EnumSet;
+import java.util.Set;
 
 public class S08PacketPlayerPosLook implements Packet<INetHandlerPlayClient>
 {
@@ -14,6 +16,7 @@ public class S08PacketPlayerPosLook implements Packet<INetHandlerPlayClient>
     private double z;
     private float yaw;
     private float pitch;
+    private int teleportId;
     private Set<S08PacketPlayerPosLook.EnumFlags> field_179835_f;
 
     public S08PacketPlayerPosLook()
@@ -41,6 +44,7 @@ public class S08PacketPlayerPosLook implements Packet<INetHandlerPlayClient>
         this.yaw = buf.readFloat();
         this.pitch = buf.readFloat();
         this.field_179835_f = S08PacketPlayerPosLook.EnumFlags.func_180053_a(buf.readUnsignedByte());
+        //teleportId = buf.readVarIntFromBuffer();
     }
 
     /**
@@ -54,6 +58,7 @@ public class S08PacketPlayerPosLook implements Packet<INetHandlerPlayClient>
         buf.writeFloat(this.yaw);
         buf.writeFloat(this.pitch);
         buf.writeByte(S08PacketPlayerPosLook.EnumFlags.func_180056_a(this.field_179835_f));
+        //buf.writeVarIntToBuffer(teleportId);
     }
 
     /**
@@ -95,6 +100,10 @@ public class S08PacketPlayerPosLook implements Packet<INetHandlerPlayClient>
 
     public void setPitch(float pitch) {
         this.pitch = pitch;
+    }
+
+    public int getTeleportId() {
+        return teleportId;
     }
 
     public Set<S08PacketPlayerPosLook.EnumFlags> func_179834_f()

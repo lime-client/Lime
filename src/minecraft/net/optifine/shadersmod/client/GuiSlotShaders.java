@@ -1,8 +1,9 @@
 package net.optifine.shadersmod.client;
 
-import java.util.ArrayList;
 import net.minecraft.client.gui.GuiSlot;
 import net.optifine.Lang;
+
+import java.util.ArrayList;
 
 class GuiSlotShaders extends GuiSlot
 {

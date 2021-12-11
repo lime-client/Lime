@@ -2,11 +2,6 @@ package net.minecraft.client.gui;
 
 import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
-
-import java.awt.*;
-import java.io.IOException;
-import java.util.List;
-
 import lime.management.FontManager;
 import lime.ui.fields.ButtonField;
 import net.minecraft.client.multiplayer.GuiConnecting;
@@ -22,6 +17,10 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 import viamcp.ViaMCP;
 import viamcp.protocols.ProtocolCollection;
+
+import java.awt.*;
+import java.io.IOException;
+import java.util.List;
 
 public class GuiMultiplayer extends GuiScreen implements GuiYesNoCallback
 {

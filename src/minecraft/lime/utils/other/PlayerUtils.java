@@ -1,16 +1,14 @@
 package lime.utils.other;
 
 import lime.utils.IUtil;
-import net.minecraft.client.Minecraft;
 import net.minecraft.network.play.client.C03PacketPlayer;
-import net.minecraft.potion.Potion;
-import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.MathHelper;
-import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.util.Vec3;
+import net.minecraft.network.play.client.C0BPacketEntityAction;
 
 public class PlayerUtils implements IUtil {
-    public static void verusDamage() {
+    public static void verusDamage(boolean b) {
+        if(!mc.thePlayer.isSprinting()) {
+            mc.getNetHandler().sendPacketNoEvent(new C0BPacketEntityAction(mc.thePlayer, C0BPacketEntityAction.Action.START_SPRINTING));
+        }
         double posY = mc.thePlayer.posY;
 
         double[] values = {0.41999998688697815, 0.33319999363422426, 0.24813599859093927, 0.1647732818260721};
@@ -19,7 +17,7 @@ public class PlayerUtils implements IUtil {
             for (double value : values) {
                 mc.getNetHandler().sendPacketNoEvent(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, posY += value, mc.thePlayer.posZ, false));
             }
-            mc.getNetHandler().sendPacketNoEvent(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, posY += 0.08307781780646906, mc.thePlayer.posZ, true));
+            mc.getNetHandler().sendPacketNoEvent(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, posY += 0.08307781780646906, mc.thePlayer.posZ, b));
         }
 
         double prevPosY = posY - 0.07840000152587834;
@@ -35,6 +33,10 @@ public class PlayerUtils implements IUtil {
         mc.getNetHandler().sendPacketNoEvent(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY, mc.thePlayer.posZ, true));
         mc.getNetHandler().sendPacketNoEvent(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY+0.41999998688697815, mc.thePlayer.posZ, false));
         mc.getNetHandler().sendPacketNoEvent(new C03PacketPlayer(false));
+
+        if(!mc.thePlayer.isSprinting()) {
+            mc.getNetHandler().sendPacketNoEvent(new C0BPacketEntityAction(mc.thePlayer, C0BPacketEntityAction.Action.STOP_SPRINTING));
+        }
     }
 
     public static void hypixelDamage() {
@@ -62,7 +64,7 @@ public class PlayerUtils implements IUtil {
                 0
         };
         double startPosY = mc.thePlayer.posY;
-        for (int i = 0;i < 3;i++) {
+        for (int i = 0;i < 3; i++) {
             for (double jumpValue : jumpValues) {
                 mc.getNetHandler().sendPacketNoEvent(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, startPosY + jumpValue, mc.thePlayer.posZ, false));
             }

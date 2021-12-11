@@ -1,8 +1,9 @@
 package net.minecraft.client.gui;
 
-import java.io.IOException;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EnumPlayerModelParts;
+
+import java.io.IOException;
 
 public class GuiCustomizeSkin extends GuiScreen
 {

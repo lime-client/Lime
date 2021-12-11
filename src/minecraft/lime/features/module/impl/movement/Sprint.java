@@ -1,10 +1,13 @@
 package lime.features.module.impl.movement;
 
 import lime.core.events.EventTarget;
+import lime.core.events.impl.EventEntityAction;
 import lime.core.events.impl.EventMotion;
+import lime.core.events.impl.EventMove;
 import lime.features.module.Category;
 import lime.features.module.Module;
 import lime.features.setting.impl.BooleanProperty;
+import lime.utils.movement.MovementUtils;
 import net.minecraft.potion.Potion;
 
 public class Sprint extends Module {

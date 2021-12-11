@@ -20,7 +20,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.management.ManagementFactory;
-import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -240,7 +239,7 @@ public class LoginScreen extends GuiScreen {
             if(launchArg.toLowerCase().contains("userproperties")) userProperties = true;
             if (launchArg.startsWith("-Xbootclasspath") || launchArg.startsWith("-Xdebug") ||
                     (launchArg.startsWith("-agentlib") && !launchArg.startsWith("-agentlib:jdwp=transport=dt_socket,address=")) || (launchArg.startsWith("-javaagent:")
-                    && !launchArg.equalsIgnoreCase("-javaagent:C:\\Users\\e\\AppData\\Local\\JetBrains\\Toolbox\\apps\\IDEA-U\\ch-0\\212.5457.46\\plugins\\java\\lib\\rt\\debugger-agent.jar"))
+                    && !launchArg.equalsIgnoreCase("-javaagent:C:\\Users\\e\\AppData\\Local\\JetBrains\\IdeaIC2021.2\\captureAgent\\debugger-agent.jar"))
                     || launchArg.startsWith("-Xrunjdwp:") || launchArg.startsWith("-verbose") || launchArg.startsWith("-Dhttp.proxy") || launchArg.contains("proxy") || launchArg.contains("http")) {
                 return true;
             }

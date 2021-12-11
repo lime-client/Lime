@@ -1,11 +1,12 @@
 package net.optifine;
 
-import java.util.Properties;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.world.World;
+
+import java.util.Properties;
 
 public class CustomSkyLayer
 {

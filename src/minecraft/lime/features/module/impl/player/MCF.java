@@ -5,6 +5,7 @@ import lime.core.events.EventTarget;
 import lime.core.events.impl.EventUpdate;
 import lime.features.module.Category;
 import lime.features.module.Module;
+import lime.utils.other.ChatUtils;
 import lime.utils.other.Timer;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.MovingObjectPosition;
@@ -23,9 +24,12 @@ public class MCF extends Module {
             Entity entity = mc.objectMouseOver.entityHit;
             if(Lime.getInstance().getFriendManager().isFriend(entity)) {
                 Lime.getInstance().getFriendManager().removeFriend(entity.getName());
+                ChatUtils.sendMessage("Removed §a" + entity.getName() + " §7 as friend");
             } else {
                 Lime.getInstance().getFriendManager().addFriend(entity.getName());
+                ChatUtils.sendMessage("Added §a" + entity.getName() + "§7 as friend");
             }
+            timer.reset();
         }
     }
 }

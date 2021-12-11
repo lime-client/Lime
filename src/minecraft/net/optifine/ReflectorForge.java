@@ -1,14 +1,15 @@
 package net.optifine;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
-import java.util.Map;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.RenderGlobal;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.util.Map;
 
 public class ReflectorForge
 {

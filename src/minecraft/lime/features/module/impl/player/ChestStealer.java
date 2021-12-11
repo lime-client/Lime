@@ -23,6 +23,8 @@ public class ChestStealer extends Module {
     private final NumberProperty delay = new NumberProperty("Delay", this, 0, 500, 100, 10);
     private final BooleanProperty ignoreJunk = new BooleanProperty("Ignore Junk", this, true);
     private final BooleanProperty randomize = new BooleanProperty("Randomize", this, true);
+    public final BooleanProperty silent = new BooleanProperty("Silent", this, false);
+    public final BooleanProperty renderGui = new BooleanProperty("Render GUI", this, false);
     private final BooleanProperty ncp = new BooleanProperty("NCP", this, false);
 
     private final Timer timer = new Timer();
@@ -35,9 +37,23 @@ public class ChestStealer extends Module {
 
     @EventTarget
     public void onUpdate(EventUpdate e) {
-        if(mc.thePlayer.openContainer instanceof ContainerChest) {
+        if(mc.thePlayer.openContainer != null && mc.thePlayer.openContainer instanceof ContainerChest && isValidChest((ContainerChest) mc.thePlayer.openContainer)) {
             isStealing = true;
-            if(timer.hasReached(delay.intValue())) {
+            if(silent.isEnabled()) {
+                if(!mc.inGameHasFocus) {
+                    if(!renderGui.isEnabled()) {
+                        mc.setIngameFocus();
+                    } else {
+                        mc.inGameHasFocus = true;
+                        mc.mouseHelper.grabMouseCursor();
+                    }
+                }
+            }
+            if(isChestEmpty((ContainerChest) mc.thePlayer.openContainer) || InventoryUtils.isInventoryFull()) {
+                mc.thePlayer.closeScreen();
+
+            }
+            if(timer.hasReached(delay.intValue()) && mc.thePlayer.openContainer instanceof ContainerChest) {
                 ContainerChest chest = (ContainerChest) mc.thePlayer.openContainer;
                 if(randomize.isEnabled()) {
                     List<Integer> slots = new ArrayList<>();
@@ -81,5 +97,18 @@ public class ChestStealer extends Module {
         return item instanceof ItemSword || item instanceof ItemBlock || item instanceof ItemTool || item instanceof ItemFood
                 || item instanceof ItemArmor || item instanceof ItemBow || item.getUnlocalizedName().contains("arrow") ||
                 item instanceof ItemEnderPearl || (item instanceof ItemPotion && !InventoryUtils.isBadPotion(itemStack));
+    }
+
+    public boolean isChestEmpty(ContainerChest chest) {
+        for(int i = 0; i < chest.getLowerChestInventory().getSizeInventory(); ++i) {
+            if (chest.getLowerChestInventory().getStackInSlot(i) != null && isValidItem(chest.getLowerChestInventory().getStackInSlot(i))) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public static boolean isValidChest(ContainerChest chest) {
+        return chest.getLowerChestInventory().getDisplayName().getUnformattedText().toLowerCase().contains("chest") || chest.getLowerChestInventory().getDisplayName().getUnformattedText().toLowerCase().contains("coffre");
     }
 }

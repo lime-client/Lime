@@ -55,7 +55,7 @@ public class ESP extends Module {
         this.black = Color.BLACK.getRGB();
     }
 
-    public final EnumProperty boxMode = new EnumProperty("Box Mode", this, "Box", "Box", "Corners");
+    public final EnumProperty boxMode = new EnumProperty("Box Mode", this, "Box", "Box", "None", "Corners");
     public final BooleanProperty healthBar = new BooleanProperty("Health bar", this, true);
     public final BooleanProperty you = new BooleanProperty("You", this,true);
     public final BooleanProperty players = new BooleanProperty("Players", this,true);
@@ -130,7 +130,7 @@ public class ESP extends Module {
                         Gui.drawRect(posX, endPosY - 0.5D, endPosX, endPosY, color);
                         Gui.drawRect(posX - 0.5D, posY, endPosX, posY + 0.5D, color);
                         Gui.drawRect(endPosX - 0.5D, posY, endPosX, endPosY, color);
-                    } else {
+                    } else if(boxMode.is("corners")) {
                         Gui.drawRect(posX + 0.5D, posY, posX - 1.0D, posY + (endPosY - posY) / 4.0D + 0.5D, black);
                         Gui.drawRect(posX - 1.0D, endPosY, posX + 0.5D, endPosY - (endPosY - posY) / 4.0D - 0.5D, black);
                         Gui.drawRect(posX - 1.0D, posY - 0.5D, posX + (endPosX - posX) / 3.0D + 0.5D, posY + 1.0D, black);

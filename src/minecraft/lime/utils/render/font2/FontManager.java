@@ -18,7 +18,6 @@ public abstract class FontManager {
             font = font.deriveFont(Font.PLAIN, 20);
         } catch (Exception ex) {
             ex.printStackTrace();
-            System.out.println("Error loading font");
             font = new Font("default", Font.PLAIN, 20);
         }
         return font;

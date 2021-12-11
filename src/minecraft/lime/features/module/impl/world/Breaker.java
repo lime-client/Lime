@@ -4,7 +4,7 @@ import lime.core.events.EventTarget;
 import lime.core.events.impl.Event3D;
 import lime.core.events.impl.EventMotion;
 import lime.core.events.impl.EventPacket;
-import lime.features.commands.impl.BlackListBed;
+import lime.features.command.impl.BlackListBed;
 import lime.features.module.Category;
 import lime.features.module.Module;
 import lime.features.setting.impl.BooleanProperty;

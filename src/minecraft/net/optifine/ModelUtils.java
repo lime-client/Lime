@@ -1,11 +1,12 @@
 package net.optifine;
 
-import java.util.ArrayList;
-import java.util.List;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.resources.model.IBakedModel;
 import net.minecraft.client.resources.model.SimpleBakedModel;
 import net.minecraft.util.EnumFacing;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ModelUtils
 {

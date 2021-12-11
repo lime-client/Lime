@@ -14,11 +14,10 @@ public class ChatUtils implements IUtil {
     }
 
     public static String removeColors(String s) {
-        return s.replaceAll("§1", "").replaceAll("§2", "").replaceAll("§3", "")
-                .replaceAll("§4", "").replaceAll("§5", "").replaceAll("§6", "")
-                .replaceAll("§7", "").replaceAll("§8", "").replaceAll("§9", "")
-                .replaceAll("§0", "").replaceAll("§a", "").replaceAll("§b", "")
-                .replaceAll("§c", "").replaceAll("§d", "").replaceAll("§e", "")
-                .replaceAll("§f", "").replaceAll("§l", "");
+        char[] chars = "abcdefghijkl1234567890".toCharArray();
+        for (char aChar : chars) {
+            s = s.replaceAll("§"+aChar, "");
+        }
+        return s;
     }
 }

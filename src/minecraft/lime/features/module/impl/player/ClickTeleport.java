@@ -59,7 +59,7 @@ public class ClickTeleport extends Module {
                 y += (blockPos.getY() - mc.thePlayer.posY) / (packetsNumber);
                 z += (blockPos.getZ() - mc.thePlayer.posZ) / (packetsNumber);
 
-                mc.getNetHandler().addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(x, y, z, true));
+                mc.getNetHandler().addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(x, y, z, false));
             }
 
             mc.thePlayer.setPosition(blockPos.getX(), blockPos.getY(), blockPos.getZ());

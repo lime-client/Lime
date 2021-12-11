@@ -1,11 +1,11 @@
 package net.optifine.shadersmod.client;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import net.optifine.Config;
 import net.optifine.Lang;
 import net.optifine.StrUtils;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class ShaderOptionSwitch extends ShaderOption
 {

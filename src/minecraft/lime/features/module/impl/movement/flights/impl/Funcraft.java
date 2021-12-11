@@ -100,12 +100,7 @@ public class Funcraft extends FlightValue {
 
                 moveSpeed = Math.max(moveSpeed, MovementUtils.getBaseMoveSpeed());
 
-                if (KillAura.getEntity() != null) {
-                    TargetStrafe targetStrafe2 = (TargetStrafe) Lime.getInstance().getModuleManager().getModuleC(TargetStrafe.class);
-                    targetStrafe2.setMoveSpeed(e, moveSpeed);
-                } else {
-                    MovementUtils.setSpeed(e, moveSpeed);
-                }
+                MovementUtils.setSpeed(e, moveSpeed);
                 ++stage;
             }
         }

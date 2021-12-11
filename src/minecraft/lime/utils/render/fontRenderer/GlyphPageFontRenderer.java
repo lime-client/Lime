@@ -18,6 +18,8 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import java.awt.*;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 import java.util.Random;
 
@@ -165,8 +167,18 @@ public class GlyphPageFontRenderer {
      * Draws the specified string.
      */
     public int drawString(String text, float x, float y, int color, boolean dropShadow) {
-        if(text != null)
-            text = text.replace("ı", "").replace("ğ", "").replace("ü", "").replace("ş", "").replace("ö", "");
+        if(text != null) {
+            List<Character> chars = new ArrayList<>();
+            for (char c : "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ 0123456789&é\"'(-è_çà)=!:;,?./§µ%¨£$*ù^".toCharArray()) {
+                chars.add(c);
+            }
+
+            for (char c : text.toCharArray()) {
+                if(!chars.contains(c))
+                    text = text.replace(c+"", "");
+            }
+        }
+
 
         GlStateManager.enableAlpha();
         this.resetStyles();

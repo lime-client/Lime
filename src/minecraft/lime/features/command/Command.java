@@ -1,4 +1,4 @@
-package lime.features.commands;
+package lime.features.command;
 
 public abstract class Command {
 

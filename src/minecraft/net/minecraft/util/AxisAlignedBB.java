@@ -71,6 +71,10 @@ public class AxisAlignedBB
         return new AxisAlignedBB(d0, d1, d2, d3, d4, d5);
     }
 
+    public AxisAlignedBB copy() {
+        return new AxisAlignedBB(minX, minY, minZ, maxX, maxY, maxZ);
+    }
+
     /**
      * Returns a bounding box expanded by the specified vector (if negative numbers are given it will shrink). Args: x,
      * y, z

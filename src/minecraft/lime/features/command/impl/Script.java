@@ -1,7 +1,7 @@
-package lime.features.commands.impl;
+package lime.features.command.impl;
 
 import lime.core.Lime;
-import lime.features.commands.Command;
+import lime.features.command.Command;
 import lime.utils.other.ChatUtils;
 
 public class Script extends Command {
@@ -18,8 +18,8 @@ public class Script extends Command {
     @Override
     public void onCommand(String[] args) throws Exception {
         if(args[1].equalsIgnoreCase("reload")) {
-            Lime.getInstance().getScriptManager().loadScripts();
-            ChatUtils.sendMessage("Reloaded all scripts.");
+            //Lime.getInstance().getScriptManager().loadScripts();
+            //ChatUtils.sendMessage("Reloaded all scripts.");
         }
     }
 }

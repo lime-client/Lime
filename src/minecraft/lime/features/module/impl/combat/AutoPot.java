@@ -30,7 +30,7 @@ public class AutoPot extends Module {
         super("Auto Pot", Category.COMBAT);
     }
 
-    private static class ItemPot {
+    public static class ItemPot {
         private final ItemStack itemStack;
         private int slot;
         private final boolean soup;

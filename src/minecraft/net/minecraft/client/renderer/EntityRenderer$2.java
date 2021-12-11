@@ -1,7 +1,8 @@
 package net.minecraft.client.renderer;
 
-import java.util.concurrent.Callable;
 import net.minecraft.client.Minecraft;
+
+import java.util.concurrent.Callable;
 
 class EntityRenderer$2 implements Callable
 {

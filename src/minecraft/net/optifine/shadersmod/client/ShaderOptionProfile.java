@@ -1,9 +1,9 @@
 package net.optifine.shadersmod.client;
 
+import net.optifine.Lang;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import net.optifine.Lang;
 
 public class ShaderOptionProfile extends ShaderOption
 {

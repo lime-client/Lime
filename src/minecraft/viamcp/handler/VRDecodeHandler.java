@@ -8,6 +8,11 @@ import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToMessageDecoder;
+import lime.core.events.EventBus;
+import lime.core.events.impl.EventPacket;
+import lime.utils.other.SPacketPlayerPosLook;
+import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.play.server.S08PacketPlayerPosLook;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
@@ -54,6 +59,22 @@ public class VRDecodeHandler extends MessageToMessageDecoder<ByteBuf>
         try
         {
             boolean needsCompress = handleCompressionOrder(ctx, transformedBuf);
+
+            try {
+                PacketBuffer packetBuffer = new PacketBuffer(transformedBuf.copy());
+                int packetID = packetBuffer.readVarIntFromBuffer();
+
+                if(packetID == 0x38) {
+                    double x = packetBuffer.readDouble();
+                    double y = packetBuffer.readDouble();
+                    double z = packetBuffer.readDouble();
+                    float yaw = packetBuffer.readFloat();
+                    float pitch = packetBuffer.readFloat();
+                    S08PacketPlayerPosLook.EnumFlags.func_180053_a(packetBuffer.readUnsignedByte());
+                    int teleportId = packetBuffer.readVarIntFromBuffer();
+                    EventBus.INSTANCE.call(new EventPacket(new SPacketPlayerPosLook(x, y, z, yaw, pitch, teleportId), EventPacket.Mode.RECEIVE));
+                }
+            } catch (Exception ignored){}
 
             info.transformIncoming(transformedBuf, CancelDecoderException::generate);
 

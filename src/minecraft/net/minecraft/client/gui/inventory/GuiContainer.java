@@ -1,9 +1,6 @@
 package net.minecraft.client.gui.inventory;
 
 import com.google.common.collect.Sets;
-import java.io.IOException;
-import java.util.Set;
-
 import lime.core.Lime;
 import lime.features.module.impl.combat.KillAura;
 import lime.features.module.impl.player.ChestStealer;
@@ -25,6 +22,9 @@ import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.input.Keyboard;
+
+import java.io.IOException;
+import java.util.Set;
 
 public abstract class GuiContainer extends GuiScreen
 {
@@ -82,8 +82,6 @@ public abstract class GuiContainer extends GuiScreen
     private boolean doubleClick;
     private ItemStack shiftClickedSlot;
 
-    private Translate translate;
-
     public GuiContainer(Container inventorySlotsIn)
     {
         this.inventorySlots = inventorySlotsIn;
@@ -103,7 +101,6 @@ public abstract class GuiContainer extends GuiScreen
         this.buttonList.add(new GuiButton(3, 3, 3, 150, 20, "Disable Inventory Manager"));
         this.buttonList.add(new GuiButton(4, 3, 3 + 22, 150, 20, "Disable Chest Stealer"));
         this.buttonList.add(new GuiButton(5, 3, 3 + (22 * 2), 150, 20, "Disable Kill Aura"));
-        this.translate = new Translate(0, 0);
         super.initGui();
     }
 
@@ -126,7 +123,6 @@ public abstract class GuiContainer extends GuiScreen
      */
     public void drawScreen(int mouseX, int mouseY, float partialTicks)
     {
-        translate.interpolate(this.width, this.height, 5);
         for (GuiButton guiButton : this.buttonList) {
             if(guiButton.id == 3) {
                 guiButton.enabled = Lime.getInstance().getModuleManager().getModuleC(InventoryManager.class).isToggled();
@@ -141,10 +137,6 @@ public abstract class GuiContainer extends GuiScreen
         this.drawDefaultBackground();
         int i = this.guiLeft;
         int j = this.guiTop;
-        double x = this.width / 2F - (translate.getX() / 2);
-        double y = this.height / 2F - (translate.getY() / 2);
-        GlStateManager.translate(x, y, 0);
-        GlStateManager.scale(translate.getX() / this.width, translate.getY() / this.height, 1);
         this.drawGuiContainerBackgroundLayer(partialTicks, mouseX, mouseY);
         GlStateManager.disableRescaleNormal();
         RenderHelper.disableStandardItemLighting();

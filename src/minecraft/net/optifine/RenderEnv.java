@@ -1,7 +1,5 @@
 package net.optifine;
 
-import java.util.BitSet;
-import java.util.List;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.BlockStateBase;
 import net.minecraft.block.state.IBlockState;
@@ -12,6 +10,9 @@ import net.minecraft.client.settings.GameSettings;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
+
+import java.util.BitSet;
+import java.util.List;
 
 public class RenderEnv
 {

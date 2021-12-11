@@ -65,7 +65,7 @@ public class PathComputer {
     }
 
     public static ArrayList<CustomVec> computePath(CustomVec from, CustomVec to) {
-        return computePath(from, to, 1000, 4, 5);
+        return computePath(from, to, 1000, 4, 6);
     }
 
     private static boolean canPassThrow(BlockPos pos) {
