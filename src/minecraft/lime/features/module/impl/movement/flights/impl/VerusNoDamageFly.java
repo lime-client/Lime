@@ -8,8 +8,8 @@ import net.minecraft.block.BlockAir;
 import net.minecraft.potion.Potion;
 import net.minecraft.util.AxisAlignedBB;
 
-public class VerusNoDamage extends FlightValue {
-    public VerusNoDamage() {
+public class VerusNoDamageFly extends FlightValue {
+    public VerusNoDamageFly() {
         super("Verus_No_Damage");
     }
 
@@ -29,7 +29,6 @@ public class VerusNoDamage extends FlightValue {
         }
 
         if (mc.thePlayer.isMoving()) {
-            double tickBoost = mc.thePlayer.ticksExisted % 20 == 0 ? 0.1 : 0;
             double amplifier = mc.thePlayer.isPotionActive(Potion.moveSpeed) ? mc.thePlayer.getActivePotionEffect(Potion.moveSpeed).getAmplifier() : 0;
             double speedBoost = mc.thePlayer.isPotionActive(Potion.moveSpeed) ? amplifier == 1 ? 0.035 : amplifier > 1 ? 0.035 * (amplifier / 2) : 0.035 / 2 : 0;
             double motionBoost = MovementUtils.isOnGround(0.15) && !mc.thePlayer.onGround ? 0.045 : 0;
@@ -45,9 +44,9 @@ public class VerusNoDamage extends FlightValue {
             }
 
             if(mc.thePlayer.moveStrafing == 0)
-                MovementUtils.setSpeed(0.3345 + speedBoost + tickBoost + motionBoost + boost);
+                MovementUtils.setSpeed(0.3345 + speedBoost + motionBoost + boost);
             else
-                MovementUtils.setSpeed(0.333 + speedBoost + tickBoost + motionBoost + boost);
+                MovementUtils.setSpeed(0.333 + speedBoost + motionBoost + boost);
 
         } else
             MovementUtils.setSpeed(0);

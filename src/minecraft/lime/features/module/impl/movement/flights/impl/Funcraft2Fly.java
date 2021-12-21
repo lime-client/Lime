@@ -7,8 +7,8 @@ import lime.features.module.impl.movement.flights.FlightValue;
 import lime.utils.movement.MovementUtils;
 import net.minecraft.network.play.server.S08PacketPlayerPosLook;
 
-public class Funcraft2 extends FlightValue {
-    public Funcraft2()
+public class Funcraft2Fly extends FlightValue {
+    public Funcraft2Fly()
     {
         super("Funcraft2");
     }

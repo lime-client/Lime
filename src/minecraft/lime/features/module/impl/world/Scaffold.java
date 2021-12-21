@@ -35,7 +35,6 @@ import org.lwjgl.input.Keyboard;
 import java.awt.*;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Locale;
 
 
 public class Scaffold extends Module {

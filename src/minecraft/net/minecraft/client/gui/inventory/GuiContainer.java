@@ -5,7 +5,6 @@ import lime.core.Lime;
 import lime.features.module.impl.combat.KillAura;
 import lime.features.module.impl.player.ChestStealer;
 import lime.features.module.impl.player.InventoryManager;
-import lime.utils.render.animation.Translate;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;

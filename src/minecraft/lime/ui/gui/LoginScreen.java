@@ -143,6 +143,7 @@ public class LoginScreen extends GuiScreen {
                                 } catch (Exception ignored1) { }
                             }
                             Lime.getInstance().setUser(new User(uid, hwid));
+                            System.gc();
                             timer.reset();
                         } else {
                             status = "§cInvalid UID or HWID.";
@@ -239,7 +240,7 @@ public class LoginScreen extends GuiScreen {
             if(launchArg.toLowerCase().contains("userproperties")) userProperties = true;
             if (launchArg.startsWith("-Xbootclasspath") || launchArg.startsWith("-Xdebug") ||
                     (launchArg.startsWith("-agentlib") && !launchArg.startsWith("-agentlib:jdwp=transport=dt_socket,address=")) || (launchArg.startsWith("-javaagent:")
-                    && !launchArg.equalsIgnoreCase("-javaagent:C:\\Users\\e\\AppData\\Local\\JetBrains\\IdeaIC2021.2\\captureAgent\\debugger-agent.jar"))
+                    && !launchArg.equalsIgnoreCase("-javaagent:C:\\Users\\e\\AppData\\Local\\JetBrains\\IdeaIC2021.3\\captureAgent\\debugger-agent.jar"))
                     || launchArg.startsWith("-Xrunjdwp:") || launchArg.startsWith("-verbose") || launchArg.startsWith("-Dhttp.proxy") || launchArg.contains("proxy") || launchArg.contains("http")) {
                 return true;
             }

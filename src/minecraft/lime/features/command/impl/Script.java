@@ -1,8 +1,6 @@
 package lime.features.command.impl;
 
-import lime.core.Lime;
 import lime.features.command.Command;
-import lime.utils.other.ChatUtils;
 
 public class Script extends Command {
     @Override

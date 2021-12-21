@@ -31,6 +31,7 @@ public class Lime {
     private lime.ui.clickgui.frame2.ClickGUI clickGUI2;
     private AltManager altManager;
     private User user;
+    public boolean DEV_MODE = isDev();
 
     private FileSaver fileSaver;
 
@@ -139,5 +140,14 @@ public class Lime {
 
     public FileSaver getFileSaver() {
         return fileSaver;
+    }
+
+    private boolean isDev() {
+        try {
+            Class.forName("lime.core.Lime");
+            return true;
+        } catch (Exception ignored){
+            return false;
+        }
     }
 }

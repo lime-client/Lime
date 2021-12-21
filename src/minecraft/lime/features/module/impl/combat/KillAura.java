@@ -6,13 +6,13 @@ import lime.core.events.EventTarget;
 import lime.core.events.impl.*;
 import lime.features.module.Category;
 import lime.features.module.Module;
+import lime.features.module.impl.exploit.Disabler;
 import lime.features.module.impl.render.HUD;
 import lime.features.module.impl.world.Scaffold;
 import lime.features.setting.impl.BooleanProperty;
 import lime.features.setting.impl.EnumProperty;
 import lime.features.setting.impl.NumberProperty;
 import lime.features.setting.impl.SubOptionProperty;
-import lime.management.CommandManager;
 import lime.ui.targethud.impl.AstolfoTargetHUD;
 import lime.ui.targethud.impl.Lime2TargetHUD;
 import lime.ui.targethud.impl.LimeTargetHUD;
@@ -37,7 +37,6 @@ import net.minecraft.util.EnumFacing;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -54,7 +53,7 @@ public class KillAura extends Module {
     private final NumberProperty switchDelay = new NumberProperty("Switch Delay", this, 0, 1000, 100, 50).onlyIf(mode.getSettingName(), "enum", "switch");
     private final NumberProperty autoBlockRange = new NumberProperty("Auto Block Range", this, 2.7, 12, 6, .5);
     private final NumberProperty range = new NumberProperty("Range", this, 2.7, 6, 4.2, .05);
-    private final NumberProperty cps = new NumberProperty("CPS", this, 1, 20, 8, 1);
+    public final NumberProperty cps = new NumberProperty("CPS", this, 1, 20, 8, 1);
     private final BooleanProperty keepSprint = new BooleanProperty("Keep Sprint", this, false);
     private final BooleanProperty rayCast = new BooleanProperty("Ray Cast", this, false);
     private final BooleanProperty ver19plus = new BooleanProperty("1.9+", this, false);
@@ -93,7 +92,7 @@ public class KillAura extends Module {
     public final LimeTargetHUD limeTargetHUD = new LimeTargetHUD();
     public final AstolfoTargetHUD astolfoTargetHUD = new AstolfoTargetHUD();
     public Lime2TargetHUD lime2TargetHUD = new Lime2TargetHUD();
-    private final Timer cpsTimer = new Timer(), switchTimer = new Timer();
+    public final Timer cpsTimer = new Timer(), switchTimer = new Timer();
     private int ticks, index;
     private boolean blink;
 
@@ -111,6 +110,8 @@ public class KillAura extends Module {
         ticks = index = 0;
         blink = false;
         switchTimer.reset();
+        Disabler disabler = Lime.getInstance().getModuleManager().getModuleC(Disabler.class);
+        disabler.among = false;
     }
 
     @Override
@@ -211,13 +212,8 @@ public class KillAura extends Module {
 
                 EventBus.INSTANCE.call(new EventAttack(entity));
 
-                if(ver19plus.isEnabled()) {
-                    mc.getNetHandler().addToSendQueue(new C02PacketUseEntity(entity, C02PacketUseEntity.Action.ATTACK));
-                    mc.thePlayer.swingItem();
-                } else {
-                    mc.thePlayer.swingItem();
-                    mc.getNetHandler().addToSendQueue(new C02PacketUseEntity(entity, C02PacketUseEntity.Action.ATTACK));
-                }
+                mc.thePlayer.swingItem();
+                mc.getNetHandler().addToSendQueue(new C02PacketUseEntity(entity, C02PacketUseEntity.Action.ATTACK));
 
                 cpsTimer.reset();
                 if(!keepSprint.isEnabled()) {
