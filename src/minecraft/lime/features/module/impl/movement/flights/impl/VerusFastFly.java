@@ -83,7 +83,7 @@ public class VerusFastFly extends FlightValue {
                 if(!mc.gameSettings.keyBindJump.isKeyDown() || !b) {
                     if(defTicks > ticks && b) {
                         e.setGround(!getFlight().verusHeavy.isEnabled());
-                        if(disabler.mode.is("Verus ABCDEFGIK") && disabler.isToggled()) {
+                        if(disabler.mode.is("Verus CDEGIK") && disabler.isToggled()) {
                             mc.thePlayer.motionY = mc.gameSettings.keyBindJump.isKeyDown() ? .4 : mc.gameSettings.keyBindSneak.isKeyDown() ? -.4 : 0;
                         } else {
                             mc.thePlayer.motionY = 0;
@@ -93,7 +93,7 @@ public class VerusFastFly extends FlightValue {
                             e.setY(mc.thePlayer.ticksExisted % 2 == 0 ? mc.thePlayer.posY : mc.thePlayer.posY + 0.01);
                     } else {
                         if(getFlight().verusHeavy.isEnabled()) {
-                            if(disabler.mode.is("Verus ABCDEFGIK") && disabler.isToggled()) {
+                            if(disabler.mode.is("Verus CDEGIK") && disabler.isToggled()) {
                                 mc.thePlayer.motionY = mc.gameSettings.keyBindJump.isKeyDown() ? 0.16 : mc.gameSettings.keyBindSneak.isKeyDown() ? -0.16 : -0.0784000015258789;
                             } else {
                                 mc.thePlayer.motionY = -0.0784000015258789;
@@ -182,6 +182,8 @@ public class VerusFastFly extends FlightValue {
 
     @Override
     public void on2D(Event2D e) {
-        processBar.draw();
+        if(processBar != null) {
+            processBar.draw();
+        }
     }
 }

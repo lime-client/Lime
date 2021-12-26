@@ -122,11 +122,14 @@ public class ColorUtils {
         return Color.HSBtoRGB(hue, 0.5F, 1F);
     }
 
-    public static Color rainbow(long d, float brightness, float speed) {
-        float hue = (float) (System.nanoTime() + (d * speed)) / 1.0E09F % 1.0F;
-        long color = Long.parseLong(Integer.toHexString(Color.HSBtoRGB(hue, brightness, 1F)), 16);
-        Color c = new Color((int) color);
-        return new Color(c.getRed()/255.0F, c.getGreen()/255.0F, c.getBlue()/255.0F, c.getAlpha()/255.0F);
+    public static int rainbow(int delay, float saturation, float brightness) {
+        double rainbow = Math.ceil((System.currentTimeMillis() + (long)delay) / 16L);
+        return Color.getHSBColor((float)((rainbow %= 360.0) / 360.0), saturation, brightness).getRGB();
+    }
+
+    public static Color weird(long d, float brightness, float speed) {
+        double rainbow = Math.ceil((System.currentTimeMillis() + (long)d) / 16L);
+        return Color.getHSBColor((float)((rainbow %= 360.0) / 360.0), speed, brightness);
     }
 
     public static Color setAlpha(Color color, int alpha) {

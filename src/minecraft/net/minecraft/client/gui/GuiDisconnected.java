@@ -10,7 +10,10 @@ import net.minecraft.util.IChatComponent;
 
 import java.awt.*;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
+import java.util.stream.Collectors;
 
 public class GuiDisconnected extends GuiScreen
 {
@@ -72,11 +75,23 @@ public class GuiDisconnected extends GuiScreen
         }
         if(button.id == 3)
         {
-            Alt alt = Lime.getInstance().getAltManager().getRandomAlt();
-            try {
+            List<Alt> alts = new ArrayList<>(Lime.getInstance().getAltManager().getAlts()).stream().filter((a -> a.getName().contains("@"))).collect(Collectors.toList());
+            Alt alt;
+            if(alts.isEmpty()) {
+                alt = Lime.getInstance().getAltManager().getRandomAlt();
+            } else {
+                alt = alts.get(new Random().nextInt(alts.size()));
+            }
+
+            if(alt != null) {
                 altLoginThread = new AltLoginThread(alt.getMail(), alt.getPassword(), false);
                 altLoginThread.start();
-            } catch (Exception ignored) { }
+
+                new Thread(() -> {
+                    while(altLoginThread.isAlive()){}
+                    alt.setName(mc.session.getUsername());
+                }).start();
+            }
         }
         if(button.id == 4)
         {
@@ -85,7 +100,7 @@ public class GuiDisconnected extends GuiScreen
         }
         if(button.id == 5) {
             String s = GuiScreen.getClipboardString();
-            if(s.contains("@") && s.contains(":")) {
+            if(s.contains("@") && s.contains(":") && s.contains(".")) {
                 altLoginThread = new AltLoginThread(s.split(":")[0], s.split(":")[1], false);
                 altLoginThread.start();
             }

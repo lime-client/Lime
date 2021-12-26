@@ -2,7 +2,7 @@
   "informations": [
     {
       "author": "Lime Auto Save",
-      "time": 1640050714
+      "time": 1640512612
     }
   ],
   "modules": [
@@ -92,7 +92,7 @@
     {
       "moduleName": "Auto Sword",
       "key": -1,
-      "toggled": true,
+      "toggled": false,
       "settings": [
         {
           "name": "Show",
@@ -131,7 +131,7 @@
         {
           "name": "Mode",
           "type": "enum",
-          "value": "single"
+          "value": "switch"
         },
         {
           "name": "State",
@@ -151,17 +151,17 @@
         {
           "name": "Auto Block Range",
           "type": "slider",
-          "value": 8.0
+          "value": 12.0
         },
         {
           "name": "Range",
           "type": "slider",
-          "value": 3.2
+          "value": 3.8000000000000003
         },
         {
           "name": "CPS",
           "type": "slider",
-          "value": 12.0
+          "value": 20.0
         },
         {
           "name": "Keep Sprint",
@@ -196,7 +196,7 @@
         {
           "name": "Turn Speed",
           "type": "slider",
-          "value": 180.0
+          "value": 70.0
         },
         {
           "name": "Randomize Yaw",
@@ -236,7 +236,7 @@
         {
           "name": "Teams",
           "type": "bool",
-          "value": false
+          "value": true
         },
         {
           "name": "Dead",
@@ -246,7 +246,7 @@
         {
           "name": "Through Walls",
           "type": "bool",
-          "value": false
+          "value": true
         },
         {
           "name": "Jello ESP",
@@ -393,7 +393,7 @@
         {
           "name": "Fly B and F Disabler",
           "type": "bool",
-          "value": true
+          "value": false
         },
         {
           "name": "Show",
@@ -451,7 +451,7 @@
         {
           "name": "Blink Delay",
           "type": "slider",
-          "value": 500.0
+          "value": 100.0
         },
         {
           "name": "Show",
@@ -492,7 +492,7 @@
     {
       "moduleName": "Target Strafe",
       "key": 45,
-      "toggled": false,
+      "toggled": true,
       "settings": [
         {
           "name": "Distance",
@@ -556,7 +556,7 @@
         {
           "name": "Mode",
           "type": "enum",
-          "value": "hypixel"
+          "value": "vanilla"
         },
         {
           "name": "Speed",
@@ -610,12 +610,12 @@
     {
       "moduleName": "Flight",
       "key": 33,
-      "toggled": true,
+      "toggled": false,
       "settings": [
         {
           "name": "Mode",
           "type": "enum",
-          "value": "verus fast"
+          "value": "vanilla"
         },
         {
           "name": "Damage",
@@ -677,7 +677,7 @@
     {
       "moduleName": "Sprint",
       "key": -1,
-      "toggled": false,
+      "toggled": true,
       "settings": [
         {
           "name": "Omni",
@@ -711,12 +711,12 @@
     {
       "moduleName": "Speed",
       "key": 47,
-      "toggled": false,
+      "toggled": true,
       "settings": [
         {
           "name": "Mode",
           "type": "enum",
-          "value": "hypixel"
+          "value": "verus"
         },
         {
           "name": "Speed",
@@ -782,7 +782,7 @@
     {
       "moduleName": "Inventory Manager",
       "key": 48,
-      "toggled": true,
+      "toggled": false,
       "settings": [
         {
           "name": "Mode",
@@ -821,7 +821,7 @@
     {
       "moduleName": "Inventory Move",
       "key": -1,
-      "toggled": false,
+      "toggled": true,
       "settings": [
         {
           "name": "Sneak",
@@ -1521,7 +1521,7 @@
         {
           "name": "Target HUD",
           "type": "enum",
-          "value": "lime2"
+          "value": "lime"
         },
         {
           "name": "TargetHUD X",
@@ -1560,6 +1560,11 @@
         },
         {
           "name": "Suffix",
+          "type": "bool",
+          "value": true
+        },
+        {
+          "name": "Play Time",
           "type": "bool",
           "value": true
         },
@@ -1635,7 +1640,7 @@
         {
           "name": "Tower",
           "type": "enum",
-          "value": "none"
+          "value": "ncp"
         },
         {
           "name": "Search",

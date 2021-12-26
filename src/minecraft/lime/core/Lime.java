@@ -7,6 +7,7 @@ import lime.ui.altmanager.AltManager;
 import lime.ui.clickgui.frame.ClickGUI;
 import lime.ui.gui.MainScreen;
 import lime.ui.notifications.NotificationManager;
+import lime.utils.other.Timer;
 import lime.utils.other.file.FileSaver;
 import lime.utils.other.security.CipherEncryption;
 import lime.utils.other.security.User;
@@ -31,7 +32,8 @@ public class Lime {
     private lime.ui.clickgui.frame2.ClickGUI clickGUI2;
     private AltManager altManager;
     private User user;
-    public boolean DEV_MODE = isDev();
+    public final Timer playTime = new Timer();
+    public boolean DEV_MODE;
 
     private FileSaver fileSaver;
 
@@ -41,6 +43,8 @@ public class Lime {
         if(!CipherEncryption.passCheck) {
             return;
         }
+
+        DEV_MODE = isDev();
 
         Display.setTitle("Lime");
 

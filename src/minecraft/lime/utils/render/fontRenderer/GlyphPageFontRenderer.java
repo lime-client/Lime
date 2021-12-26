@@ -169,7 +169,7 @@ public class GlyphPageFontRenderer {
     public int drawString(String text, float x, float y, int color, boolean dropShadow) {
         if(text != null) {
             List<Character> chars = new ArrayList<>();
-            for (char c : "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ 0123456789&é\"'(-è_çà)=!:;,?./§µ%¨£$*ù^@".toCharArray()) {
+            for (char c : "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ 0123456789&é\"'(-è_çà)=!:;,?.\\/|§µ%¨£$*ù^@+=~#{[]".toCharArray()) {
                 chars.add(c);
             }
 
@@ -408,7 +408,6 @@ public class GlyphPageFontRenderer {
         if (text == null) {
             return 0;
         }
-        text = text.replace("ı", "");
         int width = 0;
 
         GlyphPage currentPage;

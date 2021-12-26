@@ -18,12 +18,16 @@ import org.lwjgl.input.Mouse;
 
 import java.awt.*;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+import java.util.stream.Collectors;
 
 public class AltManagerScreen extends GuiScreen {
     private final AltManager altManager;
     private AltLoginThread lastThread;
     private Alt alt;
-    private long initTime, index;
+    private long index;
 
     public AltManagerScreen(AltManager altManager) {
         this.altManager = altManager;
@@ -31,7 +35,6 @@ public class AltManagerScreen extends GuiScreen {
 
     @Override
     public void initGui() {
-        initTime = System.currentTimeMillis();
         index = 0;
         ScaledResolution sr = new ScaledResolution(mc);
         float width = sr.getScaledWidth() - ((sr.getScaledWidth() / 2F) + 202);
@@ -47,11 +50,12 @@ public class AltManagerScreen extends GuiScreen {
             lastThread.start();
         }));
         this.customButtonList.add(new ButtonField(FontManager.ProductSans20.getFont(), "Random Alt", (sr.getScaledWidth() / 2F) + 200, sr.getScaledHeight() - 124, width, 20, new Color(25, 25, 25), false, () -> {
-            Alt alt = Lime.getInstance().getAltManager().getRandomAlt();
+            List<Alt> alts = new ArrayList<>(altManager.getAlts()).stream().filter(a -> a.getName().contains("@")).collect(Collectors.toList());
+            Alt alt = alts.isEmpty() ? altManager.getRandomAlt() : alts.get(new Random().nextInt(alts.size()));
+
             if(alt != null) {
                 this.alt = alt;
-                lastThread = new AltLoginThread(alt.getMail(), alt.getPassword(), false);
-                lastThread.start();
+                lastThread = connectToAlt(alt.getMail(), alt.getPassword());
             }
         }));
     }
@@ -106,8 +110,9 @@ public class AltManagerScreen extends GuiScreen {
         float x = (sr.getScaledWidth() / 2F) + 200;
         FontManager.ProductSans20.getFont().drawStringWithShadow("§7Status: " + (lastThread == null ? "Unknown" : lastThread.getStatus()), x + (width / 2F) - (FontManager.ProductSans20.getFont().getStringWidth("Status: " + (lastThread == null ? "Unknown" : lastThread.getStatus())) / 2F), 5, -1);
         FontManager.ProductSans20.getFont().drawStringWithShadow("§7Current Username: §f" + mc.getSession().getUsername(), x + (width / 2F) - (FontManager.ProductSans20.getFont().getStringWidth("Current Username: " + mc.getSession().getUsername()) / 2F), 5 + FontManager.ProductSans20.getFont().getFontHeight(), -1);
-        FontManager.ProductSans20.getFont().drawStringWithShadow("Empty nigger", x + (width / 2F) - (FontManager.ProductSans20.getFont().getStringWidth("Empty nigger") / 2F), 50 + FontManager.ProductSans20.getFont().getFontHeight(), -1);
-
+        FontManager.ProductSans20.getFont().drawString("nothing", x + (width / 2F) - (FontManager.ProductSans20.getFont().getStringWidth("nothing") / 2F), 50 + FontManager.ProductSans20.getFont().getFontHeight(), -1);
+        String message = Lime.getInstance().getAltManager().getAlts().isEmpty() ? "Tip: You can add alt by copying it in clipboard then do CTRL+V here" : "Tip: You can wheel click on an alt if you want to delete it";
+        FontManager.ProductSans20.getFont().drawStringWithShadow(message, sr.getScaledWidth() - FontManager.ProductSans20.getFont().getStringWidth(message) - 3, sr.getScaledHeight() - FontManager.ProductSans20.getFont().getFontHeight(), -1);
         super.drawScreen(mouseX, mouseY, partialTicks);
     }
 
@@ -116,15 +121,20 @@ public class AltManagerScreen extends GuiScreen {
         int i = 0;
         final ScaledResolution scaledResolution = new ScaledResolution(this.mc);
         for (Alt alt : altManager.getAlts()) {
-            if(GuiScreen.hover(3, 3 + (i * 56) - (int) index, mouseX, mouseY, (scaledResolution.getScaledWidth() / 2) + 100, 52) && mouseButton == 0) {
-                if(alt.isSelected()) {
-                    this.alt = alt;
-                    lastThread = connectToAlt(alt.getMail(), alt.getPassword());
-                } else {
-                    for (Alt altManagerAlt : altManager.getAlts()) {
-                        altManagerAlt.setSelected(false);
+            if(GuiScreen.hover(3, 3 + (i * 56) - (int) index, mouseX, mouseY, (scaledResolution.getScaledWidth() / 2) + 100, 52)) {
+                if(mouseButton == 0) {
+                    if(alt.isSelected()) {
+                        this.alt = alt;
+                        lastThread = connectToAlt(alt.getMail(), alt.getPassword());
+                    } else {
+                        for (Alt altManagerAlt : altManager.getAlts()) {
+                            altManagerAlt.setSelected(false);
+                        }
+                        alt.setSelected(true);
                     }
-                    alt.setSelected(true);
+                } else if (mouseButton == 2) {
+                    Lime.getInstance().getAltManager().removeAlt(alt);
+                    break;
                 }
             }
             ++i;
