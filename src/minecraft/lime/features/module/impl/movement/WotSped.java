@@ -3,12 +3,9 @@ package lime.features.module.impl.movement;
 import lime.core.events.EventTarget;
 import lime.core.events.impl.EventMotion;
 import lime.core.events.impl.EventMove;
-import lime.core.events.impl.EventPacket;
 import lime.features.module.Category;
 import lime.features.module.Module;
 import lime.utils.movement.MovementUtils;
-import net.minecraft.network.play.client.C03PacketPlayer;
-import net.minecraft.network.play.server.S08PacketPlayerPosLook;
 
 public class WotSped extends Module {
     public WotSped() {

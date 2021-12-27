@@ -29,6 +29,7 @@ public class TargetStrafe extends Module {
     private final BooleanProperty holdSpace = new BooleanProperty("Hold Space", this, true);
     private final BooleanProperty fallCheck = new BooleanProperty("Fall Check", this, true);
     private final BooleanProperty wallCheck = new BooleanProperty("Wall Check", this, true);
+    private final BooleanProperty speedOnly = new BooleanProperty("Speed Only", this, true);
     private static int direction = -1; // -1 = Right, 1 = Left
     private static int index = 0, ticks = 0;
 
@@ -51,8 +52,10 @@ public class TargetStrafe extends Module {
         if(KillAura.getEntity() == null) {
             return;
         }
-        if(ts.holdSpace.isEnabled() && !mc.gameSettings.keyBindJump.isKeyDown()) {
-            MovementUtils.setSpeed(e, speed, mc.thePlayer.rotationYaw, mc.thePlayer.moveStrafing, mc.thePlayer.movementInput.moveForward);
+        if((ts.holdSpace.isEnabled() && !mc.gameSettings.keyBindJump.isKeyDown()) || (!(Lime.getInstance().getModuleManager().getModuleC(Speed.class).isToggled() || Lime.getInstance().getModuleManager().getModuleC(Flight.class).isToggled()) && ts.speedOnly.isEnabled())) {
+            if(Lime.getInstance().getModuleManager().getModuleC(Flight.class).isToggled() || Lime.getInstance().getModuleManager().getModuleC(Speed.class).isToggled()) {
+                MovementUtils.setSpeed(e, speed, mc.thePlayer.rotationYaw, mc.thePlayer.moveStrafing, mc.thePlayer.movementInput.moveForward);
+            }
             return;
         }
         List<Point> points = ts.getPoints(KillAura.getEntity());

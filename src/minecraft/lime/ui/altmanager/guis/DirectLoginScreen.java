@@ -24,17 +24,13 @@ public class DirectLoginScreen extends GuiScreen {
     private final GuiScreen parentScreen;
     private boolean microsoft;
 
-    private final long initTime;
-
 
     public DirectLoginScreen(GuiScreen parentScreen) {
         this.parentScreen = parentScreen;
-        this.initTime = System.currentTimeMillis();
     }
 
     @Override
     public void initGui() {
-
         this.username = new GuiTextField(0, mc.fontRendererObj, this.width / 2 - 100, this.height / 2 - 20 - 40, 200, 20);
         this.password = new PasswordField(1, mc.fontRendererObj, this.width / 2 - 100, this.height / 2 - 20 - 16, 200, 20);
         this.username.setMaxStringLength(48);
@@ -42,20 +38,12 @@ public class DirectLoginScreen extends GuiScreen {
         this.buttonList.add(new GuiButton(2, this.width / 2 - 100, this.height / 2 + 40, 200, 20, "Log In"));
         this.buttonList.add(new GuiButton(4, this.width / 2 - 100, this.height / 2 + 40 + 24, 200, 20, "Copy Mail:Pass"));
         this.buttonList.add(new GuiButton(3, this.width / 2 - 100, this.height / 2 + 40 + 24 + 24, 200, 20, "Back"));
-        this.buttonList.add(new GuiButton(20, this.width - 105, 3, 100, 20, "The Altening"));
-        this.buttonList.add(new GuiButton(21, this.width - 105, 25, 100, 20, "Mojang"));
+        this.buttonList.add(new GuiButton(20, this.width - 105, 3, 100, 20, "Mojang"));
         microsoft = false;
-        this.buttonList.add(new GuiButton(69, 3, 3, 100, 20, "FunCraft Ban"));
 
         for (GuiButton guiButton : buttonList) {
             if(guiButton.id == 20) {
-                if(Lime.getInstance().theAltening) {
-                    guiButton.displayString = "Mojang";
-                    TheAlteningAuthentication.mojang();
-                } else {
-                    guiButton.displayString = "The Altening";
-                    TheAlteningAuthentication.theAltening();
-                }
+                guiButton.displayString = Lime.getInstance().theAltening ? "The Altening" : "Mojang";
             }
         }
 
@@ -99,25 +87,14 @@ public class DirectLoginScreen extends GuiScreen {
 
     @Override
     protected void actionPerformed(GuiButton button) throws IOException {
-        if(button.id == 69) {
-            if(WebUtils.getSource("https://www.funcraft.net/fr/joueurs?q=" + Minecraft.getMinecraft().getSession().getUsername()).toLowerCase().contains("ce joueur est banni")) {
-                Lime.getInstance().getNotificationManager().addNotification("Alt is banned on funcraft", Notification.Type.WARNING);
-            } else {
-                Lime.getInstance().getNotificationManager().addNotification("Alt is unbanned on funcraft", Notification.Type.SUCCESS);
-            }
-        }
         if(button.id == 3) mc.displayGuiScreen(parentScreen);
         if(button.id == 4) {
-            try {
-                String clipboard = (String) Toolkit.getDefaultToolkit().getSystemClipboard().getData(DataFlavor.stringFlavor);
-                if(!clipboard.contains(":")) return;
-                this.username.setText(clipboard.split(":")[0]);
-                this.password.setText(clipboard.split(":")[1]);
-                this.runningThread = new AltLoginThread(username.getText(), password.getText(), microsoft);
-                this.runningThread.start();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            String clipboard = GuiScreen.getClipboardString();
+            if(!clipboard.contains(":")) return;
+            this.username.setText(clipboard.split(":")[0]);
+            this.password.setText(clipboard.split(":")[1]);
+            this.runningThread = new AltLoginThread(username.getText(), password.getText(), microsoft);
+            this.runningThread.start();
         }
         if(button.id == 2 && button.enabled) {
             if(Lime.getInstance().theAltening) {
@@ -129,15 +106,21 @@ public class DirectLoginScreen extends GuiScreen {
             this.runningThread.start();
         }
         if(button.id == 20) {
-            Lime.getInstance().theAltening = !Lime.getInstance().theAltening;
-            if(Lime.getInstance().theAltening) {
-                button.displayString = "The Altening";
-                TheAlteningAuthentication.theAltening();
-            } else {
+            if(button.displayString.equalsIgnoreCase("Microsoft")) {
                 button.displayString = "Mojang";
                 TheAlteningAuthentication.mojang();
+                microsoft = false;
+                Lime.getInstance().theAltening = false;
+            } else if(button.displayString.equalsIgnoreCase("mojang")) {
+                button.displayString = "The Altening";
+                TheAlteningAuthentication.theAltening();
+                Lime.getInstance().theAltening = true;
+            } else if(button.displayString.equalsIgnoreCase("the altening")) {
+                microsoft = true;
+                TheAlteningAuthentication.mojang();
+                button.displayString = "Microsoft";
+                Lime.getInstance().theAltening = false;
             }
-            //mc.displayGuiScreen(new TheAlteningLoginScreen(this));
         }
         if(button.id == 21) {
             if(!microsoft) {

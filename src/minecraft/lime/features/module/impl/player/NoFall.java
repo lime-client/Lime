@@ -48,6 +48,7 @@ public class NoFall extends Module {
                 } else if(mode.is("collide")) {
                     if(Lime.getInstance().getModuleManager().getModuleC(LongJump.class).isToggled() && ((EnumProperty) Lime.getInstance().getSettingsManager().getSetting("Mode", Lime.getInstance().getModuleManager().getModuleC(LongJump.class))).is("verus_bow")) return;
                     e.setGround(true);
+                    e.setY((int)mc.thePlayer.posY);
                     mc.thePlayer.motionY = -0.0784000015258789;
                     mc.thePlayer.fallDistance = 0;
                 }

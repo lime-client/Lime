@@ -35,7 +35,6 @@ import org.lwjgl.input.Keyboard;
 import java.awt.*;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Locale;
 
 
 public class Scaffold extends Module {
@@ -217,7 +216,9 @@ public class Scaffold extends Module {
             this.y = (int) mc.thePlayer.posY;
         }
 
-        tower(e);
+        if(MovementUtils.isOnGround(0.42)) {
+            tower(e);
+        }
 
         BlockPos underPosition = new BlockPos(x, this.y - 1 - (isAirBlock(new BlockPos(x, y - 0.5, z).getBlock()) ? BlockUtils.getBlockData(new BlockPos(x, this.y - 2, z)) == null ? 0 : downFlag ? 1 : 0 : 0), z);
         BlockUtils.BlockData blockData = BlockUtils.getBlockData(underPosition);

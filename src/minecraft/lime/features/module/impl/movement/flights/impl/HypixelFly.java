@@ -4,7 +4,6 @@ import lime.core.events.impl.EventMotion;
 import lime.core.events.impl.EventPacket;
 import lime.features.module.impl.movement.flights.FlightValue;
 import lime.utils.movement.MovementUtils;
-import lime.utils.other.ChatUtils;
 import lime.utils.other.SPacketPlayerPosLook;
 import lime.utils.other.Timer;
 import net.minecraft.network.EnumConnectionState;
@@ -13,8 +12,6 @@ import net.minecraft.network.PacketBuffer;
 import net.minecraft.network.RawPacket;
 import net.minecraft.network.play.client.C03PacketPlayer;
 import net.minecraft.network.play.server.S01PacketJoinGame;
-import net.minecraft.network.play.server.S08PacketPlayerPosLook;
-import net.minecraft.network.play.server.S12PacketEntityVelocity;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -22,8 +19,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
-public class Hypixel extends FlightValue {
-    public Hypixel() {
+public class HypixelFly extends FlightValue {
+    public HypixelFly() {
         super("Hypixel");
     }
 

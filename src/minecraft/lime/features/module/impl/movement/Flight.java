@@ -19,13 +19,14 @@ public class Flight extends Module {
     private final Graph speedGraph = new Graph("Speed");
 
     //Settings
-    public final EnumProperty mode = new EnumProperty("Mode", this, "Vanilla", "Vanilla", "Hypixel", "Funcraft", "Funcraft2", "Verus", "Verus_No_Damage", "Verus Float", "Verus Fast", "Astral", "KoksCraft");
+    public final EnumProperty mode = new EnumProperty("Mode", this, "Vanilla", "Vanilla", "ZoneCraft", "Hypixel", "Funcraft", "Funcraft2", "Verus", "Verus_No_Damage", "Verus Float", "Verus Fast", "Astral", "KoksCraft");
     public final EnumProperty damage = new EnumProperty("Damage", this, "Bypass", "Basic", "Bypass").onlyIf(mode.getSettingName(), "enum", "Verus Fast");
     public final NumberProperty speed = new NumberProperty("Speed", this, 0.5, 10, 1.5, 0.5).onlyIf(mode.getSettingName(), "enum", "vanilla", "Verus Fast");
     public final NumberProperty vClip = new NumberProperty("V Clip", this, 1, 5, 2, 0.5).onlyIf(mode.getSettingName(), "enum", "Verus Fast");
     public final NumberProperty funcraftSpeed = new NumberProperty("Funcraft Speed", this, 0.2, 2, 1.6, 0.05).onlyIf(mode.getSettingName(), "enum", "funcraft");
     public final NumberProperty funcraftTimerSpeed = new NumberProperty("Funcraft Timer Speed", this, 1, 5, 3, 0.05).onlyIf(mode.getSettingName(), "enum", "funcraft");
     private final BooleanProperty bobbing = new BooleanProperty("Bobbing", this, true);
+    public final BooleanProperty cancelPackets = new BooleanProperty("Cancel Packets", this, false);
     public final BooleanProperty timerBypass = new BooleanProperty("Timer Bypass", this, true).onlyIf(mode.getSettingName(), "enum", "Verus Fast");
     public final BooleanProperty verusHeavy = new BooleanProperty("Verus Heavy", this, false).onlyIf(mode.getSettingName(), "enum", "verus fast", "Verus Float");
     public final BooleanProperty latestVerus = new BooleanProperty("Latest Verus", this, false).onlyIf(mode.getSettingName(), "enum", "Verus Fast");
@@ -38,15 +39,16 @@ public class Flight extends Module {
     {
         super("Flight", Category.MOVE);
 
-        this.flights.add(new Funcraft2());
-        this.flights.add(new Funcraft());
-        this.flights.add(new Vanilla());
-        this.flights.add(new Hypixel());
-        this.flights.add(new Verus());
-        this.flights.add(new VerusFast());
-        this.flights.add(new VerusNoDamage());
-        this.flights.add(new VerusFloat());
-        this.flights.add(new Astral());
+        this.flights.add(new Funcraft2Fly());
+        this.flights.add(new FuncraftFly());
+        this.flights.add(new VanillaFly());
+        this.flights.add(new ZoneCraftFly());
+        this.flights.add(new HypixelFly());
+        this.flights.add(new CollisionFly());
+        this.flights.add(new VerusFastFly());
+        this.flights.add(new VerusNoDamageFly());
+        this.flights.add(new VerusFloatFly());
+        this.flights.add(new AstralFly());
     }
 
     public int getTicks() {

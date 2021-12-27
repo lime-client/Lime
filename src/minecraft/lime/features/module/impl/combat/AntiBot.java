@@ -7,7 +7,6 @@ import lime.features.module.Category;
 import lime.features.module.Module;
 import lime.features.setting.impl.BooleanProperty;
 import lime.features.setting.impl.EnumProperty;
-import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.play.server.S0CPacketSpawnPlayer;

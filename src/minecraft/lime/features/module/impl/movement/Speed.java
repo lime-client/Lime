@@ -2,19 +2,25 @@ package lime.features.module.impl.movement;
 
 import lime.core.Lime;
 import lime.core.events.EventTarget;
+import lime.core.events.impl.EventEntityAction;
 import lime.core.events.impl.EventMotion;
 import lime.core.events.impl.EventMove;
 import lime.core.events.impl.EventPacket;
 import lime.features.module.Category;
 import lime.features.module.Module;
-import lime.features.setting.impl.BooleanProperty;
 import lime.features.setting.impl.EnumProperty;
 import lime.features.setting.impl.NumberProperty;
 import lime.utils.movement.MovementUtils;
 import net.minecraft.block.BlockStairs;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
+import net.minecraft.network.play.client.C03PacketPlayer;
+import net.minecraft.network.play.client.C08PacketPlayerBlockPlacement;
 import net.minecraft.network.play.server.S08PacketPlayerPosLook;
 import net.minecraft.potion.Potion;
 import net.minecraft.util.BlockPos;
+import org.apache.commons.lang3.RandomUtils;
 
 public class Speed extends Module {
 
@@ -22,11 +28,10 @@ public class Speed extends Module {
         super("Speed", Category.MOVE);
     }
 
-    public final EnumProperty mode = new EnumProperty("Mode", this, "Vanilla", "Vanilla", "Vanilla_BHOP", "Hypixel", "HypixelNew", "Cubecraft", "Verus", "Verus Float", "Verus_LOWHOP", "NCP", "Funcraft", "Funcraft_YPORT");
+    public final EnumProperty mode = new EnumProperty("Mode", this, "Vanilla", "Vanilla", "Vanilla_BHOP", "Hypixel", "ZoneCraft", "Cubecraft", "Verus", "Verus Ground", "Verus Float", "Verus_LOWHOP", "NCP", "Funcraft", "Funcraft_YPORT");
     private final NumberProperty speed = new NumberProperty("Speed", this, 0.2, 5, 0.6, 0.1).onlyIf(mode.getSettingName(), "enum", "vanilla_bhop", "vanilla");
-    private final BooleanProperty hypixelStrafe = new BooleanProperty("Hypixel Strafe", this, false).onlyIf(mode.getSettingName(), "enum", "hypixel");
-    private double moveSpeed, lastDist, jumpY;
-    private int stage, ticks;
+    private double moveSpeed, lastDist;
+    private int stage;
     private boolean spoofGround, firstHop, nigger;
 
     @Override
@@ -37,7 +42,6 @@ public class Speed extends Module {
         }
         this.moveSpeed = MovementUtils.getBaseMoveSpeed();
         stage = 0;
-        ticks = 0;
         spoofGround = false;
         firstHop = true;
         nigger = mc.thePlayer.onGround;
@@ -110,12 +114,8 @@ public class Speed extends Module {
 
                 if(mc.thePlayer.onGround) {
                     mc.thePlayer.motionY = MovementUtils.getJumpBoostModifier(0.39999998);
-                    double sped = .47;
+                    double sped = .42;
                     MovementUtils.setSpeed(moveSpeed = sped);
-                } else {
-                    if(hypixelStrafe.isEnabled() && mc.thePlayer.fallDistance < 1.25) {
-                        MovementUtils.setSpeed(MovementUtils.getSpeed());
-                    }
                 }
             }
         }
@@ -126,8 +126,20 @@ public class Speed extends Module {
     }
 
     @EventTarget
+    public void onEntityAction(EventEntityAction e) {
+        if(mode.is("Verus Ground")) {
+            e.setShouldJump(false);
+        }
+    }
+
+    @EventTarget
     public void onPacket(EventPacket e) {
-        if(e.getPacket() instanceof S08PacketPlayerPosLook) {
+        if(e.getPacket() instanceof S08PacketPlayerPosLook && mc.thePlayer.ticksExisted > 30) {
+            if(mode.is("zonecraft")) {
+                e.setCanceled(true);
+                S08PacketPlayerPosLook p = (S08PacketPlayerPosLook) e.getPacket();
+                mc.getNetHandler().sendPacketNoEvent(new C03PacketPlayer.C06PacketPlayerPosLook(p.getX(), p.getY(), p.getZ(), p.getYaw(), p.getPitch(), false));
+            }
             lastDist = 0;
             if(mode.is("mineplex") || mode.is("funcraft")) {
                 moveSpeed = 0;
@@ -143,73 +155,49 @@ public class Speed extends Module {
                 if(mc.thePlayer.onGround) {
                     e.setY(mc.thePlayer.motionY = 0.41999998688697815);
                     moveSpeed = 0.6;
-                    jumpY = mc.thePlayer.posY;
                 } else {
-                    moveSpeed = MovementUtils.getBaseMoveSpeed() * (MovementUtils.hasSpeed() ? mc.thePlayer.getActivePotionEffect(Potion.moveSpeed).getAmplifier() == 1 ? 0.982 : 1.12 : 1.253);
-
-                    /*if(mc.thePlayer.posY - jumpY < 0.35) {
-                        moveSpeed = 0.4 + MovementUtils.getBaseMoveSpeed(0);
-                    }*/
+                    moveSpeed = MovementUtils.getBaseMoveSpeed() * (MovementUtils.hasSpeed() ? 1.1 + Math.random() * 0.005 : 1.253);
                 }
 
                 MovementUtils.setSpeed(e, moveSpeed);
             }
         }
-        if(mode.is("mineplex")) {
-            if(mc.thePlayer.isMoving()) {
-                if(mc.thePlayer.onGround) {
-                    stage = 0;
-                }
-                switch(stage) {
-                    case 0:
-                        if(mc.thePlayer.onGround) {
-                            e.setY(mc.thePlayer.motionY = 0.41999998688697815);
-                            moveSpeed *= 2.149;
-                        }
-                        break;
-                    case 1:
-                        double difference = .84 * (this.lastDist - MovementUtils.getBaseMoveSpeed());
-                        this.moveSpeed = this.lastDist - difference;
-                        break;
-                    default:
-                        this.moveSpeed = this.lastDist - this.lastDist / 159;
-                        break;
-                }
-                ++stage;
-                MovementUtils.setSpeed(e, Math.max(moveSpeed, MovementUtils.getBaseMoveSpeed()));
+
+        if(mode.is("zonecraft")) {
+            if(mc.thePlayer.onGround && mc.thePlayer.isMoving()) {
+                mc.getNetHandler().sendPacketNoEvent(new C08PacketPlayerBlockPlacement(mc.thePlayer.getPosition().down(), 0, new ItemStack(Blocks.stone, 1), 0.54345F,0.523234F, 0.5435345F));
+                MovementUtils.setSpeed(e, 0.5 + (Math.random() * 0.003));
             }
         }
+        if(mode.is("Verus Ground")) {
+            if(Lime.getInstance().getModuleManager().getModuleC(Flight.class).isToggled()) return;
 
-        if(mode.is("hypixelnew") && !MovementUtils.isVoidUnder()) {
-            mc.timer.timerSpeed = 1.0866f;
-            if(mc.thePlayer.isMoving()) {
-                if(mc.thePlayer.onGround) {
+            if(mc.thePlayer.isMoving() && MovementUtils.isOnGround(0.02) && !mc.thePlayer.isCollidedHorizontally) {
+                if(firstHop) {
+                    mc.getNetHandler().sendPacketNoEvent(new C08PacketPlayerBlockPlacement(new BlockPos(-1, -1, -1), 255, new ItemStack(Items.water_bucket), 0, 0.5f, 0));
+                    e.setY(mc.thePlayer.motionY = 0.01);
+                    firstHop = false;
                     stage = 0;
+                    moveSpeed = 0;
+                } else {
+                    if(stage >= 8) {
+                        stage = 0;
+                        mc.getNetHandler().sendPacketNoEvent(new C08PacketPlayerBlockPlacement(new BlockPos(-1, -1, -1), 255, new ItemStack(Items.water_bucket), 0, 0.5f, 0));
+                        e.setY(mc.thePlayer.motionY = 0.01);
+                        moveSpeed = 0;
+                    }
+                    if(mc.thePlayer.onGround) {
+                        stage++;
+                        MovementUtils.setSpeed(e, moveSpeed += RandomUtils.nextDouble(0.10, 0.18));
+                    }
                 }
-                switch(stage) {
-                    case 0:
-                        if(mc.thePlayer.onGround) {
-                            e.setY(mc.thePlayer.motionY = 0.3999998);
-                            moveSpeed *= 1.64;
-                            stage++;
-                        }
-                        break;
-                    case 1:
-                        double difference = .8 * (this.lastDist - MovementUtils.getBaseMoveSpeed());
-                        this.moveSpeed = this.lastDist - difference;
-                        ++stage;
-                        break;
-                    default:
-                        this.moveSpeed = lastDist - lastDist / 72;
-                        break;
-                }
-                MovementUtils.setSpeed(e, Math.max(moveSpeed, MovementUtils.getBaseMoveSpeed()));
             } else {
-                lastDist = 0;
+                firstHop = true;
                 stage = 0;
                 moveSpeed = 0;
             }
         }
+
 
         if(mode.is("cubecraft")) {
             mc.timer.timerSpeed = 1.2f;
@@ -241,7 +229,7 @@ public class Speed extends Module {
             if(mode.is("vanilla_bhop") && Lime.getInstance().getModuleManager().getModuleC(Flight.class).isToggled()) {
                 return;
             }
-            mc.timer.timerSpeed = 1.0866f;
+            //mc.timer.timerSpeed = 1.1f;
             if(mc.thePlayer.isMoving()) {
                 if(mc.thePlayer.onGround) {
                     stage = 0;
@@ -315,7 +303,7 @@ public class Speed extends Module {
                 }
 
                 mc.thePlayer.motionY = e.getY();
-                MovementUtils.setSpeed(e, this.moveSpeed - 1.0E-4D);
+                MovementUtils.setSpeed(e, this.moveSpeed - 1E-4);
             }
         }
     }

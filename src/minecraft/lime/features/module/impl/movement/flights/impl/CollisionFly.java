@@ -5,8 +5,8 @@ import lime.features.module.impl.movement.flights.FlightValue;
 import net.minecraft.block.BlockAir;
 import net.minecraft.util.AxisAlignedBB;
 
-public class Verus extends FlightValue {
-    public Verus()
+public class CollisionFly extends FlightValue {
+    public CollisionFly()
     {
         super("Verus");
     }

@@ -40,7 +40,7 @@ public class Lime2TargetHUD extends TargetHUD {
             RenderUtils.drawFace((int)x + 3, (int)y + 3, 24, 24, (AbstractClientPlayer) target);
         }
 
-        FontManager.SfUiArray.drawStringWithShadow(target.getName(), x+29, y+5, -1);
+        FontManager.productSans.drawStringWithShadow(target.getName(), x+29, y+5, -1);
         health.setMax((float) MathUtils.scale(Math.min(target.getHealth(), target.getMaxHealth()), 0, target.getMaxHealth(), 0, 118));
         armor.setMax((float) MathUtils.scale(target.getTotalArmorValue(), 0, 20, 0, 118));
 

@@ -97,14 +97,21 @@ public class MainScreen extends GuiScreen {
         clickGui = false;
         final Color color = new Color(41, 41, 41, 255);
 
-        this.customButtonList.add(new ButtonField(FontManager.ProductSans20.getFont(), "Singleplayer", width / 2F - 75, height / 2F, 150, 20, false, color, true, new Color(255, 255, 255, 200), !anim, () -> {
+        this.customButtonList.add(new ButtonField(FontManager.ProductSans20.getFont(), "Singleplayer", width / 2F - 75, height / 2F - 22 - 22, 150, 20, false, color, true, new Color(255, 255, 255, 200), !anim, () -> {
             mc.displayGuiScreen(new GuiSelectWorld(this));
         }));
-        this.customButtonList.add(new ButtonField(FontManager.ProductSans20.getFont(), "Multiplayer", width / 2F - 75, height / 2F + 22, 150, 20, false, color, true, new Color(255, 255, 255, 200), !anim, () -> {
+        this.customButtonList.add(new ButtonField(FontManager.ProductSans20.getFont(), "Multiplayer", width / 2F - 75, height / 2F - 22, 150, 20, false, color, true, new Color(255, 255, 255, 200), !anim, () -> {
             mc.displayGuiScreen(new GuiMultiplayer(this));
         }));
-        this.customButtonList.add(new ButtonField(FontManager.ProductSans20.getFont(), "Alt Manager", width / 2F - 75, height / 2F + 22 + 22, 150, 20, false, color, true, new Color(255, 255, 255, 200), !anim, () -> {
+        this.customButtonList.add(new ButtonField(FontManager.ProductSans20.getFont(), "Alt Manager", width / 2F - 75, height / 2F, 150, 20, false, color, true, new Color(255, 255, 255, 200), !anim, () -> {
             mc.displayGuiScreen(Lime.getInstance().getAltManager().getAltManagerScreen());
+        }));
+        this.customButtonList.add(new ButtonField(FontManager.ProductSans20.getFont(), "Options", width / 2F - 75, height / 2F + 22, 150, 20, false, color, true, new Color(255, 255, 255, 200), !anim, () -> {
+            mc.displayGuiScreen(new GuiOptions(this, mc.gameSettings));
+        }));
+
+        this.customButtonList.add(new ButtonField(FontManager.ProductSans20.getFont(), "Exit", width / 2F - 75, height / 2F + 22 + 22, 150, 20, false, color, true, new Color(255, 255, 255, 200), !anim, () -> {
+            mc.shutdown();
         }));
         anim = true;
         super.initGui();
@@ -119,19 +126,9 @@ public class MainScreen extends GuiScreen {
         GL11.glPushMatrix();
         GL11.glEnable(GL11.GL_SCISSOR_TEST);
 
-        RenderUtils.prepareScissorBox((width / 2F - (FontManager.ProductSans76.getFont().getStringWidth("Lime")  / 2F)), this.height / 2F - 132, (width / 2F - (FontManager.ProductSans76.getFont().getStringWidth("Lime")  / 2F)) + (FontManager.ProductSans76.getFont().getStringWidth("Lime")), this.height / 2F - 132 + FontManager.ProductSans76.getFont().getFontHeight() - 5);
-        FontManager.ProductSans76.getFont().drawStringWithShadow(EnumChatFormatting.GREEN + "L§fime", (width / 2F - (FontManager.ProductSans76.getFont().getStringWidth("Lime")  / 2F)), this.height / 2F - 132, -1);
+        RenderUtils.prepareScissorBox((width / 2F - (FontManager.ProductSans76.getFont().getStringWidth("Lime")  / 2F)), this.height / 2F - 150, (width / 2F - (FontManager.ProductSans76.getFont().getStringWidth("Lime")  / 2F)) + (FontManager.ProductSans76.getFont().getStringWidth("Lime")), this.height / 2F - 150 + FontManager.ProductSans76.getFont().getFontHeight() - 5);
+        FontManager.ProductSans76.getFont().drawStringWithShadow(EnumChatFormatting.GREEN + "L§fime", (width / 2F - (FontManager.ProductSans76.getFont().getStringWidth("Lime")  / 2F)), this.height / 2F - 150, -1);
         GL11.glDisable(GL11.GL_SCISSOR_TEST);
-        GL11.glPopMatrix();
-
-        ScaledResolution sr = new ScaledResolution(mc);
-
-        GL11.glPushMatrix();
-        RenderUtils.drawImage(new ResourceLocation("lime/images/settings.png"), sr.getScaledWidth() - 72, 3, 32, 32);
-        RenderUtils.drawImage(new ResourceLocation("lime/images/shutdown.png"), sr.getScaledWidth() - 34, 3, 32, 32);
-        GL11.glEnable(GL11.GL_BLEND);
-        FontManager.ProductSans20.getFont().drawStringWithShadow("Options", sr.getScaledWidth() - 76, 38, -1);
-        FontManager.ProductSans20.getFont().drawStringWithShadow("Quit", sr.getScaledWidth() - 29, 38, -1);
         GL11.glPopMatrix();
         super.drawScreen(mouseX, mouseY, partialTicks);
     }

@@ -3,8 +3,8 @@ package lime.features.module.impl.movement.flights.impl;
 import lime.features.module.impl.movement.flights.FlightValue;
 import lime.utils.movement.MovementUtils;
 
-public class Astral extends FlightValue {
-    public Astral() {
+public class AstralFly extends FlightValue {
+    public AstralFly() {
         super("Astral");
     }
 

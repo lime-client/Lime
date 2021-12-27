@@ -39,11 +39,6 @@ public class LongJump extends Module {
 
     @Override
     public void onEnable() {
-        if(mode.is("vanilla")) {
-            mc.getNetHandler().sendPacketNoEvent(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY + 3.05, mc.thePlayer.posZ, false));
-            mc.getNetHandler().sendPacketNoEvent(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY, mc.thePlayer.posZ, false));
-            mc.getNetHandler().sendPacketNoEvent(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY, mc.thePlayer.posZ, true));
-        }
         receivedS12 = back = boosted = bowd = false;
         moveSpeed = y = 0;
         stage = ticks = 0;
@@ -52,7 +47,7 @@ public class LongJump extends Module {
             this.toggle();
             return;
         }
-        if(mode.is("verus_bow")) {
+        if(mode.is("verus_bow") || mode.is("hypixel")) {
             ItemStack bow = null;
             int slot = -1;
             for(int i = 36; i < 45; ++i) {
@@ -73,10 +68,6 @@ public class LongJump extends Module {
             }
         }
 
-        if(mode.is("hypixel")) {
-            PlayerUtils.hypixelDamage();
-        }
-
         if(mode.is("verus")) {
             PlayerUtils.verusDamage(true);
             mc.thePlayer.jump();
@@ -92,7 +83,7 @@ public class LongJump extends Module {
         this.setSuffix(mode.getSelected());
 
         // Auto Bow
-        if((mode.is("verus_bow")) && !bowd && !back) {
+        if((mode.is("verus_bow") || mode.is("hypixel")) && !bowd && !back) {
             MovementUtils.setSpeed(0);
             e.setPitch(-90);
             if(ticks >= 3 && !bowd) {
@@ -162,7 +153,7 @@ public class LongJump extends Module {
                     }
                 }
             } else {
-                if(mc.thePlayer.hurtTime != 0) receivedS12 =true;
+                if(mc.thePlayer.hurtTime != 0) receivedS12 = true;
                 if(receivedS12) {
                     if(mc.thePlayer.onGround) {
                         if(moveSpeed == 0) {
@@ -174,7 +165,7 @@ public class LongJump extends Module {
                             this.toggle();
                         }
                     } else {
-                        MovementUtils.setSpeed(e, moveSpeed -= moveSpeed / 18);
+                        MovementUtils.setSpeed(e, moveSpeed -= moveSpeed / 24);
                         e.setY(e.getY() * 0.85);
                     }
                 }

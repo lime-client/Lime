@@ -11,8 +11,8 @@ import net.minecraft.block.BlockAir;
 import net.minecraft.network.play.client.C0CPacketInput;
 import net.minecraft.util.AxisAlignedBB;
 
-public class VerusFloat extends FlightValue {
-    public VerusFloat() {
+public class VerusFloatFly extends FlightValue {
+    public VerusFloatFly() {
         super("Verus Float");
     }
 

@@ -390,7 +390,13 @@ public abstract class Container
         }
         else if (mode == 2 && clickedButton >= 0 && clickedButton < 9)
         {
-            Slot slot5 = (Slot)this.inventorySlots.get(slotId);
+            Slot slot5 = null;
+
+            try {
+                slot5 = (Slot)this.inventorySlots.get(slotId);
+            } catch (Exception ignored){
+                return null;
+            }
 
             if (slot5.canTakeStack(playerIn))
             {

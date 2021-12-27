@@ -7,7 +7,7 @@ import java.awt.*;
 import java.io.InputStream;
 
 public abstract class FontManager {
-    public static CFontRenderer SfUiArray = new CFontRenderer(FontManager.getPS(), true, true);
+    public static CFontRenderer productSans = new CFontRenderer(FontManager.getPS(), true, true);
 
     private static Font getPS() {
         Font font;
