@@ -9,7 +9,7 @@ import net.minecraft.util.ResourceLocation;
 import net.optifine.Config;
 import net.optifine.shadersmod.client.Shaders;
 
-public class LayerSpiderEyes implements LayerRenderer
+public class LayerSpiderEyes implements LayerRenderer<EntityLivingBase>
 {
     private static final ResourceLocation SPIDER_EYES = new ResourceLocation("textures/entity/spider_eyes.png");
     private final RenderSpider spiderRenderer;

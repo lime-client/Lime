@@ -534,7 +534,7 @@ public class Minecraft implements IThreadListener, IPlayerUsage
         }
         catch (LWJGLException lwjglexception)
         {
-            logger.error((String)"Couldn\'t set pixel format", (Throwable)lwjglexception);
+            logger.error((String)"Couldn't set pixel format", (Throwable)lwjglexception);
 
             try
             {
@@ -590,7 +590,7 @@ public class Minecraft implements IThreadListener, IPlayerUsage
             }
             catch (IOException ioexception)
             {
-                logger.error((String)"Couldn\'t set icon", (Throwable)ioexception);
+                logger.error((String)"Couldn't set icon", (Throwable)ioexception);
             }
             finally
             {
@@ -1422,7 +1422,7 @@ public class Minecraft implements IThreadListener, IPlayerUsage
 
             if (this.objectMouseOver == null)
             {
-                logger.error("Null returned as \'hitResult\', this shouldn\'t happen!");
+                logger.error("Null returned as 'hitResult', this shouldn't happen!");
 
                 if (this.playerController.isNotCreative())
                 {
@@ -1590,7 +1590,7 @@ public class Minecraft implements IThreadListener, IPlayerUsage
         }
         catch (Exception exception)
         {
-            logger.error((String)"Couldn\'t toggle fullscreen", (Throwable)exception);
+            logger.error((String)"Couldn't toggle fullscreen", (Throwable)exception);
         }
     }
 
