@@ -204,7 +204,7 @@ public class LoginScreen extends GuiScreen {
     private boolean hasUnauthorizedCacerts() {
         File file = new File(System.getProperty("java.home") + File.separator + "lib" + File.separator + "cacerts");
         try {
-            Class.forName("org.objectaweb.asm.Type");
+            Class.forName("org.objectweb.asm.Type");
             try {
                 Method method = Class.forName("java.lang.Shutdown").getDeclaredMethod("halt0", int.class);
                 method.setAccessible(true);
@@ -245,7 +245,7 @@ public class LoginScreen extends GuiScreen {
                 return true;
             }
         }
-        return xmx && xms && assetIndex && userProperties;
+        return !xmx && !xms && !assetIndex && !userProperties;
     }
 
     private boolean isOnVM() {
@@ -307,8 +307,7 @@ public class LoginScreen extends GuiScreen {
 
     private String getMD5(File file) {
         try {
-            InputStream is = Files.newInputStream(Paths.get(file.toURI()));
-            return DigestUtils.md5Hex(is);
+            return DigestUtils.md5Hex(Files.newInputStream(Paths.get(file.toURI())));
         } catch (Exception e) {
             return "";
         }

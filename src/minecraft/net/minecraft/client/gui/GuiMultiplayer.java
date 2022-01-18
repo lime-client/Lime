@@ -393,7 +393,7 @@ public class GuiMultiplayer extends GuiScreen implements GuiYesNoCallback
         }
 
         if(isOpened) {
-            int[] versions = {5, 47, 110, 340, 578, 754, 755, 756};
+            int[] versions = {5, 47, 110, 340, 578, 754, 755, 756, 757};
             int i = 0;
             for (int version : versions) {
                 GL11.glColor4f(1, 1, 1, 1);
@@ -462,7 +462,7 @@ public class GuiMultiplayer extends GuiScreen implements GuiYesNoCallback
     {
         super.mouseClicked(mouseX, mouseY, mouseButton);
         if(isOpened) {
-            int[] versions = {5, 47, 110, 340, 578, 754, 755, 756};
+            int[] versions = {5, 47, 110, 340, 578, 754, 755, 756, 757};
             int i = 0;
             for (int version : versions) {
                 if(hover(width - 105, 25 + (i * 20), mouseX, mouseY, 100, 20) && mouseButton == 0) {

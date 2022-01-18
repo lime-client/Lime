@@ -59,7 +59,7 @@ ofLazyChunkLoading:false
 ofDynamicFov:false
 ofDynamicLights:2
 ofFullscreenMode:Default
-ofFastMath:false
+ofFastMath:true
 ofFastRender:false
 ofTranslucentBlocks:2
 key_of.key.zoom:46

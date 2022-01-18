@@ -44,7 +44,6 @@ public class KillSult extends Module {
             String message = ((S02PacketChat) e.getPacket()).getChatComponent().getUnformattedText();
 
             if(killedSomeone(mc.session.getUsername(), ChatUtils.removeColors(message))) {
-                System.out.println("cc");
                 // Get Entity name
                 String killedEntity = getKilledEntity(message);
 

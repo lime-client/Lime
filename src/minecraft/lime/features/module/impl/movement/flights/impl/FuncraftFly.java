@@ -30,18 +30,20 @@ public class FuncraftFly extends FlightValue {
     @Override
     public void onPacket(EventPacket e) {
         if(e.getPacket() instanceof S08PacketPlayerPosLook) {
-            moveSpeed = 0.25;
-            timerSpeed = 1.75;
+            moveSpeed = MovementUtils.getBaseMoveSpeed();
+            timerSpeed = 1;
+            stage = -1;
         }
     }
 
     @Override
     public void onMotion(EventMotion e) {
-        if(!Lime.getInstance().getModuleManager().getModuleC(Timer.class).isToggled())
-        {
+        if(!e.isPre()) return;
+
+        if(!Lime.getInstance().getModuleManager().getModuleC(Timer.class).isToggled()) {
             mc.timer.timerSpeed = mc.thePlayer.isMoving() ? (float) timerSpeed : 1;
             timerSpeed -= timerSpeed / 360;
-            timerSpeed = Math.max(timerSpeed, 1.6);
+            timerSpeed = Math.max(timerSpeed, getFlight().funcraftTimerSpeed.getCurrent() >= 1.5 ? 1.5 : 1);
         }
 
         if(!mc.thePlayer.isMoving()) {
@@ -50,22 +52,18 @@ public class FuncraftFly extends FlightValue {
 
         e.setGround(true);
 
-        if(e.isPre())
-        {
+        if(e.isPre()) {
             double xDist = mc.thePlayer.posX - mc.thePlayer.prevPosX;
             double zDist = mc.thePlayer.posZ - mc.thePlayer.prevPosZ;
             lastDist = Math.sqrt(xDist * xDist + zDist * zDist);
         }
 
-        if((stage > 2 || stage == -1) && !MovementUtils.isOnGround(3.33315597345063e-11))
-        {
+        if((stage > 2 || stage == -1) && !MovementUtils.isOnGround(3.33315597345063e-11)) {
             mc.thePlayer.motionY = 0;
+            MovementUtils.vClip(-(3.33315597345063e-11));
+
             if(stage == -1 && mc.thePlayer.isMoving()) {
                 MovementUtils.setSpeed(.25);
-            }
-            if(e.isPre())
-            {
-                MovementUtils.vClip(-(3.33315597345063e-11));
             }
         }
     }
@@ -74,14 +72,12 @@ public class FuncraftFly extends FlightValue {
     public void onMove(EventMove e) {
         mc.thePlayer.jumpMovementFactor = 0;
         if((stage == 0 && !mc.thePlayer.onGround) || mc.thePlayer.isCollidedHorizontally) stage = -1;
-        if(mc.thePlayer.isMoving())
-        {
+        if(mc.thePlayer.isMoving()) {
             if(stage != -1) {
                 switch(stage)
                 {
                     case 0:
-                        if(mc.thePlayer.onGround && mc.thePlayer.isCollidedVertically)
-                            this.moveSpeed = 0.5;
+                        moveSpeed = 0;
                         break;
                     case 1:
                         if(mc.thePlayer.onGround && mc.thePlayer.isCollidedVertically)

@@ -40,9 +40,6 @@ public class ModuleManager {
         registerModule(new Blink());
         registerModule(new Phase());
 
-
-        registerModule(new WotSped());
-
         // MOVEMENT
         registerModule(new TargetStrafe());
         registerModule(new HighJump());
@@ -109,6 +106,7 @@ public class ModuleManager {
         registerModule(new Eater());
         registerModule(new Timer());
         registerModule(new Eagle());
+        registerModule(new NoC03());
     }
 
     public ArrayList<Module> getModules() {

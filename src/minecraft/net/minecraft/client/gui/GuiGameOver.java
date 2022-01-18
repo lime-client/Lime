@@ -4,6 +4,7 @@ import lime.ui.gui.MainScreen;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.network.play.client.C16PacketClientStatus;
 import net.minecraft.util.EnumChatFormatting;
 
 import java.io.IOException;
@@ -48,7 +49,7 @@ public class GuiGameOver extends GuiScreen implements GuiYesNoCallback
 
         for (GuiButton guibutton : this.buttonList)
         {
-            guibutton.enabled = false;
+            guibutton.enabled = true;
         }
     }
 
@@ -81,7 +82,7 @@ public class GuiGameOver extends GuiScreen implements GuiYesNoCallback
                 {
                     GuiYesNo guiyesno = new GuiYesNo(this, I18n.format("deathScreen.quit.confirm", new Object[0]), "", I18n.format("deathScreen.titleScreen", new Object[0]), I18n.format("deathScreen.respawn", new Object[0]), 0);
                     this.mc.displayGuiScreen(guiyesno);
-                    guiyesno.setButtonDelay(20);
+                    guiyesno.setButtonDelay(1);
                 }
         }
     }

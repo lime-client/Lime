@@ -10,6 +10,7 @@ import lime.features.setting.impl.EnumProperty;
 import lime.features.setting.impl.NumberProperty;
 import lime.utils.other.ChatUtils;
 import lime.utils.other.Timer;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.network.play.client.C02PacketUseEntity;
 import net.minecraft.network.play.client.C03PacketPlayer;
 
@@ -43,7 +44,7 @@ public class Criticals extends Module {
         if(e.getPacket() instanceof C02PacketUseEntity) {
             C02PacketUseEntity packet = (C02PacketUseEntity) e.getPacket();
             if(packet.getAction() == C02PacketUseEntity.Action.ATTACK && mc.thePlayer.onGround && groundTicks > 1 && timer.hasReached(delay.intValue()) && mode.is("packet")) {
-                double[] offsets = {0.0625, 0};
+                double[] offsets = {0.06251999735832214, 0};
                 for (double offset : offsets) {
                     mc.getNetHandler().addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY + offset, mc.thePlayer.posZ, false));
                 }

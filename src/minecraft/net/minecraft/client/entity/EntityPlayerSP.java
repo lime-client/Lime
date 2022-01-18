@@ -3,6 +3,7 @@ package net.minecraft.client.entity;
 import lime.core.Lime;
 import lime.core.events.EventBus;
 import lime.core.events.impl.*;
+import lime.features.module.impl.exploit.Phase;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.MovingSoundMinecartRiding;
 import net.minecraft.client.audio.PositionedSoundRecord;
@@ -450,7 +451,7 @@ public class EntityPlayerSP extends AbstractClientPlayer
 
     protected boolean pushOutOfBlocks(double x, double y, double z)
     {
-        if(Lime.getInstance().getModuleManager().getModule("Phase").isToggled()) return false;
+        if(Lime.getInstance().getModuleManager().getModuleC(Phase.class).isToggled()) return false;
         if (this.noClip)
         {
             return false;

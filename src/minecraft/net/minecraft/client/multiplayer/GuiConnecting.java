@@ -48,6 +48,7 @@ public class GuiConnecting extends GuiScreen
         this.mc = mcIn;
         this.previousGuiScreen = p_i1182_1_;
         mcIn.loadWorld((WorldClient)null);
+        mcIn.setServerData(new ServerData(hostName, port+"", true));
         this.connect(hostName, port);
     }
 

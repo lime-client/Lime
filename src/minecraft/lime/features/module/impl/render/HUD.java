@@ -196,7 +196,7 @@ public class HUD extends Module {
                 });
                 return ColorUtils.fade(new Color(hud.fadeColor.getColor()), index, count.get());
             case "moon":
-                return ColorUtils.blend2colors(new Color(25, 60, 224), new Color(51, 13, 196), (System.nanoTime() + (index + index * 100000000L * 2)) / 1.0E09F % 2.0F);
+                return ColorUtils.blend2colors(new Color(25, 60, 224), new Color(79, 23, 180), (System.nanoTime() + (index + index * 100000000L * 2)) / 1.0E09F % 2.0F);
         }
 
         // wtf ?

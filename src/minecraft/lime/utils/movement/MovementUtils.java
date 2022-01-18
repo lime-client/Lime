@@ -170,6 +170,9 @@ public class MovementUtils implements IUtil {
         if (mc.thePlayer.isPotionActive(Potion.moveSpeed)) {
             baseSpeed *= 1.0 + 0.2 * (mc.thePlayer.getActivePotionEffect(Potion.moveSpeed).getAmplifier() + 1);
         }
+        if (mc.thePlayer.isPotionActive(Potion.moveSlowdown)) {
+            baseSpeed /= 1.0 + 0.2 * (mc.thePlayer.getActivePotionEffect(Potion.moveSlowdown).getAmplifier() + 1);
+        }
         return baseSpeed;
     }
 }

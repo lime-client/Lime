@@ -26,6 +26,7 @@ public class CommandManager {
         registerCommand(new BlackListBed());
         registerCommand(new Target());
         registerCommand(new Teleport());
+        registerCommand(new StaffChecker());
     }
 
     private void registerCommand(Command command) {

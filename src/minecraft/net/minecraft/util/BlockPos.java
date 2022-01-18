@@ -273,6 +273,14 @@ public class BlockPos extends Vec3i
         };
     }
 
+    public double distanceTo(Vec3 vec)
+    {
+        double d0 = vec.xCoord - this.getX();
+        double d1 = vec.yCoord - this.getY();
+        double d2 = vec.zCoord - this.getZ();
+        return (double)MathHelper.sqrt_double(d0 * d0 + d1 * d1 + d2 * d2);
+    }
+
     public static Iterable<BlockPos.MutableBlockPos> getAllInBoxMutable(BlockPos from, BlockPos to)
     {
         final BlockPos blockpos = new BlockPos(Math.min(from.getX(), to.getX()), Math.min(from.getY(), to.getY()), Math.min(from.getZ(), to.getZ()));

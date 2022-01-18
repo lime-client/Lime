@@ -10,11 +10,17 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
 import org.lwjgl.input.Keyboard;
 
+import javax.net.ssl.HttpsURLConnection;
 import java.awt.*;
 import java.awt.datatransfer.DataFlavor;
 import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 public class DirectLoginScreen extends GuiScreen {
 
@@ -65,20 +71,19 @@ public class DirectLoginScreen extends GuiScreen {
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        //this.drawDefaultBackground();
         GuiScreen.drawRect(0, 0, mc.displayWidth, mc.displayHeight, new Color(21, 21, 21).getRGB());
-
+        String buttonName = buttonList.stream().filter(b -> b.id == 20).findFirst().orElse(null).displayString;
         this.buttonList.get(0).enabled = !username.getText().isEmpty();
 
         username.drawTextBox();
-        if(!Lime.getInstance().theAltening) {
+        if(!Lime.getInstance().theAltening && !buttonName.equals("KingGen")) {
             password.drawTextBox();
+            if(password.getText().isEmpty())
+                this.drawString(mc.fontRendererObj, "Password", this.width / 2 - 95, this.height / 2 - 20 - 10, new Color(75, 75, 75).getRGB());
         }
 
         if(username.getText().isEmpty())
-            this.drawString(mc.fontRendererObj, !Lime.getInstance().theAltening ? "Username" : "Token", this.width / 2 - 95, this.height / 2 - 20 - 34, new Color(75, 75, 75).getRGB());
-        if(password.getText().isEmpty() && !Lime.getInstance().theAltening)
-            this.drawString(mc.fontRendererObj, "Password", this.width / 2 - 95, this.height / 2 - 20 - 10, new Color(75, 75, 75).getRGB());
+            this.drawString(mc.fontRendererObj, buttonName.equals("KingGen") ? "API Key" : !Lime.getInstance().theAltening ? "Username" : "Token", this.width / 2 - 95, this.height / 2 - 20 - 34, new Color(75, 75, 75).getRGB());
 
         this.drawCenteredString(mc.fontRendererObj, "Alt Login (Username: " + mc.session.getUsername() + ")", this.width / 2, 10, new Color(75, 75, 75).getRGB());
         this.drawCenteredString(mc.fontRendererObj, this.runningThread == null || this.runningThread.getStatus().contains("wait") ? this.username.getText().length() > 16 && !this.username.getText().contains("@") && this.password.getText().isEmpty() ? "§4Warning: You can't use a cracked account with more than 16 characters" : "Waiting" : this.runningThread.getStatus(), this.width / 2, 20, new Color(75, 75, 75).getRGB());
@@ -87,6 +92,7 @@ public class DirectLoginScreen extends GuiScreen {
 
     @Override
     protected void actionPerformed(GuiButton button) throws IOException {
+        String buttonName = buttonList.stream().filter(b -> b.id == 20).findFirst().orElse(null).displayString;
         if(button.id == 3) mc.displayGuiScreen(parentScreen);
         if(button.id == 4) {
             String clipboard = GuiScreen.getClipboardString();
@@ -102,12 +108,22 @@ public class DirectLoginScreen extends GuiScreen {
             } else {
                 TheAlteningAuthentication.mojang();
             }
-            this.runningThread = new AltLoginThread(username.getText(), !Lime.getInstance().theAltening ? password.getText() : "aaa", microsoft);
-            this.runningThread.start();
+            if(buttonName.equals("KingGen")) {
+                try {
+                    CloseableHttpClient client = HttpClients.createDefault();
+                    HttpGet request = new HttpGet("http://kinggen.wtf/api/v2/alt?key=" + username.getText());
+                    StringBuilder builder = new StringBuilder();
+                    client.execute(request, httpResponse -> builder.append(httpResponse.getEntity().getContent()));
+                    System.out.println(builder.toString());
+                } catch (Exception ignored){ignored.printStackTrace();}
+            } else {
+                this.runningThread = new AltLoginThread(username.getText(), !Lime.getInstance().theAltening ? password.getText() : "aaa", microsoft);
+                this.runningThread.start();
+            }
         }
         if(button.id == 20) {
             if(button.displayString.equalsIgnoreCase("Microsoft")) {
-                button.displayString = "Mojang";
+                button.displayString = "KingGen";
                 TheAlteningAuthentication.mojang();
                 microsoft = false;
                 Lime.getInstance().theAltening = false;
@@ -119,6 +135,11 @@ public class DirectLoginScreen extends GuiScreen {
                 microsoft = true;
                 TheAlteningAuthentication.mojang();
                 button.displayString = "Microsoft";
+                Lime.getInstance().theAltening = false;
+            } else if(button.displayString.equalsIgnoreCase("KingGen")) {
+                button.displayString = "Mojang";
+                TheAlteningAuthentication.mojang();
+                microsoft = false;
                 Lime.getInstance().theAltening = false;
             }
         }

@@ -1,6 +1,7 @@
 package lime.features.module.impl.player;
 
 import lime.core.events.EventTarget;
+import lime.core.events.impl.EventPacket;
 import lime.core.events.impl.EventUpdate;
 import lime.features.module.Category;
 import lime.features.module.Module;
@@ -10,6 +11,8 @@ import lime.utils.other.InventoryUtils;
 import lime.utils.other.Timer;
 import net.minecraft.inventory.ContainerChest;
 import net.minecraft.item.*;
+import net.minecraft.network.play.client.C08PacketPlayerBlockPlacement;
+import net.minecraft.network.play.client.C0DPacketCloseWindow;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -85,6 +88,18 @@ public class ChestStealer extends Module {
                 }
             }
         } else {
+            isStealing = false;
+        }
+    }
+
+    @EventTarget
+    public void onPacket(EventPacket e) {
+        if(e.getPacket() instanceof C08PacketPlayerBlockPlacement && isStealing) {
+            e.setCanceled(true);
+        }
+
+        if(e.getPacket() instanceof C0DPacketCloseWindow && isStealing) {
+            mc.thePlayer.closeScreenAndDropStack();
             isStealing = false;
         }
     }

@@ -65,7 +65,6 @@ public class ZoneCraftFly extends FlightValue {
                 mc.getNetHandler().sendPacketNoEvent(new C03PacketPlayer.C06PacketPlayerPosLook(p.getX(), p.getY(), p.getZ(), p.getYaw(), p.getPitch(), false));
                 e.setCanceled(true);
             }
-
         }
         super.onPacket(e);
     }

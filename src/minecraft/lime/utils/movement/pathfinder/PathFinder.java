@@ -14,10 +14,9 @@ public class PathFinder {
     private ArrayList<CustomVec> path = new ArrayList<>();
     private final ArrayList<Hub> hubs = new ArrayList<>();
     private final ArrayList<Hub> hubsToWork = new ArrayList<>();
-    private double minDistanceSquared = 9;
     private boolean nearest = true;
 
-    private static CustomVec[] flatCardinalDirections = {
+    private final static CustomVec[] flatCardinalDirections = {
             new CustomVec(1, 0, 0),
             new CustomVec(-1, 0, 0),
             new CustomVec(0, 0, 1),
@@ -146,7 +145,7 @@ public class PathFinder {
             totalCost += parent.getTotalCost();
         }
         if (existingHub == null) {
-            if ((loc.getX() == endVec.getX() && loc.getY() == endVec.getY() && loc.getZ() == endVec.getZ()) || (minDistanceSquared != 0 && loc.squareDistanceTo(endVec) <= minDistanceSquared)) {
+            if ((loc.getX() == endVec.getX() && loc.getY() == endVec.getY() && loc.getZ() == endVec.getZ()) || (loc.squareDistanceTo(endVec) <= 9)) {
                 path.clear();
                 path = parent.getPath();
                 path.add(loc);

@@ -8,9 +8,12 @@ import lime.core.events.impl.EventMove;
 import lime.core.events.impl.EventPacket;
 import lime.features.module.Category;
 import lime.features.module.Module;
+import lime.features.setting.impl.BooleanProperty;
 import lime.features.setting.impl.EnumProperty;
 import lime.features.setting.impl.NumberProperty;
 import lime.utils.movement.MovementUtils;
+import lime.utils.other.ChatUtils;
+import lime.utils.other.Timer;
 import net.minecraft.block.BlockStairs;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -22,14 +25,17 @@ import net.minecraft.potion.Potion;
 import net.minecraft.util.BlockPos;
 import org.apache.commons.lang3.RandomUtils;
 
+import java.util.Random;
+
 public class Speed extends Module {
 
     public Speed() {
         super("Speed", Category.MOVE);
     }
 
-    public final EnumProperty mode = new EnumProperty("Mode", this, "Vanilla", "Vanilla", "Vanilla_BHOP", "Hypixel", "ZoneCraft", "Cubecraft", "Verus", "Verus Ground", "Verus Float", "Verus_LOWHOP", "NCP", "Funcraft", "Funcraft_YPORT");
+    public final EnumProperty mode = new EnumProperty("Mode", this, "Vanilla", "Vanilla", "Vanilla_BHOP", "Funcraft New", "Hypixel", "ZoneCraft", "Cubecraft", "Verus", "Verus Ground", "Verus Float", "Verus_LOWHOP", "NCP", "Funcraft", "Funcraft_YPORT", "Dev");
     private final NumberProperty speed = new NumberProperty("Speed", this, 0.2, 5, 0.6, 0.1).onlyIf(mode.getSettingName(), "enum", "vanilla_bhop", "vanilla");
+    private final BooleanProperty bps24 = new BooleanProperty("24 BPS", this, false).onlyIf(mode.getSettingName(), "enum", "Funcraft New");
     private double moveSpeed, lastDist;
     private int stage;
     private boolean spoofGround, firstHop, nigger;
@@ -47,6 +53,8 @@ public class Speed extends Module {
         nigger = mc.thePlayer.onGround;
     }
 
+    private final Timer timer = new Timer();
+
     @Override
     public void onDisable() {
         mc.timer.timerSpeed = 1;
@@ -56,10 +64,23 @@ public class Speed extends Module {
 
     @EventTarget
     public void onMotion(EventMotion e) {
+        double xDist = mc.thePlayer.posX - mc.thePlayer.prevPosX;
+        double zDist = mc.thePlayer.posZ - mc.thePlayer.prevPosZ;
+        lastDist = Math.sqrt(xDist * xDist + zDist * zDist);
         this.setSuffix(mode.getSelected());
         if(mode.is("vanilla")) {
             if(mc.thePlayer.isMoving()) {
                 MovementUtils.setSpeed(speed.getCurrent());
+            }
+        }
+
+        if(mode.is("dev")) {
+            if(e.isPre()) {
+                if (timer.hasReached(300L))
+                    timer.reset();
+                mc.timer.timerSpeed = 1F + (float)timer.hasTimeLeft(250L) / 250F * 1.5F;
+                if (mc.thePlayer.onGround)
+                    MovementUtils.strafe();
             }
         }
 
@@ -119,10 +140,6 @@ public class Speed extends Module {
                 }
             }
         }
-
-        double xDist = mc.thePlayer.posX - mc.thePlayer.prevPosX;
-        double zDist = mc.thePlayer.posZ - mc.thePlayer.prevPosZ;
-        lastDist = Math.sqrt(xDist * xDist + zDist * zDist);
     }
 
     @EventTarget
@@ -141,7 +158,7 @@ public class Speed extends Module {
                 mc.getNetHandler().sendPacketNoEvent(new C03PacketPlayer.C06PacketPlayerPosLook(p.getX(), p.getY(), p.getZ(), p.getYaw(), p.getPitch(), false));
             }
             lastDist = 0;
-            if(mode.is("mineplex") || mode.is("funcraft")) {
+            if(mode.is("mineplex") || mode.is("funcraft") || mode.is("Funcraft New")) {
                 moveSpeed = 0;
                 stage = 0;
             }
@@ -225,11 +242,40 @@ public class Speed extends Module {
             }
         }
 
+        if(mode.is("Funcraft New")) {
+            if(!mc.thePlayer.isMoving()) {
+                moveSpeed = 0;
+                MovementUtils.setSpeed(e, 0);
+                return;
+            }
+            if (mc.thePlayer.onGround) {
+                for (int i = 0; i < (bps24.isEnabled() ? 7 : 5); i++) {
+                    MovementUtils.hClip(0.15);
+                    if(mc.theWorld.checkBlockCollision(mc.thePlayer.getEntityBoundingBox()) && mc.thePlayer.getPosition().getBlock().isFullBlock()) {
+                        MovementUtils.hClip(-0.15);
+                        return;
+                    }
+                    mc.getNetHandler().sendPacketNoEvent(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY, mc.thePlayer.posZ, true));
+                }
+                e.setY(mc.thePlayer.motionY = 0.42);
+                moveSpeed = MovementUtils.getBaseMoveSpeed(0.6);
+                nigger = true;
+            } else {
+                if (nigger) {
+                    moveSpeed = bps24.isEnabled() ? 1.2 : MovementUtils.getBaseMoveSpeed(0.9);
+                    nigger = false;
+                    MovementUtils.setSpeed(e, moveSpeed);
+                    return;
+                }
+                moveSpeed = Math.max(moveSpeed - moveSpeed / 154F, MovementUtils.getBaseMoveSpeed());
+            }
+            MovementUtils.setSpeed(e, moveSpeed);
+        }
+
         if(mode.is("ncp") || mode.is("funcraft") || mode.is("funcraft_yport") || mode.is("vanilla_bhop")) {
             if(mode.is("vanilla_bhop") && Lime.getInstance().getModuleManager().getModuleC(Flight.class).isToggled()) {
                 return;
             }
-            //mc.timer.timerSpeed = 1.1f;
             if(mc.thePlayer.isMoving()) {
                 if(mc.thePlayer.onGround) {
                     stage = 0;
@@ -241,7 +287,7 @@ public class Speed extends Module {
                             if(!mode.is("funcraft_yport")) {
                                 mc.thePlayer.motionY = 0.399399995803833;
                             }
-                            moveSpeed *= 2.1499999;
+                            moveSpeed *= 2.14999;
                             stage++;
                         }
                         break;

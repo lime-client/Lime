@@ -216,7 +216,7 @@ public class Scaffold extends Module {
             this.y = (int) mc.thePlayer.posY;
         }
 
-        if(MovementUtils.isOnGround(0.42)) {
+        if(MovementUtils.isOnGround(1.05) && InventoryUtils.hasBlock(blacklistedBlocks, true, true) != -1) {
             tower(e);
         }
 
@@ -231,10 +231,6 @@ public class Scaffold extends Module {
         {
             if(blockData != null && !rotations.is("none")) {
                 float[] rotations = getRotations(blockData.getBlockPos(), blockData.getEnumFacing());
-                assert rotations != null;
-                if(Lime.getInstance().getModuleManager().getModuleC(Disabler.class).isToggled() && ((Disabler) Lime.getInstance().getModuleManager().getModuleC(Disabler.class)).mode.is("watchdog") && mc.thePlayer.ticksExisted % 2 != 0) {
-                    mc.getNetHandler().sendPacketNoEvent(new C03PacketPlayer.C05PacketPlayerLook(rotations[0], rotations[1], e.isGround()));
-                }
                 e.setYaw(yaw = rotations[0]);
                 e.setPitch(pitch = this.rotations.is("cubecraft") ? 81 + (RandomUtils.nextFloat(0, 1) - 0.5f) : rotations[1]);
 

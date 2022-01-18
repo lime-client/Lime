@@ -2,10 +2,7 @@ package lime.features.module.impl.movement;
 
 import lime.core.Lime;
 import lime.core.events.EventTarget;
-import lime.core.events.impl.Event2D;
-import lime.core.events.impl.EventMotion;
-import lime.core.events.impl.EventMove;
-import lime.core.events.impl.EventPacket;
+import lime.core.events.impl.*;
 import lime.features.module.Category;
 import lime.features.module.Module;
 import lime.features.module.impl.exploit.Disabler;
@@ -22,10 +19,9 @@ public class HighJump extends Module {
         super("High Jump", Category.MOVE);
     }
 
-    private final EnumProperty mode = new EnumProperty("Mode", this, "Verus", "Verus");
+    private final EnumProperty mode = new EnumProperty("Mode", this, "Vanilla", "Vanilla", "Verus");
     private final BooleanProperty latestVerus = new BooleanProperty("Latest Verus", this, false).onlyIf(mode.getSettingName(), "enum", "Verus");
     private ProcessBar processBar;
-    private int ticks;
     private boolean waiting, received;
 
     @Override
@@ -33,7 +29,6 @@ public class HighJump extends Module {
         ScaledResolution sr = new ScaledResolution(mc);
         processBar = new ProcessBar((sr.getScaledWidth() / 2) - 25, (sr.getScaledHeight() / 2) + 20, 1500);
         waiting = received = false;
-        ticks = 0;
     }
 
     @EventTarget
@@ -65,6 +60,16 @@ public class HighJump extends Module {
                 e.setCanceled(true);
             }
         }
+        if(mode.is("vanilla")) {
+            if(MovementUtils.isOnGround(0.01) && mc.gameSettings.keyBindJump.isKeyDown()) {
+                e.setY(mc.thePlayer.motionY = 1);
+            }
+        }
+    }
+
+    @EventTarget
+    public void onEntityAction(EventEntityAction e) {
+        e.setShouldJump(false);
     }
 
     @EventTarget
@@ -76,6 +81,8 @@ public class HighJump extends Module {
 
     @EventTarget
     public void on2D(Event2D e) {
-        processBar.draw();
+        if(mode.is("verus")) {
+            processBar.draw();
+        }
     }
 }

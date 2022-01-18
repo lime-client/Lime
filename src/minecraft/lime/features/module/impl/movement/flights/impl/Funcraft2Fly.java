@@ -67,7 +67,7 @@ public class Funcraft2Fly extends FlightValue {
                     moveSpeed *= 2.149;
                     break;
                 case 2:
-                    moveSpeed = 1.6;
+                    moveSpeed = 1.2;
                     break;
                 default:
                     moveSpeed = lastDist - lastDist / 159;

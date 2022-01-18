@@ -13,6 +13,7 @@ import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.inventory.ContainerChest;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.play.client.C0DPacketCloseWindow;
 
 public class AutoArmor extends Module {
 
@@ -57,8 +58,7 @@ public class AutoArmor extends Module {
                 } else if(this.checkArmor(armor, b) && (currentProtection > armorProtection || currentProtection == armorProtection)) {
                     if(InventoryManager.getTimer().hasReached((long) delay.getCurrent())) {
                         InventoryUtils.drop(i);
-                        InventoryManager.getTimer().reset();
-                        break;
+                        return true;
                     }
                 }
             }
@@ -72,7 +72,6 @@ public class AutoArmor extends Module {
                 } else {
                     InventoryUtils.shiftClick(slot);
                 }
-                InventoryManager.getTimer().reset();
             }
             return true;
         } else {

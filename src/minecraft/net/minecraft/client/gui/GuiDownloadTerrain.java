@@ -31,6 +31,8 @@ public class GuiDownloadTerrain extends GuiScreen
     public void initGui()
     {
         this.buttonList.clear();
+        ScaledResolution sr = new ScaledResolution(mc);
+        //this.buttonList.add(new GuiButton(0, sr.getScaledWidth() / 2 - 100, ))
     }
 
     /**

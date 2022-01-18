@@ -2,13 +2,13 @@
   "informations": [
     {
       "author": "Lime Auto Save",
-      "time": 1640512612
+      "time": 1642523258
     }
   ],
   "modules": [
     {
       "moduleName": "Teleport",
-      "key": 0,
+      "key": 37,
       "toggled": false,
       "settings": [
         {
@@ -92,7 +92,7 @@
     {
       "moduleName": "Auto Sword",
       "key": -1,
-      "toggled": false,
+      "toggled": true,
       "settings": [
         {
           "name": "Show",
@@ -131,7 +131,7 @@
         {
           "name": "Mode",
           "type": "enum",
-          "value": "switch"
+          "value": "single"
         },
         {
           "name": "State",
@@ -151,17 +151,17 @@
         {
           "name": "Auto Block Range",
           "type": "slider",
-          "value": 12.0
+          "value": 8.0
         },
         {
           "name": "Range",
           "type": "slider",
-          "value": 3.8000000000000003
+          "value": 3.2
         },
         {
           "name": "CPS",
           "type": "slider",
-          "value": 20.0
+          "value": 12.0
         },
         {
           "name": "Keep Sprint",
@@ -196,7 +196,7 @@
         {
           "name": "Turn Speed",
           "type": "slider",
-          "value": 70.0
+          "value": 180.0
         },
         {
           "name": "Randomize Yaw",
@@ -236,7 +236,7 @@
         {
           "name": "Teams",
           "type": "bool",
-          "value": true
+          "value": false
         },
         {
           "name": "Dead",
@@ -246,7 +246,7 @@
         {
           "name": "Through Walls",
           "type": "bool",
-          "value": true
+          "value": false
         },
         {
           "name": "Jello ESP",
@@ -383,7 +383,7 @@
         {
           "name": "Mode",
           "type": "enum",
-          "value": "verus transaction"
+          "value": "blocksmc"
         },
         {
           "name": "Transaction Mode",
@@ -393,7 +393,7 @@
         {
           "name": "Fly B and F Disabler",
           "type": "bool",
-          "value": false
+          "value": true
         },
         {
           "name": "Show",
@@ -445,13 +445,13 @@
     },
     {
       "moduleName": "Blink",
-      "key": 0,
+      "key": -1,
       "toggled": false,
       "settings": [
         {
           "name": "Blink Delay",
           "type": "slider",
-          "value": 100.0
+          "value": 500.0
         },
         {
           "name": "Show",
@@ -478,21 +478,9 @@
       ]
     },
     {
-      "moduleName": "Wot Sped",
-      "key": 0,
-      "toggled": false,
-      "settings": [
-        {
-          "name": "Show",
-          "type": "bool",
-          "value": true
-        }
-      ]
-    },
-    {
       "moduleName": "Target Strafe",
       "key": 45,
-      "toggled": true,
+      "toggled": false,
       "settings": [
         {
           "name": "Distance",
@@ -528,13 +516,13 @@
     },
     {
       "moduleName": "High Jump",
-      "key": 38,
-      "toggled": false,
+      "key": 36,
+      "toggled": true,
       "settings": [
         {
           "name": "Mode",
           "type": "enum",
-          "value": "verus"
+          "value": "vanilla"
         },
         {
           "name": "Latest Verus",
@@ -550,13 +538,13 @@
     },
     {
       "moduleName": "Long Jump",
-      "key": 42,
+      "key": 40,
       "toggled": false,
       "settings": [
         {
           "name": "Mode",
           "type": "enum",
-          "value": "vanilla"
+          "value": "hypixel"
         },
         {
           "name": "Speed",
@@ -615,7 +603,7 @@
         {
           "name": "Mode",
           "type": "enum",
-          "value": "vanilla"
+          "value": "zonecraft"
         },
         {
           "name": "Damage",
@@ -677,7 +665,7 @@
     {
       "moduleName": "Sprint",
       "key": -1,
-      "toggled": true,
+      "toggled": false,
       "settings": [
         {
           "name": "Omni",
@@ -711,17 +699,22 @@
     {
       "moduleName": "Speed",
       "key": 47,
-      "toggled": true,
+      "toggled": false,
       "settings": [
         {
           "name": "Mode",
           "type": "enum",
-          "value": "verus"
+          "value": "zonecraft"
         },
         {
           "name": "Speed",
           "type": "slider",
           "value": 0.6
+        },
+        {
+          "name": "24 BPS",
+          "type": "bool",
+          "value": true
         },
         {
           "name": "Show",
@@ -821,7 +814,7 @@
     {
       "moduleName": "Inventory Move",
       "key": -1,
-      "toggled": true,
+      "toggled": false,
       "settings": [
         {
           "name": "Sneak",
@@ -903,7 +896,7 @@
     },
     {
       "moduleName": "Auto Armor",
-      "key": 37,
+      "key": -1,
       "toggled": true,
       "settings": [
         {
@@ -1521,7 +1514,7 @@
         {
           "name": "Target HUD",
           "type": "enum",
-          "value": "lime"
+          "value": "lime2"
         },
         {
           "name": "TargetHUD X",
@@ -1640,7 +1633,7 @@
         {
           "name": "Tower",
           "type": "enum",
-          "value": "ncp"
+          "value": "none"
         },
         {
           "name": "Search",
@@ -1797,7 +1790,7 @@
     },
     {
       "moduleName": "Timer",
-      "key": 0,
+      "key": -1,
       "toggled": false,
       "settings": [
         {
@@ -1816,6 +1809,18 @@
       "moduleName": "Eagle",
       "key": -1,
       "toggled": false,
+      "settings": [
+        {
+          "name": "Show",
+          "type": "bool",
+          "value": true
+        }
+      ]
+    },
+    {
+      "moduleName": "No C03",
+      "key": -1,
+      "toggled": true,
       "settings": [
         {
           "name": "Show",

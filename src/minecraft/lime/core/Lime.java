@@ -18,6 +18,7 @@ import org.lwjgl.opengl.Display;
 import viamcp.ViaMCP;
 
 import java.io.File;
+import java.lang.reflect.Field;
 
 public class Lime {
     private final static Lime instance = new Lime();
@@ -92,6 +93,7 @@ public class Lime {
         Minecraft.getMinecraft().displayGuiScreen(new MainScreen());
 
         logger.info("[LIME] Started.");
+
     }
 
     public User getUser() {

@@ -20,13 +20,13 @@ public class Flight extends Module {
 
     //Settings
     public final EnumProperty mode = new EnumProperty("Mode", this, "Vanilla", "Vanilla", "ZoneCraft", "Hypixel", "Funcraft", "Funcraft2", "Verus", "Verus_No_Damage", "Verus Float", "Verus Fast", "Astral", "KoksCraft");
-    public final EnumProperty damage = new EnumProperty("Damage", this, "Bypass", "Basic", "Bypass").onlyIf(mode.getSettingName(), "enum", "Verus Fast");
+    public final EnumProperty damage = new EnumProperty("Damage", this, "Bypass", "Basic", "Bypass", "New").onlyIf(mode.getSettingName(), "enum", "Verus Fast");
     public final NumberProperty speed = new NumberProperty("Speed", this, 0.5, 10, 1.5, 0.5).onlyIf(mode.getSettingName(), "enum", "vanilla", "Verus Fast");
     public final NumberProperty vClip = new NumberProperty("V Clip", this, 1, 5, 2, 0.5).onlyIf(mode.getSettingName(), "enum", "Verus Fast");
     public final NumberProperty funcraftSpeed = new NumberProperty("Funcraft Speed", this, 0.2, 2, 1.6, 0.05).onlyIf(mode.getSettingName(), "enum", "funcraft");
-    public final NumberProperty funcraftTimerSpeed = new NumberProperty("Funcraft Timer Speed", this, 1, 5, 3, 0.05).onlyIf(mode.getSettingName(), "enum", "funcraft");
+    public final NumberProperty funcraftTimerSpeed = new NumberProperty("Funcraft Timer Speed", this, 1, 5, 1.75, 0.05).onlyIf(mode.getSettingName(), "enum", "funcraft");
     private final BooleanProperty bobbing = new BooleanProperty("Bobbing", this, true);
-    public final BooleanProperty cancelPackets = new BooleanProperty("Cancel Packets", this, false);
+    public final BooleanProperty cancelPackets = new BooleanProperty("Cancel Packets", this, false).onlyIf(mode.getSettingName(), "enum", "Verus Fast");
     public final BooleanProperty timerBypass = new BooleanProperty("Timer Bypass", this, true).onlyIf(mode.getSettingName(), "enum", "Verus Fast");
     public final BooleanProperty verusHeavy = new BooleanProperty("Verus Heavy", this, false).onlyIf(mode.getSettingName(), "enum", "verus fast", "Verus Float");
     public final BooleanProperty latestVerus = new BooleanProperty("Latest Verus", this, false).onlyIf(mode.getSettingName(), "enum", "Verus Fast");

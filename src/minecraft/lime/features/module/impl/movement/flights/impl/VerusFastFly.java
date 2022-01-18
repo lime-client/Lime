@@ -16,7 +16,10 @@ import net.minecraft.block.BlockAir;
 import net.minecraft.block.BlockLeaves;
 import net.minecraft.block.BlockSlab;
 import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
 import net.minecraft.network.play.client.C03PacketPlayer;
+import net.minecraft.network.play.client.C08PacketPlayerBlockPlacement;
 import net.minecraft.network.play.server.S12PacketEntityVelocity;
 import net.minecraft.util.BlockPos;
 
@@ -37,13 +40,21 @@ public class VerusFastFly extends FlightValue {
         Block block = new BlockPos(mc.thePlayer.posX, mc.thePlayer.posY - 1, mc.thePlayer.posZ).getBlock();
         sus = block instanceof BlockSlab || block instanceof BlockLeaves || block instanceof BlockAir;
         if(!sus) {
-            processBar = new ProcessBar((sr.getScaledWidth() / 2) - 25, (sr.getScaledHeight() / 2) + 20, getFlight().timerBypass.isEnabled() ? getFlight().damage.is("basic") ? 200 : 1500 : 0);
+            processBar = new ProcessBar((sr.getScaledWidth() / 2) - 25, (sr.getScaledHeight() / 2) + 20, getFlight().timerBypass.isEnabled() ? getFlight().damage.is("bypass") ? 1500 : 200 : 0);
             if(!getFlight().timerBypass.isEnabled()) {
                 sent = true;
-                if(getFlight().damage.is("basic")) {
-                    damage();
-                } else {
-                    PlayerUtils.verusDamage(!getFlight().latestVerus.isEnabled());
+
+                switch(getFlight().damage.getSelected().toLowerCase()) {
+                    case "basic":
+                        damage();
+                        break;
+                    case "bypass":
+                        PlayerUtils.verusDamage(!getFlight().latestVerus.isEnabled());
+                        break;
+                    case "new":
+                        mc.getNetHandler().sendPacketNoEvent(new C08PacketPlayerBlockPlacement(new BlockPos(mc.thePlayer.posX, mc.thePlayer.posY - 1.5, mc.thePlayer.posZ), 1, new ItemStack(Blocks.stone.getItem(mc.theWorld, new BlockPos(-1, -1, -1))), 0, 0.94f, 0));
+                        damage();
+                        break;
                 }
                 MovementUtils.vClip(.42);
             }
@@ -63,21 +74,27 @@ public class VerusFastFly extends FlightValue {
         boolean b = Lime.getInstance().getModuleManager().getModuleC(Disabler.class).isToggled() && (((Disabler) Lime.getInstance().getModuleManager().getModuleC(Disabler.class)).mode.is("Verus Transaction"));
         int defTicks = b ? 70 : 15;
         if(!sus) {
-            if(!processBar.getTimer().hasReached(getFlight().damage.is("basic") ? 150 : 1500) && getFlight().timerBypass.isEnabled()) {
+            if(!processBar.getTimer().hasReached(getFlight().damage.is("bypass") ? 1500 : 150) && getFlight().timerBypass.isEnabled()) {
                 e.setCanceled(true);
                 return;
             }
             if(!sent && mc.thePlayer.onGround && e.isPre()) {
                 sent = true;
-                if(getFlight().damage.is("basic")) {
-                    damage();
-                } else {
-                    PlayerUtils.verusDamage(!getFlight().latestVerus.isEnabled());
+                switch(getFlight().damage.getSelected().toLowerCase()) {
+                    case "basic":
+                        damage();
+                        break;
+                    case "bypass":
+                        PlayerUtils.verusDamage(!getFlight().latestVerus.isEnabled());
+                        break;
+                    case "new":
+                        mc.getNetHandler().sendPacketNoEvent(new C08PacketPlayerBlockPlacement(new BlockPos(mc.thePlayer.posX, mc.thePlayer.posY - 1.5, mc.thePlayer.posZ), 1, new ItemStack(Blocks.stone.getItem(mc.theWorld, new BlockPos(-1, -1, -1))), 0, 0.94f, 0));
+                        damage();
+                        break;
                 }
             }
 
             if(received && e.isPre()) {
-
                 Disabler disabler = Lime.getInstance().getModuleManager().getModuleC(Disabler.class);
 
                 if(!mc.gameSettings.keyBindJump.isKeyDown() || !b) {
