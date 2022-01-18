@@ -10,7 +10,7 @@ import net.minecraft.util.ResourceLocation;
 import net.optifine.Config;
 import net.optifine.CustomColors;
 
-public class LayerSheepWool implements LayerRenderer
+public class LayerSheepWool implements LayerRenderer<EntityLivingBase>
 {
     private static final ResourceLocation TEXTURE = new ResourceLocation("textures/entity/sheep/sheep_fur.png");
     private final RenderSheep sheepRenderer;
