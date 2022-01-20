@@ -124,6 +124,7 @@ public class ChestStealer extends Module {
     }
 
     public static boolean isValidChest(ContainerChest chest) {
-        return chest.getLowerChestInventory().getDisplayName().getUnformattedText().toLowerCase().contains("chest") || chest.getLowerChestInventory().getDisplayName().getUnformattedText().toLowerCase().contains("coffre");
+        String chestName = chest.getLowerChestInventory().getDisplayName().getUnformattedText().toLowerCase();
+        return chestName.contains("chest") || chestName.contains("coffre") || chestName.contains("cofre") || chestName.contains("truhe");
     }
 }
