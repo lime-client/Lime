@@ -1,8 +1,0 @@
-<component name="ArtifactManager">
-  <artifact type="jar" name="Lime:jar">
-    <output-path>$PROJECT_DIR$/out/artifacts/Lime_jar</output-path>
-    <root id="archive" name="Lime.jar">
-      <element id="module-output" name="Lime" />
-    </root>
-  </artifact>
-</component>
