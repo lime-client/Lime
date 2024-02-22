@@ -38,7 +38,7 @@ public class Speed extends Module {
     private final BooleanProperty bps24 = new BooleanProperty("24 BPS", this, false).onlyIf(mode.getSettingName(), "enum", "Funcraft New");
     private double moveSpeed, lastDist;
     private int stage;
-    private boolean spoofGround, firstHop, nigger;
+    private boolean spoofGround, firstHop, aBoolean;
 
     @Override
     public void onEnable() {
@@ -50,7 +50,7 @@ public class Speed extends Module {
         stage = 0;
         spoofGround = false;
         firstHop = true;
-        nigger = mc.thePlayer.onGround;
+        aBoolean = mc.thePlayer.onGround;
     }
 
     private final Timer timer = new Timer();
@@ -259,11 +259,11 @@ public class Speed extends Module {
                 }
                 e.setY(mc.thePlayer.motionY = 0.42);
                 moveSpeed = MovementUtils.getBaseMoveSpeed(0.6);
-                nigger = true;
+                aBoolean = true;
             } else {
-                if (nigger) {
+                if (aBoolean) {
                     moveSpeed = bps24.isEnabled() ? 1.2 : MovementUtils.getBaseMoveSpeed(0.9);
-                    nigger = false;
+                    aBoolean = false;
                     MovementUtils.setSpeed(e, moveSpeed);
                     return;
                 }
@@ -315,8 +315,8 @@ public class Speed extends Module {
                 stage = 0;
                 return;
             }
-            if(!nigger) {
-                nigger = mc.thePlayer.onGround;
+            if(!aBoolean) {
+                aBoolean = mc.thePlayer.onGround;
                 return;
             }
             if(firstHop) {
